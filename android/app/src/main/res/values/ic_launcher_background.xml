@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Cor primária do app "Fala Comigo" (#5B5FEF), usada como fundo
+         do ícone adaptativo (Android 8+). -->
+    <color name="ic_launcher_background">#5B5FEF</color>
+</resources>

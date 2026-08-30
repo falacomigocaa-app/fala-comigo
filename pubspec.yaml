@@ -1,0 +1,50 @@
+name: fala_comigo
+description: "Fala Comigo — Aplicativo de Comunicação Alternativa e Aumentativa (CAA) para autismo"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+  flutter: ">=3.38.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Gerenciamento de estado
+  flutter_riverpod: ^2.5.1
+
+  # Text-to-Speech (voz em português do Brasil)
+  flutter_tts: ^4.1.0
+
+  # Persistência local
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.1.3
+
+  # Seleção de fotos (câmera/galeria) para novos cartões
+  image_picker: ^1.1.2
+
+  # Ícones
+  cupertino_icons: ^1.0.8
+
+  # Utilitário para gerar IDs únicos
+  uuid: ^4.4.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.11
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/cards/
+    - assets/icons/
+
+  # Trava a orientação do app (definida também nativamente no Android)
+  # em Paisagem para uso em tablets/celulares, conforme recomendação
+  # de acessibilidade do guia.
