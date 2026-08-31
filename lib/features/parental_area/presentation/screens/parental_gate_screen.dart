@@ -40,7 +40,7 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
         title: const Text('Área do Responsável'),
         backgroundColor: AppTheme.surface,
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
