@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../aac_grid/data/providers/cards_provider.dart';
 import 'add_card_screen.dart';
+import 'behavior_log_screen.dart';
 
 /// Painel dos Pais & Educadores.
 ///
@@ -47,6 +48,15 @@ class SettingsScreen extends ConsumerWidget {
             onChanged: (v) => ref.read(buttonScaleProvider.notifier).state = v,
           ),
           const Divider(height: 32),
+ListTile(
+  leading: const Icon(Icons.fact_check_outlined),
+  title: const Text('Registro de Comportamento'),
+  subtitle: const Text('Registrar gatilhos (modelo ABC)'),
+  onTap: () => Navigator.of(context).push(
+    MaterialPageRoute(builder: (_) => const BehaviorLogScreen()),
+  ),
+),
+const Divider(height: 16),
           Text('Cartões cadastrados (${cards.length})',
               style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
           const SizedBox(height: 8),
