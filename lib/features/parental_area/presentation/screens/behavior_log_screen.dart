@@ -91,9 +91,7 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
     final h = date.hour.toString().padLeft(2, '0');
     final min = date.minute.toString().padLeft(2, '0');
     return '$d/$m às $h:$min';
-  }
-
-  @override
+  }@override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -141,4 +139,81 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
                     controller: _consequenceController,
                     maxLines: 2,
                     decoration: const InputDecoration(
-                      la
+                      labelText: 'Consequência (o que aconteceu depois)',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: _notesController,
+                    maxLines: 2,
+                    decoration: const InputDecoration(
+                      labelText: 'Notas adicionais (opcional)',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _saveEntry,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(0, 56),
+                        backgroundColor: AppTheme.primary,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text('Salvar registro'),
+                    ),
+                  ),
+                  const Divider(height: 40),
+                  const Text(
+                    'Registros salvos',
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+                  ),
+                  const SizedBox(height: 8),
+                  if (_box != null)
+                    ValueListenableBuilder(
+                      valueListenable: _box!.listenable(),
+                      builder: (context, Box box, _) {
+                        final keys = box.keys.toList().reversed.toList();
+                        if (keys.isEmpty) {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Text(
+                              'Nenhum registro ainda.',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          );
+                        }
+                        return Column(
+                          children: keys.map((key) {
+                            final entry = Map<String, dynamic>.from(
+                              box.get(key) as Map,
+                            );
+                            return Card(
+                              margin: const EdgeInsets.symmetric(vertical: 4),
+                              child: ListTile(
+                                title: Text(_formatDate(entry['timestamp'] ?? '')),
+                                subtitle: Text(
+                                  'A: ${entry['antecedent']}\n'
+                                  'C: ${entry['behavior']}\n'
+                                  'D: ${entry['consequence']}',
+                                ),
+                                isThreeLine: true,
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+                                  onPressed: () => _deleteEntry(key),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    ),
+                  const SizedBox(height: 24),
+                ],
+              ),
+            ),
+    );
+  }
+}
