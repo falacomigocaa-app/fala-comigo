@@ -30,6 +30,8 @@ dependencies:
 
   # Utilitário para gerar IDs únicos
   uuid: ^4.4.0
+  # Compartilhar vídeos com terapeutas/família
+  share_plus: ^10.1.2
 
 dev_dependencies:
   flutter_test:
