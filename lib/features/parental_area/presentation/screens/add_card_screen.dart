@@ -53,7 +53,8 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(title: const Text('Adicionar Cartão'), backgroundColor: AppTheme.surface),
-      body: Padding(
+      body: SingleChildScrollView(
+  child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
@@ -133,6 +134,7 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
             ),
           ],
         ),
+    ),
       ),
     );
   }
