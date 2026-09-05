@@ -7,6 +7,7 @@ import 'add_card_screen.dart';
 import 'behavior_log_screen.dart';
 
 import 'video_diary_screen.dart';
+import 'patient_profile_screen.dart';
 /// Painel dos Pais & Educadores.
 ///
 /// Permite:
@@ -66,6 +67,15 @@ ListTile(
   ),
 ), 
 const Divider(height: 16),
+          ListTile(
+                  leading: const Icon(Icons.person_outline),
+                  title: const Text('Perfil do Paciente'),
+                  subtitle: const Text('Dados da criança para os relatórios'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const PatientProfileScreen()),
+                  ),
+                ),
+                const Divider(height: 16),
 Text('Cartões cadastrados (${cards.length})',
     style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
 const SizedBox(height: 8),
