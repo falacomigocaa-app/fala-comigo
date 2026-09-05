@@ -32,6 +32,9 @@ dependencies:
   uuid: ^4.4.0
   # Compartilhar vídeos com terapeutas/família
   share_plus: ^10.1.2
+  # Geração de relatórios em PDF
+  pdf: ^3.11.1
+  printing: ^5.13.4
 
 dev_dependencies:
   flutter_test:
