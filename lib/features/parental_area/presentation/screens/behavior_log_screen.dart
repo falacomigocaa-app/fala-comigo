@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 import '../../../../core/theme/app_theme.dart';
 
@@ -91,14 +94,79 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
     final h = date.hour.toString().padLeft(2, '0');
     final min = date.minute.toString().padLeft(2, '0');
     return '$d/$m às $h:$min';
-  }@override
+  Future<void> _exportPdf() async {
+    if (_box == null || _box!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Nenhum registro para exportar.')),
+      );
+      return;
+    }
+
+    final entries = _box!.values
+        .map((e) => Map<String, dynamic>.from(e as Map))
+        .toList()
+        .reversed
+        .toList();
+
+    final doc = pw.Document();
+    doc.addPage(
+      pw.MultiPage(
+        build: (context) => [
+          pw.Header(
+            level: 0,
+            child: pw.Text('Fala Comigo — Registro de Comportamento (ABC)'),
+          ),
+          pw.Paragraph(
+            text: 'Relatório gerado em ${_formatDate(DateTime.now().toIso8601String())}',
+          ),
+          pw.SizedBox(height: 12),
+          ...entries.map((entry) {
+            return pw.Container(
+              margin: const pw.EdgeInsets.only(bottom: 12),
+              padding: const pw.EdgeInsets.all(8),
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(color: PdfColors.grey400),
+                borderRadius: pw.BorderRadius.circular(4),
+              ),
+              child: pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Text(
+                    _formatDate(entry['timestamp'] ?? ''),
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                  ),
+                  pw.SizedBox(height: 4),
+                  pw.Text('Antecedente: ${entry['antecedent'] ?? ''}'),
+                  pw.Text('Comportamento: ${entry['behavior'] ?? ''}'),
+                  pw.Text('Consequência: ${entry['consequence'] ?? ''}'),
+                  if ((entry['notes'] ?? '').toString().isNotEmpty)
+                    pw.Text('Notas: ${entry['notes']}'),
+                ],
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+
+    await Printing.sharePdf(
+      bytes: await doc.save(),
+      filename: 'registro_comportamento_fala_comigo.pdf',
+    );
+  }}@override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: const Text('Registro de Comportamento'),
         backgroundColor: AppTheme.surface,
-      ),
+      actions: [
+          IconButton(
+            icon: const Icon(Icons.picture_as_pdf_outlined),
+            tooltip: 'Exportar PDF',
+            onPressed: _exportPdf,
+          ),
+        ],),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
