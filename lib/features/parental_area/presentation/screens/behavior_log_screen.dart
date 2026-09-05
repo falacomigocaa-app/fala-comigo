@@ -153,7 +153,9 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
       bytes: await doc.save(),
       filename: 'registro_comportamento_fala_comigo.pdf',
     );
-  }}@override
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
