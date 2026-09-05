@@ -95,16 +95,14 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
   }
 
   Future<void> _shareEntry(String videoPath, String context) async {
-    final file = File(videoPath);
-    if (!await file.exists()) return;
-    await SharePlus.instance.share(
-      ShareParams(
-        files: [XFile(videoPath)],
-        text: context.isNotEmpty
-            ? 'Vídeo do Fala Comigo — contexto: $context'
-            : 'Vídeo do Fala Comigo',
-      ),
-    );
+  final file = File(videoPath);
+  if (!await file.exists()) return;
+  await Share.shareXFiles(
+    [XFile(videoPath)],
+    text: context.isNotEmpty
+        ? 'Vídeo do Fala Comigo — contexto: $context'
+        : 'Vídeo do Fala Comigo',
+  );
   }
 
   String _formatDate(String isoString) {
