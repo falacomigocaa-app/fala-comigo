@@ -67,7 +67,8 @@ ListTile(
 ), 
 const Divider(height: 16),
 Text('Cartões cadastrados (${cards.length})',
-          const SizedBox(height: 8),
+    style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+const SizedBox(height: 8),
           ...cards.map(
             (card) => Card(
               margin: const EdgeInsets.symmetric(vertical: 4),
