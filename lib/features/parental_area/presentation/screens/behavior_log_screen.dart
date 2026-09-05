@@ -109,6 +109,13 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
         .toList()
         .reversed
         .toList();
+    final profileBox = await Hive.openBox('patient_profile');
+    final profileData = profileBox.get('data') as Map?;
+    final patientName = profileData?['name'] ?? '';
+    final birthDate = profileData?['birthDate'] ?? '';
+    final supportLevel = profileData?['supportLevel'] ?? '';
+    final guardian = profileData?['guardian'] ?? '';
+    final school = profileData?['school'] ?? '';
 
     final doc = pw.Document();
     doc.addPage(
@@ -121,6 +128,30 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
           pw.Paragraph(
             text: 'Relatório gerado em ${_formatDate(DateTime.now().toIso8601String())}',
           ),
+          if (patientName.toString().isNotEmpty)
+              pw.Container(
+                margin: const pw.EdgeInsets.only(top: 8, bottom: 8),
+                padding: const pw.EdgeInsets.all(8),
+                decoration: pw.BoxDecoration(
+                  border: pw.Border.all(color: PdfColors.grey400),
+                  borderRadius: pw.BorderRadius.circular(4),
+                ),
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text('Paciente: $patientName',
+                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    if (birthDate.toString().isNotEmpty)
+                      pw.Text('Data de nascimento: $birthDate'),
+                    if (supportLevel.toString().isNotEmpty)
+                      pw.Text('Nível de suporte (DSM-5): $supportLevel'),
+                    if (guardian.toString().isNotEmpty)
+                      pw.Text('Responsável: $guardian'),
+                    if (school.toString().isNotEmpty)
+                      pw.Text('Escola/clínica: $school'),
+                  ],
+                ),
+              ),
           pw.SizedBox(height: 12),
           ...entries.map((entry) {
             return pw.Container(
