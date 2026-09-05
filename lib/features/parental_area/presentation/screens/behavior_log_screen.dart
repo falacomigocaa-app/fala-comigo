@@ -94,6 +94,8 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
     final h = date.hour.toString().padLeft(2, '0');
     final min = date.minute.toString().padLeft(2, '0');
     return '$d/$m às $h:$min';
+  }
+  
   Future<void> _exportPdf() async {
     if (_box == null || _box!.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
