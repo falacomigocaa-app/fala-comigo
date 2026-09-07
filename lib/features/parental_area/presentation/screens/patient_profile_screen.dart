@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../../../../core/services/secure_box_service.dart';
 import '../../../../core/theme/app_theme.dart';
 
 /// Perfil do Paciente: dados usados para identificar a criança nos
 /// relatórios gerados pelo app (PDF), dando um formato mais
 /// profissional para uso por terapeutas e escolas.
+///
+/// Esses dados são sensíveis (nome, data de nascimento, diagnóstico
+/// de um menor) e ficam salvos em uma Hive Box criptografada com
+/// AES-256 (ver SecureBoxService).
 class PatientProfileScreen extends StatefulWidget {
   const PatientProfileScreen({super.key});
 
@@ -34,7 +39,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
   }
 
   Future<void> _loadProfile() async {
-    final box = await Hive.openBox(_boxName);
+    final box = await SecureBoxService.openSecureBox(_boxName);
     final data = box.get('data') as Map?;
     if (data != null) {
       _nameController.text = data['name'] ?? '';
