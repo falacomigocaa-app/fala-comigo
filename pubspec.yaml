@@ -17,10 +17,12 @@ dependencies:
   # Text-to-Speech (voz em português do Brasil)
   flutter_tts: ^4.1.0
 
-  # Persistência local
+# Persistência local
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   path_provider: ^2.1.3
+  # Criptografia de dados sensíveis (perfil do paciente, registros ABC, vídeos)
+  flutter_secure_storage: ^9.2.2
 
   # Seleção de fotos (câmera/galeria) para novos cartões
   image_picker: ^1.1.2
