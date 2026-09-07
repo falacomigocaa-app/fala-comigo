@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../../core/services/parental_pin_service.dart';
 import '../../../../core/theme/app_theme.dart';
+import 'settings_screen.dart';
 
 /// "Parental Gate": tela de bloqueio por PIN de 4 dígitos, exigida
 /// antes de entrar na Área do Responsável (configurações, perfil do
@@ -14,7 +15,7 @@ import '../../../../core/theme/app_theme.dart';
 class ParentalGateScreen extends StatefulWidget {
   final Widget destination;
 
-  const ParentalGateScreen({super.key, required this.destination});
+  const ParentalGateScreen({super.key, this.destination = const SettingsScreen()});
 
   @override
   State<ParentalGateScreen> createState() => _ParentalGateScreenState();
