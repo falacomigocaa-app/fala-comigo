@@ -52,6 +52,7 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
     _contextController.dispose();
     super.dispose();
   }
+
   Future<void> _recordVideo() async {
     final video = await _picker.pickVideo(
       source: ImageSource.camera,
@@ -97,14 +98,14 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
   }
 
   Future<void> _shareEntry(String videoPath, String context) async {
-  final file = File(videoPath);
-  if (!await file.exists()) return;
-  await Share.shareXFiles(
-    [XFile(videoPath)],
-    text: context.isNotEmpty
-        ? 'Vídeo do Fala Comigo — contexto: $context'
-        : 'Vídeo do Fala Comigo',
-  );
+    final file = File(videoPath);
+    if (!await file.exists()) return;
+    await Share.shareXFiles(
+      [XFile(videoPath)],
+      text: context.isNotEmpty
+          ? 'Vídeo do Fala Comigo — contexto: $context'
+          : 'Vídeo do Fala Comigo',
+    );
   }
 
   String _formatDate(String isoString) {
@@ -115,8 +116,7 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
     final h = date.hour.toString().padLeft(2, '0');
     final min = date.minute.toString().padLeft(2, '0');
     return '$d/$m às $h:$min';
-  }
-  @override
+  }@override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -139,4 +139,128 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
                   const Text(
                     'Grave um vídeo curto do momento e adicione um contexto. '
                     'Depois, compartilhe com o terapeuta ou a escola.',
-                    styl
+                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 16),
+                  if (_pendingVideoPath == null)
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: _recordVideo,
+                        icon: const Icon(Icons.videocam_outlined),
+                        label: const Text('Gravar vídeo'),
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(0, 56),
+                          backgroundColor: AppTheme.primary,
+                          foregroundColor: Colors.white,
+                        ),
+                      ),
+                    )
+                  else ...[
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppTheme.surface,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.check_circle, color: Colors.green),
+                          const SizedBox(width: 8),
+                          const Expanded(child: Text('Vídeo gravado, pronto para salvar.')),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _contextController,
+                      maxLines: 2,
+                      decoration: const InputDecoration(
+                        labelText: 'Contexto (o que estava acontecendo)',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => setState(() => _pendingVideoPath = null),
+                            child: const Text('Descartar'),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: _saveEntry,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppTheme.primary,
+                              foregroundColor: Colors.white,
+                            ),
+                            child: const Text('Salvar'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                  const Divider(height: 40),
+                  const Text(
+                    'Vídeos salvos',
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+                  ),
+                  const SizedBox(height: 8),
+                  if (_box != null)
+                    ValueListenableBuilder(
+                      valueListenable: _box!.listenable(),
+                      builder: (context, Box box, _) {
+                        final keys = box.keys.toList().reversed.toList();
+                        if (keys.isEmpty) {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Text(
+                              'Nenhum vídeo ainda.',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          );
+                        }
+                        return Column(
+                          children: keys.map((key) {
+                            final entry = Map<String, dynamic>.from(
+                              box.get(key) as Map,
+                            );
+                            final videoPath = entry['videoPath'] as String? ?? '';
+                            final entryContext = entry['context'] as String? ?? '';
+                            return Card(
+                              margin: const EdgeInsets.symmetric(vertical: 4),
+                              child: ListTile(
+                                leading: const Icon(Icons.videocam_outlined),
+                                title: Text(_formatDate(entry['timestamp'] ?? '')),
+                                subtitle: Text(
+                                  entryContext.isEmpty ? '(sem contexto)' : entryContext,
+                                ),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.share_outlined),
+                                      onPressed: () => _shareEntry(videoPath, entryContext),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+                                      onPressed: () => _deleteEntry(key, videoPath),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    ),
+                  const SizedBox(height: 24),
+                ],
+              ),
+            ),
+    );
+  }
+}
