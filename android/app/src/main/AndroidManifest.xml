@@ -6,6 +6,7 @@
 
     <application
         android:label="Fala Comigo"
+        android:allowBackup="false"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round">
