@@ -4,6 +4,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
+import '../../../../core/services/secure_box_service.dart';
 import '../../../../core/theme/app_theme.dart';
 
 /// Tela de Registro de Comportamento (modelo ABC).
@@ -12,7 +13,8 @@ import '../../../../core/theme/app_theme.dart';
 /// usando o modelo ABC (Antecedente - Comportamento - Consequência),
 /// usado por profissionais de terapia ABA para identificar gatilhos.
 ///
-/// Os registros ficam salvos localmente no dispositivo (Hive).
+/// Os registros ficam salvos localmente no dispositivo, em uma Hive
+/// Box criptografada com AES-256 (ver SecureBoxService).
 class BehaviorLogScreen extends StatefulWidget {
   const BehaviorLogScreen({super.key});
 
@@ -38,7 +40,7 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
   }
 
   Future<void> _openBox() async {
-    final box = await Hive.openBox(_boxName);
+    final box = await SecureBoxService.openSecureBox(_boxName);
     setState(() {
       _box = box;
       _loading = false;
@@ -95,7 +97,7 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
     final min = date.minute.toString().padLeft(2, '0');
     return '$d/$m às $h:$min';
   }
-  
+
   Future<void> _exportPdf() async {
     if (_box == null || _box!.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -109,7 +111,7 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
         .toList()
         .reversed
         .toList();
-    final profileBox = await Hive.openBox('patient_profile');
+    final profileBox = await SecureBoxService.openSecureBox('patient_profile');
     final profileData = profileBox.get('data') as Map?;
     final patientName = profileData?['name'] ?? '';
     final birthDate = profileData?['birthDate'] ?? '';
@@ -137,186 +139,4 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
                   borderRadius: pw.BorderRadius.circular(4),
                 ),
                 child: pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.Text('Paciente: $patientName',
-                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                    if (birthDate.toString().isNotEmpty)
-                      pw.Text('Data de nascimento: $birthDate'),
-                    if (supportLevel.toString().isNotEmpty)
-                      pw.Text('Nível de suporte (DSM-5): $supportLevel'),
-                    if (guardian.toString().isNotEmpty)
-                      pw.Text('Responsável: $guardian'),
-                    if (school.toString().isNotEmpty)
-                      pw.Text('Escola/clínica: $school'),
-                  ],
-                ),
-              ),
-          pw.SizedBox(height: 12),
-          ...entries.map((entry) {
-            return pw.Container(
-              margin: const pw.EdgeInsets.only(bottom: 12),
-              padding: const pw.EdgeInsets.all(8),
-              decoration: pw.BoxDecoration(
-                border: pw.Border.all(color: PdfColors.grey400),
-                borderRadius: pw.BorderRadius.circular(4),
-              ),
-              child: pw.Column(
-                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                children: [
-                  pw.Text(
-                    _formatDate(entry['timestamp'] ?? ''),
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                  ),
-                  pw.SizedBox(height: 4),
-                  pw.Text('Antecedente: ${entry['antecedent'] ?? ''}'),
-                  pw.Text('Comportamento: ${entry['behavior'] ?? ''}'),
-                  pw.Text('Consequência: ${entry['consequence'] ?? ''}'),
-                  if ((entry['notes'] ?? '').toString().isNotEmpty)
-                    pw.Text('Notas: ${entry['notes']}'),
-                ],
-              ),
-            );
-          }),
-        ],
-      ),
-    );
-
-    await Printing.sharePdf(
-      bytes: await doc.save(),
-      filename: 'registro_comportamento_fala_comigo.pdf',
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.background,
-      appBar: AppBar(
-        title: const Text('Registro de Comportamento'),
-        backgroundColor: AppTheme.surface,
-      actions: [
-          IconButton(
-            icon: const Icon(Icons.picture_as_pdf_outlined),
-            tooltip: 'Exportar PDF',
-            onPressed: _exportPdf,
-          ),
-        ],),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Modelo ABC',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'Registre o que aconteceu antes, durante e depois de um episódio. '
-                    'Isso ajuda terapeutas e educadores a identificar gatilhos.',
-                    style: TextStyle(fontSize: 13, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _antecedentController,
-                    maxLines: 2,
-                    decoration: const InputDecoration(
-                      labelText: 'Antecedente (o que aconteceu antes)',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: _behaviorController,
-                    maxLines: 2,
-                    decoration: const InputDecoration(
-                      labelText: 'Comportamento (o que a criança fez)',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: _consequenceController,
-                    maxLines: 2,
-                    decoration: const InputDecoration(
-                      labelText: 'Consequência (o que aconteceu depois)',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: _notesController,
-                    maxLines: 2,
-                    decoration: const InputDecoration(
-                      labelText: 'Notas adicionais (opcional)',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _saveEntry,
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(0, 56),
-                        backgroundColor: AppTheme.primary,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text('Salvar registro'),
-                    ),
-                  ),
-                  const Divider(height: 40),
-                  const Text(
-                    'Registros salvos',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
-                  ),
-                  const SizedBox(height: 8),
-                  if (_box != null)
-                    ValueListenableBuilder(
-                      valueListenable: _box!.listenable(),
-                      builder: (context, Box box, _) {
-                        final keys = box.keys.toList().reversed.toList();
-                        if (keys.isEmpty) {
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: Text(
-                              'Nenhum registro ainda.',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          );
-                        }
-                        return Column(
-                          children: keys.map((key) {
-                            final entry = Map<String, dynamic>.from(
-                              box.get(key) as Map,
-                            );
-                            return Card(
-                              margin: const EdgeInsets.symmetric(vertical: 4),
-                              child: ListTile(
-                                title: Text(_formatDate(entry['timestamp'] ?? '')),
-                                subtitle: Text(
-                                  'A: ${entry['antecedent']}\n'
-                                  'C: ${entry['behavior']}\n'
-                                  'D: ${entry['consequence']}',
-                                ),
-                                isThreeLine: true,
-                                trailing: IconButton(
-                                  icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
-                                  onPressed: () => _deleteEntry(key),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        );
-                      },
-                    ),
-                  const SizedBox(height: 24),
-                ],
-              ),
-            ),
-    );
-  }
-}
+                  crossAxisAlignment: pw.CrossAx
