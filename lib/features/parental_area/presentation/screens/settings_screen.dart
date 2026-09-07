@@ -8,6 +8,7 @@ import 'behavior_log_screen.dart';
 
 import 'video_diary_screen.dart';
 import 'patient_profile_screen.dart';
+import 'change_pin_screen.dart';
 /// Painel dos Pais & Educadores.
 ///
 /// Permite:
@@ -76,6 +77,15 @@ const Divider(height: 16),
                   ),
                 ),
                 const Divider(height: 16),
+ListTile(
+  leading: const Icon(Icons.lock_reset_outlined),
+  title: const Text('Trocar PIN'),
+  subtitle: const Text('Alterar o PIN de acesso a esta área'),
+  onTap: () => Navigator.of(context).push(
+    MaterialPageRoute(builder: (_) => const ChangePinScreen()),
+  ),
+),
+const Divider(height: 16),
 Text('Cartões cadastrados (${cards.length})',
     style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
 const SizedBox(height: 8),
