@@ -7,11 +7,14 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/services/media_storage_service.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../aac_grid/data/providers/cards_provider.dart';
-/// Tela usada pelos pais/educadores para cadastrar um novo cartão:
-/// escolhem uma foto (câmera ou galeria) e digitam o rótulo que
-/// será falado pelo TTS.
+import '../../../aac_grid/domain/models/pictogram_card.dart';
+
+/// Tela usada pelos pais/educadores para cadastrar um novo cartão ou
+/// editar um já existente (quando [existingCard] é informado).
 class AddCardScreen extends ConsumerStatefulWidget {
-  const AddCardScreen({super.key});
+  final PictogramCard? existingCard;
+
+  const AddCardScreen({super.key, this.existingCard});
 
   @override
   ConsumerState<AddCardScreen> createState() => _AddCardScreenState();
@@ -22,6 +25,25 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
   final ImagePicker _picker = ImagePicker();
   File? _selectedImage;
   String _category = 'personalizado';
+
+  bool get _isEditing => widget.existingCard != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final existing = widget.existingCard;
+    if (existing != null) {
+      _labelController.text = existing.label;
+      _category = existing.category;
+      _selectedImage = File(existing.imagePath);
+    }
+  }
+
+  @override
+  void dispose() {
+    _labelController.dispose();
+    super.dispose();
+  }
 
   Future<void> _pickImage(ImageSource source) async {
     final XFile? picked = await _picker.pickImage(source: source, imageQuality: 85);
@@ -39,12 +61,21 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
       return;
     }
 
-    ref.read(cardsListProvider.notifier).addCard(
-          label: _labelController.text.trim(),
-          imagePath: _selectedImage!.path,
-          isCustomImage: true,
-          category: _category,
-        );
+    if (_isEditing) {
+      ref.read(cardsListProvider.notifier).updateCard(
+            id: widget.existingCard!.id,
+            label: _labelController.text.trim(),
+            imagePath: _selectedImage!.path,
+            category: _category,
+          );
+    } else {
+      ref.read(cardsListProvider.notifier).addCard(
+            label: _labelController.text.trim(),
+            imagePath: _selectedImage!.path,
+            isCustomImage: true,
+            category: _category,
+          );
+    }
 
     Navigator.of(context).pop();
   }
@@ -53,7 +84,10 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
-      appBar: AppBar(title: const Text('Adicionar Cartão'), backgroundColor: AppTheme.surface),
+      appBar: AppBar(
+        title: Text(_isEditing ? 'Editar Cartão' : 'Adicionar Cartão'),
+        backgroundColor: AppTheme.surface,
+      ),
       body: SingleChildScrollView(
   child: Padding(
         padding: const EdgeInsets.all(20),
@@ -130,7 +164,10 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
                   backgroundColor: AppTheme.accentGreen,
                   foregroundColor: Colors.white,
                 ),
-                child: const Text('Salvar Cartão', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                child: Text(
+                  _isEditing ? 'Salvar Alterações' : 'Salvar Cartão',
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                ),
               ),
             ),
           ],
