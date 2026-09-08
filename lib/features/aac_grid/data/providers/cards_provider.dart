@@ -46,6 +46,38 @@ class CardsNotifier extends StateNotifier<List<PictogramCard>> {
     state = _box.values.toList()..sort((a, b) => a.order.compareTo(b.order));
   }
 
+  /// Atualiza um cartão existente (usado ao editar pela Área do
+  /// Responsável). Só altera os campos informados.
+  Future<void> updateCard({
+    required String id,
+    String? label,
+    String? imagePath,
+    String? category,
+  }) async {
+    final card = _box.get(id);
+    if (card == null) return;
+    if (label != null) card.label = label;
+    if (imagePath != null) card.imagePath = imagePath;
+    if (category != null) card.category = category;
+    await card.save();
+    state = _box.values.toList()..sort((a, b) => a.order.compareTo(b.order));
+  }
+
+  /// Reordena os cartões (drag-and-drop na lista de Configurações),
+  /// persistindo a nova ordem no Hive.
+  Future<void> reorderCards(int oldIndex, int newIndex) async {
+    final list = [...state];
+    if (newIndex > oldIndex) newIndex -= 1;
+    final item = list.removeAt(oldIndex);
+    list.insert(newIndex, item);
+
+    for (var i = 0; i < list.length; i++) {
+      list[i].order = i;
+      await list[i].save();
+    }
+    state = list;
+  }⁷
+
   /// Usado pelo painel dos pais para ajustar tamanho/config sem
   /// duplicar cartões.
   void refresh() {
