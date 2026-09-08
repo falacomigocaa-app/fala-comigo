@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../core/services/media_storage_service.dart';
 import '../../../../core/services/secure_box_service.dart';
 import '../../../../core/theme/app_theme.dart';
 
@@ -59,8 +60,9 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
       maxDuration: const Duration(minutes: 3),
     );
     if (video == null) return;
+    final permanentPath = await MediaStorageService.persistFile(video.path);
     setState(() {
-      _pendingVideoPath = video.path;
+      _pendingVideoPath = permanentPath;
     });
   }
 
