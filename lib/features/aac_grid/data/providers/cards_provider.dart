@@ -76,7 +76,7 @@ class CardsNotifier extends StateNotifier<List<PictogramCard>> {
       await list[i].save();
     }
     state = list;
-  }⁷
+  }
 
   /// Usado pelo painel dos pais para ajustar tamanho/config sem
   /// duplicar cartões.
