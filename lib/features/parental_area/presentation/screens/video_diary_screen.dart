@@ -92,10 +92,7 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
   void _deleteEntry(dynamic key, String? videoPath) {
     _box?.delete(key);
     if (videoPath != null) {
-      final file = File(videoPath);
-      file.exists().then((exists) {
-        if (exists) file.delete();
-      });
+      MediaStorageService.deleteFile(videoPath);
     }
   }
 
