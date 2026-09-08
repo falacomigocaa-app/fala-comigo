@@ -13,6 +13,13 @@ class AppTheme {
   static const Color textDark = Color(0xFF23243A);
   static const Color cardBorder = Color(0xFFE2E4F0);
 
+  // Paleta sóbria usada na Área do Responsável/Profissional — mais
+  // discreta que as cores lúdicas da tela de comunicação da criança,
+  // para reforçar a sensação de "ferramenta de trabalho".
+  static const Color professionalBackground = Color(0xFF161B2E);
+  static const Color professionalSurface = Color(0xFF232A45);
+  static const Color professionalAccent = Color(0xFF3AAFA9);
+
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
