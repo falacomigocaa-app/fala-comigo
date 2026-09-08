@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_theme.dart';
@@ -9,17 +10,37 @@ import 'behavior_log_screen.dart';
 import 'video_diary_screen.dart';
 import 'patient_profile_screen.dart';
 import 'change_pin_screen.dart';
+
 /// Painel dos Pais & Educadores.
 ///
 /// Permite:
 /// - Adicionar novos cartões (fotos da galeria/câmera);
 /// - Ajustar o tamanho dos botões da grade;
 /// - Remover cartões existentes.
-class SettingsScreen extends ConsumerWidget {
+///
+/// Ao sair desta tela (voltando para a comunicação da criança), a
+/// orientação volta a ser travada em paisagem.
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  @override
+  void dispose() {
+    // Volta a travar em paisagem ao sair da Área do Responsável,
+    // de volta para a tela de comunicação da criança.
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final cards = ref.watch(cardsListProvider);
     final scale = ref.watch(buttonScaleProvider);
 
