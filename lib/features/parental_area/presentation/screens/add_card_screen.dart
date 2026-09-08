@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/services/media_storage_service.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../aac_grid/data/providers/cards_provider.dart';
-
 /// Tela usada pelos pais/educadores para cadastrar um novo cartão:
 /// escolhem uma foto (câmera ou galeria) e digitam o rótulo que
 /// será falado pelo TTS.
@@ -26,7 +26,8 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
   Future<void> _pickImage(ImageSource source) async {
     final XFile? picked = await _picker.pickImage(source: source, imageQuality: 85);
     if (picked != null) {
-      setState(() => _selectedImage = File(picked.path));
+      final permanentPath = await MediaStorageService.persistFile(picked.path);
+      setState(() => _selectedImage = File(permanentPath));
     }
   }
 
