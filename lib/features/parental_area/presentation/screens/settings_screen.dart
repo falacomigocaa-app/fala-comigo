@@ -14,7 +14,7 @@ import 'change_pin_screen.dart';
 /// Painel dos Pais & Educadores.
 ///
 /// Permite:
-/// - Adicionar novos cartões (fotos da galeria/câmera);
+/// - Adicionar, editar e reordenar cartões (arraste para reordenar);
 /// - Ajustar o tamanho dos botões da grade;
 /// - Remover cartões existentes.
 ///
@@ -30,8 +30,6 @@ class SettingsScreen extends ConsumerStatefulWidget {
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   @override
   void dispose() {
-    // Volta a travar em paisagem ao sair da Área do Responsável,
-    // de volta para a tela de comunicação da criança.
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
@@ -71,57 +69,83 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             activeColor: AppTheme.primary,
             onChanged: (v) => ref.read(buttonScaleProvider.notifier).state = v,
           ),
-         ListTile(
-  leading: const Icon(Icons.fact_check_outlined),
-  title: const Text('Registro de Comportamento'),
-  subtitle: const Text('Registrar gatilhos (modelo ABC)'),
-  onTap: () => Navigator.of(context).push(
-    MaterialPageRoute(builder: (_) => const BehaviorLogScreen()),
-  ),
-),
-const Divider(height: 16),
-ListTile(
-  leading: const Icon(Icons.videocam_outlined),
-  title: const Text('Diário de Vídeo'),
-  subtitle: const Text('Gravar momentos para o especialista avaliar'),
-  onTap: () => Navigator.of(context).push(
-    MaterialPageRoute(builder: (_) => const VideoDiaryScreen()),
-  ),
-), 
-const Divider(height: 16),
           ListTile(
-                  leading: const Icon(Icons.person_outline),
-                  title: const Text('Perfil do Paciente'),
-                  subtitle: const Text('Dados da criança para os relatórios'),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const PatientProfileScreen()),
+            leading: const Icon(Icons.fact_check_outlined),
+            title: const Text('Registro de Comportamento'),
+            subtitle: const Text('Registrar gatilhos (modelo ABC)'),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const BehaviorLogScreen()),
+            ),
+          ),
+          const Divider(height: 16),
+          ListTile(
+            leading: const Icon(Icons.videocam_outlined),
+            title: const Text('Diário de Vídeo'),
+            subtitle: const Text('Gravar momentos para o especialista avaliar'),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const VideoDiaryScreen()),
+            ),
+          ),
+          const Divider(height: 16),
+          ListTile(
+            leading: const Icon(Icons.person_outline),
+            title: const Text('Perfil do Paciente'),
+            subtitle: const Text('Dados da criança para os relatórios'),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const PatientProfileScreen()),
+            ),
+          ),
+          const Divider(height: 16),
+          ListTile(
+            leading: const Icon(Icons.lock_reset_outlined),
+            title: const Text('Trocar PIN'),
+            subtitle: const Text('Alterar o PIN de acesso a esta área'),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const ChangePinScreen()),
+            ),
+          ),
+          const Divider(height: 16),Text('Cartões cadastrados (${cards.length})',
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+          const SizedBox(height: 4),
+          const Text(
+            'Segure e arraste um cartão para reordenar.',
+            style: TextStyle(fontSize: 12, color: Colors.grey),
+          ),
+          const SizedBox(height: 8),
+          ReorderableListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: cards.length,
+            onReorder: (oldIndex, newIndex) {
+              ref.read(cardsListProvider.notifier).reorderCards(oldIndex, newIndex);
+            },
+            itemBuilder: (context, index) {
+              final card = cards[index];
+              return Card(
+                key: ValueKey(card.id),
+                margin: const EdgeInsets.symmetric(vertical: 4),
+                child: ListTile(
+                  leading: const Icon(Icons.drag_indicator, color: Colors.grey),
+                  title: Text(card.label),
+                  subtitle: Text(card.category),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit_outlined, color: AppTheme.primary),
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => AddCardScreen(existingCard: card)),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+                        onPressed: () => ref.read(cardsListProvider.notifier).removeCard(card.id),
+                      ),
+                    ],
                   ),
                 ),
-                const Divider(height: 16),
-ListTile(
-  leading: const Icon(Icons.lock_reset_outlined),
-  title: const Text('Trocar PIN'),
-  subtitle: const Text('Alterar o PIN de acesso a esta área'),
-  onTap: () => Navigator.of(context).push(
-    MaterialPageRoute(builder: (_) => const ChangePinScreen()),
-  ),
-),
-const Divider(height: 16),
-Text('Cartões cadastrados (${cards.length})',
-    style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-const SizedBox(height: 8),
-          ...cards.map(
-            (card) => Card(
-              margin: const EdgeInsets.symmetric(vertical: 4),
-              child: ListTile(
-                title: Text(card.label),
-                subtitle: Text(card.category),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
-                  onPressed: () => ref.read(cardsListProvider.notifier).removeCard(card.id),
-                ),
-              ),
-            ),
+              );
+            },
           ),
           const SizedBox(height: 80), // espaço para o FAB não cobrir a lista
         ],
