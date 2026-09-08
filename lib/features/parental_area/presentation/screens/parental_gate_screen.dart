@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../../core/services/parental_pin_service.dart';
 import '../../../../core/theme/app_theme.dart';
+import 'parental_area_transition_screen.dart';
 import 'settings_screen.dart';
 
 /// "Parental Gate": tela de bloqueio por PIN de 4 dígitos, exigida
@@ -33,10 +34,12 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
 
   Future<void> _checkPin() async {
     final isValid = await ParentalPinService.checkPin(_pinController.text);
-    if (isValid) {
+if (isValid) {
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => widget.destination),
+        MaterialPageRoute(
+          builder: (_) => ParentalAreaTransitionScreen(destination: widget.destination),
+        ),
       );
     } else {
       setState(() => _error = 'PIN incorreto. Tente novamente.');
