@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/services/tts_service.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/hyperfocus_theme.dart';
 import '../../../parental_area/presentation/screens/parental_gate_screen.dart';
 import '../../data/providers/cards_provider.dart';
 import '../widgets/grid_card.dart';
@@ -19,6 +20,8 @@ class AACGridScreen extends ConsumerWidget {
     final allCards = ref.watch(cardsListProvider);
     final selectedCategory = ref.watch(selectedCategoryProvider);
     final scale = ref.watch(buttonScaleProvider);
+    final hyperfocusTheme = ref.watch(hyperfocusThemeProvider);
+    final themeColor = hyperfocusTheme.primaryColor;
 
     final visibleCards = selectedCategory == 'todas'
         ? allCards
@@ -35,6 +38,11 @@ class AACGridScreen extends ConsumerWidget {
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
               child: Row(
                 children: [
+                  if (hyperfocusTheme != HyperfocusTheme.padrao)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: Text(hyperfocusTheme.emoji, style: const TextStyle(fontSize: 24)),
+                    ),
                   Expanded(
                     child: SizedBox(
                       height: 44,
@@ -44,12 +52,14 @@ class AACGridScreen extends ConsumerWidget {
                           _CategoryChip(
                             label: 'Todas',
                             selected: selectedCategory == 'todas',
+                            color: themeColor,
                             onTap: () => ref.read(selectedCategoryProvider.notifier).state = 'todas',
                           ),
                           ...AppConstants.categoryLabels.entries.map(
                             (e) => _CategoryChip(
                               label: e.value,
                               selected: selectedCategory == e.key,
+                              color: themeColor,
                               onTap: () => ref.read(selectedCategoryProvider.notifier).state = e.key,
                             ),
                           ),
@@ -122,9 +132,15 @@ class AACGridScreen extends ConsumerWidget {
 class _CategoryChip extends StatelessWidget {
   final String label;
   final bool selected;
+  final Color color;
   final VoidCallback onTap;
 
-  const _CategoryChip({required this.label, required this.selected, required this.onTap});
+  const _CategoryChip({
+    required this.label,
+    required this.selected,
+    required this.color,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -134,14 +150,14 @@ class _CategoryChip extends StatelessWidget {
         label: Text(label),
         selected: selected,
         onSelected: (_) => onTap(),
-        selectedColor: AppTheme.primary.withOpacity(0.18),
+        selectedColor: color.withValues(alpha: 0.18),
         labelStyle: TextStyle(
-          color: selected ? AppTheme.primary : AppTheme.textDark,
+          color: selected ? color : AppTheme.textDark,
           fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: selected ? AppTheme.primary : AppTheme.cardBorder),
+          side: BorderSide(color: selected ? color : AppTheme.cardBorder),
         ),
         backgroundColor: AppTheme.surface,
       ),
