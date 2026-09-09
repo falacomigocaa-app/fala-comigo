@@ -25,6 +25,10 @@ Future<void> main() async {
   Hive.registerAdapter(PictogramCardAdapter());
   final box = await Hive.openBox<PictogramCard>(cardsBoxName);
 
+  // Caixa simples de configurações do app (ex: tema de hiperfoco
+  // escolhido pelos pais).
+  await Hive.openBox('app_settings');
+
   // Primeiro uso: popula os pictogramas básicos que acompanham o app,
   // para que a criança já tenha cartões disponíveis antes mesmo dos
   // pais cadastrarem fotos personalizadas.
