@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/hyperfocus_theme.dart';
 import '../../../aac_grid/data/providers/cards_provider.dart';
 import 'add_card_screen.dart';
 import 'behavior_log_screen.dart';
@@ -16,6 +17,7 @@ import 'change_pin_screen.dart';
 /// Permite:
 /// - Adicionar, editar e reordenar cartões (arraste para reordenar);
 /// - Ajustar o tamanho dos botões da grade;
+/// - Escolher o tema visual de hiperfoco da criança;
 /// - Remover cartões existentes.
 ///
 /// Ao sair desta tela (voltando para a comunicação da criança), a
@@ -41,6 +43,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget build(BuildContext context) {
     final cards = ref.watch(cardsListProvider);
     final scale = ref.watch(buttonScaleProvider);
+    final currentTheme = ref.watch(hyperfocusThemeProvider);
 
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -69,6 +72,37 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             activeColor: AppTheme.primary,
             onChanged: (v) => ref.read(buttonScaleProvider.notifier).state = v,
           ),
+          const Divider(height: 24),
+          const Text('Tema por Hiperfoco', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+          const SizedBox(height: 4),
+          const Text(
+            'Deixa a tela da criança com a cara do interesse favorito dela.',
+            style: TextStyle(fontSize: 12, color: Colors.grey),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: HyperfocusTheme.values.map((theme) {
+              final selected = theme == currentTheme;
+              return ChoiceChip(
+                label: Text('${theme.emoji} ${theme.displayName}'),
+                selected: selected,
+                onSelected: (_) => ref.read(hyperfocusThemeProvider.notifier).setTheme(theme),
+                selectedColor: theme.primaryColor.withValues(alpha: 0.2),
+                labelStyle: TextStyle(
+                  color: selected ? theme.primaryColor : AppTheme.textDark,
+                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(color: selected ? theme.primaryColor : AppTheme.cardBorder),
+                ),
+                backgroundColor: AppTheme.surface,
+              );
+            }).toList(),
+          ),
+          const Divider(height: 24),
           ListTile(
             leading: const Icon(Icons.fact_check_outlined),
             title: const Text('Registro de Comportamento'),
@@ -104,7 +138,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               MaterialPageRoute(builder: (_) => const ChangePinScreen()),
             ),
           ),
-          const Divider(height: 16),Text('Cartões cadastrados (${cards.length})',
+          const Divider(height: 16),
+          Text('Cartões cadastrados (${cards.length})',
               style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
           const SizedBox(height: 4),
           const Text(
