@@ -1,17 +1,20 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/hyperfocus_theme.dart';
 import '../../domain/models/pictogram_card.dart';
 
 /// Cartão individual exibido na grade de pictogramas.
 ///
 /// Ao ser tocado, amplia levemente com destaque luminoso (feedback
-/// visual) e dispara [onTap] — que, na tela pai, aciona o TTS.
-/// Latência da animação mantida curta (~120ms) para não atrasar
-/// o feedback sonoro.
-class GridCard extends StatefulWidget {
+/// visual, na cor do tema de hiperfoco escolhido pelos pais) e
+/// dispara [onTap] — que, na tela pai, aciona o TTS. Latência da
+/// animação mantida curta (~120ms) para não atrasar o feedback
+/// sonoro.
+class GridCard extends ConsumerStatefulWidget {
   final PictogramCard card;
   final VoidCallback onTap;
   final double scale;
@@ -24,10 +27,10 @@ class GridCard extends StatefulWidget {
   });
 
   @override
-  State<GridCard> createState() => _GridCardState();
+  ConsumerState<GridCard> createState() => _GridCardState();
 }
 
-class _GridCardState extends State<GridCard> {
+class _GridCardState extends ConsumerState<GridCard> {
   bool _pressed = false;
 
   void _handleTap() {
@@ -44,6 +47,8 @@ class _GridCardState extends State<GridCard> {
         ? Image.file(File(widget.card.imagePath), fit: BoxFit.cover)
         : Image.asset(widget.card.imagePath, fit: BoxFit.cover);
 
+    final themeColor = ref.watch(hyperfocusThemeProvider).primaryColor;
+
     return GestureDetector(
       onTap: _handleTap,
       child: AnimatedScale(
@@ -58,13 +63,13 @@ class _GridCardState extends State<GridCard> {
             color: AppTheme.surface,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: _pressed ? AppTheme.primary : AppTheme.cardBorder,
+              color: _pressed ? themeColor : AppTheme.cardBorder,
               width: _pressed ? 3 : 1.5,
             ),
             boxShadow: _pressed
                 ? [
                     BoxShadow(
-                      color: AppTheme.primary.withOpacity(0.35),
+                      color: themeColor.withValues(alpha: 0.35),
                       blurRadius: 12,
                       spreadRadius: 1,
                     ),
