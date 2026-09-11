@@ -71,6 +71,17 @@ enum HyperfocusTheme {
         return const Color(0xFF7A5FC7);
     }
   }
+
+  /// Cor de fundo da tela da criança para este tema: um tom bem
+  /// suave (pastel) misturado com branco, mantendo o contraste alto
+  /// para leitura e evitando estímulo visual excessivo. O tema
+  /// Padrão mantém exatamente o fundo original do app.
+  Color get backgroundColor {
+    if (this == HyperfocusTheme.padrao) {
+      return const Color(0xFFF7F8FC);
+    }
+    return Color.alphaBlend(primaryColor.withValues(alpha: 0.07), Colors.white);
+  }
 }
 
 const String _hiveBoxName = 'app_settings';
