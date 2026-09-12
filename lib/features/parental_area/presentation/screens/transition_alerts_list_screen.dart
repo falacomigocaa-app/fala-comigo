@@ -22,4 +22,112 @@ class TransitionAlertsListScreen extends ConsumerWidget {
         title: const Text('Alertas de Transição'),
         backgroundColor: AppTheme.surface,
       ),
-      floatingActionButton: F
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const TransitionAlertEditScreen()),
+        ),
+        icon: const Icon(Icons.add_alert_outlined),
+        label: const Text('Novo alerta'),
+        backgroundColor: AppTheme.primary,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Card(
+            color: AppTheme.primary.withValues(alpha: 0.08),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      'Para os alertas funcionarem mesmo com a tela bloqueada, '
+                      'autorize as permissões do celular (uma vez só).',
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () =>
+                        TransitionAlertService.instance.requestPermissions(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.primary,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('Autorizar'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          if (alerts.isEmpty)
+            const Padding(
+              padding: EdgeInsets.only(top: 32),
+              child: Center(
+                child: Text(
+                  'Nenhum alerta criado ainda.\nToque em "Novo alerta" para começar.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+              ),
+            ),
+          for (final alert in alerts) _AlertCard(alert: alert),
+          const SizedBox(height: 80),
+        ],
+      ),
+    );
+  }
+}
+class _AlertCard extends ConsumerWidget {
+  final TransitionAlert alert;
+
+  const _AlertCard({required this.alert});
+
+  String _scheduleSummary() {
+    if (!alert.isScheduled || alert.scheduledWeekdays.isEmpty) {
+      return 'Somente disparo manual';
+    }
+    const labels = {1: 'Dom', 2: 'Seg', 3: 'Ter', 4: 'Qua', 5: 'Qui', 6: 'Sex', 7: 'Sáb'};
+    final days = alert.scheduledWeekdays.map((d) => labels[d] ?? '').join(', ');
+    final hour = (alert.scheduledHour ?? 0).toString().padLeft(2, '0');
+    final minute = (alert.scheduledMinute ?? 0).toString().padLeft(2, '0');
+    return '$days às $hour:$minute';
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: ListTile(
+        leading: const Icon(Icons.notifications_active_outlined, color: AppTheme.primary),
+        title: Text(alert.title.isEmpty ? '(sem título)' : alert.title),
+        subtitle: Text(
+          '${alert.audioType == 'gravado' ? 'Áudio gravado' : 'Texto falado'} • '
+          '${_scheduleSummary()} • ${alert.checklistItems.length} itens no checklist',
+        ),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => TransitionAlertEditScreen(existingAlert: alert)),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.play_circle_outline, color: AppTheme.accentGreen),
+              tooltip: 'Testar agora',
+              onPressed: () => TransitionAlertService.instance.triggerNow(alert),
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+              tooltip: 'Excluir',
+              onPressed: () async {
+                await TransitionAlertService.instance.cancelSchedule(alert);
+                await ref.read(transitionAlertsListProvider.notifier).removeAlert(alert.id);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
