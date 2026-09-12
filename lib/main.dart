@@ -9,6 +9,7 @@ import 'features/aac_grid/data/providers/cards_provider.dart';
 import 'features/aac_grid/data/providers/seed_cards.dart';
 import 'features/aac_grid/domain/models/pictogram_card.dart';
 import 'features/onboarding/presentation/screens/splash_screen.dart';
+import 'features/transition_alerts/data/providers/transition_alerts_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,10 @@ Future<void> main() async {
   // Caixa simples de configurações do app (ex: tema de hiperfoco
   // escolhido pelos pais).
   await Hive.openBox('app_settings');
+
+  // Caixa dos Alertas de Transição de Atividade (configurações dos
+  // alertas: áudio, horário, checklist).
+  await Hive.openBox(transitionAlertsBoxName);
 
   // Primeiro uso: popula os pictogramas básicos que acompanham o app,
   // para que a criança já tenha cartões disponíveis antes mesmo dos
