@@ -28,99 +28,104 @@ class AACGridScreen extends ConsumerWidget {
         : allCards.where((c) => c.category == selectedCategory).toList();
 
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: hyperfocusTheme.backgroundColor,
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            // Barra superior com filtro de categoria e acesso restrito
-            // ao Painel dos Pais/Educadores.
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
-              child: Row(
-                children: [
-                  if (hyperfocusTheme != HyperfocusTheme.padrao)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: Text(hyperfocusTheme.emoji, style: const TextStyle(fontSize: 24)),
-                    ),
-                  Expanded(
-                    child: SizedBox(
-                      height: 44,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          _CategoryChip(
-                            label: 'Todas',
-                            selected: selectedCategory == 'todas',
-                            color: themeColor,
-                            onTap: () => ref.read(selectedCategoryProvider.notifier).state = 'todas',
+            _HyperfocusBackground(theme: hyperfocusTheme),
+            Column(
+              children: [
+                // Barra superior com filtro de categoria e acesso restrito
+                // ao Painel dos Pais/Educadores.
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+                  child: Row(
+                    children: [
+                      if (hyperfocusTheme != HyperfocusTheme.padrao)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: Text(hyperfocusTheme.emoji, style: const TextStyle(fontSize: 24)),
+                        ),
+                      Expanded(
+                        child: SizedBox(
+                          height: 44,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              _CategoryChip(
+                                label: 'Todas',
+                                selected: selectedCategory == 'todas',
+                                color: themeColor,
+                                onTap: () => ref.read(selectedCategoryProvider.notifier).state = 'todas',
+                              ),
+                              ...AppConstants.categoryLabels.entries.map(
+                                (e) => _CategoryChip(
+                                  label: e.value,
+                                  selected: selectedCategory == e.key,
+                                  color: themeColor,
+                                  onTap: () => ref.read(selectedCategoryProvider.notifier).state = e.key,
+                                ),
+                              ),
+                            ],
                           ),
-                          ...AppConstants.categoryLabels.entries.map(
-                            (e) => _CategoryChip(
-                              label: e.value,
-                              selected: selectedCategory == e.key,
-                              color: themeColor,
-                              onTap: () => ref.read(selectedCategoryProvider.notifier).state = e.key,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.settings_outlined, size: 28),
-                    tooltip: 'Área do Responsável',
-                    onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const ParentalGateScreen()),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Construtor de frases (Sentence Bar).
-            const SentenceBarWidget(),
-
-            // Grade de pictogramas.
-            Expanded(
-              child: visibleCards.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'Nenhum cartão nesta categoria ainda.\nAdicione pelo Painel dos Pais.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                      IconButton(
+                        icon: const Icon(Icons.settings_outlined, size: 28),
+                        tooltip: 'Área do Responsável',
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const ParentalGateScreen()),
+                        ),
                       ),
-                    )
-                  : LayoutBuilder(
-                      builder: (context, constraints) {
-                        // Colunas responsivas: mais colunas em telas largas
-                        // (tablets em paisagem), menos em celulares.
-                        final width = constraints.maxWidth;
-                        final crossAxisCount = (width / (110 * scale)).floor().clamp(3, 8);
+                    ],
+                  ),
+                ),
 
-                        return GridView.builder(
-                          padding: const EdgeInsets.all(AppConstants.gridSpacing),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: crossAxisCount,
-                            crossAxisSpacing: AppConstants.gridSpacing,
-                            mainAxisSpacing: AppConstants.gridSpacing,
-                            childAspectRatio: 0.85,
+                // Construtor de frases (Sentence Bar).
+                const SentenceBarWidget(),
+
+                // Grade de pictogramas.
+                Expanded(
+                  child: visibleCards.isEmpty
+                      ? const Center(
+                          child: Text(
+                            'Nenhum cartão nesta categoria ainda.\nAdicione pelo Painel dos Pais.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.grey, fontSize: 16),
                           ),
-                          itemCount: visibleCards.length,
-                          itemBuilder: (context, index) {
-                            final card = visibleCards[index];
-                            return GridCard(
-                              card: card,
-                              scale: scale,
-                              onTap: () {
-                                TtsService.instance.speak(card.label);
-                                ref.read(sentenceBarProvider.notifier).addToSentence(card);
+                        )
+                      : LayoutBuilder(
+                          builder: (context, constraints) {
+                            // Colunas responsivas: mais colunas em telas largas
+                            // (tablets em paisagem), menos em celulares.
+                            final width = constraints.maxWidth;
+                            final crossAxisCount = (width / (110 * scale)).floor().clamp(3, 8);
+
+                            return GridView.builder(
+                              padding: const EdgeInsets.all(AppConstants.gridSpacing),
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: crossAxisCount,
+                                crossAxisSpacing: AppConstants.gridSpacing,
+                                mainAxisSpacing: AppConstants.gridSpacing,
+                                childAspectRatio: 0.85,
+                              ),
+                              itemCount: visibleCards.length,
+                              itemBuilder: (context, index) {
+                                final card = visibleCards[index];
+                                return GridCard(
+                                  card: card,
+                                  scale: scale,
+                                  onTap: () {
+                                    TtsService.instance.speak(card.label);
+                                    ref.read(sentenceBarProvider.notifier).addToSentence(card);
+                                  },
+                                );
                               },
                             );
                           },
-                        );
-                      },
-                    ),
+                        ),
+                ),
+              ],
             ),
           ],
         ),
@@ -128,7 +133,6 @@ class AACGridScreen extends ConsumerWidget {
     );
   }
 }
-
 class _CategoryChip extends StatelessWidget {
   final String label;
   final bool selected;
@@ -164,3 +168,10 @@ class _CategoryChip extends StatelessWidget {
     );
   }
 }
+
+/// Padrão decorativo sutil com o emoji do tema de hiperfoco ativo,
+/// espalhado com baixa opacidade atrás da grade — reforça a
+/// identificação visual com o interesse da criança sem atrapalhar
+/// a leitura dos cartões.
+class _HyperfocusBackground extends StatelessWidget {
+  f
