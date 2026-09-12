@@ -174,4 +174,42 @@ class _CategoryChip extends StatelessWidget {
 /// identificação visual com o interesse da criança sem atrapalhar
 /// a leitura dos cartões.
 class _HyperfocusBackground extends StatelessWidget {
-  f
+  final HyperfocusTheme theme;
+
+  const _HyperfocusBackground({required this.theme});
+
+  @override
+  Widget build(BuildContext context) {
+    if (theme == HyperfocusTheme.padrao) {
+      return const SizedBox.shrink();
+    }
+    return Positioned.fill(
+      child: IgnorePointer(
+        child: Opacity(
+          opacity: 0.07,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              const tile = 72.0;
+              final cols = (constraints.maxWidth / tile).ceil() + 1;
+              final rows = (constraints.maxHeight / tile).ceil() + 1;
+              return Wrap(
+                children: List.generate(cols * rows, (i) {
+                  return SizedBox(
+                    width: tile,
+                    height: tile,
+                    child: Center(
+                      child: Text(
+                        theme.emoji,
+                        style: const TextStyle(fontSize: 30),
+                      ),
+                    ),
+                  );
+                }),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
