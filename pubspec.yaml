@@ -40,8 +40,8 @@ dependencies:
 
   # Alerta de Transição de Atividade: notificação em tela cheia
   # (mesmo mecanismo de despertadores/chamadas) + agendamento
-  flutter_local_notifications: ^18.0.1
-  timezone: ^0.9.4
+  flutter_local_notifications: ^19.0.0
+  timezone: ^0.10.0
   # Gravação da voz do responsável para o alerta de transição
   record: ^6.2.1
   # Reprodução do áudio gravado do alerta de transição
