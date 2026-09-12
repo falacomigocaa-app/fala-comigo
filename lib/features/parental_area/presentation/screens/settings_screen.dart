@@ -11,6 +11,7 @@ import 'behavior_log_screen.dart';
 import 'video_diary_screen.dart';
 import 'patient_profile_screen.dart';
 import 'change_pin_screen.dart';
+import 'transition_alerts_list_screen.dart';
 
 /// Painel dos Pais & Educadores.
 ///
@@ -118,6 +119,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             subtitle: const Text('Gravar momentos para o especialista avaliar'),
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const VideoDiaryScreen()),
+            ),
+          ),
+          const Divider(height: 16),
+          ListTile(
+            leading: const Icon(Icons.alarm_on_outlined),
+            title: const Text('Alertas de Transição'),
+            subtitle: const Text('Avisa a criança antes de mudar de atividade'),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const TransitionAlertsListScreen()),
             ),
           ),
           const Divider(height: 16),
