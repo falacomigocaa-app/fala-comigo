@@ -48,8 +48,25 @@ class TransitionAlertsListScreen extends ConsumerWidget {
                   ),
                   const SizedBox(width: 8),
                   ElevatedButton(
-                    onPressed: () =>
-                        TransitionAlertService.instance.requestPermissions(),
+                    onPressed: () async {
+                      try {
+                        await TransitionAlertService.instance
+                            .requestPermissions();
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Permissões solicitadas.'),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Erro: $e')),
+                          );
+                        }
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppTheme.primary,
                       foregroundColor: Colors.white,
@@ -79,6 +96,7 @@ class TransitionAlertsListScreen extends ConsumerWidget {
     );
   }
 }
+
 class _AlertCard extends ConsumerWidget {
   final TransitionAlert alert;
 
@@ -115,7 +133,24 @@ class _AlertCard extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.play_circle_outline, color: AppTheme.accentGreen),
               tooltip: 'Testar agora',
-              onPressed: () => TransitionAlertService.instance.triggerNow(alert),
+              onPressed: () async {
+                try {
+                  await TransitionAlertService.instance.triggerNow(alert);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Notificação disparada! Verifique a barra de notificações.'),
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Erro ao disparar: $e')),
+                    );
+                  }
+                }
+              },
             ),
             IconButton(
               icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
