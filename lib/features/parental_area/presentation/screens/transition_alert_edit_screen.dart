@@ -21,11 +21,8 @@ const Map<int, String> _weekdayLabels = {
   7: 'S',
 };
 
-/// Tela de criaÃ§Ã£o/ediÃ§Ã£o de um Alerta de TransiÃ§Ã£o de Atividade:
-/// tÃ­tulo, Ã¡udio (gravado ou digitado/TTS), disparo manual e/ou
-/// agendado, e os itens do checklist gamificado que aparece depois.
-class TransitionAlertEditScreen extends ConsumerStatefulWidget {
-  final TransitionAlert? existingAlert;
+classe TransitionAlertEditScreen estende ConsumerStatefulWidget {
+  Alerta de transição final? Alerta existente;
 
   const TransitionAlertEditScreen({super.key, this.existingAlert});
 
@@ -34,28 +31,28 @@ class TransitionAlertEditScreen extends ConsumerStatefulWidget {
       _TransitionAlertEditScreenState();
 }
 
-class _TransitionAlertEditScreenState
-    extends ConsumerState<TransitionAlertEditScreen> {
-  late final TextEditingController _titleController;
-  late final TextEditingController _ttsController;
+classe _TransitionAlertEditScreenState
+    estende ConsumerState<TransitionAlertEditScreen> {
+  final tardio TextEditingController _titleController;
+  Controlador de edição de texto final tardio _ttsController;
   final TextEditingController _checklistInputController =
-      TextEditingController();
+      Controlador de edição de texto();
 
   final AudioRecorder _recorder = AudioRecorder();
   final AudioPlayer _player = AudioPlayer();
 
-  late String _alertId;
-  late int _notificationId;
-  late String _audioType; // 'gravado' ou 'tts'
+  String _alertId atrasado;
+  int _notificationId tardio;
+  String _audioType tardio;
   String? _recordedAudioPath;
   bool _isRecording = false;
   bool _isPlayingPreview = false;
 
-  late bool _isScheduled;
-  TimeOfDay? _scheduledTimeOfDay;
-  late Set<int> _scheduledWeekdays;
-  late int _countdownSeconds;
-  late List<String> _checklistItems;
+  tarde bool _isScheduled;
+  Hora do dia? _horário agendado;
+  definir tarde<int> _scheduledWeekdays;
+  int _countdownSeconds tardio;
+  Lista tardia<String> _checklistItems;
 
   bool get _isEditing => widget.existingAlert != null;
 
@@ -63,7 +60,7 @@ class _TransitionAlertEditScreenState
   void initState() {
     super.initState();
     final existing = widget.existingAlert;
-    final notifier = ref.read(transitionAlertsListProvider.notifier);
+    notificador final = ref.read(transitionAlertsListProvider.notifier);
 
     _alertId = existing?.id ?? notifier.generateId();
     _notificationId =
@@ -79,10 +76,10 @@ class _TransitionAlertEditScreenState
     _countdownSeconds = existing?.countdownSeconds ?? 60;
     _checklistItems = [...(existing?.checklistItems ?? [])];
 
-    if (existing?.scheduledHour != null &&
+    se (existindo?.horaAgendada != nulo &&
         existing?.scheduledMinute != null) {
       _scheduledTimeOfDay = TimeOfDay(
-          hour: existing!.scheduledHour!, minute: existing.scheduledMinute!);
+          hora: existente!.horaAgendada!, minuto: existente.minutoAgendado!);
     }
   }
 
@@ -98,63 +95,62 @@ class _TransitionAlertEditScreenState
 
   Future<String> _recordingFilePath() async {
     final dir = await getApplicationDocumentsDirectory();
-    final alertsDir = Directory('${dir.path}/transition_alerts_audio');
-    if (!await alertsDir.exists()) {
-      await alertsDir.create(recursive: true);
+    final alertsDir = Directory(dir.path + '/transition_alerts_audio');
+    se (!await alertsDir.exists()) {
+      aguarde alertsDir.create(recursive: true);
     }
-    return '${alertsDir.path}/$_alertId.m4a';
+    retornar alertsDir.path + '/' + _alertId + '.m4a';
   }
 
   Future<void> _toggleRecording() async {
-    if (_isRecording) {
-      final path = await _recorder.stop();
+    se (_isRecording) {
+      caminho final = aguarde _recorder.stop();
       setState(() {
-        _isRecording = false;
-        _recordedAudioPath = path ?? _recordedAudioPath;
+        _isRecording = falso;
+        _recordedAudioPath = caminho ?? _recordedAudioPath;
       });
-      return;
+      retornar;
     }
 
     if (!await _recorder.hasPermission()) {
-      if (mounted) {
+      se (montado) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content:
-                Text('Ã‰ preciso autorizar o uso do microfone para gravar.'),
+            content: Text('E preciso autorizar o uso do microfone para gravar.'),
           ),
         );
       }
-      return;
+      retornar;
     }
 
-    final path = await _recordingFilePath();
-    await _recorder.start(const RecordConfig(encoder: AudioEncoder.aacLc),
-        path: path);
+    caminho final = aguarde _recordingFilePath();
+    aguarde _recorder.start(const RecordConfig(encoder: AudioEncoder.aacLc),
+        caminho: caminho);
     setState(() => _isRecording = true);
   }
 
-  Future<void> _playPreview() async {
-    if (_recordedAudioPath == null) return;
+  Futuro<void> _playPreview() assíncrono {
+    se (_recordedAudioPath == nulo) retorne;
     setState(() => _isPlayingPreview = true);
     await _player.play(DeviceFileSource(_recordedAudioPath!));
     _player.onPlayerComplete.first.then((_) {
-      if (mounted) setState(() => _isPlayingPreview = false);
+      se (montado) setState(() => _isPlayingPreview = false);
     });
   }
 
-  Future<void> _pickTime() async {
-    final picked = await showTimePicker(
-      context: context,
+  Futuro<void> _pickTime() assíncrono {
+    final escolhido = aguarde showTimePicker(
+      contexto: contexto,
       initialTime: _scheduledTimeOfDay ?? TimeOfDay.now(),
     );
-    if (picked != null) {
-      setState(() => _scheduledTimeOfDay = picked);
+    se (escolhido != nulo) {
+      setState(() => _scheduledTimeOfDay = escolhido);
     }
   }
 
   void _addChecklistItem() {
-    final text = _checklistInputController.text.trim();
-    if (text.isEmpty) return;
+    texto final = _checklistInputController.text.trim();
+    se (texto.isEmpty) retorne;
     setState(() {
       _checklistItems.add(text);
       _checklistInputController.clear();
@@ -162,167 +158,179 @@ class _TransitionAlertEditScreenState
   }
 
   TransitionAlert _buildAlert() {
-    return TransitionAlert(
+    retornar AlertaDeTransição(
       id: _alertId,
-      title: _titleController.text.trim(),
+      título: _titleController.text.trim(),
       audioType: _audioType,
-      recordedAudioPath: _recordedAudioPath,
+      caminhoAudioGravado: _caminhoAudioGravado,
       ttsText: _ttsController.text.trim(),
-      countdownSeconds: _countdownSeconds,
+      contagemRegressivaSegundos: _contagemRegressivaSegundos,
       checklistItems: _checklistItems,
-      isScheduled: _isScheduled,
-      scheduledHour: _scheduledTimeOfDay?.hour,
-      scheduledMinute: _scheduledTimeOfDay?.minute,
-      scheduledWeekdays: _scheduledWeekdays.toList(),
-      notificationId: _notificationId,
+      estáAgendado: _estáAgendado,
+      horaAgendada: _horaAgendadaDoDia?.hora,
+      minutoAgendado: _horárioAgendadoDoDia?.minuto,
+      dias da semana agendados: _scheduledWeekdays.toList(),
+      ID da notificação: _notificationId,
     );
   }
 
   Future<void> _save() async {
-    if (_titleController.text.trim().isEmpty) {
+    se (_titleController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text('DÃª um nome para o alerta antes de salvar.')),
+            content: Text('De um nome para o alerta antes de salvar.')),
       );
-      return;
+      retornar;
     }
-    final alert = _buildAlert();
-    if (_isEditing) {
+    alerta final = _buildAlert();
+    se (_isEditing) {
       await ref.read(transitionAlertsListProvider.notifier).updateAlert(alert);
-    } else {
+    } outro {
       await ref.read(transitionAlertsListProvider.notifier).addAlert(alert);
     }
-    await TransitionAlertService.instance.scheduleRecurring(alert);
-    if (mounted) Navigator.of(context).pop();
+    String? erroAgendamento;
+    tentar {
+      aguardar TransitionAlertService.instance.scheduleRecurring(alert);
+    } catch (e) {
+      scheduleError = e.toString();
+    }
+    se (!montado) retornar;
+    se (scheduleError != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao agendar: ' + agendaError)),
+      );
+      retornar;
+    }
+    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    retornar Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: Text(_isEditing ? 'Editar Alerta' : 'Novo Alerta'),
         backgroundColor: AppTheme.surface,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
+      corpo: ListView(
+        preenchimento: const EdgeInsets.all(16),
+        crianças: [
           const Text('Nome do alerta',
-              style: TextStyle(fontWeight: FontWeight.w700)),
-          const SizedBox(height: 4),
-          TextField(
-            controller: _titleController,
-            decoration: const InputDecoration(
-              hintText: 'Ex: Hora do banho',
-              border: OutlineInputBorder(),
+              estilo: TextStyle(fontWeight: FontWeight.w700)),
+          const SizedBox(altura: 4),
+          Campo de texto(
+            controlador: _titleController,
+            decoração: const InputDecoration(
+              dicaText: 'Ex: Hora do banho',
+              borda: OutlineInputBorder(),
             ),
           ),
-          const Divider(height: 32),
+          const Divider(altura: 32),
 
-          const Text('Mensagem de Ã¡udio',
-              style: TextStyle(fontWeight: FontWeight.w700)),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            children: [
+          const Text('Mensagem de áudio',
+              estilo: TextStyle(fontWeight: FontWeight.w700)),
+          const SizedBox(altura: 8),
+          Enrolar(
+            espaçamento: 8,
+            crianças: [
               ChoiceChip(
                 label: const Text('Gravar minha voz'),
-                selected: _audioType == 'gravado',
+                selecionado: _audioType == 'gravado',
                 onSelected: (_) => setState(() => _audioType = 'gravado'),
               ),
               ChoiceChip(
-                label: const Text('Digitar (o app fala)'),
-                selected: _audioType == 'tts',
+                rótulo: const Text('Digitar (o app fala)'),
+                selecionado: _audioType == 'tts',
                 onSelected: (_) => setState(() => _audioType = 'tts'),
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          if (_audioType == 'gravado')
-            Row(
-              children: [
-                ElevatedButton.icon(
+          const SizedBox(altura: 12),
+          se (_audioType == 'gravado')
+            Linha(
+              crianças: [
+                ElevatedButton.ícone(
                   onPressed: _toggleRecording,
-                  icon: Icon(_isRecording ? Icons.stop : Icons.mic),
-                  label: Text(_isRecording ? 'Parar' : 'Gravar'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        _isRecording ? Colors.redAccent : AppTheme.primary,
-                    foregroundColor: Colors.white,
+                  ícone: Icon(_isRecording ? Icons.stop : Icons.mic),
+                  rótulo: Text(_isRecording ? 'Parar' : 'Gravar'),
+                  estilo: ElevatedButton.styleFrom(
+                    cor de fundo:
+                        _estágravando? Colors.redAccent: AppTheme.primary,
+                    cor de primeiro plano: Cores.branco,
                   ),
                 ),
-                const SizedBox(width: 12),
-                if (_recordedAudioPath != null)
-                  IconButton(
+                const SizedBox(largura: 12),
+                se (_recordedAudioPath != null)
+                  Botão de ícone(
                     onPressed: _isPlayingPreview ? null : _playPreview,
-                    icon: const Icon(Icons.play_circle,
-                        color: AppTheme.accentGreen, size: 32),
-                    tooltip: 'Ouvir gravaÃ§Ã£o',
+                    ícone: const Icon(Icons.play_circle,
+                        cor: AppTheme.accentGreen, tamanho: 32),
+                    dica de ferramenta: 'Ouvir gravacao',
                   ),
               ],
             )
-          else
-            TextField(
-              controller: _ttsController,
+          outro
+            Campo de texto(
+              controlador: _ttsController,
               maxLines: 3,
-              decoration: const InputDecoration(
+              decoração: const InputDecoration(
                 hintText: 'Ex: Vamos guardar os brinquedos e ir para o banho!',
-                border: OutlineInputBorder(),
+                borda: OutlineInputBorder(),
               ),
             ),
-          const Divider(height: 32),
+          const Divider(altura: 32),
 
           const Text('Contagem visual',
-              style: TextStyle(fontWeight: FontWeight.w700)),
-          Text('$_countdownSeconds segundos',
-              style: const TextStyle(color: Colors.grey)),
+              estilo: TextStyle(fontWeight: FontWeight.w700)),
+          Texto(_countdownSeconds.toString() + ' segundos',
+              estilo: const TextStyle(cor: Colors.grey)),
           Slider(
-            value: _countdownSeconds.toDouble(),
+            valor: _countdownSeconds.toDouble(),
             min: 10,
-            max: 300,
-            divisions: 29,
+            máx.: 300,
+            divisões: 29,
             activeColor: AppTheme.primary,
             onChanged: (v) => setState(() => _countdownSeconds = v.round()),
           ),
-          const Divider(height: 32),
+          const Divider(altura: 32),
 
-          Row(
-            children: [
-              const Expanded(
-                child: Text('Repetir em horÃ¡rio fixo',
-                    style: TextStyle(fontWeight: FontWeight.w700)),
+          Linha(
+            crianças: [
+              const Expandido(
+                filho: Text('Repetir em horario fixo',
+                    estilo: TextStyle(fontWeight: FontWeight.w700)),
               ),
-              Switch(
-                value: _isScheduled,
+              Trocar(
+                valor: _isScheduled,
                 activeColor: AppTheme.primary,
                 onChanged: (v) => setState(() => _isScheduled = v),
               ),
             ],
           ),
-          if (_isScheduled) ...[
-            const SizedBox(height: 8),
-            OutlinedButton.icon(
+          se (_isScheduled) ...[
+            const SizedBox(altura: 8),
+            Ícone de botão com contorno (
               onPressed: _pickTime,
-              icon: const Icon(Icons.access_time),
-              label: Text(
+              ícone: const Icon(Icons.access_time),
+              rótulo: Texto(
                 _scheduledTimeOfDay == null
-                    ? 'Escolher horÃ¡rio'
+                    ? 'Escolher horario'
                     : _scheduledTimeOfDay!.format(context),
               ),
             ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 6,
-              children: _weekdayLabels.entries.map((entry) {
-                final selected = _scheduledWeekdays.contains(entry.key);
-                return FilterChip(
-                  label: Text(entry.value),
-                  selected: selected,
+            const SizedBox(altura: 12),
+            Enrolar(
+              espaçamento: 6,
+              filhos: _weekdayLabels.entries.map((entry) {
+                final selecionado = _scheduledWeekdays.contains(entry.key);
+                retornar FilterChip(
+                  rótulo: Texto(entrada.valor),
+                  selecionado: selecionado,
                   selectedColor: AppTheme.primary.withValues(alpha: 0.2),
                   onSelected: (sel) => setState(() {
-                    if (sel) {
+                    se (sel) {
                       _scheduledWeekdays.add(entry.key);
-                    } else {
+                    } outro {
                       _scheduledWeekdays.remove(entry.key);
                     }
                   }),
@@ -330,58 +338,58 @@ class _TransitionAlertEditScreenState
               }).toList(),
             ),
           ],
-          const Divider(height: 32),
+          const Divider(altura: 32),
 
           const Text('Checklist depois do alerta',
-              style: TextStyle(fontWeight: FontWeight.w700)),
-          const SizedBox(height: 4),
-          const Text(
-            'Dica: comece cada item com um emoji, ex: "ðŸ§¸ Guardar os brinquedos".',
-            style: TextStyle(fontSize: 12, color: Colors.grey),
+              estilo: TextStyle(fontWeight: FontWeight.w700)),
+          const SizedBox(altura: 4),
+          const Texto(
+            'Dica: comece cada item com um emoji, ex: Guardar os brinquedos.',
+            estilo: TextStyle(fontSize: 12, color: Colors.grey),
           ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _checklistInputController,
-                  decoration: const InputDecoration(
-                    hintText: 'ðŸ§¸ Guardar os brinquedos',
-                    border: OutlineInputBorder(),
+          const SizedBox(altura: 8),
+          Linha(
+            crianças: [
+              Expandido(
+                filho: Campo de texto(
+                  controlador: _checklistInputController,
+                  decoração: const InputDecoration(
+                    hintText: 'Guardar os brinquedos',
+                    borda: OutlineInputBorder(),
                   ),
                   onSubmitted: (_) => _addChecklistItem(),
                 ),
               ),
-              IconButton(
+              Botão de ícone(
                 onPressed: _addChecklistItem,
-                icon: const Icon(Icons.add_circle,
-                    color: AppTheme.primary, size: 32),
+                ícone: const Icon(Icons.add_circle,
+                    cor: AppTheme.primary, tamanho: 32),
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          for (var i = 0; i < _checklistItems.length; i++)
+          const SizedBox(altura: 8),
+          para (var i = 0; i < _checklistItems.length; i++)
             ListTile(
               contentPadding: EdgeInsets.zero,
-              title: Text(_checklistItems[i]),
-              trailing: IconButton(
-                icon: const Icon(Icons.close, color: Colors.redAccent),
+              título: Texto(_checklistItems[i]),
+              final: IconButton(
+                ícone: const Icon(Icons.close, cor: Colors.redAccent),
                 onPressed: () => setState(() => _checklistItems.removeAt(i)),
               ),
             ),
-          const SizedBox(height: 24),
+          const SizedBox(altura: 24),
 
-          ElevatedButton.icon(
-            onPressed: _save,
-            icon: const Icon(Icons.check),
-            label: const Text('Salvar alerta'),
-            style: ElevatedButton.styleFrom(
+          ElevatedButton.ícone(
+            onPressed: _salvar,
+            ícone: const Icon(Icons.check),
+            rótulo: const Text('Salvar alerta'),
+            estilo: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.primary,
-              foregroundColor: Colors.white,
-              minimumSize: const Size.fromHeight(48),
+              cor de primeiro plano: Cores.branco,
+              tamanhoMínimo: const Tamanho.daAltura(48),
             ),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(altura: 40),
         ],
       ),
     );
