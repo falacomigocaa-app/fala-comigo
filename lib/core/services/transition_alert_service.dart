@@ -167,6 +167,22 @@ class TransitionAlertService {
   /// determinado.
   tz.TZDateTime _nextInstanceOfWeekdayTime(
       int weekday, int hour, int minute) {
+      /// Método de diagnóstico: agenda uma notificação única e simples
+  /// para daqui a alguns segundos, sem a lógica de dia da semana —
+  /// serve para isolar se o problema está no agendamento em si ou
+  /// na lógica de repetição semanal.
+  Future<void> testDelayed(int seconds) async {
+    final scheduledDate =
+        tz.TZDateTime.now(tz.local).add(Duration(seconds: seconds));
+    await _plugin.zonedSchedule(
+      999999,
+      'Teste agendado',
+      'Se você está vendo isso, o agendamento simples funciona!',
+      scheduledDate,
+      _buildDetails(),
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    );
+  }
     // package:timezone/Dart usa 1=segunda...7=domingo; convertemos
     // da convenção do app (1=domingo...7=sábado).
     final dartWeekday = weekday == 1 ? DateTime.sunday : weekday - 1;
