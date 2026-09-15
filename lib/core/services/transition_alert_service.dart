@@ -165,9 +165,7 @@ class TransitionAlertService {
   /// Calcula a próxima ocorrência de um dia da semana (1=domingo ...
   /// 7=sábado, convenção usada no resto do app) num horário
   /// determinado.
-  tz.TZDateTime _nextInstanceOfWeekdayTime(
-      int weekday, int hour, int minute) {
-      /// Método de diagnóstico: agenda uma notificação única e simples
+  /// Método de diagnóstico: agenda uma notificação única e simples
   /// para daqui a alguns segundos, sem a lógica de dia da semana —
   /// serve para isolar se o problema está no agendamento em si ou
   /// na lógica de repetição semanal.
@@ -183,6 +181,9 @@ class TransitionAlertService {
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
   }
+
+  tz.TZDateTime _nextInstanceOfWeekdayTime(
+      int weekday, int hour, int minute) {
     // package:timezone/Dart usa 1=segunda...7=domingo; convertemos
     // da convenção do app (1=domingo...7=sábado).
     final dartWeekday = weekday == 1 ? DateTime.sunday : weekday - 1;
