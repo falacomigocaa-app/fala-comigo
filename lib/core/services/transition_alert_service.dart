@@ -79,6 +79,21 @@ class TransitionAlertService {
     await androidPlugin.requestFullScreenIntentPermission();
   }
 
+  /// Verifica o status real das permissões no Android, para
+  /// diagnóstico visível na tela (em vez de falhas silenciosas).
+  Future<String> checkPermissionStatus() async {
+    final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+    if (androidPlugin == null) {
+      return 'Não foi possível verificar nesta plataforma.';
+    }
+    final notificationsEnabled = await androidPlugin.areNotificationsEnabled();
+    final exactAlarmsAllowed =
+        await androidPlugin.canScheduleExactNotifications();
+    return 'Notificações: ${notificationsEnabled == true ? "OK" : "BLOQUEADAS"} | '
+        'Alarme exato: ${exactAlarmsAllowed == true ? "OK" : "BLOQUEADO"}';
+  }
+
   NotificationDetails _buildDetails() {
     return const NotificationDetails(
       android: AndroidNotificationDetails(
