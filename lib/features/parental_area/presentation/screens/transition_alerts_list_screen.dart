@@ -48,31 +48,34 @@ class TransitionAlertsListScreen extends ConsumerWidget {
                   ),
                   const SizedBox(width: 8),
                   ElevatedButton(
-                    onPressed: () async {
-                      try {
-                        await TransitionAlertService.instance
-                            .requestPermissions();
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Permissões solicitadas.'),
-                            ),
-                          );
-                        }
-                      } catch (e) {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Erro: $e')),
-                          );
-                        }
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primary,
-                      foregroundColor: Colors.white,
+            onPressed: () async {
+              try {
+                await TransitionAlertService.instance
+                    .requestPermissions();
+                final status = await TransitionAlertService.instance
+                    .checkPermissionStatus();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(status),
+                      duration: const Duration(seconds: 6),
                     ),
-                    child: const Text('Autorizar'),
-                  ),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Erro: $e')),
+                  );
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.primary,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Autorizar'),
+          ),
                 ],
               ),
             ),
