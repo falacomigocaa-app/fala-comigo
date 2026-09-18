@@ -147,7 +147,7 @@ class TransitionAlertService {
         'Hora de mudar de atividade!',
         scheduledDate,
         _buildDetails(),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        androidScheduleMode: AndroidScheduleMode.alarmClock,
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
         payload: '$transitionAlertPayloadPrefix${alert.id}',
       );
@@ -162,9 +162,6 @@ class TransitionAlertService {
     }
   }
 
-  /// Calcula a próxima ocorrência de um dia da semana (1=domingo ...
-  /// 7=sábado, convenção usada no resto do app) num horário
-  /// determinado.
   /// Método de diagnóstico: agenda uma notificação única e simples
   /// para daqui a alguns segundos, sem a lógica de dia da semana —
   /// serve para isolar se o problema está no agendamento em si ou
@@ -178,10 +175,13 @@ class TransitionAlertService {
       'Se você está vendo isso, o agendamento simples funciona!',
       scheduledDate,
       _buildDetails(),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.alarmClock,
     );
   }
 
+  /// Calcula a próxima ocorrência de um dia da semana (1=domingo ...
+  /// 7=sábado, convenção usada no resto do app) num horário
+  /// determinado.
   tz.TZDateTime _nextInstanceOfWeekdayTime(
       int weekday, int hour, int minute) {
     // package:timezone/Dart usa 1=segunda...7=domingo; convertemos
