@@ -11,6 +11,8 @@ import 'features/aac_grid/data/providers/seed_cards.dart';
 import 'features/aac_grid/domain/models/pictogram_card.dart';
 import 'features/onboarding/presentation/screens/splash_screen.dart';
 import 'features/transition_alerts/data/providers/transition_alerts_provider.dart';
+import 'features/transition_alerts/domain/models/transition_alert.dart';
+import 'features/transition_alerts/presentation/screens/transition_alert_full_screen.dart';
 
 /// Chave global de navegação: permite abrir uma tela (como o alerta
 /// de transição em tela cheia) a partir de fora da árvore de widgets,
@@ -54,6 +56,20 @@ Future<void> main() async {
 
   // Inicializa o serviço de notificações do Alerta de Transição.
   await TransitionAlertService.instance.init();
+
+  // Quando uma notificação de Alerta de Transição é tocada, abre a
+  // tela em tela cheia correspondente, buscando o alerta salvo pelo
+  // ID recebido no payload da notificação.
+  TransitionAlertService.instance.onAlertTriggered = (alertId) {
+    final alertsBox = Hive.box(transitionAlertsBoxName);
+    final rawMap = alertsBox.get(alertId);
+    if (rawMap != null) {
+      final alert = TransitionAlert.fromMap(Map<String, dynamic>.from(rawMap as Map));
+      navigatorKey.currentState?.push(
+        MaterialPageRoute(builder: (_) => TransitionAlertFullScreen(alert: alert)),
+      );
+    }
+  };
 
   runApp(const ProviderScope(child: CaaApp()));
 }
