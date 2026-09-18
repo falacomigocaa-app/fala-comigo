@@ -61,13 +61,29 @@ Future<void> main() async {
   // tela em tela cheia correspondente, buscando o alerta salvo pelo
   // ID recebido no payload da notificação.
   TransitionAlertService.instance.onAlertTriggered = (alertId) {
-    final alertsBox = Hive.box(transitionAlertsBoxName);
-    final rawMap = alertsBox.get(alertId);
-    if (rawMap != null) {
-      final alert = TransitionAlert.fromMap(Map<String, dynamic>.from(rawMap as Map));
-      navigatorKey.currentState?.push(
-        MaterialPageRoute(builder: (_) => TransitionAlertFullScreen(alert: alert)),
-      );
+    final ctx = navigatorKey.currentContext;
+    try {
+      final alertsBox = Hive.box(transitionAlertsBoxName);
+      final rawMap = alertsBox.get(alertId);
+      if (rawMap != null) {
+        final alert =
+            TransitionAlert.fromMap(Map<String, dynamic>.from(rawMap as Map));
+        navigatorKey.currentState?.push(
+          MaterialPageRoute(builder: (_) => TransitionAlertFullScreen(alert: alert)),
+        );
+      } else if (ctx != null) {
+        ScaffoldMessenger.of(ctx).showSnackBar(
+          SnackBar(
+              content: Text(
+                  'DIAGNÓSTICO: callback chamado, mas alerta não encontrado (id: $alertId)')),
+        );
+      }
+    } catch (e) {
+      if (ctx != null) {
+        ScaffoldMessenger.of(ctx).showSnackBar(
+          SnackBar(content: Text('DIAGNÓSTICO: erro ao abrir alerta: $e')),
+        );
+      }
     }
   };
 
