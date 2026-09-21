@@ -116,5 +116,31 @@ class SentenceBarNotifier extends StateNotifier<List<PictogramCard>> {
 /// Tamanho ajustável dos botões, controlado no Painel dos Pais.
 final buttonScaleProvider = StateProvider<double>((ref) => 1.0);
 
+/// Define se tocar em um cartão fala, adiciona à frase, ou faz as duas coisas.
+///
+/// O modo padrão preserva o comportamento anterior. Famílias podem escolher
+/// um modo silencioso para montar mensagens sem produzir áudio a cada toque.
+enum CardTapBehavior { speakAndAdd, addOnly, speakOnly }
+
+class CardTapBehaviorNotifier extends StateNotifier<CardTapBehavior> {
+  CardTapBehaviorNotifier() : super(_loadInitial());
+
+  static CardTapBehavior _loadInitial() {
+    final saved = Hive.box('app_settings').get('card_tap_behavior') as String?;
+    return CardTapBehavior.values.firstWhere(
+      (behavior) => behavior.name == saved,
+      orElse: () => CardTapBehavior.speakAndAdd,
+    );
+  }
+
+  Future<void> setBehavior(CardTapBehavior behavior) async {
+    state = behavior;
+    await Hive.box('app_settings').put('card_tap_behavior', behavior.name);
+  }
+}
+
+final cardTapBehaviorProvider = StateNotifierProvider<CardTapBehaviorNotifier,
+    CardTapBehavior>((ref) => CardTapBehaviorNotifier());
+
 /// Configurações bloqueadas (Modo Infantil Sensorial ativo).
 final settingsLockedProvider = StateProvider<bool>((ref) => true);

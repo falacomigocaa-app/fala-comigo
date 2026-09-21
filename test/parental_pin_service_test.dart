@@ -3,10 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:fala_comigo/core/services/parental_pin_service.dart';
 
-/// Testes do serviço de PIN da Área do Responsável — a parte mais
-/// crítica de segurança do app. O "cofre seguro" do sistema
-/// (flutter_secure_storage) é simulado com um mapa em memória, já
-/// que o cofre de verdade só existe num aparelho real.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -17,16 +13,16 @@ void main() {
     fakeStorage.clear();
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (MethodCall call) async {
+      final args = call.arguments is Map
+          ? Map<String, dynamic>.from(call.arguments as Map)
+          : <String, dynamic>{};
       switch (call.method) {
         case 'write':
-          final args = Map<String, dynamic>.from(call.arguments as Map);
           fakeStorage[args['key'] as String] = args['value'] as String;
           return null;
         case 'read':
-          final args = Map<String, dynamic>.from(call.arguments as Map);
           return fakeStorage[args['key'] as String];
         case 'delete':
-          final args = Map<String, dynamic>.from(call.arguments as Map);
           fakeStorage.remove(args['key'] as String);
           return null;
         case 'deleteAll':
@@ -35,7 +31,6 @@ void main() {
         case 'readAll':
           return fakeStorage;
         case 'containsKey':
-          final args = Map<String, dynamic>.from(call.arguments as Map);
           return fakeStorage.containsKey(args['key'] as String);
         default:
           return null;
@@ -49,30 +44,42 @@ void main() {
   });
 
   group('ParentalPinService', () {
-    test('aceita o PIN padrão "1234" quando nenhum PIN foi definido ainda', () async {
-      final isValid = await ParentalPinService.checkPin('1234');
-      expect(isValid, isTrue);
+    test('não aceita nenhum PIN antes da configuração inicial', () async {
+      expect(await ParentalPinService.hasPin(), isFalse);
+      expect(await ParentalPinService.checkPin('1234'), isFalse);
     });
 
-    test('rejeita um PIN errado quando nenhum PIN foi definido ainda', () async {
-      final isValid = await ParentalPinService.checkPin('0000');
-      expect(isValid, isFalse);
+    test('armazena um verificador e aceita o PIN configurado', () async {
+      await ParentalPinService.setPin('4826');
+
+      expect(await ParentalPinService.hasPin(), isTrue);
+      expect(await ParentalPinService.checkPin('4826'), isTrue);
+      expect(await ParentalPinService.checkPin('9999'), isFalse);
     });
 
-    test('depois de trocar o PIN, o PIN antigo deixa de funcionar', () async {
-      await ParentalPinService.setPin('7777');
-
-      final oldPinResult = await ParentalPinService.checkPin('1234');
-      final newPinResult = await ParentalPinService.checkPin('7777');
-
-      expect(oldPinResult, isFalse);
-      expect(newPinResult, isTrue);
+    test('rejeita PIN padrão, repetido ou com formato inválido', () async {
+      await expectLater(ParentalPinService.setPin('1234'), throwsFormatException);
+      await expectLater(ParentalPinService.setPin('0000'), throwsFormatException);
+      await expectLater(ParentalPinService.setPin('1111'), throwsFormatException);
+      await expectLater(ParentalPinService.setPin('123'), throwsFormatException);
     });
 
-    test('PIN errado após a troca continua sendo rejeitado', () async {
-      await ParentalPinService.setPin('5555');
-      final isValid = await ParentalPinService.checkPin('9999');
-      expect(isValid, isFalse);
+    test('uma falha inicia bloqueio progressivo antes de nova tentativa', () async {
+      await ParentalPinService.setPin('4826');
+
+      expect(await ParentalPinService.checkPin('9999'), isFalse);
+      expect(await ParentalPinService.remainingLockout(), isNotNull);
+      expect(await ParentalPinService.checkPin('4826'), isFalse);
+    });
+
+    test('trocar o PIN invalida o anterior', () async {
+      await ParentalPinService.setPin('4826');
+      await Future<void>.delayed(const Duration(seconds: 1));
+      await ParentalPinService.setPin('7391');
+
+      expect(await ParentalPinService.checkPin('4826'), isFalse);
+      await Future<void>.delayed(const Duration(seconds: 1));
+      expect(await ParentalPinService.checkPin('7391'), isTrue);
     });
   });
 }

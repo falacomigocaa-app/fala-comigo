@@ -44,6 +44,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget build(BuildContext context) {
     final cards = ref.watch(cardsListProvider);
     final scale = ref.watch(buttonScaleProvider);
+    final tapBehavior = ref.watch(cardTapBehaviorProvider);
     final currentTheme = ref.watch(hyperfocusThemeProvider);
 
     return Scaffold(
@@ -72,6 +73,48 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             label: '${(scale * 100).round()}%',
             activeColor: AppTheme.primary,
             onChanged: (v) => ref.read(buttonScaleProvider.notifier).state = v,
+          ),
+          const SizedBox(height: 8),
+          const Text('Ao tocar em um cartão',
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+          const SizedBox(height: 4),
+          const Text(
+            'Escolha se o toque fala, monta uma mensagem ou faz as duas coisas.',
+            style: TextStyle(fontSize: 12, color: Colors.grey),
+          ),
+          RadioListTile<CardTapBehavior>(
+            contentPadding: EdgeInsets.zero,
+            value: CardTapBehavior.speakAndAdd,
+            groupValue: tapBehavior,
+            title: const Text('Falar e adicionar à frase'),
+            onChanged: (value) {
+              if (value != null) {
+                ref.read(cardTapBehaviorProvider.notifier).setBehavior(value);
+              }
+            },
+          ),
+          RadioListTile<CardTapBehavior>(
+            contentPadding: EdgeInsets.zero,
+            value: CardTapBehavior.addOnly,
+            groupValue: tapBehavior,
+            title: const Text('Adicionar sem falar'),
+            subtitle: const Text('Recomendado para montar frases com calma.'),
+            onChanged: (value) {
+              if (value != null) {
+                ref.read(cardTapBehaviorProvider.notifier).setBehavior(value);
+              }
+            },
+          ),
+          RadioListTile<CardTapBehavior>(
+            contentPadding: EdgeInsets.zero,
+            value: CardTapBehavior.speakOnly,
+            groupValue: tapBehavior,
+            title: const Text('Falar sem adicionar à frase'),
+            onChanged: (value) {
+              if (value != null) {
+                ref.read(cardTapBehaviorProvider.notifier).setBehavior(value);
+              }
+            },
           ),
           const Divider(height: 24),
           const Text('Tema por Hiperfoco', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),

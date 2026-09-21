@@ -12,10 +12,6 @@ class AppConstants {
   /// Mantida curta e suave para evitar sobrecarga sensorial.
   static const Duration cardTapAnimationDuration = Duration(milliseconds: 120);
 
-  /// PIN padrão do "Parental Gate" (deve ser alterável nas configurações
-  /// em uma versão futura; aqui fica como constante para simplicidade).
-  static const String defaultParentalPin = '1234';
-
   static const Map<String, String> categoryLabels = {
     'acoes': 'Ações',
     'pessoas': 'Pessoas',

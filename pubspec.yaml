@@ -23,6 +23,8 @@ dependencies:
   path_provider: ^2.1.3
   # Criptografia de dados sensíveis (perfil do paciente, registros ABC, vídeos)
   flutter_secure_storage: ^9.2.2
+  # Derivação segura do PIN parental e futura cifra autenticada de mídia
+  cryptography: ^2.8.1
 
   # Seleção de fotos (câmera/galeria) para novos cartões
   image_picker: ^1.1.2

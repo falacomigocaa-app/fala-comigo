@@ -42,7 +42,12 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
       return;
     }
 
-    await ParentalPinService.setPin(_newController.text);
+    try {
+      await ParentalPinService.setPin(_newController.text);
+    } on FormatException catch (error) {
+      setState(() => _error = error.message);
+      return;
+    }
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('PIN atualizado com sucesso.')),
