@@ -1,9 +1,9 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/services/tts_service.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/secure_media_image.dart';
 import '../../data/providers/cards_provider.dart';
 
 /// Barra horizontal que acumula os cartões selecionados pelo usuário
@@ -56,7 +56,7 @@ class SentenceBarWidget extends ConsumerWidget {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: card.isCustomImage
-                                      ? Image.file(File(card.imagePath), fit: BoxFit.cover)
+                                      ? SecureMediaImage(path: card.imagePath)
                                       : Image.asset(card.imagePath, fit: BoxFit.cover),
                                 ),
                               ),

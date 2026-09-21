@@ -1,10 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/hyperfocus_theme.dart';
+import '../../../../core/widgets/secure_media_image.dart';
 import '../../domain/models/pictogram_card.dart';
 
 /// Cartão individual exibido na grade de pictogramas.
@@ -44,12 +44,7 @@ class _GridCardState extends ConsumerState<GridCard> {
   @override
   Widget build(BuildContext context) {
     final imageWidget = widget.card.isCustomImage
-        ? Image.file(
-            File(widget.card.imagePath),
-            fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) =>
-                const Icon(Icons.image_not_supported_outlined, size: 48),
-          )
+        ? SecureMediaImage(path: widget.card.imagePath)
         : Image.asset(
             widget.card.imagePath,
             fit: BoxFit.cover,
