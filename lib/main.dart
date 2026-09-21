@@ -5,12 +5,14 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'core/services/transition_alert_service.dart';
 import 'core/services/secure_box_service.dart';
+import 'core/services/parental_session_service.dart';
 import 'core/services/tts_service.dart';
 import 'core/theme/app_theme.dart';
 import 'features/aac_grid/data/providers/cards_provider.dart';
 import 'features/aac_grid/data/providers/seed_cards.dart';
 import 'features/aac_grid/domain/models/pictogram_card.dart';
 import 'features/onboarding/presentation/screens/splash_screen.dart';
+import 'features/parental_area/presentation/screens/parental_gate_screen.dart';
 import 'features/transition_alerts/data/providers/transition_alerts_provider.dart';
 import 'features/transition_alerts/domain/models/transition_alert.dart';
 import 'features/transition_alerts/presentation/screens/transition_alert_full_screen.dart';
@@ -91,8 +93,51 @@ Future<void> main() async {
   runApp(const ProviderScope(child: CaaApp()));
 }
 
-class CaaApp extends StatelessWidget {
+class CaaApp extends StatefulWidget {
   const CaaApp({super.key});
+
+  @override
+  State<CaaApp> createState() => _CaaAppState();
+}
+
+class _CaaAppState extends State<CaaApp> with WidgetsBindingObserver {
+  bool _wasInBackground = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    ParentalSessionService.onExpired = _showParentalGate;
+  }
+
+  @override
+  void dispose() {
+    if (ParentalSessionService.onExpired == _showParentalGate) {
+      ParentalSessionService.onExpired = null;
+    }
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      _wasInBackground = ParentalSessionService.isAuthenticated;
+      ParentalSessionService.lock();
+    } else if (state == AppLifecycleState.resumed && _wasInBackground) {
+      _wasInBackground = false;
+      _showParentalGate();
+    }
+  }
+
+  void _showParentalGate() {
+    final navigator = navigatorKey.currentState;
+    if (navigator == null || !mounted) return;
+    navigator.pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const ParentalGateScreen()),
+      (route) => route.isFirst,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
