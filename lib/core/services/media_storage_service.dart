@@ -69,6 +69,23 @@ class MediaStorageService {
     }
   }
 
+  static Future<void> clearAllMedia() async {
+    final appDir = await getApplicationDocumentsDirectory();
+    final temporaryDir = await getTemporaryDirectory();
+    for (final path in [
+      '${appDir.path}/$_subfolder',
+      '${appDir.path}/transition_alerts_audio',
+      '${temporaryDir.path}/$_temporarySubfolder',
+      '${temporaryDir.path}/fala_comigo_audio_recordings',
+    ]) {
+      final directory = Directory(path);
+      if (await directory.exists()) {
+        await directory.delete(recursive: true);
+      }
+    }
+    _previewCache.clear();
+  }
+
   static Future<File> _materialize(String path) async {
     final source = File(path);
     if (!await source.exists()) {

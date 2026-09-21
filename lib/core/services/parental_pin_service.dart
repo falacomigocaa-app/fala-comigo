@@ -71,6 +71,13 @@ class ParentalPinService {
     await _clearFailures();
   }
 
+  static Future<void> clearCredentials() async {
+    await _storage.delete(key: _saltKey);
+    await _storage.delete(key: _verifierKey);
+    await _storage.delete(key: _failedAttemptsKey);
+    await _storage.delete(key: _lockoutUntilKey);
+  }
+
   static void _validatePin(String pin) {
     if (!RegExp(r'^\d{4}$').hasMatch(pin)) {
       throw const FormatException('O PIN deve conter exatamente quatro dígitos.');
