@@ -29,6 +29,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
 
   Box? _box;
   bool _loading = true;
+  bool _consentAccepted = false;
 
   static const _supportLevels = ['Nível 1', 'Nível 2', 'Nível 3'];
 
@@ -47,6 +48,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
       _guardianController.text = data['guardian'] ?? '';
       _schoolController.text = data['school'] ?? '';
       _supportLevel = data['supportLevel'] ?? 'Nível 1';
+      _consentAccepted = data['consentAccepted'] == true;
     }
     setState(() {
       _box = box;
@@ -64,12 +66,38 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
   }
 
   Future<void> _saveProfile() async {
+    if (!_consentAccepted) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: const Text('Proteção de dados da criança'),
+          content: const Text(
+            'Estes dados podem identificar uma criança e aparecer em relatórios. Preencha somente o que for necessário. Ao continuar, confirme que você é o responsável legal ou está autorizado a cuidar desses dados. O conteúdo fica no aparelho e não é enviado automaticamente pelo Fala Comigo.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('Cancelar'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: const Text('Sou responsável/autorizado'),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true || !mounted) return;
+      _consentAccepted = true;
+    }
+
     await _box?.put('data', {
       'name': _nameController.text.trim(),
       'birthDate': _birthDateController.text.trim(),
       'guardian': _guardianController.text.trim(),
       'school': _schoolController.text.trim(),
       'supportLevel': _supportLevel,
+      'consentAccepted': true,
+      'consentAt': DateTime.now().toIso8601String(),
     });
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
@@ -93,7 +121,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Esses dados aparecem nos relatórios em PDF gerados pelo app.',
+                    'Tudo é opcional. Preencha somente o necessário; os dados aparecem nos relatórios em PDF gerados pelo app.',
                     style: TextStyle(fontSize: 13, color: Colors.grey),
                   ),
                   const SizedBox(height: 16),
@@ -108,7 +136,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                   TextField(
                     controller: _birthDateController,
                     decoration: const InputDecoration(
-                      labelText: 'Data de nascimento (ex: 15/03/2018)',
+                      labelText: 'Data de nascimento (opcional)',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -116,7 +144,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                   DropdownButtonFormField<String>(
                     initialValue: _supportLevel,
                     decoration: const InputDecoration(
-                      labelText: 'Nível de suporte (DSM-5)',
+                      labelText: 'Nível de suporte (opcional)',
                       border: OutlineInputBorder(),
                     ),
                     items: _supportLevels
@@ -128,7 +156,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                   TextField(
                     controller: _guardianController,
                     decoration: const InputDecoration(
-                      labelText: 'Nome do responsável',
+                      labelText: 'Nome do responsável (opcional)',
                       border: OutlineInputBorder(),
                     ),
                   ),
