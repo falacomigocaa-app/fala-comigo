@@ -62,10 +62,12 @@ class TransitionAlertsListScreen extends ConsumerWidget {
                     ),
                   );
                 }
-              } catch (e) {
+              } catch (_) {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Erro: $e')),
+                    const SnackBar(
+                      content: Text('Não foi possível configurar as permissões.'),
+                    ),
                   );
                 }
               }
@@ -161,10 +163,12 @@ class _AlertCard extends ConsumerWidget {
                       ),
                     );
                   }
-                } catch (e) {
+                } catch (_) {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Erro ao disparar: $e')),
+                      const SnackBar(
+                        content: Text('Não foi possível disparar o alerta.'),
+                      ),
                     );
                   }
                 }
