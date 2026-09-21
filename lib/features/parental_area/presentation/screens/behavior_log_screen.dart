@@ -104,6 +104,27 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
       return;
     }
 
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Exportar relatório?'),
+        content: const Text(
+          'O PDF pode conter registros ABC e dados do perfil da criança, como nome, responsável, escola/clínica e nível de suporte. Depois do compartilhamento, o aplicativo não controla as cópias enviadas a outros serviços.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Exportar'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
     final entries = _box!.values
         .map((e) => Map<String, dynamic>.from(e as Map))
         .toList()
