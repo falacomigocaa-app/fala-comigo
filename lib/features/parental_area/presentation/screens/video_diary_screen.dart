@@ -100,13 +100,36 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
     if (mounted) setState(() => _pendingVideoPath = null);
   }
 
-  Future<void> _shareEntry(String videoPath, String context) async {
+  Future<void> _shareEntry(String videoPath, String entryContext) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Compartilhar vídeo?'),
+        content: Text(
+          entryContext.isEmpty
+              ? 'O vídeo será entregue ao aplicativo de compartilhamento escolhido por você.'
+              : 'O vídeo e o contexto “$entryContext” serão entregues ao aplicativo de compartilhamento escolhido por você.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Continuar'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
     final file = await MediaStorageService.materializeForReading(videoPath);
     if (!await file.exists()) return;
     await Share.shareXFiles(
       [XFile(file.path)],
-      text: context.isNotEmpty
-          ? 'Vídeo do Fala Comigo — contexto: $context'
+      text: entryContext.isNotEmpty
+          ? 'Vídeo do Fala Comigo — contexto: $entryContext'
           : 'Vídeo do Fala Comigo',
     );
   }
