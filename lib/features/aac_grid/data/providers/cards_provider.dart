@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../core/services/media_storage_service.dart';
 import '../../domain/models/pictogram_card.dart';
 
 const String cardsBoxName = 'pictogram_cards';
@@ -42,7 +43,11 @@ class CardsNotifier extends StateNotifier<List<PictogramCard>> {
   }
 
   Future<void> removeCard(String id) async {
+    final card = _box.get(id);
     await _box.delete(id);
+    if (card != null && card.isCustomImage) {
+      await MediaStorageService.deleteFile(card.imagePath);
+    }
     state = _box.values.toList()..sort((a, b) => a.order.compareTo(b.order));
   }
 
@@ -56,10 +61,17 @@ class CardsNotifier extends StateNotifier<List<PictogramCard>> {
   }) async {
     final card = _box.get(id);
     if (card == null) return;
+    final previousImagePath = card.imagePath;
+    final previousWasCustom = card.isCustomImage;
     if (label != null) card.label = label;
     if (imagePath != null) card.imagePath = imagePath;
     if (category != null) card.category = category;
     await card.save();
+    if (imagePath != null &&
+        imagePath != previousImagePath &&
+        previousWasCustom) {
+      await MediaStorageService.deleteFile(previousImagePath);
+    }
     state = _box.values.toList()..sort((a, b) => a.order.compareTo(b.order));
   }
 

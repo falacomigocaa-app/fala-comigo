@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/services/media_storage_service.dart';
 import '../../../../core/services/tts_service.dart';
 import '../../../../core/theme/hyperfocus_theme.dart';
 import '../../domain/models/transition_alert.dart';
@@ -46,7 +47,10 @@ class _TransitionAlertFullScreenState
   Future<void> _playAudio() async {
     if (widget.alert.audioType == 'gravado' &&
         widget.alert.recordedAudioPath != null) {
-      await _player.play(DeviceFileSource(widget.alert.recordedAudioPath!));
+      final preview = await MediaStorageService.materializeForReading(
+        widget.alert.recordedAudioPath!,
+      );
+      await _player.play(DeviceFileSource(preview.path));
     } else if (widget.alert.ttsText != null &&
         widget.alert.ttsText!.isNotEmpty) {
       await TtsService.instance.speak(widget.alert.ttsText!);

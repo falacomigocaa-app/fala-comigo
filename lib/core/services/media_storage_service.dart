@@ -128,7 +128,10 @@ class MediaStorageService {
 
   static Future<bool> _isOwnedPath(File file) async {
     final mediaDir = await _mediaDirectory();
-    return file.absolute.path.startsWith('${mediaDir.absolute.path}/');
+    final appDir = await getApplicationDocumentsDirectory();
+    final legacyAudioDir = Directory('${appDir.path}/transition_alerts_audio');
+    return file.absolute.path.startsWith('${mediaDir.absolute.path}/') ||
+        file.absolute.path.startsWith('${legacyAudioDir.absolute.path}/');
   }
 
   static String _safeExtension(String path, {String fallback = ''}) {

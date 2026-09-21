@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../core/services/media_storage_service.dart';
 import '../../domain/models/transition_alert.dart';
 
 const String transitionAlertsBoxName = 'transition_alerts';
@@ -41,7 +42,15 @@ class TransitionAlertsNotifier extends StateNotifier<List<TransitionAlert>> {
   }
 
   Future<void> removeAlert(String id) async {
+    final raw = _box.get(id);
     await _box.delete(id);
+    if (raw is Map) {
+      final alert = TransitionAlert.fromMap(Map<String, dynamic>.from(raw));
+      final audioPath = alert.recordedAudioPath;
+      if (audioPath != null) {
+        await MediaStorageService.deleteFile(audioPath);
+      }
+    }
     state = _loadAll(_box);
   }
 
