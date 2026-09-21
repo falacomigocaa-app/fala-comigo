@@ -236,8 +236,9 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
                   ),
                   const SizedBox(height: 4),
                   const Text(
-                    'Registre o que aconteceu antes, durante e depois de um episódio. '
-                    'Isso ajuda terapeutas e educadores a identificar gatilhos.',
+                    'Registre o que aconteceu antes, o que foi observado e o que '
+                    'aconteceu depois. Prefira descrições concretas e anote quais '
+                    'apoios ajudaram.',
                     style: TextStyle(fontSize: 13, color: Colors.grey),
                   ),
                   const SizedBox(height: 16),
@@ -254,7 +255,7 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
                     controller: _behaviorController,
                     maxLines: 2,
                     decoration: const InputDecoration(
-                      labelText: 'Comportamento (o que a criança fez)',
+                      labelText: 'Comportamento observado (sem interpretações)',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -263,7 +264,7 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
                     controller: _consequenceController,
                     maxLines: 2,
                     decoration: const InputDecoration(
-                      labelText: 'Consequência (o que aconteceu depois)',
+                      labelText: 'Depois e apoio oferecido',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -320,8 +321,8 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
                                 title: Text(_formatDate(entry['timestamp'] ?? '')),
                                 subtitle: Text(
                                   'A: ${entry['antecedent']}\n'
-                                  'C: ${entry['behavior']}\n'
-                                  'D: ${entry['consequence']}',
+                                  'B: ${entry['behavior']}\n'
+                                  'C: ${entry['consequence']}',
                                 ),
                                 isThreeLine: true,
                                 trailing: IconButton(
