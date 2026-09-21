@@ -32,5 +32,12 @@ jobs:
       - name: Static analysis
         run: flutter analyze --no-fatal-infos --no-fatal-warnings
 
+      - name: Verify release signing policy
+        run: |
+          if grep -q 'signingConfigs.getByName("debug")' android/app/build.gradle.kts; then
+            echo "Release builds must never fall back to the debug signing key."
+            exit 1
+          fi
+
       - name: Tests
         run: flutter test
