@@ -23,6 +23,11 @@ class AACGridScreen extends ConsumerWidget {
     final tapBehavior = ref.watch(cardTapBehaviorProvider);
     final hyperfocusTheme = ref.watch(hyperfocusThemeProvider);
     final themeColor = hyperfocusTheme.primaryColor;
+    final tapSemanticHint = switch (tapBehavior) {
+      CardTapBehavior.speakAndAdd => 'Toque para falar e adicionar à frase',
+      CardTapBehavior.addOnly => 'Toque para adicionar à frase sem falar',
+      CardTapBehavior.speakOnly => 'Toque para falar sem adicionar à frase',
+    };
 
     final visibleCards = selectedCategory == 'todas'
         ? allCards
@@ -116,6 +121,7 @@ class AACGridScreen extends ConsumerWidget {
                                 return GridCard(
                                   card: card,
                                   scale: scale,
+                                  semanticHint: tapSemanticHint,
                                   onTap: () {
                                     if (tapBehavior != CardTapBehavior.addOnly) {
                                       TtsService.instance.speak(card.label);
