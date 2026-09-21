@@ -20,6 +20,7 @@ class AACGridScreen extends ConsumerWidget {
     final allCards = ref.watch(cardsListProvider);
     final selectedCategory = ref.watch(selectedCategoryProvider);
     final scale = ref.watch(buttonScaleProvider);
+    final tapBehavior = ref.watch(cardTapBehaviorProvider);
     final hyperfocusTheme = ref.watch(hyperfocusThemeProvider);
     final themeColor = hyperfocusTheme.primaryColor;
 
@@ -116,8 +117,12 @@ class AACGridScreen extends ConsumerWidget {
                                   card: card,
                                   scale: scale,
                                   onTap: () {
-                                    TtsService.instance.speak(card.label);
-                                    ref.read(sentenceBarProvider.notifier).addToSentence(card);
+                                    if (tapBehavior != CardTapBehavior.addOnly) {
+                                      TtsService.instance.speak(card.label);
+                                    }
+                                    if (tapBehavior != CardTapBehavior.speakOnly) {
+                                      ref.read(sentenceBarProvider.notifier).addToSentence(card);
+                                    }
                                   },
                                 );
                               },

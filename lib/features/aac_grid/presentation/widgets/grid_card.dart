@@ -44,14 +44,29 @@ class _GridCardState extends ConsumerState<GridCard> {
   @override
   Widget build(BuildContext context) {
     final imageWidget = widget.card.isCustomImage
-        ? Image.file(File(widget.card.imagePath), fit: BoxFit.cover)
-        : Image.asset(widget.card.imagePath, fit: BoxFit.cover);
+        ? Image.file(
+            File(widget.card.imagePath),
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) =>
+                const Icon(Icons.image_not_supported_outlined, size: 48),
+          )
+        : Image.asset(
+            widget.card.imagePath,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) =>
+                const Icon(Icons.image_not_supported_outlined, size: 48),
+          );
 
     final themeColor = ref.watch(hyperfocusThemeProvider).primaryColor;
 
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      label: widget.card.label,
+      hint: 'Toque duas vezes para selecionar',
       onTap: _handleTap,
-      child: AnimatedScale(
+      child: GestureDetector(
+        onTap: _handleTap,
+        child: AnimatedScale(
         scale: _pressed ? 1.06 : 1.0,
         duration: AppConstants.cardTapAnimationDuration,
         child: Container(
@@ -100,6 +115,7 @@ class _GridCardState extends ConsumerState<GridCard> {
               ),
             ],
           ),
+        ),
         ),
       ),
     );
