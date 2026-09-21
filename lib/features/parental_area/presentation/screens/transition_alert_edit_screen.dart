@@ -206,16 +206,18 @@ class _TransitionAlertEditScreenState
     } else {
       await ref.read(transitionAlertsListProvider.notifier).addAlert(alert);
     }
-    String? scheduleError;
+    var scheduleFailed = false;
     try {
       await TransitionAlertService.instance.scheduleRecurring(alert);
-    } catch (e) {
-      scheduleError = e.toString();
+    } catch (_) {
+      scheduleFailed = true;
     }
     if (!mounted) return;
-    if (scheduleError != null) {
+    if (scheduleFailed) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao agendar: $scheduleError')),
+        const SnackBar(
+          content: Text('O alerta foi salvo, mas não foi possível agendá-lo.'),
+        ),
       );
       return;
     }

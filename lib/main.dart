@@ -76,15 +76,13 @@ Future<void> main() async {
         );
       } else if (ctx != null) {
         ScaffoldMessenger.of(ctx).showSnackBar(
-          SnackBar(
-              content: Text(
-                  'DIAGNÓSTICO: callback chamado, mas alerta não encontrado (id: $alertId)')),
+          const SnackBar(content: Text('Não foi possível abrir este alerta.')),
         );
       }
-    } catch (e) {
+    } catch (_) {
       if (ctx != null) {
         ScaffoldMessenger.of(ctx).showSnackBar(
-          SnackBar(content: Text('DIAGNÓSTICO: erro ao abrir alerta: $e')),
+          const SnackBar(content: Text('Não foi possível abrir este alerta.')),
         );
       }
     }
