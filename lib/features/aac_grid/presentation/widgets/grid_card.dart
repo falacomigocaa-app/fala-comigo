@@ -57,7 +57,7 @@ class _GridCardState extends ConsumerState<GridCard> {
     return Semantics(
       button: true,
       label: widget.card.label,
-      hint: 'Toque duas vezes para selecionar',
+      hint: 'Toque para selecionar',
       onTap: _handleTap,
       child: GestureDetector(
         onTap: _handleTap,

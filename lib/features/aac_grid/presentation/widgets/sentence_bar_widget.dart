@@ -40,33 +40,39 @@ class SentenceBarWidget extends ConsumerWidget {
                     separatorBuilder: (_, __) => const SizedBox(width: 8),
                     itemBuilder: (context, index) {
                       final card = sentence[index];
-                      return GestureDetector(
+                      return Semantics(
+                        button: true,
+                        label: card.label,
+                        hint: 'Toque para remover da frase',
                         onTap: () => notifier.removeAt(index),
-                        child: Container(
-                          width: 72,
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: AppTheme.background,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: AppTheme.cardBorder),
-                          ),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: card.isCustomImage
-                                      ? SecureMediaImage(path: card.imagePath)
-                                      : Image.asset(card.imagePath, fit: BoxFit.cover),
+                        child: GestureDetector(
+                          onTap: () => notifier.removeAt(index),
+                          child: Container(
+                            width: 72,
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppTheme.background,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: AppTheme.cardBorder),
+                            ),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: card.isCustomImage
+                                        ? SecureMediaImage(path: card.imagePath)
+                                        : Image.asset(card.imagePath, fit: BoxFit.cover),
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                card.label,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 11),
-                              ),
-                            ],
+                                Text(
+                                  card.label,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 11),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
