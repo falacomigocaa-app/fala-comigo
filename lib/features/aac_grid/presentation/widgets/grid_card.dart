@@ -18,12 +18,14 @@ class GridCard extends ConsumerStatefulWidget {
   final PictogramCard card;
   final VoidCallback onTap;
   final double scale;
+  final String? semanticHint;
 
   const GridCard({
     super.key,
     required this.card,
     required this.onTap,
     this.scale = 1.0,
+    this.semanticHint,
   });
 
   @override
@@ -57,7 +59,7 @@ class _GridCardState extends ConsumerState<GridCard> {
     return Semantics(
       button: true,
       label: widget.card.label,
-      hint: 'Toque para selecionar',
+      hint: widget.semanticHint ?? 'Toque para selecionar',
       onTap: _handleTap,
       child: GestureDetector(
         onTap: _handleTap,
