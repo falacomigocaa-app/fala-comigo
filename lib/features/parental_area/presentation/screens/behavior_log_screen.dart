@@ -104,34 +104,58 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
       return;
     }
 
-    final confirmed = await showDialog<bool>(
+    final includeProfileData = await showDialog<bool>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Exportar relatório?'),
-        content: const Text(
-          'O PDF pode conter registros ABC e dados do perfil da criança, como nome, responsável, escola/clínica e nível de suporte. Depois do compartilhamento, o aplicativo não controla as cópias enviadas a outros serviços.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: const Text('Cancelar'),
+      builder: (dialogContext) {
+        var includeData = false;
+        return StatefulBuilder(
+          builder: (context, setDialogState) => AlertDialog(
+            title: const Text('Exportar relatório?'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Por padrão, o PDF contém somente os registros ABC. '
+                  'Depois do compartilhamento, o aplicativo não controla as cópias enviadas a outros serviços.',
+                ),
+                const SizedBox(height: 12),
+                CheckboxListTile(
+                  contentPadding: EdgeInsets.zero,
+                  value: includeData,
+                  onChanged: (value) => setDialogState(
+                    () => includeData = value ?? false,
+                  ),
+                  title: const Text('Incluir dados identificadores'),
+                  subtitle: const Text('Nome, responsável, escola e nível de suporte'),
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text('Cancelar'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.of(dialogContext).pop(includeData),
+                child: const Text('Exportar'),
+              ),
+            ],
           ),
-          FilledButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text('Exportar'),
-          ),
-        ],
-      ),
+        );
+      },
     );
-    if (confirmed != true || !mounted) return;
+    if (includeProfileData == null || !mounted) return;
 
     final entries = _box!.values
         .map((e) => Map<String, dynamic>.from(e as Map))
         .toList()
         .reversed
         .toList();
-    final profileBox = await SecureBoxService.openSecureBox('patient_profile');
-    final profileData = profileBox.get('data') as Map?;
+    final profileData = includeProfileData
+        ? (await SecureBoxService.openSecureBox('patient_profile')).get('data') as Map?
+        : null;
     final patientName = profileData?['name'] ?? '';
     final birthDate = profileData?['birthDate'] ?? '';
     final supportLevel = profileData?['supportLevel'] ?? '';
