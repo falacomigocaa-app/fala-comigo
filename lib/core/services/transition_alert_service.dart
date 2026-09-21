@@ -104,7 +104,7 @@ class TransitionAlertService {
         priority: Priority.max,
         fullScreenIntent: true,
         category: AndroidNotificationCategory.alarm,
-        visibility: NotificationVisibility.public,
+        visibility: NotificationVisibility.private,
         playSound: true,
         enableVibration: true,
       ),
@@ -115,7 +115,7 @@ class TransitionAlertService {
   Future<void> triggerNow(TransitionAlert alert) async {
     await _plugin.show(
       alert.notificationId,
-      alert.title,
+      'Lembrete do Fala Comigo',
       'Hora de mudar de atividade!',
       _buildDetails(),
       payload: '$transitionAlertPayloadPrefix${alert.id}',
@@ -143,7 +143,7 @@ class TransitionAlertService {
       );
       await _plugin.zonedSchedule(
         alert.notificationId + weekday,
-        alert.title,
+        'Lembrete do Fala Comigo',
         'Hora de mudar de atividade!',
         scheduledDate,
         _buildDetails(),
