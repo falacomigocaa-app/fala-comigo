@@ -30,7 +30,7 @@
 <body>
 
 <h1>Política de Privacidade — Fala Comigo</h1>
-<p class="updated">Última atualização: 7 de setembro de 2026</p>
+<p class="updated">Última atualização: 21 de setembro de 2026</p>
 
 <p>
   O <strong>Fala Comigo</strong> é um aplicativo de Comunicação Alternativa
@@ -44,19 +44,20 @@
 <h2>1. Dados de voz (Text-to-Speech)</h2>
 <p>
   O Fala Comigo converte texto em voz (TTS) inteiramente no próprio
-  dispositivo, utilizando o mecanismo de síntese de voz nativo do
-  sistema Android. Nenhum áudio, frase montada ou texto falado é
-  enviado para servidores externos ou para a Anthropic/Google — todo o
-  processamento acontece localmente, no aparelho do usuário.
+  dispositivo, utilizando o mecanismo de síntese de voz disponível no
+  sistema operacional. O aplicativo não envia áudio, frase montada ou
+  texto falado para um servidor próprio.
 </p>
 
 <h2>2. Fotos e cartões personalizados</h2>
 <p>
   Os pais/responsáveis podem adicionar fotos próprias (da câmera ou da
   galeria do dispositivo) para criar cartões de comunicação
-  personalizados. Essas imagens são armazenadas <strong>apenas
-  localmente</strong> no dispositivo do usuário. O aplicativo não faz
-  upload dessas fotos para nenhum servidor, nuvem ou terceiro.
+  personalizados. Essas imagens são armazenadas <strong>localmente e
+  cifradas em repouso</strong> no dispositivo do usuário. Novas mídias usam
+  AES-GCM-256, com a chave protegida pelo armazenamento seguro do sistema
+  operacional. O aplicativo não faz upload automático dessas fotos para
+  nenhum servidor, nuvem ou terceiro.
 </p>
 
 <h2>3. Perfil do Paciente</h2>
@@ -66,8 +67,8 @@
   responsável e escola/clínica) para identificá-la nos relatórios em
   PDF gerados pelo app. Esses dados são considerados sensíveis por se
   referirem a uma criança com deficiência, e ficam armazenados
-  <strong>apenas localmente, de forma criptografada (AES-256)</strong>
-  no dispositivo. Nunca são enviados a servidores externos.
+  <strong>apenas localmente, em uma caixa Hive protegida por AES-256</strong>
+  no dispositivo. Nunca são enviados automaticamente a servidores externos.
 </p>
 
 <h2>4. Registro de Comportamento</h2>
@@ -75,8 +76,8 @@
   O app permite registrar episódios de comportamento pelo modelo ABC
   (Antecedente, Comportamento, Consequência), usado por profissionais de
   terapia para identificar gatilhos. Esses registros ficam armazenados
-  <strong>apenas localmente, de forma criptografada (AES-256)</strong> no
-  dispositivo. O responsável pode exportar esses registros em um arquivo
+  <strong>apenas localmente, em uma caixa Hive protegida por AES-256</strong>
+  no dispositivo. O responsável pode exportar esses registros em um arquivo
   PDF e decidir livremente com quem compartilhá-lo (por exemplo, um
   terapeuta ou a escola), usando os recursos de compartilhamento do
   próprio sistema Android.
@@ -87,8 +88,9 @@
   O app permite gravar vídeos curtos, com áudio, de momentos do dia a
   dia da criança, junto de uma anotação de contexto, para compartilhar
   com um terapeuta ou especialista. Esses vídeos ficam armazenados
-  <strong>apenas localmente, de forma criptografada (AES-256)</strong> no
-  dispositivo. O app não faz upload automático de nenhum vídeo — o
+  <strong>apenas localmente, cifrados com AES-GCM-256</strong> no dispositivo,
+  enquanto a chave fica protegida pelo armazenamento seguro do sistema. O app
+  não faz upload automático de nenhum vídeo — o
   compartilhamento só acontece se o responsável escolher ativamente
   compartilhar um vídeo específico, usando os recursos do próprio
   sistema Android.
@@ -101,9 +103,9 @@
     Vídeo.</li>
   <li><strong>Microfone:</strong> usado apenas durante a gravação de
     vídeos no Diário de Vídeo, para capturar o áudio do momento.</li>
-  <li><strong>Galeria/Armazenamento de mídia:</strong> usada apenas quando
-    o responsável opta por selecionar uma foto já existente no
-    dispositivo.</li>
+  <li><strong>Fotos e vídeos:</strong> o seletor do sistema é usado quando o
+    responsável escolhe uma foto ou vídeo existente, conforme as permissões e
+    recursos oferecidos pela versão do sistema operacional.</li>
 </ul>
 <p>
   Todas as permissões são solicitadas apenas no momento do uso e podem
@@ -116,8 +118,10 @@
   O aplicativo possui uma tela de bloqueio por PIN de 4 dígitos para
   impedir que a criança acesse acidentalmente as configurações e os
   dados sensíveis descritos acima. O responsável pode definir e alterar
-  esse PIN a qualquer momento. O PIN é armazenado de forma segura,
-  apenas localmente no dispositivo, e não é transmitido a nenhum
+  esse PIN a qualquer momento. O PIN nunca é armazenado em texto puro: o
+  aplicativo guarda um verificador derivado por PBKDF2-HMAC-SHA256, com salt
+  aleatório, no armazenamento seguro do sistema. Tentativas inválidas geram
+  atraso progressivo e bloqueio temporário. O PIN não é transmitido a nenhum
   servidor.
 </p>
 
@@ -139,7 +143,16 @@
   aplicativo seja desinstalado.
 </p>
 
-<h2>10. Alterações nesta política</h2>
+<h2>10. Backup e transferência do dispositivo</h2>
+<p>
+  Para reduzir o risco de exposição de dados sensíveis, o aplicativo declara
+  regras Android que excluem seus arquivos, bancos de dados, preferências e
+  armazenamento externo dos backups automáticos e da transferência automática
+  entre dispositivos. A família deve manter seus próprios cuidados ao exportar
+  ou compartilhar um relatório ou uma mídia pelo sistema operacional.
+</p>
+
+<h2>11. Alterações nesta política</h2>
 <p>
   Esta política pode ser atualizada conforme novas funcionalidades
   forem adicionadas ao aplicativo. A data da última atualização estará
@@ -147,9 +160,10 @@
 </p>
 
 <div class="contact">
-  <strong>Contato:</strong><br>
-  Em caso de dúvidas sobre esta política de privacidade, entre em
-  contato pelo e-mail: <em>[inserir e-mail de contato antes de publicar]</em>
+  <strong>Contato e transparência:</strong><br>
+  Dúvidas, correções ou sugestões sobre esta política podem ser registradas
+  na <a href="https://github.com/falacomigocaa-app/fala-comigo/issues">página
+  pública do projeto no GitHub</a>.
 </div>
 
 </body>
