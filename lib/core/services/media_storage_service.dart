@@ -20,6 +20,18 @@ class MediaStorageService {
   static const _fileMagic = 'FCM1';
   static const _nonceLength = 12;
   static const _macLength = 16;
+  static const _maxFileBytes = 100 * 1024 * 1024;
+  static const _allowedExtensions = {
+    '.png',
+    '.jpg',
+    '.jpeg',
+    '.webp',
+    '.mp4',
+    '.m4a',
+    '.aac',
+    '.wav',
+    '.3gp',
+  };
   static final _algorithm = AesGcm.with256bits();
   static final _random = Random.secure();
   static const _storage = FlutterSecureStorage();
@@ -32,9 +44,16 @@ class MediaStorageService {
     if (!await source.exists()) {
       throw FileSystemException('Mídia de origem não encontrada', sourcePath);
     }
+    final size = await source.length();
+    if (size > _maxFileBytes) {
+      throw const FileSystemException('Mídia excede o limite permitido.');
+    }
 
     final mediaDir = await _mediaDirectory();
     final extension = _safeExtension(sourcePath);
+    if (!_allowedExtensions.contains(extension)) {
+      throw const FormatException('Formato de mídia não permitido.');
+    }
     final fileName =
         '${DateTime.now().microsecondsSinceEpoch}_${_random.nextInt(1 << 32).toRadixString(16)}$extension.fcm';
     final destination = File('${mediaDir.path}/$fileName');
@@ -90,6 +109,9 @@ class MediaStorageService {
     final source = File(path);
     if (!await source.exists()) {
       throw FileSystemException('Mídia não encontrada', path);
+    }
+    if (!await _isOwnedPath(source)) {
+      throw const FileSystemException('Caminho de mídia não autorizado.');
     }
 
     final bytes = await source.readAsBytes();
@@ -147,8 +169,14 @@ class MediaStorageService {
     final mediaDir = await _mediaDirectory();
     final appDir = await getApplicationDocumentsDirectory();
     final legacyAudioDir = Directory('${appDir.path}/transition_alerts_audio');
-    return file.absolute.path.startsWith('${mediaDir.absolute.path}/') ||
-        file.absolute.path.startsWith('${legacyAudioDir.absolute.path}/');
+    if (!await file.exists()) return false;
+    final filePath = await file.resolveSymbolicLinks();
+    final mediaPath = await mediaDir.resolveSymbolicLinks();
+    final legacyAudioPath = await legacyAudioDir.exists()
+        ? await legacyAudioDir.resolveSymbolicLinks()
+        : '';
+    return filePath.startsWith('$mediaPath${Platform.pathSeparator}') ||
+        filePath.startsWith('$legacyAudioPath${Platform.pathSeparator}');
   }
 
   static String _safeExtension(String path, {String fallback = ''}) {
