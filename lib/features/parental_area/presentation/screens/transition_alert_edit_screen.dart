@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 
+import '../../../../core/services/media_storage_service.dart';
 import '../../../../core/services/transition_alert_service.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../transition_alerts/data/providers/transition_alerts_provider.dart';
@@ -94,21 +95,31 @@ class _TransitionAlertEditScreenState
   }
 
   Future<String> _recordingFilePath() async {
-    final dir = await getApplicationDocumentsDirectory();
-    final alertsDir = Directory('${dir.path}/transition_alerts_audio');
-    if (!await alertsDir.exists()) {
-      await alertsDir.create(recursive: true);
+    final dir = await getTemporaryDirectory();
+    final recordingsDir = Directory('${dir.path}/fala_comigo_audio_recordings');
+    if (!await recordingsDir.exists()) {
+      await recordingsDir.create(recursive: true);
     }
-    return '${alertsDir.path}/$_alertId.m4a';
+    return '${recordingsDir.path}/$_alertId.m4a';
   }
 
   Future<void> _toggleRecording() async {
     if (_isRecording) {
       final path = await _recorder.stop();
-      setState(() {
-        _isRecording = false;
-        _recordedAudioPath = path ?? _recordedAudioPath;
-      });
+      if (path != null) {
+        final encryptedPath = await MediaStorageService.persistFile(path);
+        await File(path).delete();
+        final previousPath = _recordedAudioPath;
+        if (previousPath != null) {
+          await MediaStorageService.deleteFile(previousPath);
+        }
+        setState(() {
+          _isRecording = false;
+          _recordedAudioPath = encryptedPath;
+        });
+      } else {
+        setState(() => _isRecording = false);
+      }
       return;
     }
 
@@ -133,7 +144,9 @@ class _TransitionAlertEditScreenState
   Future<void> _playPreview() async {
     if (_recordedAudioPath == null) return;
     setState(() => _isPlayingPreview = true);
-    await _player.play(DeviceFileSource(_recordedAudioPath!));
+    final preview =
+        await MediaStorageService.materializeForReading(_recordedAudioPath!);
+    await _player.play(DeviceFileSource(preview.path));
     _player.onPlayerComplete.first.then((_) {
       if (mounted) setState(() => _isPlayingPreview = false);
     });
@@ -182,6 +195,10 @@ class _TransitionAlertEditScreenState
             content: Text('Dê um nome para o alerta antes de salvar.')),
       );
       return;
+    }
+    if (_audioType != 'gravado' && _recordedAudioPath != null) {
+      await MediaStorageService.deleteFile(_recordedAudioPath!);
+      _recordedAudioPath = null;
     }
     final alert = _buildAlert();
     if (_isEditing) {
