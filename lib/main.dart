@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'core/services/transition_alert_service.dart';
+import 'core/services/secure_box_service.dart';
 import 'core/services/tts_service.dart';
 import 'core/theme/app_theme.dart';
 import 'features/aac_grid/data/providers/cards_provider.dart';
@@ -32,15 +33,15 @@ Future<void> main() async {
   // Persistência local dos cartões.
   await Hive.initFlutter();
   Hive.registerAdapter(PictogramCardAdapter());
-  final box = await Hive.openBox<PictogramCard>(cardsBoxName);
+  final box = await SecureBoxService.openSecureBoxWithMigration(cardsBoxName);
 
   // Caixa simples de configurações do app (ex: tema de hiperfoco
   // escolhido pelos pais).
-  await Hive.openBox('app_settings');
+  await SecureBoxService.openSecureBoxWithMigration('app_settings');
 
   // Caixa dos Alertas de Transição de Atividade (configurações dos
   // alertas: áudio, horário, checklist).
-  await Hive.openBox(transitionAlertsBoxName);
+  await SecureBoxService.openSecureBoxWithMigration(transitionAlertsBoxName);
 
   // Primeiro uso: popula os pictogramas básicos que acompanham o app,
   // para que a criança já tenha cartões disponíveis antes mesmo dos
