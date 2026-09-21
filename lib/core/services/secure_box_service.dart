@@ -30,4 +30,30 @@ class SecureBoxService {
     final key = await _getOrCreateEncryptionKey();
     return Hive.openBox(name, encryptionCipher: HiveAesCipher(key));
   }
+
+  /// Abre uma caixa criptografada e migra, uma única vez, uma caixa legada
+  /// que tenha sido criada sem [encryptionCipher]. A cópia só é removida
+  /// depois que a nova caixa cifrada foi criada e preenchida com sucesso.
+  static Future<Box> openSecureBoxWithMigration(String name) async {
+    final key = await _getOrCreateEncryptionKey();
+    try {
+      return await Hive.openBox(name, encryptionCipher: HiveAesCipher(key));
+    } catch (_) {
+      if (Hive.isBoxOpen(name)) {
+        await Hive.box(name).close();
+      }
+
+      final legacy = await Hive.openBox(name);
+      final values = legacy.toMap();
+      await legacy.close();
+      await Hive.deleteBoxFromDisk(name);
+
+      final encrypted = await Hive.openBox(
+        name,
+        encryptionCipher: HiveAesCipher(key),
+      );
+      await encrypted.putAll(values);
+      return encrypted;
+    }
+  }
 }
