@@ -56,4 +56,8 @@ class SecureBoxService {
       return encrypted;
     }
   }
+
+  static Future<void> deleteEncryptionKey() async {
+    await _storage.delete(key: _keyStorageKey);
+  }
 }

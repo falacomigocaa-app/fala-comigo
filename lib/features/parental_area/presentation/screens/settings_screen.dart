@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/hyperfocus_theme.dart';
+import '../../../../core/services/data_wipe_service.dart';
 import '../../../aac_grid/data/providers/cards_provider.dart';
 import 'add_card_screen.dart';
 import 'behavior_log_screen.dart';
@@ -11,7 +12,9 @@ import 'behavior_log_screen.dart';
 import 'video_diary_screen.dart';
 import 'patient_profile_screen.dart';
 import 'change_pin_screen.dart';
+import 'parental_gate_screen.dart';
 import 'transition_alerts_list_screen.dart';
+import '../../../transition_alerts/data/providers/transition_alerts_provider.dart';
 
 /// Painel dos Pais & Educadores.
 ///
@@ -31,6 +34,40 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  Future<void> _deleteAllLocalData() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Apagar todos os dados?'),
+        content: const Text(
+          'Esta ação remove cartões personalizados, perfil, registros, vídeos, áudios, configurações e o PIN deste aparelho. Não pode ser desfeita pelo aplicativo.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: Colors.redAccent),
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Apagar tudo'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    await DataWipeService.deleteAllLocalData();
+    if (!mounted) return;
+    ref.invalidate(cardsBoxProvider);
+    ref.invalidate(cardsListProvider);
+    ref.invalidate(transitionAlertsListProvider);
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const ParentalGateScreen()),
+      (route) => route.isFirst,
+    );
+  }
+
   @override
   void dispose() {
     SystemChrome.setPreferredOrientations([
@@ -190,6 +227,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const ChangePinScreen()),
             ),
+          ),
+          const Divider(height: 16),
+          ListTile(
+            leading: const Icon(Icons.delete_forever_outlined, color: Colors.redAccent),
+            title: const Text('Apagar todos os dados'),
+            subtitle: const Text('Remove os dados locais e o PIN deste aparelho'),
+            onTap: _deleteAllLocalData,
           ),
           const Divider(height: 16),
           Text('Cartões cadastrados (${cards.length})',
