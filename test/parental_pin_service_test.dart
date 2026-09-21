@@ -81,5 +81,14 @@ void main() {
       await Future<void>.delayed(const Duration(seconds: 1));
       expect(await ParentalPinService.checkPin('7391'), isTrue);
     });
+
+    test('limpar credenciais remove o PIN armazenado', () async {
+      await ParentalPinService.setPin('4826');
+
+      await ParentalPinService.clearCredentials();
+
+      expect(await ParentalPinService.hasPin(), isFalse);
+      expect(await ParentalPinService.checkPin('4826'), isFalse);
+    });
   });
 }
