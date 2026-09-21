@@ -9,9 +9,9 @@ plugins {
 
 // Carrega as credenciais de assinatura de release a partir de
 // android/key.properties, se o arquivo existir. Esse arquivo NUNCA
-// deve ser commitado no Git (fica listado no .gitignore) — em builds
-// locais ele simplesmente não existe e o app cai para a assinatura
-// de debug. No Codemagic, o arquivo é gerado automaticamente pelo
+// deve ser commitado no Git (fica listado no .gitignore). Builds de
+// release sem esse arquivo falham de propósito. No Codemagic, o arquivo
+// é gerado automaticamente pelo
 // próprio serviço a partir da keystore configurada em
 // Workflow > Distribution > Android code signing (fala-comigo-release.jks).
 val keystoreProperties = Properties()
@@ -56,11 +56,10 @@ android {
 
     buildTypes {
         release {
-            signingConfig = if (hasReleaseSigning) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
+            if (!hasReleaseSigning) {
+                error("Release build requires android/key.properties and a production keystore")
             }
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }
