@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../core/services/parental_pin_service.dart';
+import '../../../../core/services/parental_session_service.dart';
 import '../../../../core/theme/app_theme.dart';
 import 'parental_area_transition_screen.dart';
 import 'settings_screen.dart';
@@ -60,6 +61,7 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
         return;
       }
       if (!mounted) return;
+      ParentalSessionService.authenticate();
       _openDestination();
       return;
     }
@@ -72,6 +74,7 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
     final isValid = await ParentalPinService.checkPin(_pinController.text);
     if (!mounted) return;
     if (isValid) {
+      ParentalSessionService.authenticate();
       _openDestination();
     } else {
       setState(() => _error = 'PIN incorreto. Tente novamente.');
