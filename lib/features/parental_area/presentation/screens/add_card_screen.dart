@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/services/media_storage_service.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/secure_media_image.dart';
 import '../../../aac_grid/data/providers/cards_provider.dart';
 import '../../../aac_grid/domain/models/pictogram_card.dart';
 
@@ -23,7 +23,7 @@ class AddCardScreen extends ConsumerStatefulWidget {
 class _AddCardScreenState extends ConsumerState<AddCardScreen> {
   final TextEditingController _labelController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
-  File? _selectedImage;
+  String? _selectedImagePath;
   String _category = 'personalizado';
 
   bool get _isEditing => widget.existingCard != null;
@@ -35,7 +35,7 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
     if (existing != null) {
       _labelController.text = existing.label;
       _category = existing.category;
-      _selectedImage = File(existing.imagePath);
+      _selectedImagePath = existing.imagePath;
     }
   }
 
@@ -49,12 +49,12 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
     final XFile? picked = await _picker.pickImage(source: source, imageQuality: 85);
     if (picked != null) {
       final permanentPath = await MediaStorageService.persistFile(picked.path);
-      setState(() => _selectedImage = File(permanentPath));
+      setState(() => _selectedImagePath = permanentPath);
     }
   }
 
   void _saveCard() {
-    if (_selectedImage == null || _labelController.text.trim().isEmpty) {
+    if (_selectedImagePath == null || _labelController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Escolha uma foto e digite um nome para o cartão.')),
       );
@@ -65,13 +65,13 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
       ref.read(cardsListProvider.notifier).updateCard(
             id: widget.existingCard!.id,
             label: _labelController.text.trim(),
-            imagePath: _selectedImage!.path,
+            imagePath: _selectedImagePath!,
             category: _category,
           );
     } else {
       ref.read(cardsListProvider.notifier).addCard(
             label: _labelController.text.trim(),
-            imagePath: _selectedImage!.path,
+            imagePath: _selectedImagePath!,
             isCustomImage: true,
             category: _category,
           );
@@ -127,13 +127,13 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: AppTheme.cardBorder, width: 1.5),
                 ),
-                child: _selectedImage == null
+                child: _selectedImagePath == null
                     ? const Center(
                         child: Icon(Icons.add_a_photo_outlined, size: 40, color: AppTheme.primary),
                       )
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(16),
-                        child: Image.file(_selectedImage!, fit: BoxFit.cover),
+                        child: SecureMediaImage(path: _selectedImagePath!),
                       ),
               ),
             ),

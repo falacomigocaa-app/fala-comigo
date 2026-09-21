@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -96,11 +94,17 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
     }
   }
 
+  Future<void> _discardPendingVideo() async {
+    final path = _pendingVideoPath;
+    if (path != null) await MediaStorageService.deleteFile(path);
+    if (mounted) setState(() => _pendingVideoPath = null);
+  }
+
   Future<void> _shareEntry(String videoPath, String context) async {
-    final file = File(videoPath);
+    final file = await MediaStorageService.materializeForReading(videoPath);
     if (!await file.exists()) return;
     await Share.shareXFiles(
-      [XFile(videoPath)],
+      [XFile(file.path)],
       text: context.isNotEmpty
           ? 'Vídeo do Fala Comigo — contexto: $context'
           : 'Vídeo do Fala Comigo',
@@ -184,7 +188,7 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
                       children: [
                         Expanded(
                           child: OutlinedButton(
-                            onPressed: () => setState(() => _pendingVideoPath = null),
+                            onPressed: _discardPendingVideo,
                             child: const Text('Descartar'),
                           ),
                         ),
