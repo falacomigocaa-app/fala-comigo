@@ -177,6 +177,8 @@ class _CategoryChip extends StatelessWidget {
         label: Text(label),
         selected: selected,
         onSelected: (_) => onTap(),
+        showCheckmark: false,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         selectedColor: color.withValues(alpha: 0.18),
         labelStyle: TextStyle(
           color: selected ? color : AppTheme.textDark,

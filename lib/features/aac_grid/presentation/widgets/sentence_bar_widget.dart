@@ -21,7 +21,10 @@ class SentenceBarWidget extends ConsumerWidget {
       height: 96,
       decoration: BoxDecoration(
         color: AppTheme.surface,
-        border: const Border(bottom: BorderSide(color: AppTheme.cardBorder, width: 1.5)),
+        border: const Border(
+          top: BorderSide(color: AppTheme.accentGreen, width: 2),
+          bottom: BorderSide(color: AppTheme.cardBorder, width: 1.5),
+        ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Row(
@@ -31,7 +34,11 @@ class SentenceBarWidget extends ConsumerWidget {
                 ? const Center(
                     child: Text(
                       'Toque nos cartões para montar uma frase',
-                      style: TextStyle(color: Colors.grey, fontSize: 15),
+                      style: TextStyle(
+                        color: AppTheme.mutedText,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   )
                 : ListView.separated(
@@ -56,6 +63,13 @@ class SentenceBarWidget extends ConsumerWidget {
                               color: AppTheme.background,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: AppTheme.cardBorder),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0x0F14213D),
+                                  blurRadius: 6,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
                             ),
                             child: Column(
                               children: [
@@ -64,7 +78,8 @@ class SentenceBarWidget extends ConsumerWidget {
                                     borderRadius: BorderRadius.circular(8),
                                     child: card.isCustomImage
                                         ? SecureMediaImage(path: card.imagePath)
-                                        : Image.asset(card.imagePath, fit: BoxFit.cover),
+                                        : Image.asset(card.imagePath,
+                                            fit: BoxFit.cover),
                                   ),
                                 ),
                                 Text(
@@ -93,10 +108,12 @@ class SentenceBarWidget extends ConsumerWidget {
               backgroundColor: AppTheme.accentGreen,
               foregroundColor: Colors.white,
               minimumSize: const Size(64, 64),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
             ),
             icon: const Icon(Icons.volume_up, size: 28),
-            label: const Text('Falar', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            label: const Text('Falar',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
           ),
           const SizedBox(width: 8),
           IconButton(

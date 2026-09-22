@@ -10,6 +10,7 @@ class AppTheme {
   static const Color surface = Color(0xFFFFFFFF);
   static const Color accentGreen = Color(0xFF23B6A2);
   static const Color textDark = Color(0xFF14213D);
+  static const Color mutedText = Color(0xFF52677D);
   static const Color cardBorder = Color(0xFFD8E1F0);
 
   // Paleta sóbria usada na Área do Responsável/Profissional — mais
