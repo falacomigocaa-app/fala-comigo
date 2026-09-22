@@ -227,129 +227,175 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          ListTile(
-            leading: const Icon(Icons.fact_check_outlined),
-            title: const Text('Registro de Comportamento'),
-            subtitle: const Text('Registrar gatilhos (modelo ABC)'),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const BehaviorLogScreen()),
-            ),
-          ),
-          const Divider(height: 16),
-          ListTile(
-            leading: const Icon(Icons.videocam_outlined),
-            title: const Text('Diário de Vídeo'),
-            subtitle: const Text('Gravar momentos para o especialista avaliar'),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const VideoDiaryScreen()),
-            ),
-          ),
-          const Divider(height: 16),
-          ListTile(
-            leading: const Icon(Icons.alarm_on_outlined),
-            title: const Text('Alertas de Transição'),
-            subtitle: const Text('Avisa a criança antes de mudar de atividade'),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (_) => const TransitionAlertsListScreen()),
-            ),
-          ),
-          const Divider(height: 16),
-          ListTile(
-            leading: const Icon(Icons.workspace_premium_outlined),
-            title: const Text('Plano e recursos'),
-            subtitle: const Text('Ver o acesso local e os planos disponíveis'),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const PlanStatusScreen()),
-            ),
-          ),
-          const Divider(height: 16),
-          ListTile(
-            leading: const Icon(Icons.public_outlined),
-            title: const Text('Conheça o Fala Comigo'),
-            subtitle: const Text('Abrir a página institucional no navegador'),
-            trailing: const Icon(Icons.open_in_new_outlined, size: 20),
-            onTap: _openInstitutionalSite,
-          ),
-          const Divider(height: 16),
-          ListTile(
-            leading: const Icon(Icons.person_outline),
-            title: const Text('Perfil do Paciente'),
-            subtitle: const Text('Dados da criança para os relatórios'),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const PatientProfileScreen()),
-            ),
-          ),
-          const Divider(height: 16),
-          ListTile(
-            leading: const Icon(Icons.lock_reset_outlined),
-            title: const Text('Trocar PIN'),
-            subtitle: const Text('Alterar o PIN de acesso a esta área'),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const ChangePinScreen()),
-            ),
-          ),
-          const Divider(height: 16),
-          ListTile(
-            leading: const Icon(Icons.delete_forever_outlined,
-                color: Colors.redAccent),
-            title: const Text('Apagar todos os dados'),
-            subtitle:
-                const Text('Remove os dados locais e o PIN deste aparelho'),
-            onTap: _deleteAllLocalData,
-          ),
-          const Divider(height: 16),
-          Text('Cartões cadastrados (${cards.length})',
-              style:
-                  const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-          const SizedBox(height: 4),
-          const Text(
-            'Segure e arraste um cartão para reordenar.',
-            style: TextStyle(fontSize: 12, color: Colors.grey),
-          ),
-          const SizedBox(height: 8),
-          ReorderableListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: cards.length,
-            onReorder: (oldIndex, newIndex) {
-              ref
-                  .read(cardsListProvider.notifier)
-                  .reorderCards(oldIndex, newIndex);
-            },
-            itemBuilder: (context, index) {
-              final card = cards[index];
-              return Card(
-                key: ValueKey(card.id),
-                margin: const EdgeInsets.symmetric(vertical: 4),
-                child: ListTile(
-                  leading: const Icon(Icons.drag_indicator, color: Colors.grey),
-                  title: Text(card.label),
-                  subtitle: Text(card.category),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit_outlined,
-                            color: AppTheme.primary),
-                        onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (_) =>
-                                  AddCardScreen(existingCard: card)),
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete_outline,
-                            color: Colors.redAccent),
-                        onPressed: () => ref
-                            .read(cardsListProvider.notifier)
-                            .removeCard(card.id),
-                      ),
-                    ],
+          _SettingsSection(
+            icon: Icons.insights_outlined,
+            title: 'Registros e rotina',
+            description:
+                'Organize observações, vídeos e avisos para apoiar a rotina e as conversas com a equipe.',
+            child: Column(
+              children: [
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.fact_check_outlined),
+                  title: const Text('Registro de Comportamento'),
+                  subtitle: const Text('Registrar gatilhos (modelo ABC)'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const BehaviorLogScreen()),
                   ),
                 ),
-              );
-            },
+                const Divider(height: 1),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.videocam_outlined),
+                  title: const Text('Diário de Vídeo'),
+                  subtitle:
+                      const Text('Gravar momentos para o especialista avaliar'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const VideoDiaryScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.alarm_on_outlined),
+                  title: const Text('Alertas de Transição'),
+                  subtitle:
+                      const Text('Avisa a criança antes de mudar de atividade'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const TransitionAlertsListScreen()),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          _SettingsSection(
+            icon: Icons.admin_panel_settings_outlined,
+            title: 'Conta, plano e privacidade',
+            description:
+                'Consulte o acesso, os dados usados nos relatórios e as proteções desta área.',
+            child: Column(
+              children: [
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.workspace_premium_outlined),
+                  title: const Text('Plano e recursos'),
+                  subtitle:
+                      const Text('Ver o acesso local e os planos disponíveis'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const PlanStatusScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.public_outlined),
+                  title: const Text('Conheça o Fala Comigo'),
+                  subtitle:
+                      const Text('Abrir a página institucional no navegador'),
+                  trailing: const Icon(Icons.open_in_new_outlined, size: 20),
+                  onTap: _openInstitutionalSite,
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.person_outline),
+                  title: const Text('Perfil do Paciente'),
+                  subtitle: const Text('Dados da criança para os relatórios'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const PatientProfileScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.lock_reset_outlined),
+                  title: const Text('Trocar PIN'),
+                  subtitle: const Text('Alterar o PIN de acesso a esta área'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const ChangePinScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.delete_forever_outlined,
+                      color: Colors.redAccent),
+                  title: const Text('Apagar todos os dados'),
+                  subtitle: const Text(
+                      'Remove os dados locais e o PIN deste aparelho'),
+                  onTap: _deleteAllLocalData,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          _SettingsSection(
+            icon: Icons.grid_view_outlined,
+            title: 'Cartões de comunicação',
+            description:
+                'Adicione, edite ou reordene os cartões que aparecem na tela principal.',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Cartões cadastrados (${cards.length})',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700, fontSize: 16)),
+                const SizedBox(height: 4),
+                const Text(
+                  'Segure e arraste um cartão para reordenar.',
+                  style: TextStyle(fontSize: 12, color: AppTheme.mutedText),
+                ),
+                const SizedBox(height: 8),
+                ReorderableListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: cards.length,
+                  onReorder: (oldIndex, newIndex) {
+                    ref
+                        .read(cardsListProvider.notifier)
+                        .reorderCards(oldIndex, newIndex);
+                  },
+                  itemBuilder: (context, index) {
+                    final card = cards[index];
+                    return Card(
+                      key: ValueKey(card.id),
+                      margin: const EdgeInsets.symmetric(vertical: 4),
+                      child: ListTile(
+                        leading: const Icon(Icons.drag_indicator,
+                            color: AppTheme.mutedText),
+                        title: Text(card.label),
+                        subtitle: Text(card.category),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit_outlined,
+                                  color: AppTheme.primary),
+                              onPressed: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (_) =>
+                                        AddCardScreen(existingCard: card)),
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete_outline,
+                                  color: Colors.redAccent),
+                              onPressed: () => ref
+                                  .read(cardsListProvider.notifier)
+                                  .removeCard(card.id),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 80), // espaço para o FAB não cobrir a lista
         ],
