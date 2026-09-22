@@ -17,7 +17,7 @@ void main() {
     expect(find.text('Uso local'), findsOneWidget);
     expect(find.text('Comunicação offline'), findsOneWidget);
     expect(find.text('Gratuito'), findsOneWidget);
-    expect(find.text('Preço a definir'), findsNWidgets(3));
+    expect(find.text('Planos disponíveis'), findsOneWidget);
     expect(
       find.textContaining('não depende de assinatura'),
       findsOneWidget,
