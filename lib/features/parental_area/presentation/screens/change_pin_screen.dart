@@ -28,7 +28,8 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
   }
 
   Future<void> _submit() async {
-    final currentOk = await ParentalPinService.checkPin(_currentController.text);
+    final currentOk =
+        await ParentalPinService.checkPin(_currentController.text);
     if (!currentOk) {
       setState(() => _error = 'PIN atual incorreto.');
       return;
@@ -81,13 +82,38 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: const Text('Trocar PIN'),
-        backgroundColor: AppTheme.surface,
+        backgroundColor: AppTheme.professionalBackground,
+        foregroundColor: Colors.white,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                color: AppTheme.professionalBackground,
+                borderRadius: BorderRadius.circular(22),
+              ),
+              child: const Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.lock_outline,
+                      color: AppTheme.professionalAccent, size: 26),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'O PIN protege a Área do Responsável neste aparelho. Guarde o novo código em um local seguro.',
+                      style: TextStyle(
+                          color: Colors.white, height: 1.35, fontSize: 13),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 18),
             _pinField('PIN atual', _currentController),
             _pinField('Novo PIN (4 dígitos)', _newController),
             _pinField('Confirmar novo PIN', _confirmController),
