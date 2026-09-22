@@ -116,6 +116,12 @@ A sequência completa está em `docs/PLANO_SEQUENCIAL_ATE_BUILD.md`. A ordem res
 
 O catálogo, a tela de planos e a persistência local já foram implementados. O próximo trabalho deve validar e consolidar os fluxos existentes, não começar cobrança ou portal clínico prematuramente.
 
+## Nova sequência full-stack até o piloto institucional
+
+A condução full-cycle foi ampliada para incluir o site institucional, o console do proprietário, o portal multi-organização, autorizações, documentos, licenças, pagamentos em sandbox e o piloto controlado com uma clínica e um colégio. A sequência detalhada está em `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`.
+
+A regra é separar aplicativo local, site público, portal conectado e console administrativo. Pagamento real, domínio, publicação ampla e sincronização de dados clínicos permanecem bloqueados até validação e confirmação explícita. O plano Essencial e a comunicação básica nunca dependem de assinatura.
+
 ## Próxima retomada recomendada
 
 1. Confirmar a branch e o estado limpo do Git.
@@ -128,6 +134,7 @@ O catálogo, a tela de planos e a persistência local já foram implementados. O
 8. Executar `flutter build web --release`.
 9. Corrigir primeiro falhas do CI ou do núcleo CAA.
 10. Trabalhar em branch própria, adicionar teste, revisar diff, comitar e enviar ao GitHub.
+11. Seguir `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`, começando pela governança, site institucional e console do proprietário sem dados clínicos.
 
 Comandos básicos:
 
@@ -202,4 +209,5 @@ Não tratar documentação conceitual como implementação existente. O portal e
 - `docs/CHECKLIST_PRE_LANCAMENTO.md`: gates funcionais, acessibilidade, segurança e publicação.
 - `docs/MODELO_AUTORIZACAO_CLINICAS_ESCOLAS.md`: modelo de autorização futura.
 - `docs/MODELO_CUSTOS_E_PLANOS.md`: estratégia de baixo custo e planos.
+- `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`: sequência de programação até o piloto com clínica e colégio.
 - `privacy_policy.html`: política de privacidade alinhada ao armazenamento local.
