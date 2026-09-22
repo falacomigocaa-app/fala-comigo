@@ -15,7 +15,7 @@ void main() {
       'sponsored',
     ]);
     expect(PlanCatalog.essential.isFree, isTrue);
-    expect(PlanCatalog.family.monthlyPriceCents, 0);
+    expect(PlanCatalog.family.pricePending, isTrue);
     expect(PlanCatalog.organization.publiclyVisible, isFalse);
   });
 

@@ -22,7 +22,7 @@ class PlanCatalog {
     id: 'family',
     name: 'Família',
     description: 'Recursos remotos opcionais para continuar o cuidado em mais de um dispositivo.',
-    monthlyPriceCents: 0,
+    monthlyPriceCents: null,
     features: {
       PlanFeature.offlineCommunication,
       PlanFeature.parentalControls,
@@ -38,7 +38,7 @@ class PlanCatalog {
     id: 'connected_care',
     name: 'Cuidado Conectado',
     description: 'Vínculos autorizados com profissionais e escolas, sempre com escopo e prazo.',
-    monthlyPriceCents: 0,
+    monthlyPriceCents: null,
     features: {
       PlanFeature.offlineCommunication,
       PlanFeature.parentalControls,
@@ -56,7 +56,7 @@ class PlanCatalog {
     id: 'sponsored',
     name: 'Patrocinado',
     description: 'Acesso financiado por uma empresa ou instituição sem expor o conteúdo familiar.',
-    monthlyPriceCents: 0,
+    monthlyPriceCents: null,
     features: {
       PlanFeature.offlineCommunication,
       PlanFeature.parentalControls,

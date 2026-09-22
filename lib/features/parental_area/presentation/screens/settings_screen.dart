@@ -13,6 +13,7 @@ import 'video_diary_screen.dart';
 import 'patient_profile_screen.dart';
 import 'change_pin_screen.dart';
 import 'parental_gate_screen.dart';
+import 'plan_status_screen.dart';
 import 'transition_alerts_list_screen.dart';
 import '../../../transition_alerts/data/providers/transition_alerts_provider.dart';
 
@@ -208,6 +209,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             subtitle: const Text('Avisa a criança antes de mudar de atividade'),
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const TransitionAlertsListScreen()),
+            ),
+          ),
+          const Divider(height: 16),
+          ListTile(
+            leading: const Icon(Icons.workspace_premium_outlined),
+            title: const Text('Plano e recursos'),
+            subtitle: const Text('Ver o acesso local e os planos disponíveis'),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const PlanStatusScreen()),
             ),
           ),
           const Divider(height: 16),

@@ -41,7 +41,7 @@ class Plan {
   final String id;
   final String name;
   final String description;
-  final int monthlyPriceCents;
+  final int? monthlyPriceCents;
   final Set<PlanFeature> features;
   final int remoteStorageLimitBytes;
   final int maxCareConnections;
@@ -59,6 +59,8 @@ class Plan {
   });
 
   bool get isFree => monthlyPriceCents == 0;
+
+  bool get pricePending => monthlyPriceCents == null;
 
   Map<String, dynamic> toMap() {
     return {
@@ -82,7 +84,7 @@ class Plan {
       id: map['id'] as String,
       name: map['name'] as String,
       description: map['description'] as String,
-      monthlyPriceCents: map['monthlyPriceCents'] as int? ?? 0,
+      monthlyPriceCents: map['monthlyPriceCents'] as int?,
       features: PlanFeature.values
           .where((feature) => featureKeys.contains(feature.key))
           .toSet(),
