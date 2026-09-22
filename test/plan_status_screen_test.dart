@@ -22,5 +22,11 @@ void main() {
       find.textContaining('não depende de assinatura'),
       findsOneWidget,
     );
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, -600));
+    await tester.pumpAndSettle();
+    expect(find.text('Família'), findsOneWidget);
+    expect(find.text('Cuidado Conectado'), findsOneWidget);
+    expect(find.text('Patrocinado'), findsOneWidget);
+    expect(find.text('Organização'), findsNothing);
   });
 }
