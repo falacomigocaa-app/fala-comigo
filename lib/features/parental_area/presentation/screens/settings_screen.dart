@@ -17,6 +17,7 @@ import 'change_pin_screen.dart';
 import 'parental_gate_screen.dart';
 import 'plan_status_screen.dart';
 import 'privacy_settings_screen.dart';
+import 'progress_report_screen.dart';
 import 'transition_alerts_list_screen.dart';
 import '../../../transition_alerts/data/providers/transition_alerts_provider.dart';
 
@@ -243,6 +244,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (_) => const BehaviorLogScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.insights_outlined),
+                  title: const Text('Relatórios de progresso'),
+                  subtitle: const Text(
+                      'Ver um resumo local e exportar dados escolhidos'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const ProgressReportScreen()),
                   ),
                 ),
                 const Divider(height: 1),
