@@ -48,8 +48,15 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
   Future<void> _pickImage(ImageSource source) async {
     final XFile? picked = await _picker.pickImage(source: source, imageQuality: 85);
     if (picked != null) {
-      final permanentPath = await MediaStorageService.persistFile(picked.path);
-      setState(() => _selectedImagePath = permanentPath);
+      try {
+        final permanentPath = await MediaStorageService.persistFile(picked.path);
+        if (mounted) setState(() => _selectedImagePath = permanentPath);
+      } on UnsupportedError catch (error) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error.message ?? 'Mídia não disponível nesta plataforma.')),
+        );
+      }
     }
   }
 
