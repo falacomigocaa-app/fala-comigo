@@ -8,6 +8,8 @@ O roadmap separa o aplicativo local-first do portal conectado. A comunicação b
 
 A estratégia financeira complementar está documentada em [`MODELO_CUSTOS_E_PLANOS.md`](MODELO_CUSTOS_E_PLANOS.md). Ela prioriza um núcleo gratuito e offline, serviços conectados sob demanda, planos acessíveis e aquisição do domínio somente na etapa de lançamento público.
 
+A execução até o primeiro build está detalhada em [`PLANO_SEQUENCIAL_ATE_BUILD.md`](PLANO_SEQUENCIAL_ATE_BUILD.md), com telas, módulos, testes, dependências e critérios de conclusão numerados.
+
 ## Estado atual
 
 A branch `main` contém uma base Flutter multiplataforma com suporte de projeto para Android, iOS, Web, Windows, macOS e Linux. A implementação existente inclui a grade de comunicação, cartões com mídia, montagem de frases, síntese de voz, área parental, PIN protegido, sessão parental, armazenamento local cifrado, registros ABC, diário de vídeo, alertas de transição, exportação minimizada e exclusão local.
