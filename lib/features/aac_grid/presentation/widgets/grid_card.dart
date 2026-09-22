@@ -9,7 +9,7 @@ import '../../domain/models/pictogram_card.dart';
 
 /// Cartão individual exibido na grade de pictogramas.
 ///
-/// Ao ser tocado, amplia levemente com destaque luminoso (feedback
+/// Ao ser tocado, amplia minimamente com destaque luminoso (feedback
 /// visual, na cor do tema de hiperfoco escolhido pelos pais) e
 /// dispara [onTap] — que, na tela pai, aciona o TTS. Latência da
 /// animação mantida curta (~120ms) para não atrasar o feedback
@@ -66,55 +66,61 @@ class _GridCardState extends ConsumerState<GridCard> {
       child: GestureDetector(
         onTap: _handleTap,
         child: AnimatedScale(
-        scale: _pressed ? 1.06 : 1.0,
-        duration: AppConstants.cardTapAnimationDuration,
-        child: Container(
-          constraints: const BoxConstraints(
-            minWidth: AppConstants.minTouchTarget,
-            minHeight: AppConstants.minTouchTarget,
-          ),
-          decoration: BoxDecoration(
-            color: AppTheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: _pressed ? themeColor : AppTheme.cardBorder,
-              width: _pressed ? 3 : 1.5,
+          scale: _pressed ? 1.02 : 1.0,
+          duration: AppConstants.cardTapAnimationDuration,
+          child: Container(
+            constraints: const BoxConstraints(
+              minWidth: AppConstants.minTouchTarget,
+              minHeight: AppConstants.minTouchTarget,
             ),
-            boxShadow: _pressed
-                ? [
-                    BoxShadow(
-                      color: themeColor.withValues(alpha: 0.35),
-                      blurRadius: 12,
-                      spreadRadius: 1,
-                    ),
-                  ]
-                : [],
-          ),
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: imageWidget,
-                ),
+            decoration: BoxDecoration(
+              color: AppTheme.surface,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: _pressed ? themeColor : AppTheme.cardBorder,
+                width: _pressed ? 3 : 1.5,
               ),
-              const SizedBox(height: 6),
-              Text(
-                widget.card.label,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                  color: AppTheme.textDark,
+              boxShadow: _pressed
+                  ? [
+                      BoxShadow(
+                        color: themeColor.withValues(alpha: 0.35),
+                        blurRadius: 12,
+                        spreadRadius: 1,
+                      ),
+                    ]
+                  : [
+                      BoxShadow(
+                        color: AppTheme.textDark.withValues(alpha: 0.06),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+            ),
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: imageWidget,
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 6),
+                Text(
+                  widget.card.label,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    color: AppTheme.textDark,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
         ),
       ),
     );
