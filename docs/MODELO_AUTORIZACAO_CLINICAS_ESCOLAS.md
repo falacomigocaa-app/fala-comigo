@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-O portal futuro do Fala Comigo deverá tratar cada clínica, escola ou equipe como uma organização isolada. O aplicativo local continuará funcionando offline e não deverá se transformar automaticamente em um prontuário compartilhado. A sincronização somente poderá ser ativada quando o servidor aplicar as regras deste documento.
+O portal futuro do Fala Comigo deverá tratar cada clínica, escola, empresa patrocinadora ou equipe como uma organização isolada. O aplicativo local continuará funcionando offline e não deverá se transformar automaticamente em um prontuário compartilhado. A sincronização somente poderá ser ativada quando o servidor aplicar as regras deste documento.
 
 A regra principal é **negação por padrão**: uma solicitação somente é permitida quando a identidade, a organização, o vínculo com a criança, o papel profissional, a finalidade e o prazo de retenção forem compatíveis.
 
@@ -11,7 +11,7 @@ A regra principal é **negação por padrão**: uma solicitação somente é per
 | Entidade | Finalidade | Regra de isolamento |
 | --- | --- | --- |
 | `User` | Identidade de uma pessoa que acessa o portal | Não existem contas compartilhadas. Cada pessoa usa uma identidade própria. |
-| `Organization` | Clínica, escola ou organização familiar | Cada recurso compartilhado pertence a uma organização. |
+| `Organization` | Clínica, escola, empresa patrocinadora ou organização familiar | Cada recurso compartilhado pertence a uma organização. O tipo da organização limita os papéis disponíveis. |
 | `ChildSubject` | Referência pseudonimizada da criança ou adolescente | O identificador não deve ser usado sozinho como autorização. |
 | `Membership` | Vínculo entre usuário e organização | Define o papel, o estado e a data de validade do acesso. |
 | `Relationship` | Relação entre usuário e criança | Registra responsável legal, terapeuta, professor ou outro vínculo autorizado. |
