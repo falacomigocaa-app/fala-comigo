@@ -29,9 +29,7 @@ class AACGridScreen extends ConsumerWidget {
       CardTapBehavior.speakOnly => 'Toque para falar sem adicionar à frase',
     };
 
-    final visibleCards = selectedCategory == 'todas'
-        ? allCards
-        : allCards.where((c) => c.category == selectedCategory).toList();
+    final visibleCards = filterCardsByCategory(allCards, selectedCategory);
 
     return Scaffold(
       backgroundColor: hyperfocusTheme.backgroundColor,
@@ -50,7 +48,8 @@ class AACGridScreen extends ConsumerWidget {
                       if (hyperfocusTheme != HyperfocusTheme.padrao)
                         Padding(
                           padding: const EdgeInsets.only(right: 8),
-                          child: Text(hyperfocusTheme.emoji, style: const TextStyle(fontSize: 24)),
+                          child: Text(hyperfocusTheme.emoji,
+                              style: const TextStyle(fontSize: 24)),
                         ),
                       Expanded(
                         child: SizedBox(
@@ -62,14 +61,18 @@ class AACGridScreen extends ConsumerWidget {
                                 label: 'Todas',
                                 selected: selectedCategory == 'todas',
                                 color: themeColor,
-                                onTap: () => ref.read(selectedCategoryProvider.notifier).state = 'todas',
+                                onTap: () => ref
+                                    .read(selectedCategoryProvider.notifier)
+                                    .state = 'todas',
                               ),
                               ...AppConstants.categoryLabels.entries.map(
                                 (e) => _CategoryChip(
                                   label: e.value,
                                   selected: selectedCategory == e.key,
                                   color: themeColor,
-                                  onTap: () => ref.read(selectedCategoryProvider.notifier).state = e.key,
+                                  onTap: () => ref
+                                      .read(selectedCategoryProvider.notifier)
+                                      .state = e.key,
                                 ),
                               ),
                             ],
@@ -80,7 +83,8 @@ class AACGridScreen extends ConsumerWidget {
                         icon: const Icon(Icons.settings_outlined, size: 28),
                         tooltip: 'Área do Responsável',
                         onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const ParentalGateScreen()),
+                          MaterialPageRoute(
+                              builder: (_) => const ParentalGateScreen()),
                         ),
                       ),
                     ],
@@ -105,11 +109,14 @@ class AACGridScreen extends ConsumerWidget {
                             // Colunas responsivas: mais colunas em telas largas
                             // (tablets em paisagem), menos em celulares.
                             final width = constraints.maxWidth;
-                            final crossAxisCount = (width / (110 * scale)).floor().clamp(3, 8);
+                            final crossAxisCount =
+                                (width / (110 * scale)).floor().clamp(3, 8);
 
                             return GridView.builder(
-                              padding: const EdgeInsets.all(AppConstants.gridSpacing),
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              padding: const EdgeInsets.all(
+                                  AppConstants.gridSpacing),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: crossAxisCount,
                                 crossAxisSpacing: AppConstants.gridSpacing,
                                 mainAxisSpacing: AppConstants.gridSpacing,
@@ -123,11 +130,15 @@ class AACGridScreen extends ConsumerWidget {
                                   scale: scale,
                                   semanticHint: tapSemanticHint,
                                   onTap: () {
-                                    if (tapBehavior != CardTapBehavior.addOnly) {
+                                    if (tapBehavior !=
+                                        CardTapBehavior.addOnly) {
                                       TtsService.instance.speak(card.label);
                                     }
-                                    if (tapBehavior != CardTapBehavior.speakOnly) {
-                                      ref.read(sentenceBarProvider.notifier).addToSentence(card);
+                                    if (tapBehavior !=
+                                        CardTapBehavior.speakOnly) {
+                                      ref
+                                          .read(sentenceBarProvider.notifier)
+                                          .addToSentence(card);
                                     }
                                   },
                                 );
@@ -144,6 +155,7 @@ class AACGridScreen extends ConsumerWidget {
     );
   }
 }
+
 class _CategoryChip extends StatelessWidget {
   final String label;
   final bool selected;
