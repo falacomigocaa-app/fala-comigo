@@ -13,20 +13,38 @@ void main() {
       ),
     );
 
-    expect(find.text('Essencial'), findsNWidgets(2));
+    expect(find.text('Essencial'), findsOneWidget);
     expect(find.text('Uso local'), findsOneWidget);
     expect(find.text('Comunicação offline'), findsOneWidget);
-    expect(find.text('Gratuito'), findsOneWidget);
-    expect(find.text('Planos disponíveis'), findsOneWidget);
     expect(
       find.textContaining('não depende de assinatura'),
       findsOneWidget,
     );
-    await tester.drag(find.byType(Scrollable).first, const Offset(0, -600));
+    final scrollable = find.byType(Scrollable).first;
+    await tester.scrollUntilVisible(
+      find.text('Planos disponíveis'),
+      400,
+      scrollable: scrollable,
+    );
     await tester.pumpAndSettle();
-    expect(find.text('Família'), findsOneWidget);
-    expect(find.text('Cuidado Conectado'), findsOneWidget);
-    expect(find.text('Patrocinado'), findsOneWidget);
+    expect(find.text('Planos disponíveis'), findsOneWidget);
+    expect(find.text('Essencial'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('Gratuito'),
+      300,
+      scrollable: scrollable,
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Gratuito'), findsOneWidget);
+    for (final name in ['Família', 'Cuidado Conectado', 'Patrocinado']) {
+      await tester.scrollUntilVisible(
+        find.text(name),
+        300,
+        scrollable: scrollable,
+      );
+      await tester.pumpAndSettle();
+      expect(find.text(name), findsOneWidget);
+    }
     expect(find.text('Organização'), findsNothing);
   });
 }

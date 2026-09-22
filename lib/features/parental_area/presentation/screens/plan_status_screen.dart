@@ -31,40 +31,45 @@ class _PlanStatusScreenState extends ConsumerState<PlanStatusScreen> {
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: const Text('Plano e recursos'),
-        backgroundColor: AppTheme.surface,
+        backgroundColor: AppTheme.professionalBackground,
+        foregroundColor: Colors.white,
+        elevation: 0,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           _CurrentPlanCard(access: access),
           const SizedBox(height: 20),
-          const Text(
-            'Recursos da comunicação',
-            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17),
+          const _PlanSectionTitle(
+            icon: Icons.verified_outlined,
+            title: 'Recursos da comunicação',
           ),
           const SizedBox(height: 8),
           _FeatureTile(
             icon: Icons.wifi_off_outlined,
             title: 'Comunicação offline',
-            description: 'Cartões, frases e voz continuam disponíveis sem internet.',
+            description:
+                'Cartões, frases e voz continuam disponíveis sem internet.',
             enabled: access.canUse(PlanFeature.offlineCommunication),
           ),
           _FeatureTile(
             icon: Icons.lock_outline,
             title: 'Controle familiar',
-            description: 'PIN, configurações parentais e dados locais protegidos.',
+            description:
+                'PIN, configurações parentais e dados locais protegidos.',
             enabled: access.canUse(PlanFeature.parentalControls),
           ),
           _FeatureTile(
             icon: Icons.accessibility_new_outlined,
             title: 'Acessibilidade',
-            description: 'Modos de toque e semântica acessível fazem parte do núcleo.',
+            description:
+                'Modos de toque e semântica acessível fazem parte do núcleo.',
             enabled: access.canUse(PlanFeature.accessibility),
           ),
           const SizedBox(height: 20),
-          const Text(
-            'Planos disponíveis',
-            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17),
+          const _PlanSectionTitle(
+            icon: Icons.layers_outlined,
+            title: 'Planos disponíveis',
           ),
           const SizedBox(height: 8),
           ...PlanCatalog.publicPlans.map(
@@ -97,10 +102,29 @@ class _CurrentPlanCard extends StatelessWidget {
     final license = access.license;
     final status = license == null ? 'Uso local' : _statusLabel(license.status);
 
-    return Card(
-      color: AppTheme.professionalBackground,
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppTheme.professionalBackground,
+        borderRadius: BorderRadius.circular(24),
+        gradient: const LinearGradient(
+          colors: [
+            AppTheme.professionalBackground,
+            AppTheme.professionalSurface
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x1F14213D),
+            blurRadius: 18,
+            offset: Offset(0, 8),
+          ),
+        ],
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(18),
+        padding: EdgeInsets.zero,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -166,14 +190,24 @@ class _FeatureTile extends StatelessWidget {
     return Semantics(
       container: true,
       label: '$title: ${enabled ? 'disponível' : 'indisponível'}',
-      child: ListTile(
-        contentPadding: EdgeInsets.zero,
-        leading: Icon(icon, color: enabled ? AppTheme.primary : Colors.grey),
-        title: Text(title),
-        subtitle: Text(description),
-        trailing: Icon(
-          enabled ? Icons.check_circle_outline : Icons.lock_outline,
-          color: enabled ? Colors.green : Colors.grey,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AppTheme.surface,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppTheme.cardBorder),
+        ),
+        child: ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: Icon(icon,
+              color: enabled ? AppTheme.primary : AppTheme.mutedText),
+          title: Text(title),
+          subtitle: Text(description),
+          trailing: Icon(
+            enabled ? Icons.check_circle_outline : Icons.lock_outline,
+            color: enabled ? AppTheme.accentGreen : AppTheme.mutedText,
+          ),
         ),
       ),
     );
@@ -193,11 +227,12 @@ class _PlanCard extends StatelessWidget {
         : plan.pricePending
             ? 'Preço a definir'
             : 'R\$ ${(plan.monthlyPriceCents! / 100).toStringAsFixed(2)} / mês';
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
+      decoration: BoxDecoration(
+        color: selected ? const Color(0xFFEFF3FF) : AppTheme.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
           color: selected ? AppTheme.primary : AppTheme.cardBorder,
           width: selected ? 2 : 1,
         ),
@@ -226,6 +261,25 @@ class _PlanCard extends StatelessWidget {
           child: Text(plan.description),
         ),
       ),
+    );
+  }
+}
+
+class _PlanSectionTitle extends StatelessWidget {
+  final IconData icon;
+  final String title;
+
+  const _PlanSectionTitle({required this.icon, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, color: AppTheme.primary),
+        const SizedBox(width: 10),
+        Text(title,
+            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 17)),
+      ],
     );
   }
 }

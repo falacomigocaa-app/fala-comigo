@@ -16,6 +16,7 @@ import 'patient_profile_screen.dart';
 import 'change_pin_screen.dart';
 import 'parental_gate_screen.dart';
 import 'plan_status_screen.dart';
+import 'privacy_settings_screen.dart';
 import 'transition_alerts_list_screen.dart';
 import '../../../transition_alerts/data/providers/transition_alerts_provider.dart';
 
@@ -307,6 +308,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (_) => const PatientProfileScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.privacy_tip_outlined),
+                  title: const Text('Privacidade e dados'),
+                  subtitle: const Text(
+                      'Ver armazenamento, compartilhamento e exclusão'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const PrivacySettingsScreen()),
                   ),
                 ),
                 const Divider(height: 1),

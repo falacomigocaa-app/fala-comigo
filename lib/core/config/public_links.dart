@@ -5,4 +5,7 @@
 abstract final class PublicLinks {
   static const institutionalSite =
       'https://falacomigocaa-app.github.io/fala-comigo/';
+
+  static const privacyPolicy =
+      'https://falacomigocaa-app.github.io/fala-comigo/privacy.html';
 }
