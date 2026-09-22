@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/config/public_links.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/hyperfocus_theme.dart';
 import '../../../../core/services/data_wipe_service.dart';
@@ -35,6 +37,16 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  Future<void> _openInstitutionalSite() async {
+    final uri = Uri.parse(PublicLinks.institutionalSite);
+    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Não foi possível abrir o site agora.')),
+      );
+    }
+  }
+
   Future<void> _deleteAllLocalData() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -102,7 +114,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const Text('Tamanho dos botões', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+          const Text('Tamanho dos botões',
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
           Slider(
             value: scale,
             min: 0.8,
@@ -155,7 +168,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             },
           ),
           const Divider(height: 24),
-          const Text('Tema por Hiperfoco', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+          const Text('Tema por Hiperfoco',
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
           const SizedBox(height: 4),
           const Text(
             'Deixa a tela da criança com a cara do interesse favorito dela.',
@@ -170,7 +184,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               return ChoiceChip(
                 label: Text('${theme.emoji} ${theme.displayName}'),
                 selected: selected,
-                onSelected: (_) => ref.read(hyperfocusThemeProvider.notifier).setTheme(theme),
+                onSelected: (_) =>
+                    ref.read(hyperfocusThemeProvider.notifier).setTheme(theme),
                 selectedColor: theme.primaryColor.withValues(alpha: 0.2),
                 labelStyle: TextStyle(
                   color: selected ? theme.primaryColor : AppTheme.textDark,
@@ -178,7 +193,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
-                  side: BorderSide(color: selected ? theme.primaryColor : AppTheme.cardBorder),
+                  side: BorderSide(
+                      color:
+                          selected ? theme.primaryColor : AppTheme.cardBorder),
                 ),
                 backgroundColor: AppTheme.surface,
               );
@@ -208,7 +225,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             title: const Text('Alertas de Transição'),
             subtitle: const Text('Avisa a criança antes de mudar de atividade'),
             onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const TransitionAlertsListScreen()),
+              MaterialPageRoute(
+                  builder: (_) => const TransitionAlertsListScreen()),
             ),
           ),
           const Divider(height: 16),
@@ -219,6 +237,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const PlanStatusScreen()),
             ),
+          ),
+          const Divider(height: 16),
+          ListTile(
+            leading: const Icon(Icons.public_outlined),
+            title: const Text('Conheça o Fala Comigo'),
+            subtitle: const Text('Abrir a página institucional no navegador'),
+            trailing: const Icon(Icons.open_in_new_outlined, size: 20),
+            onTap: _openInstitutionalSite,
           ),
           const Divider(height: 16),
           ListTile(
@@ -240,14 +266,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
           const Divider(height: 16),
           ListTile(
-            leading: const Icon(Icons.delete_forever_outlined, color: Colors.redAccent),
+            leading: const Icon(Icons.delete_forever_outlined,
+                color: Colors.redAccent),
             title: const Text('Apagar todos os dados'),
-            subtitle: const Text('Remove os dados locais e o PIN deste aparelho'),
+            subtitle:
+                const Text('Remove os dados locais e o PIN deste aparelho'),
             onTap: _deleteAllLocalData,
           ),
           const Divider(height: 16),
           Text('Cartões cadastrados (${cards.length})',
-              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+              style:
+                  const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
           const SizedBox(height: 4),
           const Text(
             'Segure e arraste um cartão para reordenar.',
@@ -259,7 +288,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: cards.length,
             onReorder: (oldIndex, newIndex) {
-              ref.read(cardsListProvider.notifier).reorderCards(oldIndex, newIndex);
+              ref
+                  .read(cardsListProvider.notifier)
+                  .reorderCards(oldIndex, newIndex);
             },
             itemBuilder: (context, index) {
               final card = cards[index];
@@ -274,14 +305,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.edit_outlined, color: AppTheme.primary),
+                        icon: const Icon(Icons.edit_outlined,
+                            color: AppTheme.primary),
                         onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => AddCardScreen(existingCard: card)),
+                          MaterialPageRoute(
+                              builder: (_) =>
+                                  AddCardScreen(existingCard: card)),
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
-                        onPressed: () => ref.read(cardsListProvider.notifier).removeCard(card.id),
+                        icon: const Icon(Icons.delete_outline,
+                            color: Colors.redAccent),
+                        onPressed: () => ref
+                            .read(cardsListProvider.notifier)
+                            .removeCard(card.id),
                       ),
                     ],
                   ),
