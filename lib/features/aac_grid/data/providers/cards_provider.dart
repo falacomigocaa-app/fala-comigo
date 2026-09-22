@@ -114,6 +114,9 @@ class SentenceBarNotifier extends StateNotifier<List<PictogramCard>> {
   }
 
   void removeAt(int index) {
+    // A árvore de acessibilidade pode manter uma ação pendente quando a
+    // frase muda rapidamente. Uma ação obsoleta não deve encerrar o app.
+    if (index < 0 || index >= state.length) return;
     final updated = [...state]..removeAt(index);
     state = updated;
   }
