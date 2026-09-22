@@ -41,10 +41,12 @@ class SentenceBarWidget extends ConsumerWidget {
                     itemBuilder: (context, index) {
                       final card = sentence[index];
                       return Semantics(
+                        container: true,
                         button: true,
-                        label: card.label,
-                        hint: 'Toque para remover da frase',
+                        label: 'Remover ${card.label} da frase',
+                        hint: 'Toque duas vezes para remover',
                         onTap: () => notifier.removeAt(index),
+                        excludeSemantics: true,
                         child: GestureDetector(
                           onTap: () => notifier.removeAt(index),
                           child: Container(

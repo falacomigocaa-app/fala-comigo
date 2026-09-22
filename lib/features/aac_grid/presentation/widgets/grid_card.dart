@@ -57,10 +57,12 @@ class _GridCardState extends ConsumerState<GridCard> {
     final themeColor = ref.watch(hyperfocusThemeProvider).primaryColor;
 
     return Semantics(
+      container: true,
       button: true,
       label: widget.card.label,
       hint: widget.semanticHint ?? 'Toque para selecionar',
       onTap: _handleTap,
+      excludeSemantics: true,
       child: GestureDetector(
         onTap: _handleTap,
         child: AnimatedScale(
