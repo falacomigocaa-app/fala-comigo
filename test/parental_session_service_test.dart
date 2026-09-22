@@ -27,4 +27,18 @@ void main() {
     expect(ParentalSessionService.isAuthenticated, isFalse);
     expect(ParentalSessionService.requireSession(), isFalse);
   });
+
+  test('expira automaticamente e notifica a camada de navegação', () async {
+    var expired = false;
+    ParentalSessionService.onExpired = () => expired = true;
+
+    ParentalSessionService.authenticate(
+      duration: const Duration(milliseconds: 20),
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 40));
+
+    expect(ParentalSessionService.isAuthenticated, isFalse);
+    expect(ParentalSessionService.requireSession(), isFalse);
+    expect(expired, isTrue);
+  });
 }
