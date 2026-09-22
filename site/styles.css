@@ -52,3 +52,17 @@ h3 { color: var(--navy); font-size: 1.25rem; line-height: 1.15; margin-bottom: 1
 @media (max-width: 620px) { .shell { width: min(100% - 32px, 1120px); }.hero { padding-bottom: 55px; }.hero-art { min-height: 350px; border-radius: 24px; }.card-main { width: 155px; height: 185px; top: 102px; }.card-main .card-symbol { width: 68px; height: 68px; font-size: 2.3rem; }.card-top { left: 25px; }.card-bottom { right: 22px; bottom: 35px; }.orbit-one { width: 290px; left: 35px; }.orbit-two { width: 340px; left: 2px; }.feature-grid, .plans-grid { grid-template-columns: 1fr; }.feature-card { min-height: auto; }.feature-number { margin-bottom: 28px; }.soft-section, .plans-section { padding: 76px 0; }.split-section { padding-top: 78px; padding-bottom: 78px; }.contact-section { padding-top: 76px; padding-bottom: 76px; }.footer-links { order: 3; width: 100%; }.copyright { margin-left: auto !important; } h1 { font-size: clamp(2.8rem, 15vw, 4rem); } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
 :focus-visible { outline: 3px solid #d26f4e; outline-offset: 3px; }
+
+/* FAQ */
+.faq-section { padding: 110px 0 120px; background: var(--cream); }
+.faq-layout { display: grid; grid-template-columns: .82fr 1.18fr; gap: 80px; align-items: start; }
+.faq-list { border-top: 1px solid var(--line); }
+.faq-list details { border-bottom: 1px solid var(--line); }
+.faq-list summary { display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 22px 0; color: var(--navy); cursor: pointer; list-style: none; font-size: 1.05rem; font-weight: 800; }
+.faq-list summary::-webkit-details-marker { display: none; }
+.faq-list summary::after { content: "+"; flex: 0 0 auto; color: var(--coral); font-size: 1.6rem; font-weight: 400; line-height: 1; transition: transform 160ms var(--ease-out); }
+.faq-list details[open] summary::after { transform: rotate(45deg); }
+.faq-list details p { max-width: 650px; padding: 0 40px 22px 0; margin: 0; color: var(--muted); }
+.faq-list summary:focus-visible { outline-offset: 5px; }
+@media (max-width: 850px) { .faq-layout { grid-template-columns: 1fr; gap: 36px; } }
+@media (max-width: 620px) { .faq-section { padding: 76px 0; } }
