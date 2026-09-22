@@ -8,11 +8,22 @@ import '../../../../core/plans/plan_models.dart';
 import '../../../../core/theme/app_theme.dart';
 
 /// Exibe o estado comercial sem exigir conta, cobrança ou conexão.
-class PlanStatusScreen extends ConsumerWidget {
+class PlanStatusScreen extends ConsumerStatefulWidget {
   const PlanStatusScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PlanStatusScreen> createState() => _PlanStatusScreenState();
+}
+
+class _PlanStatusScreenState extends ConsumerState<PlanStatusScreen> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(planAccessProvider.notifier).hydrate();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final access = ref.watch(planAccessProvider);
     final license = access.license;
 

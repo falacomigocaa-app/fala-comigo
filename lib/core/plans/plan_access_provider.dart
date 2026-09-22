@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'plan_access_controller.dart';
+import 'plan_license_store.dart';
 import 'plan_models.dart';
 
 /// Estado comercial local. O aplicativo inicia no Essencial e não depende de
@@ -8,11 +9,23 @@ import 'plan_models.dart';
 class PlanAccessNotifier extends StateNotifier<PlanAccessController> {
   PlanAccessNotifier() : super(essentialPlanAccess);
 
-  void activateLicense(PlanLicense license) {
+  Future<void> hydrate() async {
+    try {
+      final license = await PlanLicenseStore.load();
+      if (license != null) state = PlanAccessController.fromLicense(license);
+    } catch (_) {
+      // Falha de leitura não pode bloquear a comunicação local.
+      state = essentialPlanAccess;
+    }
+  }
+
+  Future<void> activateLicense(PlanLicense license) async {
+    await PlanLicenseStore.save(license);
     state = PlanAccessController.fromLicense(license);
   }
 
-  void returnToEssential() {
+  Future<void> returnToEssential() async {
+    await PlanLicenseStore.clear();
     state = essentialPlanAccess;
   }
 }
