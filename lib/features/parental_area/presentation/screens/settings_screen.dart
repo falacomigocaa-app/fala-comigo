@@ -100,8 +100,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-        title: const Text('Painel dos Pais & Educadores'),
-        backgroundColor: AppTheme.surface,
+        title: const Text('Área do Responsável'),
+        backgroundColor: AppTheme.professionalBackground,
+        foregroundColor: Colors.white,
+        elevation: 0,
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Navigator.of(context).push(
@@ -112,96 +114,119 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         backgroundColor: AppTheme.primary,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
         children: [
-          const Text('Tamanho dos botões',
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-          Slider(
-            value: scale,
-            min: 0.8,
-            max: 1.6,
-            divisions: 8,
-            label: '${(scale * 100).round()}%',
-            activeColor: AppTheme.primary,
-            onChanged: (v) => ref.read(buttonScaleProvider.notifier).state = v,
-          ),
-          const SizedBox(height: 8),
-          const Text('Ao tocar em um cartão',
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-          const SizedBox(height: 4),
-          const Text(
-            'Escolha se o toque fala, monta uma mensagem ou faz as duas coisas.',
-            style: TextStyle(fontSize: 12, color: Colors.grey),
-          ),
-          RadioListTile<CardTapBehavior>(
-            contentPadding: EdgeInsets.zero,
-            value: CardTapBehavior.speakAndAdd,
-            groupValue: tapBehavior,
-            title: const Text('Falar e adicionar à frase'),
-            onChanged: (value) {
-              if (value != null) {
-                ref.read(cardTapBehaviorProvider.notifier).setBehavior(value);
-              }
-            },
-          ),
-          RadioListTile<CardTapBehavior>(
-            contentPadding: EdgeInsets.zero,
-            value: CardTapBehavior.addOnly,
-            groupValue: tapBehavior,
-            title: const Text('Adicionar sem falar'),
-            subtitle: const Text('Recomendado para montar frases com calma.'),
-            onChanged: (value) {
-              if (value != null) {
-                ref.read(cardTapBehaviorProvider.notifier).setBehavior(value);
-              }
-            },
-          ),
-          RadioListTile<CardTapBehavior>(
-            contentPadding: EdgeInsets.zero,
-            value: CardTapBehavior.speakOnly,
-            groupValue: tapBehavior,
-            title: const Text('Falar sem adicionar à frase'),
-            onChanged: (value) {
-              if (value != null) {
-                ref.read(cardTapBehaviorProvider.notifier).setBehavior(value);
-              }
-            },
-          ),
-          const Divider(height: 24),
-          const Text('Tema por Hiperfoco',
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-          const SizedBox(height: 4),
-          const Text(
-            'Deixa a tela da criança com a cara do interesse favorito dela.',
-            style: TextStyle(fontSize: 12, color: Colors.grey),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: HyperfocusTheme.values.map((theme) {
-              final selected = theme == currentTheme;
-              return ChoiceChip(
-                label: Text('${theme.emoji} ${theme.displayName}'),
-                selected: selected,
-                onSelected: (_) =>
-                    ref.read(hyperfocusThemeProvider.notifier).setTheme(theme),
-                selectedColor: theme.primaryColor.withValues(alpha: 0.2),
-                labelStyle: TextStyle(
-                  color: selected ? theme.primaryColor : AppTheme.textDark,
-                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+          const _SettingsHero(),
+          const SizedBox(height: 16),
+          _SettingsSection(
+            icon: Icons.accessibility_new_outlined,
+            title: 'Acessibilidade da comunicação',
+            description:
+                'Ajuste o tamanho, o som e o comportamento dos cartões para a rotina da criança.',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Tamanho dos botões',
+                    style:
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+                Slider(
+                  value: scale,
+                  min: 0.8,
+                  max: 1.6,
+                  divisions: 8,
+                  label: '${(scale * 100).round()}%',
+                  activeColor: AppTheme.primary,
+                  onChanged: (v) =>
+                      ref.read(buttonScaleProvider.notifier).state = v,
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: BorderSide(
-                      color:
-                          selected ? theme.primaryColor : AppTheme.cardBorder),
+                const SizedBox(height: 8),
+                const Text('Ao tocar em um cartão',
+                    style:
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+                const SizedBox(height: 4),
+                const Text(
+                  'Escolha se o toque fala, monta uma mensagem ou faz as duas coisas.',
+                  style: TextStyle(fontSize: 13, color: AppTheme.mutedText),
                 ),
-                backgroundColor: AppTheme.surface,
-              );
-            }).toList(),
+                RadioListTile<CardTapBehavior>(
+                  contentPadding: EdgeInsets.zero,
+                  value: CardTapBehavior.speakAndAdd,
+                  groupValue: tapBehavior,
+                  title: const Text('Falar e adicionar à frase'),
+                  onChanged: (value) {
+                    if (value != null) {
+                      ref
+                          .read(cardTapBehaviorProvider.notifier)
+                          .setBehavior(value);
+                    }
+                  },
+                ),
+                RadioListTile<CardTapBehavior>(
+                  contentPadding: EdgeInsets.zero,
+                  value: CardTapBehavior.addOnly,
+                  groupValue: tapBehavior,
+                  title: const Text('Adicionar sem falar'),
+                  subtitle:
+                      const Text('Recomendado para montar frases com calma.'),
+                  onChanged: (value) {
+                    if (value != null) {
+                      ref
+                          .read(cardTapBehaviorProvider.notifier)
+                          .setBehavior(value);
+                    }
+                  },
+                ),
+                RadioListTile<CardTapBehavior>(
+                  contentPadding: EdgeInsets.zero,
+                  value: CardTapBehavior.speakOnly,
+                  groupValue: tapBehavior,
+                  title: const Text('Falar sem adicionar à frase'),
+                  onChanged: (value) {
+                    if (value != null) {
+                      ref
+                          .read(cardTapBehaviorProvider.notifier)
+                          .setBehavior(value);
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
-          const Divider(height: 24),
+          const SizedBox(height: 16),
+          _SettingsSection(
+            icon: Icons.palette_outlined,
+            title: 'Tema e estímulos visuais',
+            description:
+                'Escolha uma identidade visual para a tela de comunicação sem alterar os cartões.',
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: HyperfocusTheme.values.map((theme) {
+                final selected = theme == currentTheme;
+                return ChoiceChip(
+                  label: Text('${theme.emoji} ${theme.displayName}'),
+                  selected: selected,
+                  onSelected: (_) => ref
+                      .read(hyperfocusThemeProvider.notifier)
+                      .setTheme(theme),
+                  selectedColor: theme.primaryColor.withValues(alpha: 0.2),
+                  labelStyle: TextStyle(
+                    color: selected ? theme.primaryColor : AppTheme.textDark,
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    side: BorderSide(
+                        color: selected
+                            ? theme.primaryColor
+                            : AppTheme.cardBorder),
+                  ),
+                  backgroundColor: AppTheme.surface,
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(height: 16),
           ListTile(
             leading: const Icon(Icons.fact_check_outlined),
             title: const Text('Registro de Comportamento'),
@@ -327,6 +352,131 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             },
           ),
           const SizedBox(height: 80), // espaço para o FAB não cobrir a lista
+        ],
+      ),
+    );
+  }
+}
+
+class _SettingsHero extends StatelessWidget {
+  const _SettingsHero();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppTheme.professionalBackground,
+        borderRadius: BorderRadius.circular(24),
+        gradient: const LinearGradient(
+          colors: [
+            AppTheme.professionalBackground,
+            AppTheme.professionalSurface
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x1F14213D),
+            blurRadius: 18,
+            offset: Offset(0, 8),
+          ),
+        ],
+      ),
+      child: const Row(
+        children: [
+          CircleAvatar(
+            radius: 26,
+            backgroundColor: AppTheme.professionalAccent,
+            child: Icon(Icons.shield_outlined,
+                color: AppTheme.professionalBackground),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Ajustes protegidos',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  'Personalize a comunicação com calma e mantenha o controle dos dados locais.',
+                  style: TextStyle(
+                      color: Color(0xFFD8E7F0), fontSize: 13, height: 1.35),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SettingsSection extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String description;
+  final Widget child;
+
+  const _SettingsSection({
+    required this.icon,
+    required this.title,
+    required this.description,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(18, 18, 18, 12),
+      decoration: BoxDecoration(
+        color: AppTheme.surface,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: AppTheme.cardBorder),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x0F14213D),
+            blurRadius: 12,
+            offset: Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, color: AppTheme.primary, size: 26),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w800, fontSize: 17)),
+                    const SizedBox(height: 4),
+                    Text(description,
+                        style: const TextStyle(
+                            color: AppTheme.mutedText,
+                            fontSize: 13,
+                            height: 1.35)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          child,
         ],
       ),
     );
