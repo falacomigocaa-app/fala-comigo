@@ -45,14 +45,23 @@ class _TransitionAlertFullScreenState
   }
 
   Future<void> _playAudio() async {
-    if (widget.alert.audioType == 'gravado' &&
-        widget.alert.recordedAudioPath != null) {
-      final preview = await MediaStorageService.materializeForReading(
-        widget.alert.recordedAudioPath!,
-      );
-      await _player.play(DeviceFileSource(preview.path));
-    } else if (widget.alert.ttsText != null &&
-        widget.alert.ttsText!.isNotEmpty) {
+    try {
+      if (widget.alert.audioType == 'gravado' &&
+          widget.alert.recordedAudioPath != null) {
+        final preview = await MediaStorageService.materializeForReading(
+          widget.alert.recordedAudioPath!,
+        );
+        if (await preview.exists()) {
+          await _player.play(DeviceFileSource(preview.path));
+          return;
+        }
+      }
+    } catch (_) {
+      // Uma mídia ausente, corrompida ou incompatível não deve interromper
+      // o alerta. O texto do alerta continua sendo uma alternativa segura.
+    }
+
+    if (widget.alert.ttsText != null && widget.alert.ttsText!.isNotEmpty) {
       await TtsService.instance.speak(widget.alert.ttsText!);
     }
   }
