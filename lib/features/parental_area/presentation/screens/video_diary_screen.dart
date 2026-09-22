@@ -142,13 +142,17 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
     final h = date.hour.toString().padLeft(2, '0');
     final min = date.minute.toString().padLeft(2, '0');
     return '$d/$m às $h:$min';
-  }@override
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: const Text('Diário de Vídeo'),
-        backgroundColor: AppTheme.surface,
+        backgroundColor: AppTheme.professionalBackground,
+        foregroundColor: Colors.white,
+        elevation: 0,
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
@@ -157,15 +161,40 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Grave momentos para o especialista avaliar',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'Grave um vídeo curto do momento e adicione um contexto. '
-                    'Depois, compartilhe com o terapeuta ou a escola.',
-                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: AppTheme.professionalBackground,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: const Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.videocam_outlined,
+                            color: AppTheme.professionalAccent, size: 28),
+                        SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Diário de Vídeo',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 20)),
+                              SizedBox(height: 6),
+                              Text(
+                                'Grave um momento curto, registre o contexto e decida quando compartilhar.',
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.white70,
+                                    height: 1.35),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 16),
                   if (_pendingVideoPath == null)
@@ -193,7 +222,9 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
                         children: [
                           const Icon(Icons.check_circle, color: Colors.green),
                           const SizedBox(width: 8),
-                          const Expanded(child: Text('Vídeo gravado, pronto para salvar.')),
+                          const Expanded(
+                              child:
+                                  Text('Vídeo gravado, pronto para salvar.')),
                         ],
                       ),
                     ),
@@ -254,26 +285,34 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
                             final entry = Map<String, dynamic>.from(
                               box.get(key) as Map,
                             );
-                            final videoPath = entry['videoPath'] as String? ?? '';
-                            final entryContext = entry['context'] as String? ?? '';
+                            final videoPath =
+                                entry['videoPath'] as String? ?? '';
+                            final entryContext =
+                                entry['context'] as String? ?? '';
                             return Card(
                               margin: const EdgeInsets.symmetric(vertical: 4),
                               child: ListTile(
                                 leading: const Icon(Icons.videocam_outlined),
-                                title: Text(_formatDate(entry['timestamp'] ?? '')),
+                                title:
+                                    Text(_formatDate(entry['timestamp'] ?? '')),
                                 subtitle: Text(
-                                  entryContext.isEmpty ? '(sem contexto)' : entryContext,
+                                  entryContext.isEmpty
+                                      ? '(sem contexto)'
+                                      : entryContext,
                                 ),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     IconButton(
                                       icon: const Icon(Icons.share_outlined),
-                                      onPressed: () => _shareEntry(videoPath, entryContext),
+                                      onPressed: () =>
+                                          _shareEntry(videoPath, entryContext),
                                     ),
                                     IconButton(
-                                      icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
-                                      onPressed: () => _deleteEntry(key, videoPath),
+                                      icon: const Icon(Icons.delete_outline,
+                                          color: Colors.redAccent),
+                                      onPressed: () =>
+                                          _deleteEntry(key, videoPath),
                                     ),
                                   ],
                                 ),
