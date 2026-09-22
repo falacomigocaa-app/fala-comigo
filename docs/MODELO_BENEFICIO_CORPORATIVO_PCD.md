@@ -65,6 +65,20 @@ O painel corporativo deve mostrar, no máximo, indicadores administrativos e agr
 
 O benefício corporativo não deve exigir que o colaborador informe o diagnóstico ao gestor. A implementação final do fluxo deve ser revisada por especialistas em privacidade, recursos humanos e inclusão.
 
+## Controle de funcionários ativos sem interromper o cuidado
+
+O vínculo empregatício deve controlar somente a **licença patrocinada**, e não a conta familiar. A conta da família deve possuir um identificador próprio. O cadastro corporativo deve manter apenas um identificador de beneficiário, o estado da licença e as datas necessárias para cobrança e elegibilidade. Nenhum desses registros precisa conter o nome ou o diagnóstico da criança.
+
+O benefício deve utilizar estados claros: `invited`, `active`, `grace`, `suspended`, `expired` e `revoked`. Uma reconciliação pode ocorrer por integração autorizada com o sistema de recursos humanos, por arquivo administrativo protegido ou por confirmação manual. A empresa não deve precisar consultar o aplicativo ou a atividade da família para saber se o funcionário continua ativo.
+
+Quando o funcionário entra em licença, muda de área ou deixa a empresa, o servidor pode suspender o direito a novas licenças patrocinadas. Ele não deve apagar a conta, apagar mídias, bloquear o aplicativo local ou remover dados da criança. Deve existir um período de transição configurável, como 30 ou 90 dias, para que a família escolha entre continuar com uma licença pessoal, migrar para outro patrocinador ou encerrar o benefício.
+
+Durante a transição, o responsável deve receber uma mensagem clara e não alarmista. A criança deve continuar usando o modo offline do aplicativo. A comunicação não deve mencionar diagnóstico ao empregador e não deve sugerir que o uso do benefício influenciou o vínculo de trabalho.
+
+Se a pessoa trocar de emprego, a nova empresa deve criar uma nova concessão independente. As concessões podem coexistir, mas não devem misturar organizações, relatórios ou históricos de administração. A empresa antiga perde o direito de administrar a licença anterior, mas não ganha autorização para apagar ou acessar os dados familiares.
+
+O contrato corporativo deve definir o que ocorre no fim do programa, o período de transição, a exportação disponível para a família, a conversão para plano pessoal, a retenção dos registros administrativos e o canal de contestação. A implementação final precisa de revisão jurídica e de recursos humanos antes de qualquer integração automática com sistemas de funcionários.
+
 ## Segurança e consentimento
 
 O benefício corporativo não substitui o consentimento para compartilhamento clínico. O aceite do programa autoriza apenas a administração da licença. Um segundo consentimento, separado e específico, é necessário para qualquer clínica, escola ou profissional.
