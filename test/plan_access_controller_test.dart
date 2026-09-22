@@ -7,7 +7,8 @@ import 'package:fala_comigo/core/plans/plan_models.dart';
 void main() {
   final issuedAt = DateTime.utc(2026, 9, 22);
 
-  test('catálogo público começa com planos acessíveis e sem cobrança definida', () {
+  test('catálogo público começa com planos acessíveis e sem cobrança definida',
+      () {
     expect(PlanCatalog.publicPlans.map((plan) => plan.id), [
       'essential',
       'family',
@@ -19,7 +20,8 @@ void main() {
     expect(PlanCatalog.organization.publiclyVisible, isFalse);
   });
 
-  test('plano Essencial mantém comunicação e controles offline disponíveis', () {
+  test('plano Essencial mantém comunicação e controles offline disponíveis',
+      () {
     final access = PlanAccessController(plan: PlanCatalog.essential);
 
     expect(access.canUse(PlanFeature.offlineCommunication), isTrue);
@@ -69,6 +71,37 @@ void main() {
     expect(grace.maxCareConnections, 5);
     expect(suspended.canUse(PlanFeature.careNetwork), isFalse);
     expect(suspended.communicationRemainsAvailable, isTrue);
+  });
+
+  test('licenças expirada e revogada preservam somente o núcleo offline', () {
+    for (final status in [LicenseStatus.expired, LicenseStatus.revoked]) {
+      final access = PlanAccessController.fromLicense(
+        PlanLicense(
+          id: 'license-$status',
+          planId: PlanCatalog.connectedCare.id,
+          status: status,
+          issuedAt: issuedAt,
+        ),
+      );
+
+      expect(access.canUse(PlanFeature.remoteBackup), isFalse);
+      expect(access.canUse(PlanFeature.careNetwork), isFalse);
+      expect(access.communicationRemainsAvailable, isTrue);
+    }
+  });
+
+  test('status desconhecido é restaurado como convite pendente', () {
+    final license = PlanLicense.fromMap({
+      'id': 'license-unknown-status',
+      'planId': PlanCatalog.family.id,
+      'status': 'future_status',
+      'issuedAt': issuedAt.toIso8601String(),
+    });
+
+    expect(license.status, LicenseStatus.invited);
+    expect(
+        PlanAccessController.fromLicense(license).communicationRemainsAvailable,
+        isTrue);
   });
 
   test('plano e licença podem ser serializados sem dados clínicos', () {
