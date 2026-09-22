@@ -66,7 +66,7 @@ class _GridCardState extends ConsumerState<GridCard> {
       child: GestureDetector(
         onTap: _handleTap,
         child: AnimatedScale(
-          scale: _pressed ? 1.02 : 1.0,
+          scale: _pressed ? 0.97 : 1.0,
           duration: AppConstants.cardTapAnimationDuration,
           child: Container(
             constraints: const BoxConstraints(

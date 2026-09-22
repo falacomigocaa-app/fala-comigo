@@ -39,48 +39,47 @@ class AACGridScreen extends ConsumerWidget {
             _HyperfocusBackground(theme: hyperfocusTheme),
             Column(
               children: [
-                // Barra superior com filtro de categoria e acesso restrito
-                // ao Painel dos Pais/Educadores.
+                // Cabeçalho infantil e filtros; o acesso parental fica separado
+                // para não competir com os cartões de comunicação.
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+                  padding: const EdgeInsets.fromLTRB(16, 10, 12, 0),
                   child: Row(
                     children: [
-                      if (hyperfocusTheme != HyperfocusTheme.padrao)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: Text(hyperfocusTheme.emoji,
-                              style: const TextStyle(fontSize: 24)),
+                      if (hyperfocusTheme != HyperfocusTheme.padrao) ...[
+                        Text(hyperfocusTheme.emoji,
+                            style: const TextStyle(fontSize: 24)),
+                        const SizedBox(width: 8),
+                      ],
+                      const Expanded(
+                        child: Text(
+                          'Fala Comigo',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w800),
                         ),
-                      Expanded(
-                        child: SizedBox(
-                          height: 44,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              _CategoryChip(
-                                label: 'Todas',
-                                selected: selectedCategory == 'todas',
-                                color: themeColor,
-                                onTap: () => ref
-                                    .read(selectedCategoryProvider.notifier)
-                                    .state = 'todas',
-                              ),
-                              ...AppConstants.categoryLabels.entries.map(
-                                (e) => _CategoryChip(
-                                  label: e.value,
-                                  selected: selectedCategory == e.key,
-                                  color: themeColor,
-                                  onTap: () => ref
-                                      .read(selectedCategoryProvider.notifier)
-                                      .state = e.key,
-                                ),
-                              ),
-                            ],
-                          ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: AppTheme.accentGreen.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.cloud_off_outlined,
+                                size: 16, color: AppTheme.accentGreen),
+                            SizedBox(width: 5),
+                            Text('Offline',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppTheme.accentGreen)),
+                          ],
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.settings_outlined, size: 28),
+                        icon: const Icon(Icons.settings_outlined, size: 27),
                         tooltip: 'Área do Responsável',
                         onPressed: () => Navigator.of(context).push(
                           MaterialPageRoute(
@@ -90,6 +89,35 @@ class AACGridScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 6, 12, 0),
+                  child: SizedBox(
+                    height: 44,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        _CategoryChip(
+                          label: 'Todas',
+                          selected: selectedCategory == 'todas',
+                          color: themeColor,
+                          onTap: () => ref
+                              .read(selectedCategoryProvider.notifier)
+                              .state = 'todas',
+                        ),
+                        ...AppConstants.categoryLabels.entries.map(
+                          (e) => _CategoryChip(
+                            label: e.value,
+                            selected: selectedCategory == e.key,
+                            color: themeColor,
+                            onTap: () => ref
+                                .read(selectedCategoryProvider.notifier)
+                                .state = e.key,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
 
                 // Construtor de frases (Sentence Bar).
                 const SentenceBarWidget(),
@@ -97,11 +125,38 @@ class AACGridScreen extends ConsumerWidget {
                 // Grade de pictogramas.
                 Expanded(
                   child: visibleCards.isEmpty
-                      ? const Center(
-                          child: Text(
-                            'Nenhum cartão nesta categoria ainda.\nAdicione pelo Painel dos Pais.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.grey, fontSize: 16),
+                      ? Center(
+                          child: Container(
+                            margin: const EdgeInsets.all(24),
+                            padding: const EdgeInsets.all(24),
+                            decoration: BoxDecoration(
+                              color: AppTheme.surface.withValues(alpha: 0.9),
+                              borderRadius: BorderRadius.circular(24),
+                              border: Border.all(color: AppTheme.cardBorder),
+                            ),
+                            child: const Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.grid_view_outlined,
+                                    size: 42, color: AppTheme.primary),
+                                SizedBox(height: 12),
+                                Text(
+                                  'Nenhum cartão nesta categoria ainda.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: AppTheme.textDark,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                SizedBox(height: 6),
+                                Text(
+                                  'O responsável pode adicionar cartões pelo painel.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: AppTheme.mutedText, fontSize: 14),
+                                ),
+                              ],
+                            ),
                           ),
                         )
                       : LayoutBuilder(
