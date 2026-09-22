@@ -66,3 +66,16 @@ h3 { color: var(--navy); font-size: 1.25rem; line-height: 1.15; margin-bottom: 1
 .faq-list summary:focus-visible { outline-offset: 5px; }
 @media (max-width: 850px) { .faq-layout { grid-template-columns: 1fr; gap: 36px; } }
 @media (max-width: 620px) { .faq-section { padding: 76px 0; } }
+
+/* Institutional areas */
+.institutions-section { padding: 110px 0 100px; background: #eaf4f2; }
+.institution-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.institution-card { min-height: 300px; display: flex; flex-direction: column; padding: 30px; border-radius: 24px; }
+.institution-card h3 { margin-top: 30px; }
+.institution-card p { color: var(--muted); }
+.institution-card a { margin-top: auto; color: var(--navy); font-weight: 800; text-underline-offset: 4px; }
+.institution-icon { display: grid; place-items: center; width: 45px; height: 45px; border-radius: 14px; color: var(--navy); background: rgba(255, 253, 248, .72); font-size: 1.7rem; font-weight: 400; }
+.institution-clinic { background: var(--blue); }.institution-school { background: var(--yellow); }.institution-sponsor { background: var(--coral); }
+.institution-note { max-width: 700px; margin: 32px 0 0; color: var(--muted); font-size: .88rem; }
+@media (max-width: 850px) { .institution-grid { grid-template-columns: 1fr; } .institution-card { min-height: 230px; } }
+@media (max-width: 620px) { .institutions-section { padding: 76px 0; } }
