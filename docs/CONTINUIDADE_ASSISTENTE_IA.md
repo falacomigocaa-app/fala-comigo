@@ -332,3 +332,13 @@ Após a integração da matriz, a `main` foi validada novamente com Flutter `3.3
 Os arquivos gerados automaticamente durante `flutter pub get` foram restaurados, deixando a cópia local da `main` limpa. A sessão possui somente um dispositivo Linux desktop; não há celular ou tablet Android conectado, `adb devices` não encontrou dispositivos e não existem ferramentas iOS disponíveis. Portanto, F21, F22 e F23 da matriz continuam pendentes de execução física.
 
 **Próximo gate:** executar F01–F17 em um celular Android e um tablet Android, começando offline e usando dados sintéticos. O resultado deve ser registrado na `MATRIZ_FLUXOS_CRITICOS.md` antes de iniciar portal conectado, sincronização clínica ou cobrança.
+
+## 23. APK debug para teste Android
+
+Foi instalado o Android SDK Command-line Tools oficial, platform-tools, plataforma Android, build-tools, NDK e JDK 21. O primeiro build revelou dois problemas no projeto Android: o plugin `org.jetbrains.kotlin.android` não estava aplicado no módulo e a regra de assinatura executava `error()` durante a configuração mesmo em builds debug.
+
+Na branch `fix/android-kotlin-plugin`, foram aplicadas correções mínimas em `android/app/build.gradle.kts`: aplicação explícita do plugin Kotlin e exigência de `key.properties` somente quando uma tarefa de release é solicitada. O build `flutter build apk --debug` foi concluído com sucesso.
+
+O APK resultante tem aproximadamente 152 MB e SHA-256 `e3e3592ecf36f1118b2e15e34ed13d6aa044d7e04c04c36f48afdc52e0a0b3bb`. O roteiro de instalação por USB/ADB e a ficha de testes estão em `docs/ANDROID_TESTE_DEBUG.md`. Nenhum aparelho Android estava conectado nesta sessão; a instalação e os fluxos ainda precisam ser executados pelo teste físico.
+
+**Próximo passo:** revisar o PR da correção Android, integrar somente após o CI, e instalar o APK debug em um celular e um tablet Android usando dados sintéticos e conectividade controlada.
