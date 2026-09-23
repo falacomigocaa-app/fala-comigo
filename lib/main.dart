@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'core/services/transition_alert_service.dart';
 import 'core/services/secure_box_service.dart';
+import 'core/services/app_orientation_service.dart';
 import 'core/services/parental_session_service.dart';
 import 'core/services/tts_service.dart';
 import 'core/theme/app_theme.dart';
@@ -25,13 +26,6 @@ final navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Trava a orientação em Paisagem (Landscape), recomendado para
-  // tablets e celulares usados como pranchas de comunicação.
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
-
   // Persistência local dos cartões.
   await Hive.initFlutter();
   Hive.registerAdapter(PictogramCardAdapter());
@@ -42,6 +36,7 @@ Future<void> main() async {
   // Caixa simples de configurações do app (ex: tema de hiperfoco
   // escolhido pelos pais).
   await SecureBoxService.openSecureBoxWithMigration('app_settings');
+  await AppOrientationService.applyChildOrientation();
 
   // Caixa dos Alertas de Transição de Atividade (configurações dos
   // alertas: áudio, horário, checklist).
@@ -65,33 +60,38 @@ Future<void> main() async {
   // Quando uma notificação de Alerta de Transição é tocada, abre a
   // tela em tela cheia correspondente, buscando o alerta salvo pelo
   // ID recebido no payload da notificação.
-  TransitionAlertService.instance.onAlertTriggered = (alertId) {
-    final ctx = navigatorKey.currentContext;
-    try {
-      final alertsBox = Hive.box(transitionAlertsBoxName);
-      final rawMap = alertsBox.get(alertId);
-      if (rawMap != null) {
-        final alert =
-            TransitionAlert.fromMap(Map<String, dynamic>.from(rawMap as Map));
-        navigatorKey.currentState?.push(
-          MaterialPageRoute(
-              builder: (_) => TransitionAlertFullScreen(alert: alert)),
-        );
-      } else if (ctx != null) {
-        ScaffoldMessenger.of(ctx).showSnackBar(
-          const SnackBar(content: Text('Não foi possível abrir este alerta.')),
-        );
+  void configureAlertHandler() {
+    TransitionAlertService.instance.setAlertHandler((alertId) {
+      final ctx = navigatorKey.currentContext;
+      try {
+        final alertsBox = Hive.box(transitionAlertsBoxName);
+        final rawMap = alertsBox.get(alertId);
+        if (rawMap != null) {
+          final alert =
+              TransitionAlert.fromMap(Map<String, dynamic>.from(rawMap as Map));
+          navigatorKey.currentState?.push(
+            MaterialPageRoute(
+                builder: (_) => TransitionAlertFullScreen(alert: alert)),
+          );
+        } else if (ctx != null) {
+          ScaffoldMessenger.of(ctx).showSnackBar(
+            const SnackBar(
+                content: Text('Não foi possível abrir este alerta.')),
+          );
+        }
+      } catch (_) {
+        if (ctx != null) {
+          ScaffoldMessenger.of(ctx).showSnackBar(
+            const SnackBar(
+                content: Text('Não foi possível abrir este alerta.')),
+          );
+        }
       }
-    } catch (_) {
-      if (ctx != null) {
-        ScaffoldMessenger.of(ctx).showSnackBar(
-          const SnackBar(content: Text('Não foi possível abrir este alerta.')),
-        );
-      }
-    }
-  };
+    });
+  }
 
   runApp(const ProviderScope(child: CaaApp()));
+  WidgetsBinding.instance.addPostFrameCallback((_) => configureAlertHandler());
 }
 
 class CaaApp extends StatefulWidget {

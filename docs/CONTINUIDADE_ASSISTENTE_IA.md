@@ -1,6 +1,6 @@
 # Fala Comigo — Continuidade para assistência por IA
 
-**Última atualização:** 23 de setembro de 2026  
+**Última atualização:** 23 de setembro de 2026
 **Estado:** avaliação inicial concluída; transferência para `main` ainda não iniciada.
 
 ## 1. Objetivo deste documento
@@ -350,3 +350,52 @@ O primeiro APK debug apresentou em aparelho Android o erro `HiveError: The box "
 A validação automática da correção passou: análise estática, testes Flutter e `flutter build apk --debug`. O novo APK tem aproximadamente 152 MB e SHA-256 `b3baeb02271501953ee212a4bf0f05816fa557dfeb351d2fa52923b435361d70`.
 
 O APK corrigido está fora do Git e deve ser instalado como uma nova versão de teste. A execução humana no Android — tocar, navegar, conceder permissões, testar voz, mídia, offline e acessibilidade — depende do aparelho do responsável e não pode ser simulada ou declarada como concluída pelo ambiente de desenvolvimento.
+
+## 25. Redesign da Área do Responsável e confiabilidade P0
+
+**Data:** 23 de setembro de 2026.
+**Branch:** `feat/parental-dashboard-reliability`, baseada na branch com a correção Hive/Android.
+
+A equipe auditou cinco áreas: temas, alertas/lembretes, Novo Cartão, dashboard parental e orientação. A auditoria concluiu que a tela branca do Novo Cartão vinha do `Spacer` dentro de `SingleChildScrollView`; alertas não tinham contrato de data única, permissões/estado visível, inicialização iOS ou fila de cold start; a Activity Android estava fixada nativamente em paisagem; e a Área do Responsável era uma lista longa apesar de já possuir recursos suficientes para um dashboard.
+
+Alterações implementadas nesta branch:
+
+- criado `lib/core/services/app_orientation_service.dart` com preferência local vertical/paisagem em `app_settings`;
+- `main.dart` aplica a preferência salva e processa payload de alerta depois da primeira frame;
+- removido `android:screenOrientation="landscape"` do Manifest para não impedir a escolha vertical;
+- `SettingsScreen` recebeu hero de **Localização & Segurança**, prévia visual sem posição falsa, cards 2x2 de Tendências, PDF, Diário de Vídeo e Rotina Visual, e ação **Novo cartão** no cabeçalho;
+- localização foi documentada como módulo futuro web autenticado, dependente de consentimento, permissão no aparelho da criança, transporte seguro e auditoria;
+- `AddCardScreen` não usa mais `Spacer` no scroll, aguarda o salvamento, impede toque duplo, trata erro e só fecha após sucesso;
+- `CardsNotifier` usa o maior `order` + 1 e `updateCard` atualiza `isCustomImage`;
+- `TransitionAlertService` passou a preservar payload de cold start até o callback existir e recebeu inicialização/detalhes Darwin básicos;
+- criado `docs/REDESIGN_AREA_PARENTAL.md` com arquitetura, decisões, comandos e checklist para continuidade.
+
+Comandos executados:
+
+```bash
+git switch -c feat/parental-dashboard-reliability
+dart format lib/main.dart lib/core/services/app_orientation_service.dart lib/core/services/transition_alert_service.dart lib/features/aac_grid/data/providers/cards_provider.dart lib/features/parental_area/presentation/screens/add_card_screen.dart lib/features/parental_area/presentation/screens/settings_screen.dart
+flutter analyze --no-fatal-infos --no-fatal-warnings
+flutter test
+flutter build apk --debug
+```
+
+A primeira validação encontrou e corrigiu dois erros estruturais de edição: marcador `EOF` no serviço de orientação e chave fora da classe `SettingsScreen`. A segunda validação terminou com código 0: análise, testes e build APK passaram.
+
+Artefato local da validação:
+
+```text
+/home/ubuntu/fala-comigo-parental-dashboard.apk
+SHA-256: 1cbf5282c0673e5b93094fc68998377613cab8aa2927f79ec4039cfbb97230c6
+```
+
+Pendências que permanecem abertas e não devem ser declaradas prontas:
+
+- instalar e testar o APK em celular e tablet reais;
+- validar alertas com app aberto, background, encerrado, tela bloqueada, permissões negadas, reboot e diferentes fabricantes;
+- finalizar data única, recorrência, timezone e IDs persistentes de alertas;
+- testar contraste, font scale, TalkBack/VoiceOver e reduced motion;
+- integrar localização real somente depois de definir backend web autenticado, consentimento e auditoria;
+- revisar o PR/CI antes de qualquer merge na `main`.
+
+**Ponto de retomada:** ler `docs/REDESIGN_AREA_PARENTAL.md`, este capítulo e `docs/ANDROID_TESTE_DEBUG.md`; confirmar `git status`, executar o CI da branch e continuar pelo teste físico. Não usar mapa com localização inventada e não prometer full-screen no iOS ou no Android sem permissões e evidência do sistema.

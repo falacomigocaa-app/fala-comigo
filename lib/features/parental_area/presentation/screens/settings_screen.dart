@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/config/public_links.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/hyperfocus_theme.dart';
+import '../../../../core/services/app_orientation_service.dart';
 import '../../../../core/services/data_wipe_service.dart';
 import '../../../aac_grid/data/providers/cards_provider.dart';
 import 'add_card_screen.dart';
@@ -89,10 +89,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   @override
   void dispose() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
+    AppOrientationService.applyChildOrientation();
     super.dispose();
   }
 
@@ -110,20 +107,66 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         backgroundColor: AppTheme.professionalBackground,
         foregroundColor: Colors.white,
         elevation: 0,
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const AddCardScreen()),
-        ),
-        icon: const Icon(Icons.add_a_photo_outlined),
-        label: const Text('Novo cartão'),
-        backgroundColor: AppTheme.primary,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: FilledButton.icon(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const AddCardScreen()),
+              ),
+              icon: const Icon(Icons.add_a_photo_outlined, size: 18),
+              label: const Text('Novo cartão'),
+            ),
+          ),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
         children: [
           const _SettingsHero(),
           const SizedBox(height: 16),
+          _LocationHeroCard(onConnect: _showLocationRoadmap),
+          const SizedBox(height: 20),
+          _DashboardSection(
+            title: 'Acompanhamento & Relatórios',
+            description: 'Acesse rapidamente os recursos usados no dia a dia.',
+            children: [
+              _DashboardActionCard(
+                icon: Icons.bar_chart_rounded,
+                title: 'Tendências semanais',
+                description: 'Resumo de uso e registros',
+                color: const Color(0xFF315BFF),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => const WeeklyTrendsScreen())),
+              ),
+              _DashboardActionCard(
+                icon: Icons.picture_as_pdf_rounded,
+                title: 'Relatórios em PDF',
+                description: 'Exportar dados escolhidos',
+                color: const Color(0xFFB45309),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => const DataExportScreen())),
+              ),
+              _DashboardActionCard(
+                icon: Icons.videocam_rounded,
+                title: 'Diário de vídeo',
+                description: 'Registrar momentos importantes',
+                color: const Color(0xFF7A5FC7),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => const VideoDiaryScreen())),
+              ),
+              _DashboardActionCard(
+                icon: Icons.view_timeline_rounded,
+                title: 'Rotina visual',
+                description: 'Organizar os passos do dia',
+                color: const Color(0xFF15803D),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) =>
+                        const VisualRoutineScreen(readOnly: false))),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
           _SettingsSection(
             icon: Icons.accessibility_new_outlined,
             title: 'Acessibilidade da comunicação',
@@ -144,6 +187,31 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   activeColor: AppTheme.primary,
                   onChanged: (v) =>
                       ref.read(buttonScaleProvider.notifier).state = v,
+                ),
+                const SizedBox(height: 8),
+                const Text('Orientação da tela da criança',
+                    style:
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+                const SizedBox(height: 4),
+                const Text(
+                  'A paisagem é recomendada para mostrar cartões maiores e reduzir mudanças na rotina. Escolha vertical se o aparelho for usado normalmente em pé.',
+                  style: TextStyle(fontSize: 13, color: AppTheme.mutedText),
+                ),
+                const SizedBox(height: 8),
+                SegmentedButton<ChildOrientation>(
+                  segments: ChildOrientation.values
+                      .map((orientation) => ButtonSegment<ChildOrientation>(
+                            value: orientation,
+                            icon: Text(childOrientationIcon(orientation)),
+                            label: Text(childOrientationLabel(orientation)),
+                          ))
+                      .toList(),
+                  selected: {ref.watch(childOrientationProvider)},
+                  onSelectionChanged: (selection) {
+                    ref
+                        .read(childOrientationProvider.notifier)
+                        .setOrientation(selection.first);
+                  },
                 ),
                 const SizedBox(height: 8),
                 const Text('Ao tocar em um cartão',
@@ -475,11 +543,266 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 80), // espaço para o FAB não cobrir a lista
+          const SizedBox(height: 24),
         ],
       ),
     );
   }
+
+  void _showLocationRoadmap() {
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Localização segura'),
+        content: const Text(
+          'O mapa em tempo real será conectado ao painel web autenticado somente depois de configurar consentimento, permissão de localização no aparelho da criança e sincronização segura. Até lá, nenhum local é inventado ou enviado.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Entendi'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LocationHeroCard extends StatelessWidget {
+  final VoidCallback onConnect;
+
+  const _LocationHeroCard({required this.onConnect});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: const Color(0xFFEAF2FF),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: const Color(0xFFC9D9F7)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const _IconBubble(
+                icon: Icons.location_on_rounded,
+                color: Color(0xFF315BFF),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Localização & Segurança',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w800)),
+                    SizedBox(height: 3),
+                    Text('Módulo web autenticado em preparação',
+                        style: TextStyle(color: AppTheme.mutedText)),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Text('OFFLINE',
+                    style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        color: AppTheme.mutedText)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+            height: 148,
+            width: double.infinity,
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              color: const Color(0xFFDCE8F7),
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Stack(
+              children: [
+                CustomPaint(painter: _MapPreviewPainter()),
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: const [
+                        BoxShadow(color: Color(0x3314253D), blurRadius: 12),
+                      ],
+                    ),
+                    child: const Icon(Icons.lock_outline,
+                        color: AppTheme.mutedText, size: 28),
+                  ),
+                ),
+                const Positioned(
+                  left: 14,
+                  bottom: 12,
+                  child: Text('Nenhuma localização compartilhada',
+                      style: TextStyle(
+                          color: AppTheme.mutedText,
+                          fontWeight: FontWeight.w700)),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            'Para proteger a criança, este painel só mostrará local, atualização e bateria depois que a família ativar o consentimento e a conexão segura do aparelho.',
+            style: TextStyle(color: AppTheme.mutedText, height: 1.35),
+          ),
+          const SizedBox(height: 12),
+          OutlinedButton.icon(
+            onPressed: onConnect,
+            icon: const Icon(Icons.admin_panel_settings_outlined),
+            label: const Text('Ver como a conexão será feita'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DashboardSection extends StatelessWidget {
+  final String title;
+  final String description;
+  final List<Widget> children;
+
+  const _DashboardSection({
+    required this.title,
+    required this.description,
+    required this.children,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+        const SizedBox(height: 4),
+        Text(description, style: const TextStyle(color: AppTheme.mutedText)),
+        const SizedBox(height: 12),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final width = constraints.maxWidth > 650
+                ? (constraints.maxWidth - 12) / 2
+                : constraints.maxWidth;
+            return Wrap(spacing: 12, runSpacing: 12, children: [
+              for (final child in children)
+                SizedBox(width: width, child: child),
+            ]);
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _DashboardActionCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String description;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _DashboardActionCard({
+    required this.icon,
+    required this.title,
+    required this.description,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
+      color: AppTheme.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+        side: const BorderSide(color: AppTheme.cardBorder),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(18),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              _IconBubble(icon: icon, color: color),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,
+                        style: const TextStyle(fontWeight: FontWeight.w800)),
+                    const SizedBox(height: 4),
+                    Text(description,
+                        style: const TextStyle(
+                            color: AppTheme.mutedText, fontSize: 13)),
+                  ],
+                ),
+              ),
+              const Icon(Icons.chevron_right_rounded,
+                  color: AppTheme.mutedText),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _IconBubble extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+
+  const _IconBubble({required this.icon, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 46,
+      height: 46,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Icon(icon, color: color),
+    );
+  }
+}
+
+class _MapPreviewPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0x5580A4C7)
+      ..strokeWidth = 1.2
+      ..style = PaintingStyle.stroke;
+    for (var x = 0.0; x < size.width; x += 42) {
+      canvas.drawLine(Offset(x, 0), Offset(x + 70, size.height), paint);
+    }
+    for (var y = 0.0; y < size.height; y += 34) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y + 12), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 class _SettingsHero extends StatelessWidget {

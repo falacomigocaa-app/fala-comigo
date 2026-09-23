@@ -25,6 +25,7 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
   final ImagePicker _picker = ImagePicker();
   String? _selectedImagePath;
   String _category = 'personalizado';
+  bool _isSaving = false;
 
   bool get _isEditing => widget.existingCard != null;
 
@@ -46,9 +47,10 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final XFile? picked =
-        await _picker.pickImage(source: source, imageQuality: 85);
-    if (picked != null) {
+    try {
+      final XFile? picked =
+          await _picker.pickImage(source: source, imageQuality: 85);
+      if (picked == null) return;
       try {
         final permanentPath =
             await MediaStorageService.persistFile(picked.path);
@@ -61,10 +63,16 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
                   error.message ?? 'Mídia não disponível nesta plataforma.')),
         );
       }
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Não foi possível carregar essa imagem.')),
+      );
     }
   }
 
-  void _saveCard() {
+  Future<void> _saveCard() async {
+    if (_isSaving) return;
     if (_selectedImagePath == null || _labelController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -73,23 +81,34 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
       return;
     }
 
-    if (_isEditing) {
-      ref.read(cardsListProvider.notifier).updateCard(
-            id: widget.existingCard!.id,
-            label: _labelController.text.trim(),
-            imagePath: _selectedImagePath!,
-            category: _category,
-          );
-    } else {
-      ref.read(cardsListProvider.notifier).addCard(
-            label: _labelController.text.trim(),
-            imagePath: _selectedImagePath!,
-            isCustomImage: true,
-            category: _category,
-          );
+    setState(() => _isSaving = true);
+    try {
+      if (_isEditing) {
+        await ref.read(cardsListProvider.notifier).updateCard(
+              id: widget.existingCard!.id,
+              label: _labelController.text.trim(),
+              imagePath: _selectedImagePath!,
+              isCustomImage: true,
+              category: _category,
+            );
+      } else {
+        await ref.read(cardsListProvider.notifier).addCard(
+              label: _labelController.text.trim(),
+              imagePath: _selectedImagePath!,
+              isCustomImage: true,
+              category: _category,
+            );
+      }
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _isSaving = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Não foi possível salvar o cartão.')),
+      );
+      return;
     }
 
-    Navigator.of(context).pop();
+    if (mounted) Navigator.of(context).pop(true);
   }
 
   @override
@@ -196,21 +215,26 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
                 onChanged: (v) =>
                     setState(() => _category = v ?? 'personalizado'),
               ),
-              const Spacer(),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _saveCard,
+                  onPressed: _isSaving ? null : _saveCard,
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(0, 56),
                     backgroundColor: AppTheme.accentGreen,
                     foregroundColor: Colors.white,
                   ),
-                  child: Text(
-                    _isEditing ? 'Salvar Alterações' : 'Salvar Cartão',
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w700),
-                  ),
+                  child: _isSaving
+                      ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(
+                          _isEditing ? 'Salvar Alterações' : 'Salvar Cartão',
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w700),
+                        ),
                 ),
               ),
             ],

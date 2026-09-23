@@ -36,6 +36,14 @@ class TransitionAlertService {
   /// TransitionAlert correspondente. Definido pelo app na Fase D,
   /// quando a tela de alerta existir.
   void Function(String alertId)? onAlertTriggered;
+  String? _pendingAlertId;
+
+  void setAlertHandler(void Function(String alertId) handler) {
+    onAlertTriggered = handler;
+    final pending = _pendingAlertId;
+    _pendingAlertId = null;
+    if (pending != null) handler(pending);
+  }
 
   Future<void> init() async {
     // Fuso horário fixo em horário de Brasília, para simplificar
@@ -44,7 +52,16 @@ class TransitionAlertService {
     tz.setLocalLocation(tz.getLocation('America/Sao_Paulo'));
 
     const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const initSettings = InitializationSettings(android: androidInit);
+    final darwinInit = DarwinInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+    );
+    final initSettings = InitializationSettings(
+      android: androidInit,
+      iOS: darwinInit,
+      macOS: darwinInit,
+    );
 
     await _plugin.initialize(
       initSettings,
@@ -66,7 +83,12 @@ class TransitionAlertService {
       return;
     }
     final alertId = payload.substring(transitionAlertPayloadPrefix.length);
-    onAlertTriggered?.call(alertId);
+    final handler = onAlertTriggered;
+    if (handler == null) {
+      _pendingAlertId = alertId;
+    } else {
+      handler(alertId);
+    }
   }
 
   /// Pede as permissões necessárias no Android: notificações, alarme
@@ -76,10 +98,15 @@ class TransitionAlertService {
   Future<void> requestPermissions() async {
     final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
-    if (androidPlugin == null) return;
-    await androidPlugin.requestNotificationsPermission();
-    await androidPlugin.requestExactAlarmsPermission();
-    await androidPlugin.requestFullScreenIntentPermission();
+    if (androidPlugin != null) {
+      await androidPlugin.requestNotificationsPermission();
+      await androidPlugin.requestExactAlarmsPermission();
+      await androidPlugin.requestFullScreenIntentPermission();
+    }
+    final darwinPlugin = _plugin.resolvePlatformSpecificImplementation<
+        IOSFlutterLocalNotificationsPlugin>();
+    await darwinPlugin?.requestPermissions(
+        alert: true, badge: true, sound: true);
   }
 
   /// Verifica o status real das permissões no Android, para
@@ -110,6 +137,11 @@ class TransitionAlertService {
         visibility: NotificationVisibility.private,
         playSound: true,
         enableVibration: true,
+      ),
+      iOS: DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
       ),
     );
   }

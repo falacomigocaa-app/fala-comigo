@@ -48,7 +48,9 @@ class CardsNotifier extends StateNotifier<List<PictogramCard>> {
       imagePath: imagePath,
       isCustomImage: isCustomImage,
       category: category,
-      order: state.length,
+      order: state.isEmpty
+          ? 0
+          : state.map((card) => card.order).reduce((a, b) => a > b ? a : b) + 1,
     );
     await _box.put(card.id, card);
     state = _box.values.toList()..sort((a, b) => a.order.compareTo(b.order));
@@ -69,6 +71,7 @@ class CardsNotifier extends StateNotifier<List<PictogramCard>> {
     required String id,
     String? label,
     String? imagePath,
+    bool? isCustomImage,
     String? category,
   }) async {
     final card = _box.get(id);
@@ -77,6 +80,7 @@ class CardsNotifier extends StateNotifier<List<PictogramCard>> {
     final previousWasCustom = card.isCustomImage;
     if (label != null) card.label = label;
     if (imagePath != null) card.imagePath = imagePath;
+    if (isCustomImage != null) card.isCustomImage = isCustomImage;
     if (category != null) card.category = category;
     await card.save();
     if (imagePath != null &&
