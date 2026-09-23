@@ -295,7 +295,11 @@ O proprietário confirmou manualmente a configuração correta em **Settings →
 
 <https://falacomigocaa-app.github.io/fala-comigo/>
 
-O workflow `Publicar site institucional` foi solicitado novamente após a ativação do Pages. No momento do registro, a execução estava `queued`; é necessário confirmar a conclusão antes de declarar a publicação operacional.
+O workflow `Publicar site institucional` foi solicitado novamente após a ativação do Pages e concluiu com sucesso. A URL pública respondeu HTTP 200 e exibiu o título `Fala Comigo — Comunicação que respeita o seu tempo`:
+
+<https://falacomigocaa-app.github.io/fala-comigo/>
+
+**Conclusão:** o GitHub Pages está habilitado e o site institucional está publicado com sucesso. A publicação não ativa cobrança, portal clínico ou sincronização de dados; ela publica somente os arquivos estáticos versionados em `site/`.
 
 ## 12. Atuação multidisciplinar da assistência
 
