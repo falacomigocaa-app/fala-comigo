@@ -20,6 +20,7 @@ import 'plan_status_screen.dart';
 import 'privacy_settings_screen.dart';
 import 'progress_report_screen.dart';
 import 'transition_alerts_list_screen.dart';
+import 'weekly_trends_screen.dart';
 import '../../../transition_alerts/data/providers/transition_alerts_provider.dart';
 import '../../../aac_grid/presentation/screens/visual_routine_screen.dart';
 
@@ -269,6 +270,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       'Escolher resumo, ABC ou rotina para compartilhar'),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const DataExportScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.bar_chart_outlined),
+                  title: const Text('Tendências semanais'),
+                  subtitle: const Text(
+                      'Ver registros ABC e vídeos das últimas 8 semanas'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const WeeklyTrendsScreen()),
                   ),
                 ),
                 const Divider(height: 1),
