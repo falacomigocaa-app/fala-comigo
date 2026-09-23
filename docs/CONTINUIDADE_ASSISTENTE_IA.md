@@ -342,3 +342,11 @@ Na branch `fix/android-kotlin-plugin`, foram aplicadas correções mínimas em `
 O APK resultante tem aproximadamente 152 MB e SHA-256 `e3e3592ecf36f1118b2e15e34ed13d6aa044d7e04c04c36f48afdc52e0a0b3bb`. O roteiro de instalação por USB/ADB e a ficha de testes estão em `docs/ANDROID_TESTE_DEBUG.md`. Nenhum aparelho Android estava conectado nesta sessão; a instalação e os fluxos ainda precisam ser executados pelo teste físico.
 
 **Próximo passo:** revisar o PR da correção Android, integrar somente após o CI, e instalar o APK debug em um celular e um tablet Android usando dados sintéticos e conectividade controlada.
+
+## 24. Correção Hive validada no APK
+
+O primeiro APK debug apresentou em aparelho Android o erro `HiveError: The box "pictogram_cards" is already open and of type Box<dynamic>`. A correção abriu a caixa como `Box<PictogramCard>` e tornou genérico o serviço de abertura/migração de caixas seguras.
+
+A validação automática da correção passou: análise estática, testes Flutter e `flutter build apk --debug`. O novo APK tem aproximadamente 152 MB e SHA-256 `b3baeb02271501953ee212a4bf0f05816fa557dfeb351d2fa52923b435361d70`.
+
+O APK corrigido está fora do Git e deve ser instalado como uma nova versão de teste. A execução humana no Android — tocar, navegar, conceder permissões, testar voz, mídia, offline e acessibilidade — depende do aparelho do responsável e não pode ser simulada ou declarada como concluída pelo ambiente de desenvolvimento.

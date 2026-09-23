@@ -11,7 +11,7 @@ O build debug foi concluído com Flutter 3.38.0, Android SDK, Android NDK e JDK 
 SHA-256 do APK gerado:
 
 ```text
-e3e3592ecf36f1118b2e15e34ed13d6aa044d7e04c04c36f48afdc52e0a0b3bb
+b3baeb02271501953ee212a4bf0f05816fa557dfeb351d2fa52923b435361d70
 ```
 
 O APK debug não possui assinatura de produção. Ele serve para validação controlada e não substitui um APK/AAB release assinado.
