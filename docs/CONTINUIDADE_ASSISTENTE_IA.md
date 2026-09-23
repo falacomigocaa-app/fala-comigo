@@ -269,6 +269,8 @@ A branch foi enviada ao GitHub sem alterar a `main`. Foi aberto o Pull Request [
 
 **Estado:** aguardando a revisão final do diff e dos checks do PR. O merge não foi executado. A publicação do site via GitHub Pages continua sendo um efeito separado a revisar antes de qualquer merge na `main`.
 
+Na consulta seguinte, o PR estava `OPEN`, com `mergeStateStatus: CLEAN`, sem conflitos e sem checks remotos listados ainda. A branch local está limpa e o commit local coincide com `origin/integration/affordable-to-main-preview` em `a500f38`.
+
 ## 12. Atuação multidisciplinar da assistência
 
 Para a continuação deste projeto, a assistência atuará de forma integrada nas seguintes responsabilidades:
