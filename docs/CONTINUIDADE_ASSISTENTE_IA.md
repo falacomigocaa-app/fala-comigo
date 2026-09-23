@@ -301,6 +301,14 @@ O workflow `Publicar site institucional` foi solicitado novamente após a ativa�
 
 **Conclusão:** o GitHub Pages está habilitado e o site institucional está publicado com sucesso. A publicação não ativa cobrança, portal clínico ou sincronização de dados; ela publica somente os arquivos estáticos versionados em `site/`.
 
+## 21. Próxima fase — matriz de fluxos críticos
+
+Foi criada a matriz executável `docs/MATRIZ_FLUXOS_CRITICOS.md` na branch `qa/critical-flow-matrix`. Ela organiza 24 fluxos, relaciona cada um aos testes automatizados existentes e separa as validações que ainda exigem celular, tablet, iOS, leitor de tela ou observação humana.
+
+A matriz registra a evidência atual de 46 testes Flutter e build Web aprovado. Os fluxos mais importantes ainda classificados como parciais ou pendentes manuais incluem primeira execução, grade CAA, modos de toque, frases, PIN, sessão parental, mídia, alertas, exclusão, acessibilidade e testes em Android real.
+
+O próximo ciclo deve começar por um celular Android e um tablet Android, usando dados sintéticos e sem internet, antes de qualquer nova construção de portal, sincronização clínica ou cobrança.
+
 ## 12. Atuação multidisciplinar da assistência
 
 Para a continuação deste projeto, a assistência atuará de forma integrada nas seguintes responsabilidades:
