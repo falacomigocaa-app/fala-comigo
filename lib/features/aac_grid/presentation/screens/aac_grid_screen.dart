@@ -7,6 +7,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/hyperfocus_theme.dart';
 import '../../../parental_area/presentation/screens/parental_gate_screen.dart';
 import '../../data/providers/cards_provider.dart';
+import '../../data/providers/communication_rewards_provider.dart';
 import '../widgets/grid_card.dart';
 import '../widgets/sentence_bar_widget.dart';
 
@@ -30,6 +31,34 @@ class AACGridScreen extends ConsumerWidget {
     };
 
     final visibleCards = filterCardsByCategory(allCards, selectedCategory);
+
+    void showReward(CommunicationReward? reward) {
+      if (reward == null || !context.mounted) return;
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(milliseconds: 2200),
+            content: Row(
+              children: [
+                Text(reward.emoji, style: const TextStyle(fontSize: 24)),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text('${reward.title}\n${reward.message}'),
+                ),
+              ],
+            ),
+          ),
+        );
+    }
+
+    void chooseCategory(String category) {
+      ref.read(selectedCategoryProvider.notifier).state = category;
+      showReward(ref
+          .read(communicationRewardsProvider.notifier)
+          .recordCategoryChoice());
+    }
 
     return Scaffold(
       backgroundColor: hyperfocusTheme.backgroundColor,
@@ -100,18 +129,14 @@ class AACGridScreen extends ConsumerWidget {
                           label: 'Todas',
                           selected: selectedCategory == 'todas',
                           color: themeColor,
-                          onTap: () => ref
-                              .read(selectedCategoryProvider.notifier)
-                              .state = 'todas',
+                          onTap: () => chooseCategory('todas'),
                         ),
                         ...AppConstants.categoryLabels.entries.map(
                           (e) => _CategoryChip(
                             label: e.value,
                             selected: selectedCategory == e.key,
                             color: themeColor,
-                            onTap: () => ref
-                                .read(selectedCategoryProvider.notifier)
-                                .state = e.key,
+                            onTap: () => chooseCategory(e.key),
                           ),
                         ),
                       ],
@@ -185,6 +210,10 @@ class AACGridScreen extends ConsumerWidget {
                                   scale: scale,
                                   semanticHint: tapSemanticHint,
                                   onTap: () {
+                                    showReward(ref
+                                        .read(communicationRewardsProvider
+                                            .notifier)
+                                        .recordCardTap(categoryChosen: false));
                                     if (tapBehavior !=
                                         CardTapBehavior.addOnly) {
                                       TtsService.instance.speak(card.label);

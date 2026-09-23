@@ -5,6 +5,7 @@ import '../../../../core/services/tts_service.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/secure_media_image.dart';
 import '../../data/providers/cards_provider.dart';
+import '../../data/providers/communication_rewards_provider.dart';
 
 /// Barra horizontal que acumula os cartões selecionados pelo usuário
 /// para montar uma frase (ex: "Eu Quero" + "Comer" + "Maçã") e um
@@ -103,6 +104,22 @@ class SentenceBarWidget extends ConsumerWidget {
                 ? null
                 : () async {
                     await TtsService.instance.speak(notifier.spokenText);
+                    if (!context.mounted) return;
+                    final reward = ref
+                        .read(communicationRewardsProvider.notifier)
+                        .recordSentenceSpoken(sentence.length);
+                    if (reward != null) {
+                      ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(
+                          SnackBar(
+                            behavior: SnackBarBehavior.floating,
+                            duration: const Duration(milliseconds: 2200),
+                            content: Text(
+                                '${reward.emoji} ${reward.title}\n${reward.message}'),
+                          ),
+                        );
+                    }
                   },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.accentGreen,
