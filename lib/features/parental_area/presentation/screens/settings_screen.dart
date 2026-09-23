@@ -16,6 +16,7 @@ import 'patient_profile_screen.dart';
 import 'parent_reminders_screen.dart';
 import 'change_pin_screen.dart';
 import 'data_export_screen.dart';
+import 'access_management_screen.dart';
 import 'parental_gate_screen.dart';
 import 'plan_status_screen.dart';
 import 'privacy_settings_screen.dart';
@@ -369,6 +370,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   title: const Text('Privacidade e dados'),
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
                       builder: (_) => const PrivacySettingsScreen()))),
+              ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.people_alt_outlined),
+                  title: const Text('Pessoas e organizações'),
+                  subtitle: const Text('Quem pode acessar?'),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const AccessManagementScreen()))),
               ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.lock_reset_outlined),

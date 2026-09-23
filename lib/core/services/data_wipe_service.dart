@@ -17,6 +17,7 @@ class DataWipeService {
     'patient_profile',
     'behavior_logs',
     'video_diary',
+    'parent_access_grants',
     planLicenseBoxName,
   ];
 
@@ -44,6 +45,7 @@ class DataWipeService {
     await SecureBoxService.openSecureBox('patient_profile');
     await SecureBoxService.openSecureBox('behavior_logs');
     await SecureBoxService.openSecureBox('video_diary');
+    await SecureBoxService.openSecureBox('parent_access_grants');
     await SecureBoxService.openSecureBox(planLicenseBoxName);
   }
 }
