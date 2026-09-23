@@ -117,7 +117,7 @@ A sequência completa está em `docs/PLANO_SEQUENCIAL_ATE_BUILD.md`. A ordem res
 → 17 cobrança e domínio
 ```
 
-O catálogo, a tela de planos e a persistência local já foram implementados. O ciclo atual iniciou a continuidade do cuidado local; o próximo trabalho deve conectar esses modelos ao portal com autorização server-side, sem começar cobrança real prematuramente.
+O catálogo, a tela de planos e a persistência local já foram implementados. O ciclo atual iniciou a continuidade do cuidado local e especificou o contrato remoto; o próximo trabalho deve implementar a fundação server-side somente após escolher a infraestrutura, sem começar cobrança real prematuramente.
 
 ## Nova sequência full-stack até o piloto institucional
 
@@ -214,6 +214,7 @@ Não tratar documentação conceitual como implementação existente. O portal e
 - `docs/MODELO_CUSTOS_E_PLANOS.md`: estratégia de baixo custo e planos.
 - `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`: sequência de programação até o piloto com clínica e colégio.
 - `docs/CONTRATO_PORTAL_CONECTADO.md`: entidades, estados, escopos e fila offline comuns ao app e web.
+- `docs/CONTRATO_API_CONTINUIDADE_CUIDADO.md`: endpoints, payloads, consentimentos e testes de negação do portal.
 - `docs/ESTUDO_PRECOS_PLANOS.md`: pesquisa de mercado e faixas de preço para validação.
 - `docs/MAPA_FUNCIONALIDADES_SAAS_CLINICAS.md`: recursos de SaaS clínico priorizados para ajudar famílias.
 - `privacy_policy.html`: política de privacidade alinhada ao armazenamento local.

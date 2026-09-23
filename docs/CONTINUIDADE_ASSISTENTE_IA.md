@@ -72,6 +72,7 @@ Foram lidos ou avaliados os documentos centrais e de continuidade da branch de t
 - workflows de CI e validações de qualidade;
 - documentação de pré-lançamento e privacidade.
 - contrato do portal conectado;
+- contrato API de continuidade do cuidado, com endpoints, payloads e matriz de negação;
 - tarefas compartilhadas com aceite, histórico e fila local;
 - perfil funcional, plano de comunicação e agenda local;
 - prévia web alinhada com esses estados;
@@ -195,7 +196,7 @@ A integração deve ser feita sem alterar a `main` remota inicialmente:
 
 ## 11. Próximo passo
 
-Continuar a partir do commit `5464914`. A base local já possui `CommunicationProfile`, `CommunicationPlan` e `Appointment`, além da prévia web correspondente. O próximo agente deve especificar a API server-side e os testes de autorização antes de sincronizar qualquer dado sensível. Deve manter a `main` intacta e consultar o CI da branch antes de avançar.
+Continuar a partir do commit que registra esta especificação. A base local já possui `CommunicationProfile`, `CommunicationPlan` e `Appointment`, além da prévia web correspondente. O contrato remoto está em `docs/CONTRATO_API_CONTINUIDADE_CUIDADO.md`; o próximo agente deve escolher a infraestrutura server-side, criar testes de autorização e só depois implementar endpoints. Deve manter a `main` intacta e consultar o CI da branch antes de avançar.
 
 ## 12. Ciclo de continuidade do cuidado — 23/09/2026
 
