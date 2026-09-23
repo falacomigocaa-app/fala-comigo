@@ -324,3 +324,11 @@ Para a continuação deste projeto, a assistência atuará de forma integrada na
 Essa atuação significa que cada alteração será analisada por mais de uma perspectiva antes de ser considerada pronta. A documentação, o diff, os testes, a acessibilidade, a privacidade e o impacto no cronograma serão avaliados conjuntamente.
 
 As validações que não podem ser inventadas ou substituídas por análise de código continuarão explícitas: teste em celular e tablet reais, observação com famílias e profissionais, revisão jurídica ou regulatória, confirmação de decisões comerciais e aprovação para publicação ou cobrança.
+
+## 22. Validação técnica pós-merge da `main`
+
+Após a integração da matriz, a `main` foi validada novamente com Flutter `3.38.0`. A formatação verificou 74 arquivos sem alterações, a análise estática terminou sem falha bloqueadora com 32 issues informativos/deprecados, **46 testes passaram** e `flutter build web --release` concluiu com sucesso.
+
+Os arquivos gerados automaticamente durante `flutter pub get` foram restaurados, deixando a cópia local da `main` limpa. A sessão possui somente um dispositivo Linux desktop; não há celular ou tablet Android conectado, `adb devices` não encontrou dispositivos e não existem ferramentas iOS disponíveis. Portanto, F21, F22 e F23 da matriz continuam pendentes de execução física.
+
+**Próximo gate:** executar F01–F17 em um celular Android e um tablet Android, começando offline e usando dados sintéticos. O resultado deve ser registrado na `MATRIZ_FLUXOS_CRITICOS.md` antes de iniciar portal conectado, sincronização clínica ou cobrança.
