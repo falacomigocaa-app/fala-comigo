@@ -19,6 +19,7 @@ class DataWipeService {
     'video_diary',
     'parent_access_grants',
     'shared_tasks',
+    'shared_task_sync_queue',
     planLicenseBoxName,
   ];
 
@@ -48,6 +49,7 @@ class DataWipeService {
     await SecureBoxService.openSecureBox('video_diary');
     await SecureBoxService.openSecureBox('parent_access_grants');
     await SecureBoxService.openSecureBox('shared_tasks');
+    await SecureBoxService.openSecureBox('shared_task_sync_queue');
     await SecureBoxService.openSecureBox(planLicenseBoxName);
   }
 }

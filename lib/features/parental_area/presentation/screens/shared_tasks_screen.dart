@@ -56,6 +56,37 @@ class _SharedTasksScreenState extends State<SharedTasksScreen> {
       status: status,
       feedback: feedback,
       updatedAt: DateTime.now(),
+      events: [
+        ...task.events,
+        SharedTaskEvent(
+          type: 'status:${status.name}',
+          actor: 'Família',
+          note: feedback,
+          occurredAt: DateTime.now(),
+        ),
+      ],
+    );
+    await SharedTaskStore.save(updated);
+    if (!mounted) return;
+    setState(() => _tasks = _tasks
+        .map((item) => item.id == task.id ? updated : item)
+        .toList());
+  }
+
+  Future<void> _changeAcceptance(
+      SharedTask task, TaskAcceptanceStatus acceptance) async {
+    final updated = task.copyWith(
+      acceptance: acceptance,
+      updatedAt: DateTime.now(),
+      events: [
+        ...task.events,
+        SharedTaskEvent(
+          type: 'acceptance:${acceptance.name}',
+          actor: 'Família',
+          note: null,
+          occurredAt: DateTime.now(),
+        ),
+      ],
     );
     await SharedTaskStore.save(updated);
     if (!mounted) return;
@@ -154,6 +185,8 @@ class _SharedTasksScreenState extends State<SharedTasksScreen> {
                   ..._tasks.map((task) => _TaskCard(
                         task: task,
                         onStatus: (status) => _changeStatus(task, status),
+                        onAcceptance: (acceptance) =>
+                            _changeAcceptance(task, acceptance),
                       )),
               ],
             ),
@@ -164,8 +197,13 @@ class _SharedTasksScreenState extends State<SharedTasksScreen> {
 class _TaskCard extends StatelessWidget {
   final SharedTask task;
   final ValueChanged<SharedTaskStatus> onStatus;
+  final ValueChanged<TaskAcceptanceStatus> onAcceptance;
 
-  const _TaskCard({required this.task, required this.onStatus});
+  const _TaskCard({
+    required this.task,
+    required this.onStatus,
+    required this.onAcceptance,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -205,6 +243,12 @@ class _TaskCard extends StatelessWidget {
               ),
             ],
           ),
+          if (task.organizationName.isNotEmpty) ...[
+            const SizedBox(height: 3),
+            Text(
+                '${task.organizationName} · ${task.recipientRole} · ${task.assignedTo}',
+                style: const TextStyle(color: AppTheme.mutedText)),
+          ],
           if (task.description.isNotEmpty) ...[
             const SizedBox(height: 5),
             Text(task.description,
@@ -235,8 +279,36 @@ class _TaskCard extends StatelessWidget {
               if (task.reminderEnabled)
                 const Icon(Icons.notifications_active_outlined,
                     size: 18, color: AppTheme.mutedText),
+              if (task.acceptance != TaskAcceptanceStatus.notRequired) ...[
+                const SizedBox(width: 8),
+                PopupMenuButton<TaskAcceptanceStatus>(
+                  tooltip: 'Atualizar aceite',
+                  onSelected: onAcceptance,
+                  itemBuilder: (_) => const [
+                    PopupMenuItem(
+                        value: TaskAcceptanceStatus.accepted,
+                        child: Text('Destinatário aceitou')),
+                    PopupMenuItem(
+                        value: TaskAcceptanceStatus.declined,
+                        child: Text('Destinatário recusou')),
+                  ],
+                  child: Chip(
+                    label: Text(task.acceptanceLabel),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                ),
+              ],
             ],
           ),
+          if (task.events.isNotEmpty)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                onPressed: () => _showEvents(context),
+                icon: const Icon(Icons.history_outlined, size: 17),
+                label: Text('Histórico (${task.events.length})'),
+              ),
+            ),
           if (task.feedback?.isNotEmpty == true) ...[
             const Divider(height: 22),
             Text('Retorno: ${task.feedback}',
@@ -263,6 +335,37 @@ class _TaskCard extends StatelessWidget {
         SharedTaskStatus.declined => 'Não realizada',
         _ => 'Atualizar',
       };
+
+  void _showEvents(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (_) => SafeArea(
+        child: ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(20),
+          children: [
+            const Text('Histórico da tarefa',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+            const SizedBox(height: 12),
+            ...task.events.reversed.map((event) => ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.radio_button_checked_outlined,
+                      color: AppTheme.primary),
+                  title: Text(_eventLabel(event.type)),
+                  subtitle: Text(
+                      '${event.actor} · ${event.occurredAt.day.toString().padLeft(2, '0')}/${event.occurredAt.month.toString().padLeft(2, '0')} ${event.note ?? ''}'),
+                )),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static String _eventLabel(String type) {
+    if (type.startsWith('acceptance:')) return 'Aceite atualizado';
+    if (type.startsWith('status:')) return 'Status atualizado';
+    return 'Tarefa atualizada';
+  }
 
   static String _date(DateTime date) =>
       'Até ${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}';
@@ -296,6 +399,7 @@ class _TaskFormState extends State<_TaskForm> {
   final _title = TextEditingController();
   final _description = TextEditingController();
   final _assignedTo = TextEditingController(text: 'Família');
+  final _organization = TextEditingController();
   final _context = TextEditingController(text: 'Rotina');
   DateTime _dueAt = DateTime.now().add(const Duration(days: 1));
   bool _reminder = true;
@@ -305,6 +409,7 @@ class _TaskFormState extends State<_TaskForm> {
     _title.dispose();
     _description.dispose();
     _assignedTo.dispose();
+    _organization.dispose();
     _context.dispose();
     super.dispose();
   }
@@ -334,13 +439,28 @@ class _TaskFormState extends State<_TaskForm> {
       description: _description.text.trim(),
       createdBy: 'Família',
       assignedTo: _assignedTo.text.trim(),
+      organizationName: _organization.text.trim(),
+      recipientRole: _organization.text.trim().isEmpty
+          ? 'Família'
+          : 'Organização convidada',
       contextLabel: _context.text.trim().isEmpty ? 'Rotina' : _context.text.trim(),
       dueAt: _dueAt,
       reminderEnabled: _reminder,
       status: SharedTaskStatus.pending,
+      acceptance: _organization.text.trim().isEmpty
+          ? TaskAcceptanceStatus.notRequired
+          : TaskAcceptanceStatus.pending,
       feedback: null,
       createdAt: now,
       updatedAt: now,
+      events: [
+        SharedTaskEvent(
+          type: 'created',
+          actor: 'Família',
+          note: null,
+          occurredAt: now,
+        ),
+      ],
     ));
   }
 
@@ -380,6 +500,12 @@ class _TaskFormState extends State<_TaskForm> {
                     controller: _assignedTo,
                     decoration: parentalInputDecoration(
                         labelText: 'Para quem?', icon: Icons.person_outline)),
+                const SizedBox(height: 12),
+                TextField(
+                    controller: _organization,
+                    decoration: parentalInputDecoration(
+                        labelText: 'Organização (opcional)',
+                        icon: Icons.apartment_outlined)),
                 const SizedBox(height: 12),
                 TextField(
                     controller: _context,

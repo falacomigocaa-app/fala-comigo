@@ -12,29 +12,58 @@ void main() {
         title: 'Praticar pedido de pausa',
         description: 'Usar o símbolo durante uma atividade natural.',
         createdBy: 'Família',
-        assignedTo: 'Clínica Caminhos',
+        assignedTo: 'Terapeuta responsável',
+        organizationName: 'Clínica Caminhos',
+        recipientRole: 'Organização convidada',
         contextLabel: 'CAA',
         dueAt: dueAt,
         reminderEnabled: true,
         status: status,
+        acceptance: TaskAcceptanceStatus.pending,
         feedback: null,
         createdAt: createdAt,
         updatedAt: createdAt,
+        events: [
+          SharedTaskEvent(
+            type: 'created',
+            actor: 'Família',
+            note: null,
+            occurredAt: createdAt,
+          ),
+        ],
       );
 
-  test('preserva os dados da tarefa ao serializar', () {
+  test('preserva vínculo, aceite e eventos ao serializar', () {
     final restored = SharedTask.fromMap(task().toMap());
 
     expect(restored.id, 'task-1');
-    expect(restored.title, 'Praticar pedido de pausa');
-    expect(restored.assignedTo, 'Clínica Caminhos');
-    expect(restored.contextLabel, 'CAA');
-    expect(restored.reminderEnabled, isTrue);
-    expect(restored.status, SharedTaskStatus.pending);
+    expect(restored.organizationName, 'Clínica Caminhos');
+    expect(restored.recipientRole, 'Organização convidada');
+    expect(restored.acceptance, TaskAcceptanceStatus.pending);
+    expect(restored.events, hasLength(1));
     expect(restored.isOpen, isTrue);
   });
 
-  test('retorno de ajuda preserva o estado sem apagar o contexto', () {
+  test('aceite recusado permanece auditável sem alterar a tarefa', () {
+    final updated = task().copyWith(
+      acceptance: TaskAcceptanceStatus.declined,
+      events: [
+        ...task().events,
+        SharedTaskEvent(
+          type: 'acceptance:declined',
+          actor: 'Família',
+          note: 'Revisar com a clínica antes de reenviar.',
+          occurredAt: dueAt,
+        ),
+      ],
+    );
+
+    expect(updated.acceptanceLabel, 'Recusada pelo destinatário');
+    expect(updated.title, task().title);
+    expect(updated.events, hasLength(2));
+  });
+
+  test('retorno de ajuda é um estado explícito e não apaga o vínculo', () {
     final updated = task().copyWith(
       status: SharedTaskStatus.needsHelp,
       feedback: 'A prancha não estava disponível na escola.',
@@ -42,14 +71,7 @@ void main() {
 
     expect(updated.statusLabel, 'Precisa de ajuda');
     expect(updated.feedback, 'A prancha não estava disponível na escola.');
-    expect(updated.title, task().title);
+    expect(updated.organizationName, 'Clínica Caminhos');
     expect(updated.isOpen, isFalse);
-  });
-
-  test('não realizada é um estado válido e explícito', () {
-    final declined = task().copyWith(status: SharedTaskStatus.declined);
-
-    expect(declined.statusLabel, 'Não realizada');
-    expect(declined.isOpen, isFalse);
   });
 }
