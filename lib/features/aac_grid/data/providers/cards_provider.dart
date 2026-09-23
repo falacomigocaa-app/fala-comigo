@@ -7,6 +7,16 @@ import '../../domain/models/pictogram_card.dart';
 
 const String cardsBoxName = 'pictogram_cards';
 
+/// Filtra cartões para a grade sem alterar a coleção persistida ou a ordem.
+List<PictogramCard> filterCardsByCategory(
+  Iterable<PictogramCard> cards,
+  String selectedCategory,
+) {
+  final source = cards.toList();
+  if (selectedCategory == 'todas') return source;
+  return source.where((card) => card.category == selectedCategory).toList();
+}
+
 /// Expõe a box do Hive já aberta (deve ser inicializada em main()
 /// antes de rodar o app).
 final cardsBoxProvider = Provider<Box<PictogramCard>>((ref) {
@@ -14,7 +24,8 @@ final cardsBoxProvider = Provider<Box<PictogramCard>>((ref) {
 });
 
 /// Lista reativa de todos os cartões cadastrados, ordenada.
-final cardsListProvider = StateNotifierProvider<CardsNotifier, List<PictogramCard>>((ref) {
+final cardsListProvider =
+    StateNotifierProvider<CardsNotifier, List<PictogramCard>>((ref) {
   final box = ref.watch(cardsBoxProvider);
   return CardsNotifier(box);
 });
@@ -22,7 +33,8 @@ final cardsListProvider = StateNotifierProvider<CardsNotifier, List<PictogramCar
 class CardsNotifier extends StateNotifier<List<PictogramCard>> {
   final Box<PictogramCard> _box;
 
-  CardsNotifier(this._box) : super(_box.values.toList()..sort((a, b) => a.order.compareTo(b.order)));
+  CardsNotifier(this._box)
+      : super(_box.values.toList()..sort((a, b) => a.order.compareTo(b.order)));
 
   Future<void> addCard({
     required String label,
@@ -102,7 +114,8 @@ final selectedCategoryProvider = StateProvider<String>((ref) => 'todas');
 
 /// A "barra de frase": lista ordenada de cartões que o usuário
 /// selecionou para montar uma frase (ex: "Eu Quero" + "Comer" + "Maçã").
-final sentenceBarProvider = StateNotifierProvider<SentenceBarNotifier, List<PictogramCard>>((ref) {
+final sentenceBarProvider =
+    StateNotifierProvider<SentenceBarNotifier, List<PictogramCard>>((ref) {
   return SentenceBarNotifier();
 });
 
@@ -114,6 +127,9 @@ class SentenceBarNotifier extends StateNotifier<List<PictogramCard>> {
   }
 
   void removeAt(int index) {
+    // A árvore de acessibilidade pode manter uma ação pendente quando a
+    // frase muda rapidamente. Uma ação obsoleta não deve encerrar o app.
+    if (index < 0 || index >= state.length) return;
     final updated = [...state]..removeAt(index);
     state = updated;
   }
@@ -151,8 +167,9 @@ class CardTapBehaviorNotifier extends StateNotifier<CardTapBehavior> {
   }
 }
 
-final cardTapBehaviorProvider = StateNotifierProvider<CardTapBehaviorNotifier,
-    CardTapBehavior>((ref) => CardTapBehaviorNotifier());
+final cardTapBehaviorProvider =
+    StateNotifierProvider<CardTapBehaviorNotifier, CardTapBehavior>(
+        (ref) => CardTapBehaviorNotifier());
 
 /// Configurações bloqueadas (Modo Infantil Sensorial ativo).
 final settingsLockedProvider = StateProvider<bool>((ref) => true);

@@ -111,7 +111,9 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: const Text('Perfil do Paciente'),
-        backgroundColor: AppTheme.surface,
+        backgroundColor: AppTheme.professionalBackground,
+        foregroundColor: Colors.white,
+        elevation: 0,
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
@@ -120,65 +122,99 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Tudo é opcional. Preencha somente o necessário; os dados aparecem nos relatórios em PDF gerados pelo app.',
-                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                  Container(
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      color: AppTheme.professionalBackground,
+                      borderRadius: BorderRadius.circular(22),
+                    ),
+                    child: const Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.shield_outlined,
+                            color: AppTheme.professionalAccent, size: 26),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Tudo é opcional. Preencha somente o necessário; os dados aparecem nos relatórios em PDF gerados pelo app.',
+                            style: TextStyle(
+                                fontSize: 13, color: Colors.white, height: 1.4),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 16),
-                  TextField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Nome completo da criança',
-                      border: OutlineInputBorder(),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppTheme.surface,
+                      borderRadius: BorderRadius.circular(22),
+                      border: Border.all(color: AppTheme.cardBorder),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: _birthDateController,
-                    decoration: const InputDecoration(
-                      labelText: 'Data de nascimento (opcional)',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  DropdownButtonFormField<String>(
-                    initialValue: _supportLevel,
-                    decoration: const InputDecoration(
-                      labelText: 'Nível de suporte (opcional)',
-                      border: OutlineInputBorder(),
-                    ),
-                    items: _supportLevels
-                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                        .toList(),
-                    onChanged: (v) => setState(() => _supportLevel = v ?? 'Nível 1'),
-                    ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: _guardianController,
-                    decoration: const InputDecoration(
-                      labelText: 'Nome do responsável (opcional)',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: _schoolController,
-                    decoration: const InputDecoration(
-                      labelText: 'Escola/clínica (opcional)',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _saveProfile,
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(0, 56),
-                        backgroundColor: AppTheme.primary,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text('Salvar perfil'),
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: _nameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Nome completo da criança',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: _birthDateController,
+                          decoration: const InputDecoration(
+                            labelText: 'Data de nascimento (opcional)',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        DropdownButtonFormField<String>(
+                          initialValue: _supportLevel,
+                          decoration: const InputDecoration(
+                            labelText: 'Nível de suporte (opcional)',
+                            border: OutlineInputBorder(),
+                          ),
+                          items: _supportLevels
+                              .map((e) =>
+                                  DropdownMenuItem(value: e, child: Text(e)))
+                              .toList(),
+                          onChanged: (v) =>
+                              setState(() => _supportLevel = v ?? 'Nível 1'),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: _guardianController,
+                          decoration: const InputDecoration(
+                            labelText: 'Nome do responsável (opcional)',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: _schoolController,
+                          decoration: const InputDecoration(
+                            labelText: 'Escola/clínica (opcional)',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: _saveProfile,
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(0, 56),
+                              backgroundColor: AppTheme.primary,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16)),
+                            ),
+                            child: const Text('Salvar perfil'),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

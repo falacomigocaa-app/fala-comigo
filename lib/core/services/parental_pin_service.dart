@@ -15,7 +15,8 @@ class ParentalPinService {
   static const _storage = FlutterSecureStorage();
   static const _saltKey = 'fala_comigo_parental_pin_salt_v2';
   static const _verifierKey = 'fala_comigo_parental_pin_verifier_v2';
-  static const _failedAttemptsKey = 'fala_comigo_parental_pin_failed_attempts_v2';
+  static const _failedAttemptsKey =
+      'fala_comigo_parental_pin_failed_attempts_v2';
   static const _lockoutUntilKey = 'fala_comigo_parental_pin_lockout_until_v2';
   static const _iterations = 100000;
   static final _random = Random.secure();
@@ -35,7 +36,8 @@ class ParentalPinService {
     final raw = await _storage.read(key: _lockoutUntilKey);
     final until = int.tryParse(raw ?? '');
     if (until == null) return null;
-    final remaining = DateTime.fromMillisecondsSinceEpoch(until).difference(DateTime.now());
+    final remaining =
+        DateTime.fromMillisecondsSinceEpoch(until).difference(DateTime.now());
     if (remaining <= Duration.zero) {
       await _storage.delete(key: _lockoutUntilKey);
       return null;
@@ -80,9 +82,12 @@ class ParentalPinService {
 
   static void _validatePin(String pin) {
     if (!RegExp(r'^\d{4}$').hasMatch(pin)) {
-      throw const FormatException('O PIN deve conter exatamente quatro dígitos.');
+      throw const FormatException(
+          'O PIN deve conter exatamente quatro dígitos.');
     }
-    if (pin == '1234' || pin == '0000' || RegExp(r'^(\d)\1{3}$').hasMatch(pin)) {
+    if (pin == '1234' ||
+        pin == '0000' ||
+        RegExp(r'^(\d)\1{3}$').hasMatch(pin)) {
       throw const FormatException('Escolha um PIN menos previsível.');
     }
   }
@@ -107,7 +112,8 @@ class ParentalPinService {
     await _storage.write(key: _failedAttemptsKey, value: '$failures');
 
     final seconds = failures >= 5 ? 30 : min(1 << (failures - 1), 8);
-    final until = DateTime.now().add(Duration(seconds: seconds)).millisecondsSinceEpoch;
+    final until =
+        DateTime.now().add(Duration(seconds: seconds)).millisecondsSinceEpoch;
     await _storage.write(key: _lockoutUntilKey, value: '$until');
   }
 

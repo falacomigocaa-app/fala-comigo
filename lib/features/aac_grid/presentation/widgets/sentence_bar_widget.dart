@@ -5,6 +5,7 @@ import '../../../../core/services/tts_service.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/secure_media_image.dart';
 import '../../data/providers/cards_provider.dart';
+import '../../data/providers/communication_rewards_provider.dart';
 
 /// Barra horizontal que acumula os cartões selecionados pelo usuário
 /// para montar uma frase (ex: "Eu Quero" + "Comer" + "Maçã") e um
@@ -21,7 +22,10 @@ class SentenceBarWidget extends ConsumerWidget {
       height: 96,
       decoration: BoxDecoration(
         color: AppTheme.surface,
-        border: const Border(bottom: BorderSide(color: AppTheme.cardBorder, width: 1.5)),
+        border: const Border(
+          top: BorderSide(color: AppTheme.accentGreen, width: 2),
+          bottom: BorderSide(color: AppTheme.cardBorder, width: 1.5),
+        ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Row(
@@ -31,7 +35,11 @@ class SentenceBarWidget extends ConsumerWidget {
                 ? const Center(
                     child: Text(
                       'Toque nos cartões para montar uma frase',
-                      style: TextStyle(color: Colors.grey, fontSize: 15),
+                      style: TextStyle(
+                        color: AppTheme.mutedText,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   )
                 : ListView.separated(
@@ -41,10 +49,12 @@ class SentenceBarWidget extends ConsumerWidget {
                     itemBuilder: (context, index) {
                       final card = sentence[index];
                       return Semantics(
+                        container: true,
                         button: true,
-                        label: card.label,
-                        hint: 'Toque para remover da frase',
+                        label: 'Remover ${card.label} da frase',
+                        hint: 'Toque duas vezes para remover',
                         onTap: () => notifier.removeAt(index),
+                        excludeSemantics: true,
                         child: GestureDetector(
                           onTap: () => notifier.removeAt(index),
                           child: Container(
@@ -54,6 +64,13 @@ class SentenceBarWidget extends ConsumerWidget {
                               color: AppTheme.background,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: AppTheme.cardBorder),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0x0F14213D),
+                                  blurRadius: 6,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
                             ),
                             child: Column(
                               children: [
@@ -62,7 +79,8 @@ class SentenceBarWidget extends ConsumerWidget {
                                     borderRadius: BorderRadius.circular(8),
                                     child: card.isCustomImage
                                         ? SecureMediaImage(path: card.imagePath)
-                                        : Image.asset(card.imagePath, fit: BoxFit.cover),
+                                        : Image.asset(card.imagePath,
+                                            fit: BoxFit.cover),
                                   ),
                                 ),
                                 Text(
@@ -86,15 +104,33 @@ class SentenceBarWidget extends ConsumerWidget {
                 ? null
                 : () async {
                     await TtsService.instance.speak(notifier.spokenText);
+                    if (!context.mounted) return;
+                    final reward = ref
+                        .read(communicationRewardsProvider.notifier)
+                        .recordSentenceSpoken(sentence.length);
+                    if (reward != null) {
+                      ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(
+                          SnackBar(
+                            behavior: SnackBarBehavior.floating,
+                            duration: const Duration(milliseconds: 2200),
+                            content: Text(
+                                '${reward.emoji} ${reward.title}\n${reward.message}'),
+                          ),
+                        );
+                    }
                   },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.accentGreen,
               foregroundColor: Colors.white,
               minimumSize: const Size(64, 64),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
             ),
             icon: const Icon(Icons.volume_up, size: 28),
-            label: const Text('Falar', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            label: const Text('Falar',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
           ),
           const SizedBox(width: 8),
           IconButton(

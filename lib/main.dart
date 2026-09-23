@@ -72,7 +72,8 @@ Future<void> main() async {
         final alert =
             TransitionAlert.fromMap(Map<String, dynamic>.from(rawMap as Map));
         navigatorKey.currentState?.push(
-          MaterialPageRoute(builder: (_) => TransitionAlertFullScreen(alert: alert)),
+          MaterialPageRoute(
+              builder: (_) => TransitionAlertFullScreen(alert: alert)),
         );
       } else if (ctx != null) {
         ScaffoldMessenger.of(ctx).showSnackBar(

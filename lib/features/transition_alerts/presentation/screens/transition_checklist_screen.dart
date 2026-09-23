@@ -89,8 +89,8 @@ class _TransitionChecklistScreenState
                             margin: const EdgeInsets.only(bottom: 12),
                             child: CheckboxListTile(
                               value: _checked[i],
-                              title:
-                                  Text(item, style: const TextStyle(fontSize: 20)),
+                              title: Text(item,
+                                  style: const TextStyle(fontSize: 20)),
                               activeColor: color,
                               onChanged: (v) {
                                 setState(() => _checked[i] = v ?? false);

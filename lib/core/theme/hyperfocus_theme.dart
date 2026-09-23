@@ -56,7 +56,7 @@ enum HyperfocusTheme {
   Color get primaryColor {
     switch (this) {
       case HyperfocusTheme.padrao:
-        return const Color(0xFF5B5FEF);
+        return const Color(0xFF315BFF);
       case HyperfocusTheme.dinossauros:
         return const Color(0xFF4C8C4A);
       case HyperfocusTheme.espaco:
@@ -78,7 +78,7 @@ enum HyperfocusTheme {
   /// Padrão mantém exatamente o fundo original do app.
   Color get backgroundColor {
     if (this == HyperfocusTheme.padrao) {
-      return const Color(0xFFF7F8FC);
+      return const Color(0xFFF4F7FB);
     }
     return Color.alphaBlend(primaryColor.withValues(alpha: 0.07), Colors.white);
   }

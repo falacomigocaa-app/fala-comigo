@@ -96,7 +96,9 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
     final h = date.hour.toString().padLeft(2, '0');
     final min = date.minute.toString().padLeft(2, '0');
     return '$d/$m às $h:$min';
-  }Future<void> _exportPdf() async {
+  }
+
+  Future<void> _exportPdf() async {
     if (_box == null || _box!.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Nenhum registro para exportar.')),
@@ -127,7 +129,8 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
                     () => includeData = value ?? false,
                   ),
                   title: const Text('Incluir dados identificadores'),
-                  subtitle: const Text('Nome, responsável, escola e nível de suporte'),
+                  subtitle: const Text(
+                      'Nome, responsável, escola e nível de suporte'),
                   controlAffinity: ListTileControlAffinity.leading,
                 ),
               ],
@@ -154,7 +157,8 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
         .reversed
         .toList();
     final profileData = includeProfileData
-        ? (await SecureBoxService.openSecureBox('patient_profile')).get('data') as Map?
+        ? (await SecureBoxService.openSecureBox('patient_profile')).get('data')
+            as Map?
         : null;
     final patientName = profileData?['name'] ?? '';
     final birthDate = profileData?['birthDate'] ?? '';
@@ -171,32 +175,33 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
             child: pw.Text('Fala Comigo — Registro de Comportamento (ABC)'),
           ),
           pw.Paragraph(
-            text: 'Relatório gerado em ${_formatDate(DateTime.now().toIso8601String())}',
+            text:
+                'Relatório gerado em ${_formatDate(DateTime.now().toIso8601String())}',
           ),
           if (patientName.toString().isNotEmpty)
-              pw.Container(
-                margin: const pw.EdgeInsets.only(top: 8, bottom: 8),
-                padding: const pw.EdgeInsets.all(8),
-                decoration: pw.BoxDecoration(
-                  border: pw.Border.all(color: PdfColors.grey400),
-                  borderRadius: pw.BorderRadius.circular(4),
-                ),
-                child: pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.Text('Paciente: $patientName',
-                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                    if (birthDate.toString().isNotEmpty)
-                      pw.Text('Data de nascimento: $birthDate'),
-                    if (supportLevel.toString().isNotEmpty)
-                      pw.Text('Nível de suporte (DSM-5): $supportLevel'),
-                    if (guardian.toString().isNotEmpty)
-                      pw.Text('Responsável: $guardian'),
-                    if (school.toString().isNotEmpty)
-                      pw.Text('Escola/clínica: $school'),
-                  ],
-                ),
+            pw.Container(
+              margin: const pw.EdgeInsets.only(top: 8, bottom: 8),
+              padding: const pw.EdgeInsets.all(8),
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(color: PdfColors.grey400),
+                borderRadius: pw.BorderRadius.circular(4),
               ),
+              child: pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Text('Paciente: $patientName',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  if (birthDate.toString().isNotEmpty)
+                    pw.Text('Data de nascimento: $birthDate'),
+                  if (supportLevel.toString().isNotEmpty)
+                    pw.Text('Nível de suporte (DSM-5): $supportLevel'),
+                  if (guardian.toString().isNotEmpty)
+                    pw.Text('Responsável: $guardian'),
+                  if (school.toString().isNotEmpty)
+                    pw.Text('Escola/clínica: $school'),
+                ],
+              ),
+            ),
           pw.SizedBox(height: 12),
           ...entries.map((entry) {
             return pw.Container(
@@ -239,14 +244,17 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: const Text('Registro de Comportamento'),
-        backgroundColor: AppTheme.surface,
-      actions: [
+        backgroundColor: AppTheme.professionalBackground,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        actions: [
           IconButton(
             icon: const Icon(Icons.picture_as_pdf_outlined),
             tooltip: 'Exportar PDF',
             onPressed: _exportPdf,
           ),
-        ],),
+        ],
+      ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -254,16 +262,40 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Modelo ABC',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'Registre o que aconteceu antes, o que foi observado e o que '
-                    'aconteceu depois. Prefira descrições concretas e anote quais '
-                    'apoios ajudaram.',
-                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: AppTheme.professionalBackground,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: const Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.fact_check_outlined,
+                            color: AppTheme.professionalAccent, size: 28),
+                        SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Modelo ABC',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 20)),
+                              SizedBox(height: 6),
+                              Text(
+                                'Descreva o contexto, o que foi observado e o apoio oferecido. Prefira fatos concretos.',
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.white70,
+                                    height: 1.35),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 16),
                   TextField(
@@ -342,7 +374,8 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
                             return Card(
                               margin: const EdgeInsets.symmetric(vertical: 4),
                               child: ListTile(
-                                title: Text(_formatDate(entry['timestamp'] ?? '')),
+                                title:
+                                    Text(_formatDate(entry['timestamp'] ?? '')),
                                 subtitle: Text(
                                   'A: ${entry['antecedent']}\n'
                                   'B: ${entry['behavior']}\n'
@@ -350,7 +383,8 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
                                 ),
                                 isThreeLine: true,
                                 trailing: IconButton(
-                                  icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+                                  icon: const Icon(Icons.delete_outline,
+                                      color: Colors.redAccent),
                                   onPressed: () => _deleteEntry(key),
                                 ),
                               ),

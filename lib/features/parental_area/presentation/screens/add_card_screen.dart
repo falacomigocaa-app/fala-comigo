@@ -46,17 +46,29 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final XFile? picked = await _picker.pickImage(source: source, imageQuality: 85);
+    final XFile? picked =
+        await _picker.pickImage(source: source, imageQuality: 85);
     if (picked != null) {
-      final permanentPath = await MediaStorageService.persistFile(picked.path);
-      setState(() => _selectedImagePath = permanentPath);
+      try {
+        final permanentPath =
+            await MediaStorageService.persistFile(picked.path);
+        if (mounted) setState(() => _selectedImagePath = permanentPath);
+      } on UnsupportedError catch (error) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  error.message ?? 'Mídia não disponível nesta plataforma.')),
+        );
+      }
     }
   }
 
   void _saveCard() {
     if (_selectedImagePath == null || _labelController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Escolha uma foto e digite um nome para o cartão.')),
+        const SnackBar(
+            content: Text('Escolha uma foto e digite um nome para o cartão.')),
       );
       return;
     }
@@ -86,93 +98,124 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: Text(_isEditing ? 'Editar Cartão' : 'Adicionar Cartão'),
-        backgroundColor: AppTheme.surface,
+        backgroundColor: AppTheme.professionalBackground,
+        foregroundColor: Colors.white,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
-  child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            GestureDetector(
-              onTap: () => showModalBottomSheet(
-                context: context,
-                builder: (_) => SafeArea(
-                  child: Wrap(
-                    children: [
-                      ListTile(
-                        leading: const Icon(Icons.photo_library_outlined),
-                        title: const Text('Escolher da Galeria'),
-                        onTap: () {
-                          Navigator.pop(context);
-                          _pickImage(ImageSource.gallery);
-                        },
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: AppTheme.professionalBackground,
+                  borderRadius: BorderRadius.circular(22),
+                ),
+                child: const Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.auto_awesome_outlined,
+                        color: AppTheme.professionalAccent, size: 26),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'Escolha uma imagem simples e um nome curto. O nome será falado quando o cartão for usado.',
+                        style: TextStyle(
+                            color: Colors.white, height: 1.35, fontSize: 13),
                       ),
-                      ListTile(
-                        leading: const Icon(Icons.photo_camera_outlined),
-                        title: const Text('Tirar Foto'),
-                        onTap: () {
-                          Navigator.pop(context);
-                          _pickImage(ImageSource.camera);
-                        },
-                      ),
-                    ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              GestureDetector(
+                onTap: () => showModalBottomSheet(
+                  context: context,
+                  builder: (_) => SafeArea(
+                    child: Wrap(
+                      children: [
+                        ListTile(
+                          leading: const Icon(Icons.photo_library_outlined),
+                          title: const Text('Escolher da Galeria'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            _pickImage(ImageSource.gallery);
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.photo_camera_outlined),
+                          title: const Text('Tirar Foto'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            _pickImage(ImageSource.camera);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                child: Container(
+                  height: 160,
+                  width: 160,
+                  decoration: BoxDecoration(
+                    color: AppTheme.surface,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppTheme.cardBorder, width: 1.5),
+                  ),
+                  child: _selectedImagePath == null
+                      ? const Center(
+                          child: Icon(Icons.add_a_photo_outlined,
+                              size: 40, color: AppTheme.primary),
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: SecureMediaImage(path: _selectedImagePath!),
+                        ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              TextField(
+                controller: _labelController,
+                decoration: const InputDecoration(
+                  labelText: 'Nome do cartão (o que será falado)',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                initialValue: _category,
+                decoration: const InputDecoration(
+                    labelText: 'Categoria', border: OutlineInputBorder()),
+                items: AppConstants.categoryLabels.entries
+                    .map((e) =>
+                        DropdownMenuItem(value: e.key, child: Text(e.value)))
+                    .toList(),
+                onChanged: (v) =>
+                    setState(() => _category = v ?? 'personalizado'),
+              ),
+              const Spacer(),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _saveCard,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(0, 56),
+                    backgroundColor: AppTheme.accentGreen,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: Text(
+                    _isEditing ? 'Salvar Alterações' : 'Salvar Cartão',
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w700),
                   ),
                 ),
               ),
-              child: Container(
-                height: 160,
-                width: 160,
-                decoration: BoxDecoration(
-                  color: AppTheme.surface,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppTheme.cardBorder, width: 1.5),
-                ),
-                child: _selectedImagePath == null
-                    ? const Center(
-                        child: Icon(Icons.add_a_photo_outlined, size: 40, color: AppTheme.primary),
-                      )
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: SecureMediaImage(path: _selectedImagePath!),
-                      ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            TextField(
-              controller: _labelController,
-              decoration: const InputDecoration(
-                labelText: 'Nome do cartão (o que será falado)',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              initialValue: _category,
-              decoration: const InputDecoration(labelText: 'Categoria', border: OutlineInputBorder()),
-              items: AppConstants.categoryLabels.entries
-                  .map((e) => DropdownMenuItem(value: e.key, child: Text(e.value)))
-                  .toList(),
-              onChanged: (v) => setState(() => _category = v ?? 'personalizado'),
-            ),
-            const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _saveCard,
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(0, 56),
-                  backgroundColor: AppTheme.accentGreen,
-                  foregroundColor: Colors.white,
-                ),
-                child: Text(
-                  _isEditing ? 'Salvar Alterações' : 'Salvar Cartão',
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-    ),
       ),
     );
   }

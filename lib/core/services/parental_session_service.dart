@@ -16,10 +16,10 @@ class ParentalSessionService {
 
   static bool get isAuthenticated => _authenticated;
 
-  static void authenticate() {
+  static void authenticate({Duration? duration}) {
     _authenticated = true;
     _expirationTimer?.cancel();
-    _expirationTimer = Timer(sessionDuration, _expire);
+    _expirationTimer = Timer(duration ?? sessionDuration, _expire);
   }
 
   static void lock() {

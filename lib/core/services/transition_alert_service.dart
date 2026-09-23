@@ -12,6 +12,10 @@ const String _channelId = 'transition_alert_channel';
 const String _channelName = 'Alertas de Transição';
 const String _channelDescription =
     'Avisos de transição de atividade com contagem visual e checklist';
+const String _parentReminderChannelId = 'parent_reminder_channel';
+const String _parentReminderChannelName = 'Lembretes do Responsável';
+const String _parentReminderChannelDescription =
+    'Lembretes locais para consultar a rotina do Fala Comigo';
 
 /// Prefixo do payload usado para identificar, quando a notificação é
 /// tocada, qual TransitionAlert deve abrir a tela em tela cheia.
@@ -58,8 +62,7 @@ class TransitionAlertService {
   }
 
   void _handlePayload(String? payload) {
-    if (payload == null ||
-        !payload.startsWith(transitionAlertPayloadPrefix)) {
+    if (payload == null || !payload.startsWith(transitionAlertPayloadPrefix)) {
       return;
     }
     final alertId = payload.substring(transitionAlertPayloadPrefix.length);
@@ -109,6 +112,48 @@ class TransitionAlertService {
         enableVibration: true,
       ),
     );
+  }
+
+  NotificationDetails _buildParentReminderDetails() {
+    return const NotificationDetails(
+      android: AndroidNotificationDetails(
+        _parentReminderChannelId,
+        _parentReminderChannelName,
+        channelDescription: _parentReminderChannelDescription,
+        importance: Importance.defaultImportance,
+        priority: Priority.defaultPriority,
+        visibility: NotificationVisibility.private,
+        playSound: true,
+        enableVibration: false,
+      ),
+    );
+  }
+
+  Future<void> scheduleParentReminder({
+    required int notificationId,
+    required int hour,
+    required int minute,
+    required List<int> weekdays,
+  }) async {
+    await cancelParentReminder(notificationId);
+    for (final weekday in weekdays) {
+      final scheduledDate = _nextInstanceOfWeekdayTime(weekday, hour, minute);
+      await _plugin.zonedSchedule(
+        notificationId + weekday,
+        'Lembrete do responsável',
+        'Confira a rotina do Fala Comigo.',
+        scheduledDate,
+        _buildParentReminderDetails(),
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+      );
+    }
+  }
+
+  Future<void> cancelParentReminder(int notificationId) async {
+    for (var weekday = 1; weekday <= 7; weekday++) {
+      await _plugin.cancel(notificationId + weekday);
+    }
   }
 
   /// Dispara o alerta imediatamente (modo manual).
@@ -182,8 +227,7 @@ class TransitionAlertService {
   /// Calcula a próxima ocorrência de um dia da semana (1=domingo ...
   /// 7=sábado, convenção usada no resto do app) num horário
   /// determinado.
-  tz.TZDateTime _nextInstanceOfWeekdayTime(
-      int weekday, int hour, int minute) {
+  tz.TZDateTime _nextInstanceOfWeekdayTime(int weekday, int hour, int minute) {
     // package:timezone/Dart usa 1=segunda...7=domingo; convertemos
     // da convenção do app (1=domingo...7=sábado).
     final dartWeekday = weekday == 1 ? DateTime.sunday : weekday - 1;

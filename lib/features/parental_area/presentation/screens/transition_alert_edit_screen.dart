@@ -77,8 +77,7 @@ class _TransitionAlertEditScreenState
     _countdownSeconds = existing?.countdownSeconds ?? 60;
     _checklistItems = [...(existing?.checklistItems ?? [])];
 
-    if (existing?.scheduledHour != null &&
-        existing?.scheduledMinute != null) {
+    if (existing?.scheduledHour != null && existing?.scheduledMinute != null) {
       _scheduledTimeOfDay = TimeOfDay(
           hour: existing!.scheduledHour!, minute: existing.scheduledMinute!);
     }
@@ -230,11 +229,38 @@ class _TransitionAlertEditScreenState
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: Text(_isEditing ? 'Editar Alerta' : 'Novo Alerta'),
-        backgroundColor: AppTheme.surface,
+        backgroundColor: AppTheme.professionalBackground,
+        foregroundColor: Colors.white,
+        elevation: 0,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: AppTheme.professionalBackground,
+              borderRadius: BorderRadius.circular(22),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.notifications_active_outlined,
+                    color: AppTheme.professionalAccent, size: 26),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    _isEditing
+                        ? 'Atualize o alerta conforme a rotina atual. As mudanças ficam salvas localmente.'
+                        : 'Crie um aviso previsível para apoiar a próxima mudança de atividade.',
+                    style: const TextStyle(
+                        color: Colors.white, height: 1.35, fontSize: 13),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 18),
           const Text('Nome do alerta',
               style: TextStyle(fontWeight: FontWeight.w700)),
           const SizedBox(height: 4),
@@ -246,7 +272,6 @@ class _TransitionAlertEditScreenState
             ),
           ),
           const Divider(height: 32),
-
           const Text('Mensagem de áudio',
               style: TextStyle(fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
@@ -299,7 +324,6 @@ class _TransitionAlertEditScreenState
               ),
             ),
           const Divider(height: 32),
-
           const Text('Contagem visual',
               style: TextStyle(fontWeight: FontWeight.w700)),
           Text('$_countdownSeconds segundos',
@@ -313,7 +337,6 @@ class _TransitionAlertEditScreenState
             onChanged: (v) => setState(() => _countdownSeconds = v.round()),
           ),
           const Divider(height: 32),
-
           Row(
             children: [
               const Expanded(
@@ -359,7 +382,6 @@ class _TransitionAlertEditScreenState
             ),
           ],
           const Divider(height: 32),
-
           const Text('Checklist depois do alerta',
               style: TextStyle(fontWeight: FontWeight.w700)),
           const SizedBox(height: 4),
@@ -398,7 +420,6 @@ class _TransitionAlertEditScreenState
               ),
             ),
           const SizedBox(height: 24),
-
           ElevatedButton.icon(
             onPressed: _save,
             icon: const Icon(Icons.check),

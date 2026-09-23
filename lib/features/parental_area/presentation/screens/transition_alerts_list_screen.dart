@@ -20,7 +20,9 @@ class TransitionAlertsListScreen extends ConsumerWidget {
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: const Text('Alertas de Transição'),
-        backgroundColor: AppTheme.surface,
+        backgroundColor: AppTheme.professionalBackground,
+        foregroundColor: Colors.white,
+        elevation: 0,
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Navigator.of(context).push(
@@ -34,7 +36,11 @@ class TransitionAlertsListScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(16),
         children: [
           Card(
-            color: AppTheme.primary.withValues(alpha: 0.08),
+            color: AppTheme.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(22),
+              side: const BorderSide(color: AppTheme.cardBorder),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Row(
@@ -43,41 +49,45 @@ class TransitionAlertsListScreen extends ConsumerWidget {
                     child: Text(
                       'Para os alertas funcionarem mesmo com a tela bloqueada, '
                       'autorize as permissões do celular (uma vez só).',
-                      style: TextStyle(fontSize: 13),
+                      style: TextStyle(
+                          fontSize: 13,
+                          color: AppTheme.mutedText,
+                          height: 1.35),
                     ),
                   ),
                   const SizedBox(width: 8),
                   ElevatedButton(
-            onPressed: () async {
-              try {
-                await TransitionAlertService.instance
-                    .requestPermissions();
-                final status = await TransitionAlertService.instance
-                    .checkPermissionStatus();
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(status),
-                      duration: const Duration(seconds: 6),
+                    onPressed: () async {
+                      try {
+                        await TransitionAlertService.instance
+                            .requestPermissions();
+                        final status = await TransitionAlertService.instance
+                            .checkPermissionStatus();
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(status),
+                              duration: const Duration(seconds: 6),
+                            ),
+                          );
+                        }
+                      } catch (_) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Não foi possível configurar as permissões.'),
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.primary,
+                      foregroundColor: Colors.white,
                     ),
-                  );
-                }
-              } catch (_) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Não foi possível configurar as permissões.'),
-                    ),
-                  );
-                }
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.primary,
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Autorizar'),
-          ),
+                    child: const Text('Autorizar'),
+                  ),
                 ],
               ),
             ),
@@ -89,7 +99,8 @@ class TransitionAlertsListScreen extends ConsumerWidget {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Teste agendado para daqui 30 segundos. Bloqueie a tela agora.'),
+                    content: Text(
+                        'Teste agendado para daqui 30 segundos. Bloqueie a tela agora.'),
                   ),
                 );
               }
@@ -105,7 +116,8 @@ class TransitionAlertsListScreen extends ConsumerWidget {
                 child: Text(
                   'Nenhum alerta criado ainda.\nToque em "Novo alerta" para começar.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                  style: TextStyle(
+                      color: AppTheme.mutedText, fontSize: 15, height: 1.35),
                 ),
               ),
             ),
@@ -126,7 +138,15 @@ class _AlertCard extends ConsumerWidget {
     if (!alert.isScheduled || alert.scheduledWeekdays.isEmpty) {
       return 'Somente disparo manual';
     }
-    const labels = {1: 'Dom', 2: 'Seg', 3: 'Ter', 4: 'Qua', 5: 'Qui', 6: 'Sex', 7: 'Sáb'};
+    const labels = {
+      1: 'Dom',
+      2: 'Seg',
+      3: 'Ter',
+      4: 'Qua',
+      5: 'Qui',
+      6: 'Sex',
+      7: 'Sáb'
+    };
     final days = alert.scheduledWeekdays.map((d) => labels[d] ?? '').join(', ');
     final hour = (alert.scheduledHour ?? 0).toString().padLeft(2, '0');
     final minute = (alert.scheduledMinute ?? 0).toString().padLeft(2, '0');
@@ -138,20 +158,23 @@ class _AlertCard extends ConsumerWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
-        leading: const Icon(Icons.notifications_active_outlined, color: AppTheme.primary),
+        leading: const Icon(Icons.notifications_active_outlined,
+            color: AppTheme.primary),
         title: Text(alert.title.isEmpty ? '(sem título)' : alert.title),
         subtitle: Text(
           '${alert.audioType == 'gravado' ? 'Áudio gravado' : 'Texto falado'} • '
           '${_scheduleSummary()} • ${alert.checklistItems.length} itens no checklist',
         ),
         onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => TransitionAlertEditScreen(existingAlert: alert)),
+          MaterialPageRoute(
+              builder: (_) => TransitionAlertEditScreen(existingAlert: alert)),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.play_circle_outline, color: AppTheme.accentGreen),
+              icon: const Icon(Icons.play_circle_outline,
+                  color: AppTheme.accentGreen),
               tooltip: 'Testar agora',
               onPressed: () async {
                 try {
@@ -159,7 +182,8 @@ class _AlertCard extends ConsumerWidget {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Notificação disparada! Verifique a barra de notificações.'),
+                        content: Text(
+                            'Notificação disparada! Verifique a barra de notificações.'),
                       ),
                     );
                   }
@@ -179,7 +203,9 @@ class _AlertCard extends ConsumerWidget {
               tooltip: 'Excluir',
               onPressed: () async {
                 await TransitionAlertService.instance.cancelSchedule(alert);
-                await ref.read(transitionAlertsListProvider.notifier).removeAlert(alert.id);
+                await ref
+                    .read(transitionAlertsListProvider.notifier)
+                    .removeAlert(alert.id);
               },
             ),
           ],

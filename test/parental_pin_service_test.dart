@@ -58,13 +58,18 @@ void main() {
     });
 
     test('rejeita PIN padrão, repetido ou com formato inválido', () async {
-      await expectLater(ParentalPinService.setPin('1234'), throwsFormatException);
-      await expectLater(ParentalPinService.setPin('0000'), throwsFormatException);
-      await expectLater(ParentalPinService.setPin('1111'), throwsFormatException);
-      await expectLater(ParentalPinService.setPin('123'), throwsFormatException);
+      await expectLater(
+          ParentalPinService.setPin('1234'), throwsFormatException);
+      await expectLater(
+          ParentalPinService.setPin('0000'), throwsFormatException);
+      await expectLater(
+          ParentalPinService.setPin('1111'), throwsFormatException);
+      await expectLater(
+          ParentalPinService.setPin('123'), throwsFormatException);
     });
 
-    test('uma falha inicia bloqueio progressivo antes de nova tentativa', () async {
+    test('uma falha inicia bloqueio progressivo antes de nova tentativa',
+        () async {
       await ParentalPinService.setPin('4826');
 
       expect(await ParentalPinService.checkPin('9999'), isFalse);

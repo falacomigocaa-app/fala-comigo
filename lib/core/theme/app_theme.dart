@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 
-/// Tema visual do app, seguindo boas práticas de UI/UX para autismo:
-/// cores suaves (tons pastel), contraste adequado para leitura,
-/// sem gradientes ou elementos visuais agressivos.
+/// Tema visual do app: futurismo calmo, com contraste, previsibilidade e
+/// pouca estimulação visual para preservar a comunicação como prioridade.
 class AppTheme {
   AppTheme._();
 
-  static const Color background = Color(0xFFF7F8FC);
-  static const Color primary = Color(0xFF5B5FEF);
+  static const Color background = Color(0xFFF4F7FB);
+  static const Color primary = Color(0xFF315BFF);
   static const Color surface = Color(0xFFFFFFFF);
-  static const Color accentGreen = Color(0xFF34B37A);
-  static const Color textDark = Color(0xFF23243A);
-  static const Color cardBorder = Color(0xFFE2E4F0);
+  static const Color accentGreen = Color(0xFF23B6A2);
+  static const Color textDark = Color(0xFF14213D);
+  static const Color mutedText = Color(0xFF52677D);
+  static const Color cardBorder = Color(0xFFD8E1F0);
 
   // Paleta sóbria usada na Área do Responsável/Profissional — mais
   // discreta que as cores lúdicas da tela de comunicação da criança,
   // para reforçar a sensação de "ferramenta de trabalho".
-  static const Color professionalBackground = Color(0xFF161B2E);
-  static const Color professionalSurface = Color(0xFF232A45);
-  static const Color professionalAccent = Color(0xFF3AAFA9);
+  static const Color professionalBackground = Color(0xFF0B1325);
+  static const Color professionalSurface = Color(0xFF141F38);
+  static const Color professionalAccent = Color(0xFF7DE2D1);
 
   static ThemeData get lightTheme {
     return ThemeData(
