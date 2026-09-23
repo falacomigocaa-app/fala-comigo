@@ -399,3 +399,51 @@ Pendências que permanecem abertas e não devem ser declaradas prontas:
 - revisar o PR/CI antes de qualquer merge na `main`.
 
 **Ponto de retomada:** ler `docs/REDESIGN_AREA_PARENTAL.md`, este capítulo e `docs/ANDROID_TESTE_DEBUG.md`; confirmar `git status`, executar o CI da branch e continuar pelo teste físico. Não usar mapa com localização inventada e não prometer full-screen no iOS ou no Android sem permissões e evidência do sistema.
+
+## 26. Correção do Novo Cartão com câmera após retorno ao PIN
+
+**Data:** 23 de setembro de 2026.
+**Branch:** `feat/parental-dashboard-reliability`.
+
+Foi relatado que escolher imagem da galeria funciona, mas ao escolher **Tirar Foto**, confirmar a foto e retornar, o app entrava novamente na tela do PIN e o cartão era perdido. A causa provável é o comportamento conhecido do Android: enquanto a câmera externa está aberta, o sistema pode destruir/recriar a Activity do Flutter. O `image_picker` entrega esse resultado perdido por `retrieveLostData()`; antes desta correção o app não recuperava esse resultado.
+
+Correção implementada em `lib/features/parental_area/presentation/screens/add_card_screen.dart`:
+
+- chamada de `_picker.retrieveLostData()` no início da tela;
+- persistência da imagem recuperada no armazenamento privado cifrado já existente;
+- rascunho em `Hive.box('app_settings')` para imagem, nome e categoria;
+- recuperação do rascunho mesmo que o responsável precise passar novamente pela tela do PIN;
+- limpeza do rascunho somente depois que o cartão foi salvo com sucesso;
+- tratamento tolerante de erro: se a recuperação falhar, o rascunho anterior permanece disponível.
+
+Validação executada:
+
+```bash
+dart format lib/features/parental_area/presentation/screens/add_card_screen.dart
+flutter analyze --no-fatal-infos --no-fatal-warnings
+flutter test
+flutter build apk --debug
+```
+
+Todos terminaram com código 0. Novo APK:
+
+```text
+/home/ubuntu/fala-comigo-camera-fix.apk
+SHA-256: 675df3e39955d5a576a9aa3b9f8d06c75e522b2aaf1041904750a2c9b135cd15
+```
+
+Teste humano obrigatório no Android:
+
+1. instalar o APK novo;
+2. entrar na Área do Responsável pelo PIN;
+3. tocar em **Novo cartão**;
+4. preencher o nome antes de abrir a câmera;
+5. escolher **Tirar Foto**;
+6. tirar e confirmar a foto;
+7. se o PIN aparecer, informar o PIN e voltar a **Novo cartão**;
+8. confirmar que a foto e o nome continuam preenchidos;
+9. salvar o cartão;
+10. sair do painel e verificar o cartão na grade infantil;
+11. repetir cancelando a câmera e repetindo com galeria.
+
+O ambiente não possui um celular Android conectado, portanto a correção automática foi validada por análise/testes/build, mas o comportamento final de câmera precisa ser confirmado no aparelho real.

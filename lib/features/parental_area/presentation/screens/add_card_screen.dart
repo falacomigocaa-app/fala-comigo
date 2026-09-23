@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/constants/app_constants.dart';
@@ -27,6 +28,11 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
   String _category = 'personalizado';
   bool _isSaving = false;
 
+  static const _settingsBox = 'app_settings';
+  static const _draftImageKey = 'add_card_draft_image_path';
+  static const _draftLabelKey = 'add_card_draft_label';
+  static const _draftCategoryKey = 'add_card_draft_category';
+
   bool get _isEditing => widget.existingCard != null;
 
   @override
@@ -38,6 +44,55 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
       _category = existing.category;
       _selectedImagePath = existing.imagePath;
     }
+    _recoverCameraResult();
+  }
+
+  /// O Android pode destruir a Activity enquanto a câmera está aberta.
+  /// Nesse caso o image_picker entrega a foto por retrieveLostData quando o
+  /// Flutter volta a inicializar. O rascunho no Hive também permite recuperar
+  /// a imagem se o usuário precisar passar novamente pelo PIN parental.
+  Future<void> _recoverCameraResult() async {
+    final box = Hive.box(_settingsBox);
+    final draftPath = box.get(_draftImageKey) as String?;
+    final draftLabel = box.get(_draftLabelKey) as String?;
+    final draftCategory = box.get(_draftCategoryKey) as String?;
+    if (draftLabel != null && _labelController.text.isEmpty) {
+      _labelController.text = draftLabel;
+    }
+    if (draftCategory != null &&
+        AppConstants.categoryLabels.containsKey(draftCategory)) {
+      _category = draftCategory;
+    }
+
+    String? recoveredPath = draftPath;
+    try {
+      final lostData = await _picker.retrieveLostData();
+      final lostFile = lostData.files?.isNotEmpty == true
+          ? lostData.files!.first
+          : lostData.file;
+      if (lostFile != null) {
+        recoveredPath = await MediaStorageService.persistFile(lostFile.path);
+      }
+    } catch (_) {
+      // O rascunho já persistido continua disponível para a próxima abertura.
+    }
+
+    if (!mounted || recoveredPath == null) return;
+    setState(() => _selectedImagePath = recoveredPath);
+    await box.put(_draftImageKey, recoveredPath);
+  }
+
+  Future<void> _saveDraft() async {
+    final box = Hive.box(_settingsBox);
+    await box.put(_draftLabelKey, _labelController.text.trim());
+    await box.put(_draftCategoryKey, _category);
+  }
+
+  Future<void> _clearDraft() async {
+    final box = Hive.box(_settingsBox);
+    await box.delete(_draftImageKey);
+    await box.delete(_draftLabelKey);
+    await box.delete(_draftCategoryKey);
   }
 
   @override
@@ -48,13 +103,17 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
 
   Future<void> _pickImage(ImageSource source) async {
     try {
+      await _saveDraft();
       final XFile? picked =
           await _picker.pickImage(source: source, imageQuality: 85);
       if (picked == null) return;
       try {
         final permanentPath =
             await MediaStorageService.persistFile(picked.path);
-        if (mounted) setState(() => _selectedImagePath = permanentPath);
+        if (mounted) {
+          setState(() => _selectedImagePath = permanentPath);
+          await Hive.box(_settingsBox).put(_draftImageKey, permanentPath);
+        }
       } on UnsupportedError catch (error) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -108,6 +167,7 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
       return;
     }
 
+    await _clearDraft();
     if (mounted) Navigator.of(context).pop(true);
   }
 
