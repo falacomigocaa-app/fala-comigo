@@ -12,7 +12,8 @@ import 'settings_screen.dart';
 class ParentalGateScreen extends StatefulWidget {
   final Widget destination;
 
-  const ParentalGateScreen({super.key, this.destination = const SettingsScreen()});
+  const ParentalGateScreen(
+      {super.key, this.destination = const SettingsScreen()});
 
   @override
   State<ParentalGateScreen> createState() => _ParentalGateScreenState();
@@ -68,7 +69,8 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
 
     final locked = await ParentalPinService.remainingLockout();
     if (locked != null) {
-      setState(() => _error = 'Acesso temporariamente bloqueado. Tente mais tarde.');
+      setState(
+          () => _error = 'Acesso temporariamente bloqueado. Tente mais tarde.');
       return;
     }
     final isValid = await ParentalPinService.checkPin(_pinController.text);
@@ -85,7 +87,8 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
   void _openDestination() {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (_) => ParentalAreaTransitionScreen(destination: widget.destination),
+        builder: (_) =>
+            ParentalAreaTransitionScreen(destination: widget.destination),
       ),
     );
   }
@@ -116,7 +119,8 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-        title: Text(_setupMode ? 'Criar acesso do responsável' : 'Área do Responsável'),
+        title: Text(
+            _setupMode ? 'Criar acesso do responsável' : 'Área do Responsável'),
         backgroundColor: AppTheme.surface,
       ),
       body: Center(
@@ -135,7 +139,8 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
                 style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 20),
-              _pinField(_setupMode ? 'Novo PIN' : 'PIN do responsável', _pinController),
+              _pinField(_setupMode ? 'Novo PIN' : 'PIN do responsável',
+                  _pinController),
               if (_setupMode) ...[
                 const SizedBox(height: 16),
                 _pinField('Confirmar PIN', _confirmController),
@@ -143,7 +148,8 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
               if (_error != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
-                  child: Text(_error!, style: const TextStyle(color: Colors.red)),
+                  child:
+                      Text(_error!, style: const TextStyle(color: Colors.red)),
                 ),
               const SizedBox(height: 20),
               SizedBox(

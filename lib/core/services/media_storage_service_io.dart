@@ -116,7 +116,9 @@ class MediaStorageService {
 
     final bytes = await source.readAsBytes();
     final isEncrypted = bytes.length >= _fileMagic.length &&
-        utf8.decode(bytes.take(_fileMagic.length).toList(), allowMalformed: true) == _fileMagic;
+        utf8.decode(bytes.take(_fileMagic.length).toList(),
+                allowMalformed: true) ==
+            _fileMagic;
     final plainBytes = isEncrypted
         ? await _decrypt(bytes.sublist(_fileMagic.length))
         : bytes; // compatibilidade com arquivos criados antes da cifra.
@@ -187,6 +189,8 @@ class MediaStorageService {
     final dot = withoutCipherSuffix.lastIndexOf('.');
     if (dot <= 0 || dot == withoutCipherSuffix.length - 1) return fallback;
     final extension = withoutCipherSuffix.substring(dot).toLowerCase();
-    return RegExp(r'^\.[a-z0-9]{1,8}$').hasMatch(extension) ? extension : fallback;
+    return RegExp(r'^\.[a-z0-9]{1,8}$').hasMatch(extension)
+        ? extension
+        : fallback;
   }
 }

@@ -25,8 +25,8 @@ class TransitionAlertsNotifier extends StateNotifier<List<TransitionAlert>> {
 
   static List<TransitionAlert> _loadAll(Box box) {
     return box.values
-        .map((e) =>
-            TransitionAlert.fromMap(Map<String, dynamic>.from(e as Map)))
+        .map(
+            (e) => TransitionAlert.fromMap(Map<String, dynamic>.from(e as Map)))
         .toList();
   }
 

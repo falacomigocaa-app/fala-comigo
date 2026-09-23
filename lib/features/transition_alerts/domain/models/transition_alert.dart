@@ -63,17 +63,15 @@ class TransitionAlert {
       recordedAudioPath: map['recordedAudioPath'] as String?,
       ttsText: map['ttsText'] as String?,
       countdownSeconds: map['countdownSeconds'] as int? ?? 60,
-      checklistItems: (map['checklistItems'] as List?)
-              ?.map((e) => e.toString())
-              .toList() ??
-          [],
+      checklistItems:
+          (map['checklistItems'] as List?)?.map((e) => e.toString()).toList() ??
+              [],
       isScheduled: map['isScheduled'] as bool? ?? false,
       scheduledHour: map['scheduledHour'] as int?,
       scheduledMinute: map['scheduledMinute'] as int?,
-      scheduledWeekdays: (map['scheduledWeekdays'] as List?)
-              ?.map((e) => e as int)
-              .toList() ??
-          [],
+      scheduledWeekdays:
+          (map['scheduledWeekdays'] as List?)?.map((e) => e as int).toList() ??
+              [],
       notificationId: map['notificationId'] as int? ?? 0,
     );
   }

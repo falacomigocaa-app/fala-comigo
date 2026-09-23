@@ -146,8 +146,8 @@ class _TransitionAlertFullScreenState
                     minimumSize: const Size(240, 64),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(32)),
-                    textStyle:
-                        const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    textStyle: const TextStyle(
+                        fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   child: const Text('Vamos lá! 👉'),
                 ),

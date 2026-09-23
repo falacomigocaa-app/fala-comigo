@@ -18,7 +18,8 @@ extension PlanFeatureMetadata on PlanFeature {
         PlanFeature.offlineCommunication ||
         PlanFeature.parentalControls ||
         PlanFeature.accessibility ||
-        PlanFeature.localStorage => true,
+        PlanFeature.localStorage =>
+          true,
         _ => false,
       };
 
