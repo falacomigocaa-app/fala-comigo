@@ -14,6 +14,7 @@ import 'behavior_log_screen.dart';
 import 'video_diary_screen.dart';
 import 'patient_profile_screen.dart';
 import 'parent_reminders_screen.dart';
+import 'shared_tasks_screen.dart';
 import 'change_pin_screen.dart';
 import 'data_export_screen.dart';
 import 'access_management_screen.dart';
@@ -288,6 +289,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     subtitle: 'Agendar avisos locais',
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (_) => const ParentRemindersScreen()))),
+                _OptionAListAction(
+                    icon: Icons.add_task_outlined,
+                    title: 'Tarefas compartilhadas',
+                    subtitle: 'Combinar próximos passos com a rede de cuidado',
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const SharedTasksScreen()))),
               ],
             ),
           ),
