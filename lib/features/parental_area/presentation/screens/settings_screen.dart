@@ -13,6 +13,7 @@ import 'behavior_log_screen.dart';
 
 import 'video_diary_screen.dart';
 import 'patient_profile_screen.dart';
+import 'parent_reminders_screen.dart';
 import 'change_pin_screen.dart';
 import 'data_export_screen.dart';
 import 'parental_gate_screen.dart';
@@ -318,6 +319,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     MaterialPageRoute(
                         builder: (_) =>
                             const VisualRoutineScreen(readOnly: false)),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.notifications_none_outlined),
+                  title: const Text('Lembretes do responsável'),
+                  subtitle: const Text(
+                      'Agendar avisos locais para consultar a rotina'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const ParentRemindersScreen()),
                   ),
                 ),
               ],
