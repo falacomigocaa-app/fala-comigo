@@ -447,3 +447,28 @@ Teste humano obrigatório no Android:
 11. repetir cancelando a câmera e repetindo com galeria.
 
 O ambiente não possui um celular Android conectado, portanto a correção automática foi validada por análise/testes/build, mas o comportamento final de câmera precisa ser confirmado no aparelho real.
+
+## 27. Protótipo comparativo da Área do Responsável em HTML/Tailwind
+
+**Data:** 23 de setembro de 2026.
+**Arquivo:** `docs/prototypes/area-responsavel-3-opcoes.html`.
+
+Foi criado um protótipo navegável, responsivo e autocontido em HTML com Tailwind CSS via CDN para comparar três direções de design antes da implementação final em Flutter:
+
+- **Opção A — Dashboard Moderno:** cards bem definidos, fundo suave, hero de localização, mapa demonstrativo, status de bateria/atualização, progresso visual e cards 2x2;
+- **Opção B — Minimalista/Clean:** tipografia com bastante espaço em branco, linhas sutis, ícones discretos e menor densidade visual;
+- **Opção C — Visual com Abas:** abas superiores `Segurança`, `Rotina` e `Configurações`, com cada contexto concentrando seus próprios controles.
+
+Todas as opções contêm Localização em Tempo Real demonstrativa, botão de histórico de trajeto, bateria, última atualização, Relatórios em PDF, Tendências Semanais, Diário de Vídeo, Rotina Visual Diária, ajustes de tamanho dos botões, comportamento de voz/texto e ação `Novo Cartão` no cabeçalho.
+
+O protótipo usa dados fictícios e deixa explícito que localização real depende de consentimento, aparelho conectado e backend seguro. Não deve ser interpretado como implementação de rastreamento.
+
+Comportamentos interativos implementados:
+
+- troca entre modelos A, B e C;
+- abas internas da Opção C;
+- sliders de tamanho dos botões;
+- radio buttons de comportamento de toque;
+- estados de foco acessíveis e layout responsivo.
+
+**Ponto de decisão:** escolher uma direção visual antes de transformar os componentes em widgets Flutter reutilizáveis. A recomendação inicial da equipe é usar a hierarquia da Opção A, o respiro tipográfico da Opção B e as separações contextuais da Opção C.
