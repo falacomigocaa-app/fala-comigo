@@ -510,3 +510,54 @@ SHA-256: d30817590c3c13a14b78ed0682c9d5445c86c8a914d6710854464cfdcabe59f2
 ```
 
 O APK deve ser testado entrando pelo PIN e verificando: abertura/fechamento dos boxes, navegação dos cinco cards de rotina, Novo Cartão, controles de acessibilidade, reordenação de cartões e preservação do fluxo infantil ao voltar.
+
+## 29. Handoff para o próximo agente — estado auditado
+
+**Última auditoria:** 23 de setembro de 2026.
+**Branch ativa:** `feat/parental-area-option-a`.
+**Commit:** `7b149bb91ab26db48865ccb7641ca23598360c4b`.
+**PR:** [#32](https://github.com/falacomigocaa-app/fala-comigo/pull/32).
+**Estado do PR:** aberto, não draft, `mergeStateStatus: CLEAN`.
+**Base do PR:** `feat/parental-dashboard-reliability`.
+**CI:** check `analyze-and-test` concluído com `SUCCESS`.
+
+O código da Opção A está commitado e publicado no remoto. A cópia local está limpa e alinhada com `origin/feat/parental-area-option-a`. A `main` não deve ser alterada diretamente nesta etapa.
+
+### Próxima sequência obrigatória
+
+1. Instalar o APK `/home/ubuntu/fala-comigo-opcao-a.apk` em um aparelho Android de teste.
+2. Entrar pelo PIN e validar a tela da Área do Responsável.
+3. Testar boxes fechados e expandidos.
+4. Testar os cinco cards de Acompanhamento & Rotina e confirmar que cada rota abre corretamente.
+5. Testar Novo Cartão, principalmente câmera, galeria, confirmação e retorno ao PIN.
+6. Testar slider, orientação e comportamento de toque.
+7. Testar edição, exclusão e reordenação dos cartões.
+8. Verificar a Bottom Bar e registrar quais seções ainda exibem aviso de próxima etapa.
+9. Registrar todos os resultados, vídeos, screenshots, erros e passos de reprodução neste documento antes de qualquer novo commit.
+10. Só depois da validação manual considerar o merge do PR #32 na branch de integração; não fazer merge automático na `main` sem revisar a base e os checks.
+
+### Limites conhecidos
+
+- A localização real ainda não está conectada a um backend/aparelho infantil. O Hero é propositalmente honesto e não exibe dados fictícios como se fossem reais.
+- A Bottom Bar foi criada visualmente; Acompanhamento, Localização e Configurações ainda mostram aviso controlado quando tocadas, aguardando a implementação das rotas de navegação correspondentes.
+- A funcionalidade de localização exige consentimento, permissões, sincronização segura e autenticação web antes de ser implementada.
+- O APK é debug e não é release de loja.
+
+### Comandos de retomada
+
+```bash
+gh repo clone falacomigocaa-app/fala-comigo /home/ubuntu/fala-comigo
+cd /home/ubuntu/fala-comigo
+git fetch origin --prune
+git switch feat/parental-area-option-a
+git pull --ff-only
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+export ANDROID_HOME=/home/ubuntu/android-sdk
+export ANDROID_SDK_ROOT=/home/ubuntu/android-sdk
+export PATH=/home/ubuntu/flutter/bin:/home/ubuntu/android-sdk/cmdline-tools/latest/bin:/home/ubuntu/android-sdk/platform-tools:$JAVA_HOME/bin:$PATH
+flutter analyze --no-fatal-infos --no-fatal-warnings
+flutter test
+flutter build apk --debug
+```
+
+**Regra para o próximo agente:** preservar o cronograma, não reimplementar a tela escolhida, não inventar localização real e atualizar esta seção sempre que executar comando, encontrar erro ou mudar o estado do PR.
