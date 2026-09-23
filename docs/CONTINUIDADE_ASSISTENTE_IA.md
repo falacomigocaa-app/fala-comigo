@@ -281,6 +281,14 @@ O endpoint de GitHub Pages retornou `404 Not Found` antes do merge, indicando qu
 
 **Estado da integração:** código da affordable incorporado à `main`; merge concluído; nenhum dado clínico, cobrança ou portal conectado foi ativado. Pendência imediata: confirmar os resultados dos workflows pós-merge e, se necessário, corrigir somente problemas de CI ou de configuração do site.
 
+## 19. Pós-merge — falha de configuração do GitHub Pages
+
+O workflow `Publicar site institucional` do commit `5a0d125` foi executado e falhou na etapa `actions/configure-pages@v5`. O log informa `Get Pages site failed` e confirma que o repositório ainda não tem GitHub Pages habilitado para publicação por GitHub Actions. A API de Pages também retornou `404 Not Found`.
+
+Isso não representa falha do aplicativo Flutter nem do código integrado. O workflow está preparado para publicar o diretório `site/`, mas a ativação do Pages é uma mudança de publicação externa e deve ser feita separadamente, com confirmação explícita antes de tornar o site público. Não foi ativado automaticamente.
+
+O workflow `Flutter quality checks` do commit `41956c3` estava em andamento no momento deste registro. O resultado deve ser verificado antes de declarar a validação pós-merge completamente encerrada.
+
 ## 12. Atuação multidisciplinar da assistência
 
 Para a continuação deste projeto, a assistência atuará de forma integrada nas seguintes responsabilidades:
