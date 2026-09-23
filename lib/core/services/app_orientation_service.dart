@@ -27,6 +27,16 @@ class AppOrientationService {
     );
   }
 
+  /// Mantém o acesso parental em retrato enquanto o responsável digita o PIN.
+  /// A grade CAA pode continuar em paisagem; esta tela prioriza teclado,
+  /// leitura e toque confortáveis.
+  static Future<void> applyParentalPinOrientation() {
+    return SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
   static Future<void> applyParentalOrientation() {
     return SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,

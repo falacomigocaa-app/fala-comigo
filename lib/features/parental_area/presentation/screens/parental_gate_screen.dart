@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../core/services/app_orientation_service.dart';
 import '../../../../core/services/parental_pin_service.dart';
 import '../../../../core/services/parental_session_service.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -23,11 +24,13 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
   final _confirmController = TextEditingController();
   bool _loading = true;
   bool _setupMode = false;
+  bool _authenticated = false;
   String? _error;
 
   @override
   void initState() {
     super.initState();
+    AppOrientationService.applyParentalPinOrientation();
     _loadState();
   }
 
@@ -42,6 +45,9 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
 
   @override
   void dispose() {
+    if (!_authenticated) {
+      AppOrientationService.applyChildOrientation();
+    }
     _pinController.dispose();
     _confirmController.dispose();
     super.dispose();
@@ -84,6 +90,7 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
   }
 
   void _openDestination() {
+    _authenticated = true;
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (_) =>
