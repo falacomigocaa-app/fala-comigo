@@ -9,6 +9,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/secure_media_image.dart';
 import '../../../aac_grid/data/providers/cards_provider.dart';
 import '../../../aac_grid/domain/models/pictogram_card.dart';
+import '../widgets/parental_ui.dart';
 
 /// Tela usada pelos pais/educadores para cadastrar um novo cartão ou
 /// editar um já existente (quando [existingCard] é informado).
@@ -186,28 +187,11 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(
-                  color: AppTheme.professionalBackground,
-                  borderRadius: BorderRadius.circular(22),
-                ),
-                child: const Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(Icons.auto_awesome_outlined,
-                        color: AppTheme.professionalAccent, size: 26),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        'Escolha uma imagem simples e um nome curto. O nome será falado quando o cartão for usado.',
-                        style: TextStyle(
-                            color: Colors.white, height: 1.35, fontSize: 13),
-                      ),
-                    ),
-                  ],
-                ),
+              const ParentalInfoBanner(
+                icon: Icons.auto_awesome_outlined,
+                eyebrow: 'NOVO CARTÃO',
+                message:
+                    'Escolha uma imagem simples e um nome curto. O nome será falado quando o cartão for usado.',
               ),
               const SizedBox(height: 16),
               GestureDetector(
@@ -258,16 +242,16 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
               const SizedBox(height: 24),
               TextField(
                 controller: _labelController,
-                decoration: const InputDecoration(
+                decoration: parentalInputDecoration(
                   labelText: 'Nome do cartão (o que será falado)',
-                  border: OutlineInputBorder(),
+                  icon: Icons.record_voice_over_outlined,
                 ),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 initialValue: _category,
-                decoration: const InputDecoration(
-                    labelText: 'Categoria', border: OutlineInputBorder()),
+                decoration: parentalInputDecoration(
+                    labelText: 'Categoria', icon: Icons.category_outlined),
                 items: AppConstants.categoryLabels.entries
                     .map((e) =>
                         DropdownMenuItem(value: e.key, child: Text(e.value)))
@@ -291,7 +275,7 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : Text(
-                          _isEditing ? 'Salvar Alterações' : 'Salvar Cartão',
+                          _isEditing ? 'Salvar alterações' : 'Salvar cartão',
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w700),
                         ),

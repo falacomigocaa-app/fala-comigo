@@ -14,8 +14,11 @@ import 'behavior_log_screen.dart';
 import 'video_diary_screen.dart';
 import 'patient_profile_screen.dart';
 import 'parent_reminders_screen.dart';
+import 'shared_tasks_screen.dart';
+import 'care_coordination_screen.dart';
 import 'change_pin_screen.dart';
 import 'data_export_screen.dart';
+import 'access_management_screen.dart';
 import 'parental_gate_screen.dart';
 import 'plan_status_screen.dart';
 import 'privacy_settings_screen.dart';
@@ -103,21 +106,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-        title: const Text('Área do Responsável'),
+        title: const Text('Área Parental'),
         backgroundColor: AppTheme.professionalBackground,
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: FilledButton.icon(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const AddCardScreen()),
-              ),
-              icon: const Icon(Icons.add_a_photo_outlined, size: 18),
-              label: const Text('Novo cartão'),
+          IconButton.filledTonal(
+            tooltip: 'Novo cartão',
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const AddCardScreen()),
             ),
+            icon: const Icon(Icons.add_a_photo_outlined),
           ),
+          const SizedBox(width: 8),
         ],
       ),
       body: ListView(
@@ -289,6 +290,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     subtitle: 'Agendar avisos locais',
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (_) => const ParentRemindersScreen()))),
+                _OptionAListAction(
+                    icon: Icons.add_task_outlined,
+                    title: 'Tarefas compartilhadas',
+                    subtitle: 'Combinar próximos passos com a rede de cuidado',
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const SharedTasksScreen()))),
+                _OptionAListAction(
+                    icon: Icons.hub_outlined,
+                    title: 'Continuidade do cuidado',
+                    subtitle: 'Perfil funcional, plano de comunicação e agenda',
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const CareCoordinationScreen()))),
               ],
             ),
           ),
@@ -371,6 +384,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   title: const Text('Privacidade e dados'),
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
                       builder: (_) => const PrivacySettingsScreen()))),
+              ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.people_alt_outlined),
+                  title: const Text('Pessoas e organizações'),
+                  subtitle: const Text('Quem pode acessar?'),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const AccessManagementScreen()))),
               ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.lock_reset_outlined),
@@ -864,10 +884,10 @@ class _SettingsHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
       decoration: BoxDecoration(
         color: AppTheme.professionalBackground,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
         gradient: const LinearGradient(
           colors: [
             AppTheme.professionalBackground,
@@ -887,29 +907,39 @@ class _SettingsHero extends StatelessWidget {
       child: const Row(
         children: [
           CircleAvatar(
-            radius: 26,
+            radius: 22,
             backgroundColor: AppTheme.professionalAccent,
             child: Icon(Icons.shield_outlined,
                 color: AppTheme.professionalBackground),
           ),
-          SizedBox(width: 16),
+          SizedBox(width: 13),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
+                  'PAINEL DO RESPONSÁVEL',
+                  style: TextStyle(
+                    color: AppTheme.professionalAccent,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.1,
+                  ),
+                ),
+                SizedBox(height: 3),
+                Text(
                   'Ajustes protegidos',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                SizedBox(height: 5),
+                SizedBox(height: 3),
                 Text(
-                  'Personalize a comunicação com calma e mantenha o controle dos dados locais.',
+                  'Personalize a comunicação e mantenha o controle dos dados locais.',
                   style: TextStyle(
-                      color: Color(0xFFD8E7F0), fontSize: 13, height: 1.35),
+                      color: Color(0xFFD8E7F0), fontSize: 12, height: 1.3),
                 ),
               ],
             ),
