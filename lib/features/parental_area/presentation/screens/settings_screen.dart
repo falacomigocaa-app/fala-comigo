@@ -20,6 +20,7 @@ import 'privacy_settings_screen.dart';
 import 'progress_report_screen.dart';
 import 'transition_alerts_list_screen.dart';
 import '../../../transition_alerts/data/providers/transition_alerts_provider.dart';
+import '../../../aac_grid/presentation/screens/visual_routine_screen.dart';
 
 /// Painel dos Pais & Educadores.
 ///
@@ -279,6 +280,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (_) => const TransitionAlertsListScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.view_timeline_outlined),
+                  title: const Text('Rotina visual diária'),
+                  subtitle: const Text(
+                      'Criar passos simples para a criança consultar'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) =>
+                            const VisualRoutineScreen(readOnly: false)),
                   ),
                 ),
               ],

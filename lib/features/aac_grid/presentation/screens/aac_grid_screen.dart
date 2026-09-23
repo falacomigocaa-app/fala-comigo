@@ -10,6 +10,7 @@ import '../../data/providers/cards_provider.dart';
 import '../../data/providers/communication_rewards_provider.dart';
 import '../widgets/grid_card.dart';
 import '../widgets/sentence_bar_widget.dart';
+import 'visual_routine_screen.dart';
 
 /// Tela principal do app: grade interativa de pictogramas baseada
 /// em PECS, com feedback de voz imediato em português.
@@ -105,6 +106,15 @@ class AACGridScreen extends ConsumerWidget {
                                     fontWeight: FontWeight.w700,
                                     color: AppTheme.accentGreen)),
                           ],
+                        ),
+                      ),
+                      IconButton(
+                        icon:
+                            const Icon(Icons.view_timeline_outlined, size: 27),
+                        tooltip: 'Rotina visual',
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (_) => const VisualRoutineScreen()),
                         ),
                       ),
                       IconButton(
