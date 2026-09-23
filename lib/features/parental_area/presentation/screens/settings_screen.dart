@@ -14,6 +14,7 @@ import 'behavior_log_screen.dart';
 import 'video_diary_screen.dart';
 import 'patient_profile_screen.dart';
 import 'change_pin_screen.dart';
+import 'data_export_screen.dart';
 import 'parental_gate_screen.dart';
 import 'plan_status_screen.dart';
 import 'privacy_settings_screen.dart';
@@ -257,6 +258,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (_) => const ProgressReportScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.picture_as_pdf_outlined),
+                  title: const Text('Exportar relatórios em PDF'),
+                  subtitle: const Text(
+                      'Escolher resumo, ABC ou rotina para compartilhar'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const DataExportScreen()),
                   ),
                 ),
                 const Divider(height: 1),
