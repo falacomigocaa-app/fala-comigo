@@ -261,6 +261,14 @@ Os arquivos gerados automaticamente pelos comandos de dependência foram restaur
 
 **Conclusão da etapa:** a cópia de integração está formatada, analisada, testada e compilada para Web. O próximo passo técnico é revisar o diff dessas correções e decidir como incorporá-las ao fluxo da branch affordable antes do fast-forward da `main`.
 
+## 17. Pré-integração publicada para revisão
+
+Foi criada a branch local `integration/affordable-to-main-preview` e registrado o commit `22628ad` (`chore: prepare affordable branch for main integration`). O commit contém as normalizações de formatação, a remoção do import não utilizado e este documento de continuidade.
+
+A branch foi enviada ao GitHub sem alterar a `main`. Foi aberto o Pull Request [#27](https://github.com/falacomigocaa-app/fala-comigo/pull/27), com destino `main`, para manter a integração revisável e rastreável. O PR registra os resultados de formatação, análise, 46 testes e build Web.
+
+**Estado:** aguardando a revisão final do diff e dos checks do PR. O merge não foi executado. A publicação do site via GitHub Pages continua sendo um efeito separado a revisar antes de qualquer merge na `main`.
+
 ## 12. Atuação multidisciplinar da assistência
 
 Para a continuação deste projeto, a assistência atuará de forma integrada nas seguintes responsabilidades:
