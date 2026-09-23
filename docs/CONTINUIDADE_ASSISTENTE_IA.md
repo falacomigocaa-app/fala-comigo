@@ -289,6 +289,14 @@ Isso não representa falha do aplicativo Flutter nem do código integrado. O wor
 
 O workflow `Flutter quality checks` do commit `41956c3` estava em andamento no momento deste registro. O resultado deve ser verificado antes de declarar a validação pós-merge completamente encerrada.
 
+## 20. GitHub Pages habilitado
+
+O proprietário confirmou manualmente a configuração correta em **Settings → Pages**. A fonte está definida como `GitHub Actions`, com branch `main` e caminho `/`. A API passou a confirmar a configuração e forneceu a URL pública:
+
+<https://falacomigocaa-app.github.io/fala-comigo/>
+
+O workflow `Publicar site institucional` foi solicitado novamente após a ativação do Pages. No momento do registro, a execução estava `queued`; é necessário confirmar a conclusão antes de declarar a publicação operacional.
+
 ## 12. Atuação multidisciplinar da assistência
 
 Para a continuação deste projeto, a assistência atuará de forma integrada nas seguintes responsabilidades:
