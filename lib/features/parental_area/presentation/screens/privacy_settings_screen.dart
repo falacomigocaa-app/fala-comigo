@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/config/public_links.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../widgets/parental_ui.dart';
 
 class PrivacySettingsScreen extends StatelessWidget {
   const PrivacySettingsScreen({super.key});
@@ -31,74 +32,51 @@ class PrivacySettingsScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 28),
+        padding: const EdgeInsets.fromLTRB(20, 24, 20, 28),
         children: [
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: AppTheme.professionalBackground,
-              borderRadius: BorderRadius.circular(24),
-              gradient: const LinearGradient(
-                colors: [
-                  AppTheme.professionalBackground,
-                  AppTheme.professionalSurface
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            child: const Row(
-              children: [
-                CircleAvatar(
-                  radius: 26,
-                  backgroundColor: AppTheme.professionalAccent,
-                  child: Icon(Icons.lock_outline,
-                      color: AppTheme.professionalBackground),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: Text(
-                    'Você decide o que é registrado e quando algo é compartilhado.',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        height: 1.25),
-                  ),
-                ),
-              ],
-            ),
+          const ParentalSectionHeading(
+            eyebrow: 'CONTROLE DOS DADOS',
+            title: 'Privacidade e dados',
+            description:
+                'Veja onde os dados ficam, quando podem sair do aparelho e como apagá-los.',
+          ),
+          const SizedBox(height: 18),
+          const ParentalInfoBanner(
+            icon: Icons.lock_outline,
+            eyebrow: 'PRIVACIDADE POR PADRÃO',
+            message:
+                'Você decide o que é registrado e quando algo é compartilhado. A comunicação básica continua funcionando sem internet.',
           ),
           const SizedBox(height: 16),
-          _PrivacyCard(
+          const _PrivacyCard(
             icon: Icons.phone_android_outlined,
             title: 'Armazenamento local',
             description:
-                'Os registros e mídias ficam neste aparelho por padrão. A comunicação básica continua funcionando sem internet.',
+                'Os registros e mídias ficam neste aparelho por padrão.',
           ),
-          _PrivacyCard(
+          const _PrivacyCard(
             icon: Icons.enhanced_encryption_outlined,
             title: 'Proteção',
             description:
-                'Caixas sensíveis usam armazenamento protegido. O PIN controla a entrada na Área do Responsável.',
+                'Caixas sensíveis usam armazenamento protegido. O PIN controla a entrada na Área Parental.',
           ),
-          _PrivacyCard(
+          const _PrivacyCard(
             icon: Icons.share_outlined,
             title: 'Compartilhamento',
             description:
-                'O aplicativo não envia dados automaticamente para clínicas, escolas ou patrocinadores. Qualquer compartilhamento deve ser uma escolha explícita.',
+                'O aplicativo não envia dados automaticamente para clínicas, escolas ou patrocinadores.',
           ),
-          _PrivacyCard(
+          const _PrivacyCard(
             icon: Icons.picture_as_pdf_outlined,
             title: 'Exportação',
             description:
-                'Relatórios e arquivos exportados podem sair do armazenamento protegido. Revise o destinatário antes de compartilhar.',
+                'Relatórios exportados podem sair do armazenamento protegido. Revise o destinatário antes de compartilhar.',
           ),
-          _PrivacyCard(
+          const _PrivacyCard(
             icon: Icons.delete_outline,
             title: 'Exclusão local',
             description:
-                'A opção Apagar todos os dados remove o conteúdo local e o PIN deste aparelho. Cópias já exportadas não são apagadas por essa ação.',
+                'Apagar os dados remove o conteúdo local e o PIN. Cópias já exportadas não são apagadas por essa ação.',
           ),
           const SizedBox(height: 8),
           OutlinedButton.icon(
@@ -110,7 +88,7 @@ class PrivacySettingsScreen extends StatelessWidget {
               foregroundColor: AppTheme.primary,
               side: const BorderSide(color: AppTheme.cardBorder),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
+                  borderRadius: BorderRadius.circular(13)),
             ),
           ),
         ],
@@ -134,28 +112,36 @@ class _PrivacyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppTheme.surface,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.cardBorder),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: AppTheme.primary, size: 26),
-          const SizedBox(width: 14),
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppTheme.primary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: AppTheme.primary, size: 21),
+          ),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title,
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w800)),
-                const SizedBox(height: 4),
+                        fontSize: 15, fontWeight: FontWeight.w800)),
+                const SizedBox(height: 3),
                 Text(description,
                     style: const TextStyle(
-                        color: AppTheme.mutedText, height: 1.4)),
+                        color: AppTheme.mutedText, height: 1.35)),
               ],
             ),
           ),
