@@ -103,21 +103,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-        title: const Text('Área do Responsável'),
+        title: const Text('Área Parental'),
         backgroundColor: AppTheme.professionalBackground,
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: FilledButton.icon(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const AddCardScreen()),
-              ),
-              icon: const Icon(Icons.add_a_photo_outlined, size: 18),
-              label: const Text('Novo cartão'),
+          IconButton.filledTonal(
+            tooltip: 'Novo cartão',
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const AddCardScreen()),
             ),
+            icon: const Icon(Icons.add_a_photo_outlined),
           ),
+          const SizedBox(width: 8),
         ],
       ),
       body: ListView(
@@ -864,10 +862,10 @@ class _SettingsHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
       decoration: BoxDecoration(
         color: AppTheme.professionalBackground,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
         gradient: const LinearGradient(
           colors: [
             AppTheme.professionalBackground,
@@ -887,29 +885,39 @@ class _SettingsHero extends StatelessWidget {
       child: const Row(
         children: [
           CircleAvatar(
-            radius: 26,
+            radius: 22,
             backgroundColor: AppTheme.professionalAccent,
             child: Icon(Icons.shield_outlined,
                 color: AppTheme.professionalBackground),
           ),
-          SizedBox(width: 16),
+          SizedBox(width: 13),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
+                  'PAINEL DO RESPONSÁVEL',
+                  style: TextStyle(
+                    color: AppTheme.professionalAccent,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.1,
+                  ),
+                ),
+                SizedBox(height: 3),
+                Text(
                   'Ajustes protegidos',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                SizedBox(height: 5),
+                SizedBox(height: 3),
                 Text(
-                  'Personalize a comunicação com calma e mantenha o controle dos dados locais.',
+                  'Personalize a comunicação e mantenha o controle dos dados locais.',
                   style: TextStyle(
-                      color: Color(0xFFD8E7F0), fontSize: 13, height: 1.35),
+                      color: Color(0xFFD8E7F0), fontSize: 12, height: 1.3),
                 ),
               ],
             ),

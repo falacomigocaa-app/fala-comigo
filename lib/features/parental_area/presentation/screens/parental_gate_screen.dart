@@ -12,8 +12,7 @@ import 'settings_screen.dart';
 class ParentalGateScreen extends StatefulWidget {
   final Widget destination;
 
-  const ParentalGateScreen(
-      {super.key, this.destination = const SettingsScreen()});
+  const ParentalGateScreen({super.key, this.destination = const SettingsScreen()});
 
   @override
   State<ParentalGateScreen> createState() => _ParentalGateScreenState();
@@ -101,11 +100,31 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
       obscureText: true,
       maxLength: 4,
       textAlign: TextAlign.center,
-      style: const TextStyle(fontSize: 28, letterSpacing: 8),
+      style: const TextStyle(
+        color: AppTheme.textDark,
+        fontSize: 25,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 9,
+      ),
       decoration: InputDecoration(
         labelText: label,
         counterText: '',
-        border: const OutlineInputBorder(),
+        prefixIcon: const Icon(Icons.lock_outline, size: 20),
+        filled: true,
+        fillColor: const Color(0xFFF7F9FC),
+        contentPadding: const EdgeInsets.symmetric(vertical: 17),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(color: AppTheme.cardBorder),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(color: AppTheme.cardBorder),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(color: AppTheme.primary, width: 2),
+        ),
       ),
       onSubmitted: (_) => _submit(),
     );
@@ -116,56 +135,195 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
     if (_loading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
+
+    final title = _setupMode ? 'Criar acesso' : 'Acesso protegido';
+    final description = _setupMode
+        ? 'Crie um PIN pessoal de 4 dígitos para proteger as configurações.'
+        : 'Digite o PIN do responsável para abrir a Área Parental.';
+
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-        title: Text(
-            _setupMode ? 'Criar acesso do responsável' : 'Área do Responsável'),
-        backgroundColor: AppTheme.surface,
+        title: const Text('Área Parental'),
+        backgroundColor: AppTheme.professionalBackground,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: false,
       ),
-      body: Center(
+      body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.lock_outline, size: 56, color: Colors.grey),
-              const SizedBox(height: 16),
-              Text(
-                _setupMode
-                    ? 'Crie um PIN pessoal de 4 dígitos. Não use 1234 ou números repetidos.'
-                    : 'Digite o PIN de 4 dígitos para continuar',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 20),
-              _pinField(_setupMode ? 'Novo PIN' : 'PIN do responsável',
-                  _pinController),
-              if (_setupMode) ...[
-                const SizedBox(height: 16),
-                _pinField('Confirmar PIN', _confirmController),
-              ],
-              if (_error != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child:
-                      Text(_error!, style: const TextStyle(color: Colors.red)),
-                ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _submit,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(0, 56),
-                    backgroundColor: AppTheme.primary,
-                    foregroundColor: Colors.white,
+          padding: const EdgeInsets.fromLTRB(20, 28, 20, 32),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 440),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const _GateBrandMark(),
+                  const SizedBox(height: 18),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(22, 22, 22, 20),
+                    decoration: BoxDecoration(
+                      color: AppTheme.surface,
+                      borderRadius: BorderRadius.circular(22),
+                      border: Border.all(color: AppTheme.cardBorder),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0x1214213D),
+                          blurRadius: 18,
+                          offset: Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          _setupMode ? 'PRIMEIRO ACESSO' : 'ÁREA PROTEGIDA',
+                          style: const TextStyle(
+                            color: AppTheme.primary,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          title,
+                          style: const TextStyle(
+                            color: AppTheme.textDark,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: 7),
+                        Text(
+                          description,
+                          style: const TextStyle(
+                            color: AppTheme.mutedText,
+                            fontSize: 15,
+                            height: 1.4,
+                          ),
+                        ),
+                        const SizedBox(height: 22),
+                        _pinField(
+                          _setupMode ? 'Novo PIN' : 'PIN do responsável',
+                          _pinController,
+                        ),
+                        if (_setupMode) ...[
+                          const SizedBox(height: 12),
+                          _pinField('Confirmar PIN', _confirmController),
+                        ],
+                        if (_error != null) ...[
+                          const SizedBox(height: 12),
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFF1F1),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: const Color(0xFFF4C7C7)),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Icon(Icons.error_outline,
+                                    color: Color(0xFFB42318), size: 20),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    _error!,
+                                    style: const TextStyle(
+                                      color: Color(0xFFB42318),
+                                      height: 1.3,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: 18),
+                        FilledButton.icon(
+                          onPressed: _submit,
+                          icon: Icon(_setupMode
+                              ? Icons.verified_user_outlined
+                              : Icons.login_rounded),
+                          label: Text(
+                              _setupMode ? 'Criar PIN e continuar' : 'Entrar'),
+                          style: FilledButton.styleFrom(
+                            minimumSize: const Size.fromHeight(54),
+                            backgroundColor: AppTheme.professionalBackground,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.shield_outlined,
+                                color: AppTheme.accentGreen, size: 17),
+                            SizedBox(width: 6),
+                            Text(
+                              'Dados protegidos neste aparelho',
+                              style: TextStyle(
+                                color: AppTheme.mutedText,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  child: Text(_setupMode ? 'Criar PIN e continuar' : 'Entrar'),
-                ),
+                  if (_setupMode) ...[
+                    const SizedBox(height: 14),
+                    const Text(
+                      'Evite combinações óbvias, como 1234 ou números repetidos. O PIN não é enviado para a internet.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: AppTheme.mutedText,
+                        fontSize: 12,
+                        height: 1.35,
+                      ),
+                    ),
+                  ],
+                ],
               ),
-            ],
+            ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _GateBrandMark extends StatelessWidget {
+  const _GateBrandMark();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 58,
+        height: 58,
+        decoration: BoxDecoration(
+          color: AppTheme.professionalBackground,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x1F14213D),
+              blurRadius: 12,
+              offset: Offset(0, 5),
+            ),
+          ],
+        ),
+        child: const Icon(
+          Icons.shield_outlined,
+          color: AppTheme.professionalAccent,
+          size: 30,
         ),
       ),
     );
