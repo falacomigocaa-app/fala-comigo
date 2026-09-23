@@ -8,8 +8,8 @@ O código oficial está no GitHub:
 
 - Repositório: https://github.com/falacomigocaa-app/fala-comigo
 - Branch principal: `main`
-- Branch de trabalho atual: `feat/affordable-plans-model`
-- Último commit registrado neste handoff: `8b0d7d7 — docs: add numbered plan to first build`
+- Branch de trabalho atual: `feat/parental-area-professional-v2`
+- Último commit registrado neste handoff: `5464914 — feat: add family care coordination foundation`
 
 Não existem segredos, tokens, senhas ou chaves privadas neste documento. Nunca coloque credenciais no Git.
 
@@ -51,6 +51,9 @@ Já existem:
 - persistência local cifrada da licença;
 - workflow do GitHub Actions com formatador, análise, testes, política de assinatura e build Web;
 - política de privacidade e documentação de pré-lançamento.
+- base local de continuidade do cuidado com perfil funcional, plano de comunicação e agenda;
+- prévia web atualizada com os mesmos conceitos de perfil, plano, agenda, tarefas e aceite;
+- estudo de preços e mapa de funcionalidades de SaaS clínico documentados separadamente.
 
 A versão Web possui implementação condicional para mídia. O núcleo CAA pode ser compilado sem `dart:io`, mas mídia personalizada no navegador está deliberadamente limitada até existir armazenamento cifrado adequado para Web. Não remover essa proteção apenas para fazer uma demonstração compilar.
 
@@ -114,7 +117,7 @@ A sequência completa está em `docs/PLANO_SEQUENCIAL_ATE_BUILD.md`. A ordem res
 → 17 cobrança e domínio
 ```
 
-O catálogo, a tela de planos e a persistência local já foram implementados. O próximo trabalho deve validar e consolidar os fluxos existentes, não começar cobrança ou portal clínico prematuramente.
+O catálogo, a tela de planos e a persistência local já foram implementados. O ciclo atual iniciou a continuidade do cuidado local; o próximo trabalho deve conectar esses modelos ao portal com autorização server-side, sem começar cobrança real prematuramente.
 
 ## Nova sequência full-stack até o piloto institucional
 
@@ -210,4 +213,7 @@ Não tratar documentação conceitual como implementação existente. O portal e
 - `docs/MODELO_AUTORIZACAO_CLINICAS_ESCOLAS.md`: modelo de autorização futura.
 - `docs/MODELO_CUSTOS_E_PLANOS.md`: estratégia de baixo custo e planos.
 - `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`: sequência de programação até o piloto com clínica e colégio.
+- `docs/CONTRATO_PORTAL_CONECTADO.md`: entidades, estados, escopos e fila offline comuns ao app e web.
+- `docs/ESTUDO_PRECOS_PLANOS.md`: pesquisa de mercado e faixas de preço para validação.
+- `docs/MAPA_FUNCIONALIDADES_SAAS_CLINICAS.md`: recursos de SaaS clínico priorizados para ajudar famílias.
 - `privacy_policy.html`: política de privacidade alinhada ao armazenamento local.

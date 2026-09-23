@@ -1,7 +1,7 @@
 # Fala Comigo — Continuidade para assistência por IA
 
 **Última atualização:** 23 de setembro de 2026
-**Estado:** avaliação inicial concluída; transferência para `main` ainda não iniciada.
+**Estado:** ciclo de continuidade do cuidado implementado na branch de trabalho; transferência para `main` ainda não iniciada.
 
 ## 1. Objetivo deste documento
 
@@ -23,7 +23,7 @@ Nenhuma credencial, token, senha, chave privada ou dado real de criança deve se
 - **Produto:** Fala Comigo — Comunicação Aumentativa e Alternativa (CAA/PECS).
 - **Repositório:** `falacomigocaa-app/fala-comigo`.
 - **Branch principal:** `main`.
-- **Branch de trabalho avaliada:** `feat/affordable-plans-model`.
+- **Branch de trabalho avaliada:** `feat/parental-area-professional-v2`.
 - **Conta GitHub conectada:** `falacomigocaa-app`.
 - **Permissões confirmadas:** leitura, push, maintain e admin.
 - **Regra central do produto:** a comunicação básica deve funcionar localmente, sem internet, sem conta e sem plano pago.
@@ -71,6 +71,11 @@ Foram lidos ou avaliados os documentos centrais e de continuidade da branch de t
 - site institucional em desenvolvimento;
 - workflows de CI e validações de qualidade;
 - documentação de pré-lançamento e privacidade.
+- contrato do portal conectado;
+- tarefas compartilhadas com aceite, histórico e fila local;
+- perfil funcional, plano de comunicação e agenda local;
+- prévia web alinhada com esses estados;
+- estudo de preços e mapa de funcionalidades de SaaS clínico.
 
 ### Ainda não pronto para produção
 
@@ -98,17 +103,17 @@ Foram lidos ou avaliados os documentos centrais e de continuidade da branch de t
 - Commit observado: `299cb9e` — `Add corporate PCD benefit model`.
 - Working tree local da `main` está limpa após o clone.
 
-### `feat/affordable-plans-model`
+### `feat/parental-area-professional-v2`
 
-- Commit observado: `d0af6e2` — `feat: add local parent routine reminders`.
+- Commit observado: `5464914` — `feat: add family care coordination foundation`.
 - Está significativamente à frente da `main`.
 - Possui aproximadamente 78 arquivos alterados em relação à `main`, com cerca de 7.533 adições e 851 remoções.
 - Workflows recentes do GitHub Actions foram concluídos com sucesso.
-- O trabalho inclui planos locais, área parental, rotinas, relatórios, tendências, site institucional, testes e documentação.
+- O trabalho inclui planos locais, área parental, rotinas, relatórios, tendências, portal web, tarefas compartilhadas, continuidade do cuidado, testes e documentação.
 
 ### Observação sobre a documentação
 
-`PROJECT_HANDOFF.md` registra um commit mais antigo (`8b0d7d7`) como último commit do handoff. Esse registro precisa ser atualizado quando a branch e o estado do projeto forem consolidados.
+`PROJECT_HANDOFF.md` foi atualizado para a branch `feat/parental-area-professional-v2` e o commit `5464914`.
 
 ## 6. Validações já realizadas
 
@@ -116,9 +121,9 @@ Foram lidos ou avaliados os documentos centrais e de continuidade da branch de t
 - Repositório localizado e clonado.
 - Permissão de `push` confirmada pela API do GitHub.
 - Branches e histórico recente avaliados.
-- CI da `feat/affordable-plans-model` consultado: resultados recentes com sucesso.
-- Tentativa de testes locais registrada: não executada porque `flutter` não está instalado nesta sessão.
-- Nenhuma alteração, commit, push ou merge foi feito no GitHub durante a avaliação.
+- CI da branch de trabalho deve ser consultado novamente após o ciclo de continuidade.
+- Validação local deste ciclo: `git diff --check` e referências concluídos; Flutter não está instalado nesta sessão.
+- Commit e push deste ciclo realizados na branch de trabalho; `main` não foi alterada.
 
 ## 7. Ordem planejada para a integração com `main`
 
@@ -154,7 +159,7 @@ A integração deve ser feita sem alterar a `main` remota inicialmente:
 - [x] Repositório identificado.
 - [x] Permissões de escrita confirmadas.
 - [x] `main` identificada.
-- [x] `feat/affordable-plans-model` identificada.
+- [x] `feat/parental-area-professional-v2` identificada.
 - [x] Documentos centrais lidos.
 - [x] CI remoto consultado.
 - [ ] Flutter instalado localmente.
@@ -190,7 +195,24 @@ A integração deve ser feita sem alterar a `main` remota inicialmente:
 
 ## 11. Próximo passo
 
-Aguardar os comandos ou a autorização operacional para iniciar a simulação de transferência da `feat/affordable-plans-model` para a `main`. A primeira ação deve ser somente de comparação/simulação, sem alteração na `main` remota.
+Continuar a partir do commit `5464914`. A base local já possui `CommunicationProfile`, `CommunicationPlan` e `Appointment`, além da prévia web correspondente. O próximo agente deve especificar a API server-side e os testes de autorização antes de sincronizar qualquer dado sensível. Deve manter a `main` intacta e consultar o CI da branch antes de avançar.
+
+## 12. Ciclo de continuidade do cuidado — 23/09/2026
+
+**Objetivo:** iniciar a camada que conecta família, fonoaudiólogo, ABA e escola sem transformar o aplicativo em prontuário completo.
+
+**Implementado no commit `5464914`:**
+
+- `lib/features/parental_area/data/care_coordination.dart`: modelos e persistência local cifrada para `CommunicationProfile`, `CommunicationPlan` e `Appointment`;
+- `lib/features/parental_area/presentation/screens/care_coordination_screen.dart`: abas Perfil, Plano e Agenda;
+- `lib/features/parental_area/presentation/screens/settings_screen.dart`: entrada no painel parental;
+- `lib/core/services/data_wipe_service.dart`: exclusão das novas caixas locais;
+- `test/care_coordination_test.dart`: testes de serialização e estados;
+- `site/portal.html` e `site/portal.css`: prévia web com os mesmos conceitos e estados.
+
+**Validação:** `git diff --check` passou; Flutter/Dart não estão disponíveis nesta sessão, portanto análise, testes e build local ainda precisam ser executados pelo CI ou por ambiente Flutter.
+
+**Próxima tarefa recomendada:** criar o contrato server-side para perfil funcional, plano e agenda com `organizationId`, `userId`, `subjectId`, finalidade, consentimento, escopo, validade e auditoria. Não enviar conteúdo sensível antes dos testes de negação.
 
 ## 13. Primeira etapa de integração — linha de base e simulação
 
