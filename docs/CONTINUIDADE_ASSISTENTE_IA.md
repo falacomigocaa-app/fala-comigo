@@ -196,7 +196,7 @@ A integração deve ser feita sem alterar a `main` remota inicialmente:
 
 ## 11. Próximo passo
 
-Continuar a partir do commit que registra esta especificação. A base local já possui `CommunicationProfile`, `CommunicationPlan` e `Appointment`, além da prévia web correspondente. O contrato remoto está em `docs/CONTRATO_API_CONTINUIDADE_CUIDADO.md`; o próximo agente deve escolher a infraestrutura server-side, criar testes de autorização e só depois implementar endpoints. Deve manter a `main` intacta e consultar o CI da branch antes de avançar.
+Continuar a partir do commit `86bb671`. A base local já possui `CommunicationProfile`, `CommunicationPlan` e `Appointment`, além da prévia web correspondente. O contrato remoto está em `docs/CONTRATO_API_CONTINUIDADE_CUIDADO.md`; o próximo agente deve escolher a infraestrutura server-side, criar testes de autorização e só depois implementar endpoints. Deve manter a `main` intacta e consultar o CI da branch antes de avançar.
 
 ## 12. Ciclo de continuidade do cuidado — 23/09/2026
 
