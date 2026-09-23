@@ -20,6 +20,9 @@ class DataWipeService {
     'parent_access_grants',
     'shared_tasks',
     'shared_task_sync_queue',
+    'communication_profile',
+    'communication_plans',
+    'care_appointments',
     planLicenseBoxName,
   ];
 
@@ -50,6 +53,9 @@ class DataWipeService {
     await SecureBoxService.openSecureBox('parent_access_grants');
     await SecureBoxService.openSecureBox('shared_tasks');
     await SecureBoxService.openSecureBox('shared_task_sync_queue');
+    await SecureBoxService.openSecureBox('communication_profile');
+    await SecureBoxService.openSecureBox('communication_plans');
+    await SecureBoxService.openSecureBox('care_appointments');
     await SecureBoxService.openSecureBox(planLicenseBoxName);
   }
 }

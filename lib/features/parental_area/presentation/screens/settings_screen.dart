@@ -15,6 +15,7 @@ import 'video_diary_screen.dart';
 import 'patient_profile_screen.dart';
 import 'parent_reminders_screen.dart';
 import 'shared_tasks_screen.dart';
+import 'care_coordination_screen.dart';
 import 'change_pin_screen.dart';
 import 'data_export_screen.dart';
 import 'access_management_screen.dart';
@@ -295,6 +296,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     subtitle: 'Combinar próximos passos com a rede de cuidado',
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (_) => const SharedTasksScreen()))),
+                _OptionAListAction(
+                    icon: Icons.hub_outlined,
+                    title: 'Continuidade do cuidado',
+                    subtitle: 'Perfil funcional, plano de comunicação e agenda',
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const CareCoordinationScreen()))),
               ],
             ),
           ),
