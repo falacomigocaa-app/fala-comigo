@@ -472,3 +472,41 @@ Comportamentos interativos implementados:
 - estados de foco acessíveis e layout responsivo.
 
 **Ponto de decisão:** escolher uma direção visual antes de transformar os componentes em widgets Flutter reutilizáveis. A recomendação inicial da equipe é usar a hierarquia da Opção A, o respiro tipográfico da Opção B e as separações contextuais da Opção C.
+
+## 28. Implementação da Opção A na Área do Responsável
+
+**Data:** 23 de setembro de 2026.
+**Branch:** `feat/parental-area-option-a`.
+
+O responsável escolheu a **Opção A — Dashboard Moderno** para a tela exibida após a entrada do PIN. A implementação foi feita em `lib/features/parental_area/presentation/screens/settings_screen.dart`, preservando o fluxo de autenticação, os serviços existentes e as rotas das funcionalidades.
+
+A nova tela contém:
+
+- Hero de **Localização & Segurança**, mantendo a indicação honesta de módulo web/consentimento em preparação;
+- botão de destaque **Novo cartão** no AppBar;
+- box expansível **Acompanhamento & Rotina**, aberto inicialmente, com cards para Rotina Visual Diária, Diário de Vídeo, Alertas de Transição, Tendências Semanais e Relatórios em PDF;
+- box expansível **Acessibilidade da Comunicação**, com slider de tamanho, orientação da tela e opções de voz/montagem de frase;
+- box expansível de personalização de tema e orientação;
+- box expansível de registros, alertas e relatórios;
+- box expansível de cartões de comunicação, preservando reordenação, edição e exclusão;
+- área de conta, plano e privacidade;
+- Bottom Navigation Bar com Início, Acompanhamento, Localização e Configurações. As seções ainda não conectadas exibem aviso controlado, sem inventar funcionalidade.
+
+Validação executada com sucesso:
+
+```bash
+dart format lib/features/parental_area/presentation/screens/settings_screen.dart
+git diff --check
+flutter analyze --no-fatal-infos --no-fatal-warnings
+flutter test
+flutter build apk --debug
+```
+
+APK para validação manual:
+
+```text
+/home/ubuntu/fala-comigo-opcao-a.apk
+SHA-256: d30817590c3c13a14b78ed0682c9d5445c86c8a914d6710854464cfdcabe59f2
+```
+
+O APK deve ser testado entrando pelo PIN e verificando: abertura/fechamento dos boxes, navegação dos cinco cards de rotina, Novo Cartão, controles de acessibilidade, reordenação de cartões e preservação do fluxo infantil ao voltar.
