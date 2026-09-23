@@ -271,6 +271,16 @@ A branch foi enviada ao GitHub sem alterar a `main`. Foi aberto o Pull Request [
 
 Na consulta seguinte, o PR estava `OPEN`, com `mergeStateStatus: CLEAN`, sem conflitos e sem checks remotos listados ainda. A branch local está limpa e o commit local coincide com `origin/integration/affordable-to-main-preview` em `a500f38`.
 
+## 18. Integração concluída na `main`
+
+Em 23 de setembro de 2026, o Pull Request #27 foi mesclado com sucesso na `main`. O merge gerou o commit `5a0d12517557c218b98074347ee578ed1a710a95`. A branch `main` local foi atualizada para esse commit e está limpa, alinhada com `origin/main`.
+
+Após o merge, foram disparados dois workflows no GitHub Actions para o novo commit: `Flutter quality checks` e `Publicar site institucional`. No momento deste registro, ambos estavam `in_progress`; os resultados finais ainda precisam ser verificados quando concluírem.
+
+O endpoint de GitHub Pages retornou `404 Not Found` antes do merge, indicando que Pages ainda não estava configurado no repositório. Portanto, o workflow do site foi disparado, mas a publicação pública definitiva depende da configuração do Pages e de sua conclusão com sucesso.
+
+**Estado da integração:** código da affordable incorporado à `main`; merge concluído; nenhum dado clínico, cobrança ou portal conectado foi ativado. Pendência imediata: confirmar os resultados dos workflows pós-merge e, se necessário, corrigir somente problemas de CI ou de configuração do site.
+
 ## 12. Atuação multidisciplinar da assistência
 
 Para a continuação deste projeto, a assistência atuará de forma integrada nas seguintes responsabilidades:
