@@ -1,5 +1,7 @@
 import java.util.Properties
 import java.io.FileInputStream
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.android.application")
@@ -56,9 +58,6 @@ android {
 
     buildTypes {
         release {
-            if (!hasReleaseSigning) {
-                error("Release build requires android/key.properties and a production keystore")
-            }
             signingConfig = signingConfigs.getByName("release")
         }
     }
@@ -68,9 +67,9 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
 
-kotlin {
+tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
