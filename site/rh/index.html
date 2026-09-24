@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#102a43" />
+    <meta name="description" content="Protótipo do console administrativo de benefícios do Fala Comigo, sem dados clínicos." />
+    <title>Console RH — Fala Comigo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>Fala Comigo <small>console RH</small></span></a>
+        <div class="topbar-actions"><span class="environment-badge">Protótipo • dados sintéticos</span><a class="back-link" href="../index.html">Voltar ao site</a></div>
+      </div>
+    </header>
+
+    <main id="conteudo" class="shell">
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Administração de benefícios</p>
+          <h1 id="page-title">Um painel para administrar o programa, não a vida da família.</h1>
+          <p class="intro-text">Esta prévia mostra apenas informações administrativas. O console não acessa diagnóstico, conteúdo de comunicação, mídias, registros clínicos ou frequência individual.</p>
+        </div>
+        <aside class="guardrail-card"><strong>Limite principal</strong><p>Patrocinar uma licença não autoriza acesso ao conteúdo familiar.</p><span>Proteção de dados por finalidade</span></aside>
+      </section>
+
+      <section class="metric-grid" aria-label="Resumo administrativo sintético">
+        <article class="metric-card"><span>Licenças do programa</span><strong>120</strong><small>lote contratado</small></article>
+        <article class="metric-card"><span>Ativas</span><strong>86</strong><small>estado administrativo</small></article>
+        <article class="metric-card"><span>Em transição</span><strong>4</strong><small>sem bloquear o uso local</small></article>
+        <article class="metric-card"><span>Dados clínicos</span><strong>0</strong><small>não fazem parte do console</small></article>
+      </section>
+
+      <section class="content-grid">
+        <div class="main-column">
+          <article class="panel">
+            <div class="panel-heading"><div><p class="eyebrow">Programa selecionado</p><h2>Apoio à comunicação 2026</h2></div><span class="status-pill active">Ativo</span></div>
+            <dl class="detail-list"><div><dt>Organização</dt><dd>Empresa parceira — demonstração</dd></div><div><dt>Modalidade</dt><dd>Licença patrocinada opcional</dd></div><div><dt>Período</dt><dd>01 jan 2026 — 31 dez 2026</dd></div><div><dt>Portal contratado</dt><dd>Administração RH + suporte</dd></div></dl>
+            <div class="panel-actions"><a class="button primary" href="#convites">Ver convites</a><a class="button secondary" href="#limites">Revisar limites de acesso</a></div>
+          </article>
+
+          <article class="panel" id="convites">
+            <div class="panel-heading"><div><p class="eyebrow">Convites e licenças</p><h2>Somente estados administrativos</h2></div><button class="button secondary" type="button">Novo convite</button></div>
+            <div class="table-wrap"><table><thead><tr><th>Referência</th><th>Estado</th><th>Validade</th><th>Informação disponível</th></tr></thead><tbody><tr><td>Beneficiário sintético A-014</td><td><span class="status-pill invited">Convidado</span></td><td>30 set 2026</td><td>Convite e validade</td></tr><tr><td>Beneficiário sintético B-027</td><td><span class="status-pill active">Ativo</span></td><td>31 dez 2026</td><td>Licença patrocinada</td></tr><tr><td>Beneficiário sintético C-031</td><td><span class="status-pill grace">Transição</span></td><td>30 nov 2026</td><td>Prazo de continuidade</td></tr></tbody></table></div>
+            <p class="table-note">As referências acima são fictícias. O painel não exibe nome de colaborador, nome de criança, diagnóstico, uso ou conteúdo.</p>
+          </article>
+
+          <article class="panel" id="limites">
+            <div class="panel-heading"><div><p class="eyebrow">Governança</p><h2>O que este console pode ver</h2></div><span class="status-pill protected">Menor privilégio</span></div>
+            <div class="boundary-grid"><div class="boundary allowed"><strong>Permitido</strong><ul><li>Programa, contrato e período</li><li>Quantidade e estado das licenças</li><li>Convites individuais e expiração</li><li>Indicadores agregados protegidos</li></ul></div><div class="boundary denied"><strong>Bloqueado</strong><ul><li>Diagnóstico ou nível de suporte</li><li>Frases, cartões e preferências</li><li>Fotos, vídeos, áudios e registros</li><li>Frequência ou atividade individual</li></ul></div></div>
+          </article>
+        </div>
+
+        <aside class="side-column">
+          <article class="panel compact"><p class="eyebrow">Acesso do operador</p><h2>Administrador de benefícios</h2><p class="muted">Permissão limitada à organização parceira e à finalidade administrativa do programa.</p><hr /><dl class="mini-list"><div><dt>Organização</dt><dd>Empresa parceira — demonstração</dd></div><div><dt>Escopo</dt><dd>Licenças e contrato</dd></div><div><dt>Exportação de conteúdo</dt><dd>Não disponível</dd></div></dl></article>
+          <article class="panel compact"><p class="eyebrow">Trilha de auditoria</p><h2>Eventos administrativos</h2><ol class="audit-list"><li><time>Hoje, 09:42</time><span>Convite sintético criado</span></li><li><time>Ontem, 16:10</time><span>Período do programa revisado</span></li><li><time>18 set, 11:30</time><span>Relatório agregado visualizado</span></li></ol><p class="table-note">Nenhum conteúdo clínico é registrado nesta trilha.</p></article>
+          <article class="notice-card"><strong>Antes de produção</strong><p>Este protótipo não é um sistema de RH, não processa dados reais e não representa conformidade jurídica final. Backend, contratos, retenção, encarregado e revisão LGPD ainda são necessários.</p><a href="../privacy.html">Ler a política pública →</a></article>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="footer"><div class="shell footer-inner"><span>Fala Comigo • console RH em protótipo</span><a href="../index.html">Voltar ao site institucional</a></div></footer>
+  </body>
+</html>
