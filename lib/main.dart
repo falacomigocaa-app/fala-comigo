@@ -106,29 +106,6 @@ Future<void> _bootstrapApp() async {
     }
   }
 
-  // Pré-inicializa o TTS para reduzir latência na primeira fala. Uma falha
-  // de áudio não pode impedir a comunicação visual.
-  try {
-    await TtsService.instance.init();
-  } catch (error, stackTrace) {
-    DiagnosticsService.capture(
-      kind: 'tts_initialization_error',
-      error: error,
-      stackTrace: stackTrace,
-    );
-  }
-
-  // Inicializa o serviço de notificações do Alerta de Transição.
-  try {
-    await TransitionAlertService.instance.init();
-  } catch (error, stackTrace) {
-    DiagnosticsService.capture(
-      kind: 'notifications_initialization_error',
-      error: error,
-      stackTrace: stackTrace,
-    );
-  }
-
   // Quando uma notificação de Alerta de Transição é tocada, abre a
   // tela em tela cheia correspondente, buscando o alerta salvo pelo
   // ID recebido no payload da notificação.
@@ -165,6 +142,31 @@ Future<void> _bootstrapApp() async {
   };
 
   runApp(const ProviderScope(child: CaaApp()));
+  // Recursos opcionais nativos são inicializados depois da primeira tela.
+  // Uma falha de TTS/notificações nunca pode impedir a comunicação visual.
+  unawaited(_initializeOptionalServices());
+}
+
+Future<void> _initializeOptionalServices() async {
+  try {
+    await TtsService.instance.init();
+  } catch (error, stackTrace) {
+    DiagnosticsService.capture(
+      kind: 'tts_initialization_error',
+      error: error,
+      stackTrace: stackTrace,
+    );
+  }
+
+  try {
+    await TransitionAlertService.instance.init();
+  } catch (error, stackTrace) {
+    DiagnosticsService.capture(
+      kind: 'notifications_initialization_error',
+      error: error,
+      stackTrace: stackTrace,
+    );
+  }
 }
 
 class CaaApp extends StatefulWidget {
