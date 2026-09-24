@@ -86,7 +86,7 @@ class PrivacySettingsScreen extends StatelessWidget {
             icon: Icons.verified_user_outlined,
             title: 'Transparência de segurança',
             description:
-                'O projeto passa por testes automatizados e usa o OWASP MASVS como referência. Detalhes e resultados ficam no site, sem sobrecarregar a comunicação.',
+                'O projeto passa por testes automatizados e usa o OWASP MASVS como referência. Uma varredura MobSF foi concluída em APK de teste; os achados estão em revisão no site.',
           ),
           _PrivacyCard(
             icon: Icons.share_outlined,
