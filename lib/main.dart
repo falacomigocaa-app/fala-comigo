@@ -27,6 +27,8 @@ import 'features/transition_alerts/presentation/screens/transition_alert_full_sc
 /// por exemplo quando uma notificação é tocada.
 final navigatorKey = GlobalKey<NavigatorState>();
 bool _startupFailureShown = false;
+final ValueNotifier<StartupState> _startupState =
+    ValueNotifier<StartupState>(const StartupState.loading());
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,19 +40,21 @@ Future<void> main() async {
   ui.PlatformDispatcher.instance.onError =
       DiagnosticsService.capturePlatformError;
 
-  await runZonedGuarded(_startApp, (error, stackTrace) {
+  runApp(const ProviderScope(child: BootstrapApp()));
+  unawaited(runZonedGuarded(_startApp, (error, stackTrace) {
     DiagnosticsService.capture(
       kind: 'uncaught_error',
       error: error,
       stackTrace: stackTrace,
     );
     _showStartupFailure(error, stackTrace);
-  });
+  }));
 }
 
 Future<void> _startApp() async {
   try {
     await _bootstrapApp();
+    _startupState.value = const StartupState.ready();
   } catch (error, stackTrace) {
     DiagnosticsService.capture(
       kind: 'startup_error',
@@ -58,6 +62,7 @@ Future<void> _startApp() async {
       stackTrace: stackTrace,
       context: 'bootstrap',
     );
+    _startupState.value = StartupState.failure(error, stackTrace);
     _showStartupFailure(error, stackTrace);
   }
 }
@@ -65,12 +70,7 @@ Future<void> _startApp() async {
 void _showStartupFailure(Object error, StackTrace stackTrace) {
   if (_startupFailureShown) return;
   _startupFailureShown = true;
-  runApp(
-    StartupFailureApp(
-      message: error.toString(),
-      stackTrace: stackTrace.toString(),
-    ),
-  );
+  _startupState.value = StartupState.failure(error, stackTrace);
 }
 
 Future<void> _bootstrapApp() async {
@@ -141,7 +141,6 @@ Future<void> _bootstrapApp() async {
     }
   };
 
-  runApp(const ProviderScope(child: CaaApp()));
   // Recursos opcionais nativos são inicializados depois da primeira tela.
   // Uma falha de TTS/notificações nunca pode impedir a comunicação visual.
   unawaited(_initializeOptionalServices());
@@ -165,6 +164,73 @@ Future<void> _initializeOptionalServices() async {
       kind: 'notifications_initialization_error',
       error: error,
       stackTrace: stackTrace,
+    );
+  }
+}
+
+class StartupState {
+  final bool ready;
+  final Object? error;
+  final StackTrace? stackTrace;
+
+  const StartupState.loading()
+      : ready = false,
+        error = null,
+        stackTrace = null;
+
+  const StartupState.ready()
+      : ready = true,
+        error = null,
+        stackTrace = null;
+
+  const StartupState.failure(this.error, this.stackTrace) : ready = false;
+}
+
+class BootstrapApp extends StatelessWidget {
+  const BootstrapApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<StartupState>(
+      valueListenable: _startupState,
+      builder: (context, state, child) {
+        if (state.ready) return const CaaApp();
+        if (state.error != null) {
+          return StartupFailureApp(
+            message: state.error.toString(),
+            stackTrace: state.stackTrace.toString(),
+          );
+        }
+        return const StartupLoadingApp();
+      },
+    );
+  }
+}
+
+class StartupLoadingApp extends StatelessWidget {
+  const StartupLoadingApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const FlutterLogo(size: 64),
+              const SizedBox(height: 20),
+              Text(
+                'Preparando o Fala Comigo…',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 20),
+              const CircularProgressIndicator(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
