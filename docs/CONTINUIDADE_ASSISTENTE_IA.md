@@ -440,3 +440,13 @@ Como o ambiente atual não fornece um celular ou tablet Android real, não foi d
 A ficha foi vinculada a `docs/MATRIZ_FLUXOS_CRITICOS.md`. O próximo passo operacional é executar F01–F07 em um Android celular e em um Android tablet, registrar versão/build, permissões, conectividade e resultado, e só então atualizar os status da matriz. Nenhum resultado manual deve ser inventado ou marcado como aprovado sem evidência do aparelho.
 
 A etapa documental não altera código, permissões, dependências, armazenamento, autorização RH ou comportamento do aplicativo. Não há mudança na linha de base MobSF.
+
+## 23. Inventário consolidado do aplicativo e da web
+
+**Data:** 24 de setembro de 2026.
+
+Foi criado `docs/STATUS_IMPLEMENTACAO_WEB_E_APLICATIVO.md` para separar, em um único documento, o que já está implementado, o que está em validação, o que é somente protótipo e o que ainda está bloqueado para produção.
+
+O resumo registrado é: o aplicativo já possui núcleo CAA local-first, área parental, mídias locais cifradas, registros, alertas, planos locais, exclusão e testes automatizados; a validação em celular, tablet, acessibilidade, distribuição e alguns achados MobSF ainda estão pendentes. A web possui site institucional publicado, console RH sintético, contratos e políticas locais; backend real, autenticação, banco, autorização no servidor, auditoria operacional, ambiente de homologação, cobrança e sincronização clínica ainda não existem ou estão bloqueados.
+
+O roadmap foi vinculado ao inventário. A publicação do site e a existência do console não devem ser descritas como portal RH de produção.

@@ -18,6 +18,8 @@ O GitHub Actions executa formatação, análise estática, verificação da pol�
 
 A validação local neste ambiente ainda depende da instalação do Flutter. Portanto, o CI é a evidência atual para as verificações automatizadas, enquanto os testes de experiência e acessibilidade continuam dependendo de dispositivos reais.
 
+O inventário detalhado do que está feito e do que ainda falta no aplicativo e na web está em [`STATUS_IMPLEMENTACAO_WEB_E_APLICATIVO.md`](STATUS_IMPLEMENTACAO_WEB_E_APLICATIVO.md). Ele diferencia implementação local, protótipo com dados sintéticos, validação pendente e funcionalidades bloqueadas para produção.
+
 ## Princípios de engenharia
 
 1. **Offline-first:** a criança deve continuar usando a comunicação sem internet, login ou acesso à Área do Responsável.
