@@ -76,11 +76,13 @@ class PlanCatalog {
     id: 'organization',
     name: 'Organização',
     description:
-        'Recursos administrativos para organizações com vínculos autorizados.',
+        'Portal administrativo, controle de benefícios e métricas agregadas sem conteúdo familiar.',
     monthlyPriceCents: 0,
     features: {
       PlanFeature.accessibility,
       PlanFeature.organizationPortal,
+      PlanFeature.benefitAdministration,
+      PlanFeature.aggregateReporting,
       PlanFeature.prioritySupport,
     },
     publiclyVisible: false,
