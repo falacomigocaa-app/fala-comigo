@@ -86,7 +86,9 @@ Future<void> _bootstrapApp() async {
   // Persistência local dos cartões.
   await Hive.initFlutter();
   Hive.registerAdapter(PictogramCardAdapter());
-  final box = await SecureBoxService.openSecureBoxWithMigration(cardsBoxName);
+  final box = await SecureBoxService.openSecureBoxWithMigration<PictogramCard>(
+    cardsBoxName,
+  );
 
   // Caixa simples de configurações do app (ex: tema de hiperfoco
   // escolhido pelos pais).

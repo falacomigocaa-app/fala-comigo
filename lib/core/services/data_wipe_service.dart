@@ -15,6 +15,8 @@ class DataWipeService {
     'pictogram_cards',
     'app_settings',
     'transition_alerts',
+    'visual_routine',
+    'parent_reminders',
     'patient_profile',
     'behavior_logs',
     'video_diary',
@@ -35,6 +37,7 @@ class DataWipeService {
       }
     }
     await MediaStorageService.clearAllMedia();
+    await MediaStorageService.deleteEncryptionKey();
     DiagnosticsService.resetAfterDataWipe();
     await SecureBoxService.deleteEncryptionKey();
     await ParentalPinService.clearCredentials();
@@ -44,6 +47,8 @@ class DataWipeService {
     await SecureBoxService.openSecureBoxWithMigration('pictogram_cards');
     await SecureBoxService.openSecureBoxWithMigration('app_settings');
     await SecureBoxService.openSecureBoxWithMigration('transition_alerts');
+    await SecureBoxService.openSecureBox('visual_routine');
+    await SecureBoxService.openSecureBox('parent_reminders');
     await SecureBoxService.openSecureBox('patient_profile');
     await SecureBoxService.openSecureBox('behavior_logs');
     await SecureBoxService.openSecureBox('video_diary');

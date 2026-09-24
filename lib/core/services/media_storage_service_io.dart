@@ -105,6 +105,12 @@ class MediaStorageService {
     _previewCache.clear();
   }
 
+  /// Remove a chave de mídia para que arquivos remanescentes não possam ser
+  /// descriptografados após uma exclusão total dos dados locais.
+  static Future<void> deleteEncryptionKey() async {
+    await _storage.delete(key: _keyStorageKey);
+  }
+
   static Future<File> _materialize(String path) async {
     final source = File(path);
     if (!await source.exists()) {
