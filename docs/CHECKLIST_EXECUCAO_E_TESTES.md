@@ -18,7 +18,8 @@ Legenda: `[ ]` pendente · `[x]` validado com evidência · `[~]` parcialmente v
 - [x] CI remoto executou qualidade, testes e build Web com sucesso em `main`.
 - [x] Build Web release reproduzido localmente e servido na URL temporária da Manus.
 - [x] Build Android debug reproduzido; APK gerado em `build/app/outputs/flutter-apk/app-debug.apk`.
-- [ ] Build Android release/AAB assinado reproduzido em ambiente controlado.
+- [x] Build Android release/AAB assinado reproduzido em ambiente controlado com chave temporária isolada.
+- [x] Build limpa após `flutter clean` reproduziu APK e AAB release.
 
 ## 2. Comunicação essencial offline
 
