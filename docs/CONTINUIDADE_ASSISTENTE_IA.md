@@ -387,7 +387,7 @@ O console RH publicado continua sintético e sem backend real. Não existe acess
 ## 20. Linha de base de segurança e continuidade para novos agentes
 
 **Data:** 24 de setembro de 2026.
-**Estado Git:** PRs #45, #46, #47, #48, #49 e #50 integradas; `main` local sincronizada com `origin/main` no commit `d50b04e` (`Merge: publicar achados MobSF`).
+**Estado Git:** PRs #45, #46, #47, #48, #49, #50 e #51 integradas; `main` local sincronizada com `origin/main` no commit `c8b9528` (`Merge: atualizar continuidade de segurança`).
 
 ### Decisão de produto
 
