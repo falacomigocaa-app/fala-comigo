@@ -3,6 +3,8 @@
 **Última atualização:** 24 de setembro de 2026
 **Estado:** `main` integrada e limpa; linha de base MobSF registrada; próxima continuidade deve monitorar segurança sem limitar as funções do produto.
 
+> **Atualização operacional posterior:** a avaliação atual está na branch `work/qa-observability-and-emulator`, commit `40d9e53`. Flutter 3.38.0, Dart 3.10.0, JDK 21 e Android SDK 36 foram disponibilizados localmente. Formatação, análise, 84 testes, build Web, APK debug, APK release, AAB release e build limpa foram executados com sucesso. A execução no aparelho físico continua pendente porque o APK instala, tenta abrir e fecha; a causa ainda requer logcat do aparelho. Consulte `docs/AUDITORIA_HANDOFF_E_ARTEFATOS_2026-09-24.md` antes de usar as métricas históricas deste documento.
+
 ## 1. Objetivo deste documento
 
 Este arquivo permite que outra pessoa ou assistência por IA retome o projeto rapidamente, entendendo o que foi analisado, quais decisões foram tomadas, quais comandos foram executados, o que já está pronto e o que ainda falta realizar.

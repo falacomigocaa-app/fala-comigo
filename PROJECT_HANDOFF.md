@@ -11,6 +11,8 @@ O código oficial está no GitHub:
 - Branch de trabalho atual: `feat/affordable-plans-model`
 - Último commit registrado neste handoff: `8b0d7d7 — docs: add numbered plan to first build`
 
+> **Atualização operacional em 24/09/2026:** a avaliação atual está sendo conduzida na branch `work/qa-observability-and-emulator`, no commit `40d9e53`. Flutter 3.38.0 e Android SDK 36 estão instalados no ambiente; a matriz local registra 84 testes, build Web, APK debug, APK release e AAB release aprovados. As linhas históricas abaixo devem ser lidas como registro de etapas anteriores. O APK release ainda precisa de validação em aparelho físico; o fechamento observado no telefone não está explicado sem logcat.
+
 Não existem segredos, tokens, senhas ou chaves privadas neste documento. Nunca coloque credenciais no Git.
 
 ## Identidade do produto
