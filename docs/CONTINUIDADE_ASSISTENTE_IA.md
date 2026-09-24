@@ -1,7 +1,7 @@
 # Fala Comigo — Continuidade para assistência por IA
 
-**Última atualização:** 23 de setembro de 2026  
-**Estado:** avaliação inicial concluída; transferência para `main` ainda não iniciada.
+**Última atualização:** 24 de setembro de 2026
+**Estado:** `main` integrada e limpa; linha de base MobSF registrada; próxima continuidade deve monitorar segurança sem limitar as funções do produto.
 
 ## 1. Objetivo deste documento
 
@@ -382,3 +382,50 @@ O console RH publicado continua sintético e sem backend real. Não existe acess
 **Validação final:** análise estática concluída com exit code 0, suíte completa com 56 testes, build Web release concluído e auditoria estrutural `FINAL RH FLOW AUDIT: PASS`. Os avisos restantes são dependências/depreciações e incompatibilidades de WASM já conhecidas, sem falha do build Web convencional.
 
 **Próximo limite:** não iniciar endpoints de produção, integração com sistemas de RH, cobrança ou sincronização clínica sem revisão de privacidade/LGPD, definição de controlador/operador, contratos, retenção final, testes de segurança e ambiente separado com dados sintéticos.
+
+
+## 20. Linha de base de segurança e continuidade para novos agentes
+
+**Data:** 24 de setembro de 2026.
+**Estado Git:** PRs #45, #46, #47, #48, #49 e #50 integradas; `main` local sincronizada com `origin/main` no commit `d50b04e` (`Merge: publicar achados MobSF`).
+
+### Decisão de produto
+
+A segurança deve melhorar **sem limitar o aplicativo**. Não remover comunicação alternativa, área parental, mídia, notificações, relatórios, funcionamento offline ou portal RH apenas para aumentar a nota do scanner. A estratégia é segurança por implementação, migração compatível e revisão contínua.
+
+Por enquanto, não alterar o algoritmo de armazenamento nem elevar o `minSdk` automaticamente. Os achados conhecidos são dívida técnica monitorada. Qualquer correção futura deve preservar os dados existentes, testar migração/recuperação e medir impacto de compatibilidade antes de ser integrada.
+
+### Linha de base MobSF
+
+Foi executado o workflow manual `MobSF mobile security scan` com sucesso:
+
+- **Run:** [35950414857](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/35950414857)
+- **MobSF:** v4.5.4
+- **Artefato:** APK release de teste, assinado por chave efêmera do runner; não é build de produção.
+- **SHA-256:** `b262679c154266f4bfb3573b13ced36c3f2b206e4d7dee77135816c01cfd1a2d`
+- **Score MobSF:** 46
+- **Resumo:** 2 achados altos, 5 warnings, 1 hotspot de permissões, 1 informação e nenhum tracker detectado estaticamente.
+
+Achados prioritários:
+
+1. CBC com PKCS5/PKCS7 em código obfuscado associado à criptografia usada pelo `HiveAesCipher` (`MSTG-CRYPTO-3`). Revisar dependência/formato e planejar migração autenticada sem quebrar dados.
+2. `minSdk=24` classificado como Android 7.0 vulnerável/desatualizado. Decisão de compatibilidade pendente; não elevar automaticamente.
+3. `ProfileInstallReceiver` com `android.permission.DUMP` exportado.
+4. Warnings de hardcoded em plugin de notificações, arquivos temporários, armazenamento externo e possíveis strings sensíveis; revisar falsos positivos e origem.
+5. Hotspot de permissões: câmera, imagens, áudio e notificações. Manter apenas as necessárias, solicitadas em contexto e explicadas ao responsável.
+
+O relatório sanitizado está em `security/reports/MOBSF_2026-09-24.md`. O plano operacional está em `docs/PLANO_SEGURANCA_OWASP_MASVS_MOBSF.md`. Não registrar no GitHub o APK, o PDF completo, tokens, chaves ou dados reais; os artefatos completos ficam somente na execução controlada do Actions.
+
+### Protocolo obrigatório para qualquer nova função
+
+Antes de integrar uma nova função, o agente deve:
+
+1. ler este documento, `PROJECT_HANDOFF.md`, o roadmap aplicável e o plano MASVS/MobSF;
+2. identificar se a função adiciona permissões, dependências, armazenamento, mídia, logs, intents, links, exportação ou dados do portal RH;
+3. preservar o modo offline, a comunicação básica e os limites entre dados familiares/clínicos e dados administrativos RH;
+4. executar testes, análise, `git diff --check` e validações específicas da função;
+5. comparar o impacto contra a linha de base MobSF, sem suprimir achados para melhorar artificialmente a pontuação;
+6. registrar no handoff o que mudou, o resultado dos testes, riscos, branch/PR e próximo passo;
+7. repetir o MobSF em marcos relevantes, principalmente antes de piloto ou quando houver mudança de criptografia, permissões, armazenamento ou dependências Android.
+
+Se o novo agente encontrar um conflito entre aumentar a pontuação e preservar uma função importante, deve manter a função e propor uma solução de implementação segura, documentando a decisão para revisão humana.
