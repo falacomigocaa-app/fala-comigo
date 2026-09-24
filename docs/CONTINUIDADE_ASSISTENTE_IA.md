@@ -368,3 +368,17 @@ Após a publicação do console RH sintético, foi iniciado o contrato técnico 
 O contrato reforça que `benefitAdministration` não implica `sponsoredLicense`, que uma licença patrocinada não implica `organizationPortal` e que a comunicação offline continua fora do ciclo comercial. Também define dados mínimos, operações permitidas, negações obrigatórias, estados de licença, transições e requisitos de logs sem conteúdo clínico.
 
 O próximo gate é validar as negações no servidor com duas organizações isoladas antes de qualquer endpoint real, integração de RH, cobrança, sincronização ou dado de produção.
+
+
+## 19. Fechamento do ciclo RH: autorização, licença, auditoria e suporte
+
+**Data:** 23 de setembro de 2026.
+**Commits integrados:** `930a006` (contrato de autorização), `2262f92` (política de autorização e 56 testes), `7924721` (isolamento organizacional), `95c0f35` (máquina de estados de licença), `6f35b55` (auditoria e retenção) e `91fb516` (acesso elevado).
+
+O ciclo de protótipo RH foi concluído na `main`. Foram adicionados contratos e políticas locais para: separação de entitlements; negação por sessão, conta, organização, papel, finalidade, escopo, prazo e limiar; estados `invited`, `active`, `grace`, `suspended`, `expired` e `revoked`; eventos administrativos mínimos; retenção por finalidade; e suporte temporário limitado a metadados administrativos.
+
+O console RH publicado continua sintético e sem backend real. Não existe acesso a diagnóstico, conteúdo, mídia, registro clínico, frequência individual ou exportação familiar. A comunicação básica offline permanece independente. O acesso elevado exige aprovação, motivo, mesma organização, escopo permitido, validade máxima de duas horas e revogação.
+
+**Validação final:** análise estática concluída com exit code 0, suíte completa com 56 testes, build Web release concluído e auditoria estrutural `FINAL RH FLOW AUDIT: PASS`. Os avisos restantes são dependências/depreciações e incompatibilidades de WASM já conhecidas, sem falha do build Web convencional.
+
+**Próximo limite:** não iniciar endpoints de produção, integração com sistemas de RH, cobrança ou sincronização clínica sem revisão de privacidade/LGPD, definição de controlador/operador, contratos, retenção final, testes de segurança e ambiente separado com dados sintéticos.
