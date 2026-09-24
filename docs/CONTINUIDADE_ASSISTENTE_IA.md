@@ -332,3 +332,27 @@ Após a integração da matriz, a `main` foi validada novamente com Flutter `3.3
 Os arquivos gerados automaticamente durante `flutter pub get` foram restaurados, deixando a cópia local da `main` limpa. A sessão possui somente um dispositivo Linux desktop; não há celular ou tablet Android conectado, `adb devices` não encontrou dispositivos e não existem ferramentas iOS disponíveis. Portanto, F21, F22 e F23 da matriz continuam pendentes de execução física.
 
 **Próximo gate:** executar F01–F17 em um celular Android e um tablet Android, começando offline e usando dados sintéticos. O resultado deve ser registrado na `MATRIZ_FLUXOS_CRITICOS.md` antes de iniciar portal conectado, sincronização clínica ou cobrança.
+
+
+## 17. Retomada: separação entre portal RH e benefício familiar
+
+**Data:** 23 de setembro de 2026.
+**Branch:** `feat/rh-portal-entitlement-boundary`.
+**Base:** `origin/main` no início desta retomada.
+
+Foi definida uma separação explícita entre dois produtos que uma empresa pode contratar de forma independente:
+
+- portal RH/benefícios, para administração de programa, convites, validade, contrato e métricas agregadas;
+- benefício patrocinado à família, para conceder recursos sem expor conteúdo familiar ou clínico.
+
+Uma empresa pode contratar somente o portal RH sem receber qualquer licença familiar ou acesso a dados de crianças. O benefício patrocinado não concede acesso ao painel administrativo da empresa. O núcleo CAA offline permanece gratuito e independente dessas ofertas.
+
+A implementação inicial adiciona os entitlements `benefitAdministration` e `aggregateReporting` ao plano administrativo `organization`. Foram incluídos testes de negação para confirmar que:
+
+- o plano administrativo não libera `sponsoredLicense` nem `careNetwork`;
+- o plano patrocinado não libera `organizationPortal`, `benefitAdministration` nem `aggregateReporting`;
+- ambos preservam a comunicação básica offline.
+
+A arquitetura e os critérios de proteção de dados estão em `docs/MODELO_PORTAL_RH_E_BENEFICIO.md`. O documento reforça minimização, finalidade, segregação de organizações, auditoria, convites individuais, métricas agregadas com limiar mínimo, ausência de conteúdo clínico em logs e revisão jurídica/LGPD antes de produção.
+
+Ainda não foi feito merge, push ou alteração na `main`. A próxima etapa é executar formatação, análise, testes e build Web disponíveis; depois revisar o diff e abrir uma PR somente se a validação estiver adequada. Pagamento, reembolso, integração automática com RH, sincronização clínica e dados reais continuam bloqueados.

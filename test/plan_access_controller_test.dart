@@ -32,6 +32,43 @@ void main() {
     expect(access.communicationRemainsAvailable, isTrue);
   });
 
+  test('portal RH pode ser contratado sem conceder acesso ao benefício familiar',
+      () {
+    final access = PlanAccessController.fromLicense(
+      PlanLicense(
+        id: 'organization-license-1',
+        planId: PlanCatalog.organization.id,
+        status: LicenseStatus.active,
+        issuedAt: issuedAt,
+      ),
+    );
+
+    expect(access.canUse(PlanFeature.organizationPortal), isTrue);
+    expect(access.canUse(PlanFeature.benefitAdministration), isTrue);
+    expect(access.canUse(PlanFeature.aggregateReporting), isTrue);
+    expect(access.canUse(PlanFeature.sponsoredLicense), isFalse);
+    expect(access.canUse(PlanFeature.careNetwork), isFalse);
+    expect(access.communicationRemainsAvailable, isTrue);
+  });
+
+  test('licença patrocinada da família não concede portal ou dados de RH', () {
+    final access = PlanAccessController.fromLicense(
+      PlanLicense(
+        id: 'sponsored-license-1',
+        planId: PlanCatalog.sponsored.id,
+        status: LicenseStatus.active,
+        issuedAt: issuedAt,
+        sponsorOrganizationId: 'sponsor-1',
+      ),
+    );
+
+    expect(access.canUse(PlanFeature.sponsoredLicense), isTrue);
+    expect(access.canUse(PlanFeature.organizationPortal), isFalse);
+    expect(access.canUse(PlanFeature.benefitAdministration), isFalse);
+    expect(access.canUse(PlanFeature.aggregateReporting), isFalse);
+    expect(access.communicationRemainsAvailable, isTrue);
+  });
+
   test('licença ativa libera somente os recursos do plano escolhido', () {
     final access = PlanAccessController.fromLicense(
       PlanLicense(

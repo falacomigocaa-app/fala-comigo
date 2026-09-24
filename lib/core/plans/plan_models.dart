@@ -9,6 +9,8 @@ enum PlanFeature {
   careNetwork,
   sponsoredLicense,
   organizationPortal,
+  benefitAdministration,
+  aggregateReporting,
   prioritySupport,
 }
 
