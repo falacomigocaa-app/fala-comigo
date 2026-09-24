@@ -56,7 +56,7 @@ O resultado deve ser revisado manualmente. Achados críticos ou altos bloqueiam 
 
 ## Transparência pública
 
-O site pode explicar que o projeto usa MASVS como referência e MobSF como ferramenta de varredura. Até o primeiro relatório revisado, deve usar o estado **“avaliação em preparação”**. Não usar “certificado”, “100% seguro”, “aprovado pela OWASP” ou “auditado” sem evidência formal correspondente.
+O site pode explicar que o projeto usa MASVS como referência e MobSF como ferramenta de varredura. Após o primeiro relatório, deve usar o estado **“varredura concluída; achados em revisão”**. Não usar “certificado”, “100% seguro”, “aprovado pela OWASP” ou “auditado” sem evidência formal correspondente.
 
 O aplicativo mostra apenas uma mensagem curta de confiança em **Privacidade e dados**. Detalhes técnicos, limitações, escopo e resultados pertencem ao site e ao repositório, para não sobrecarregar a experiência de comunicação.
 
