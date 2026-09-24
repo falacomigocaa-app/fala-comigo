@@ -1,6 +1,6 @@
 # Plano de segurança móvel: OWASP MASVS e MobSF
 
-**Status:** transparência e preparação da primeira varredura; não é certificação nem auditoria independente.
+**Status:** primeira varredura estática concluída em APK release de teste; achados em revisão. Não é certificação nem auditoria independente.
 
 ## Objetivo
 
