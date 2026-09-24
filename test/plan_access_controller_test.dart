@@ -32,7 +32,8 @@ void main() {
     expect(access.communicationRemainsAvailable, isTrue);
   });
 
-  test('portal RH pode ser contratado sem conceder acesso ao benefício familiar',
+  test(
+      'portal RH pode ser contratado sem conceder acesso ao benefício familiar',
       () {
     final access = PlanAccessController.fromLicense(
       PlanLicense(

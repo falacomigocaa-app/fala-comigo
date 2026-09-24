@@ -24,6 +24,7 @@ import 'transition_alerts_list_screen.dart';
 import 'weekly_trends_screen.dart';
 import '../../../transition_alerts/data/providers/transition_alerts_provider.dart';
 import '../../../aac_grid/presentation/screens/visual_routine_screen.dart';
+import 'diagnostics_report_screen.dart';
 
 /// Painel dos Pais & Educadores.
 ///
@@ -385,6 +386,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (_) => const PrivacySettingsScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.bug_report_outlined),
+                  title: const Text('Relatório técnico'),
+                  subtitle: const Text(
+                      'Copiar erros minimizados para o suporte autorizado'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const DiagnosticsReportScreen()),
                   ),
                 ),
                 const Divider(height: 1),

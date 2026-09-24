@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +11,7 @@ import 'core/services/transition_alert_service.dart';
 import 'core/services/secure_box_service.dart';
 import 'core/services/parental_session_service.dart';
 import 'core/services/tts_service.dart';
+import 'core/services/diagnostics_service.dart';
 import 'core/theme/app_theme.dart';
 import 'features/aac_grid/data/providers/cards_provider.dart';
 import 'features/aac_grid/data/providers/seed_cards.dart';
@@ -21,8 +26,54 @@ import 'features/transition_alerts/presentation/screens/transition_alert_full_sc
 /// de transição em tela cheia) a partir de fora da árvore de widgets,
 /// por exemplo quando uma notificação é tocada.
 final navigatorKey = GlobalKey<NavigatorState>();
+bool _startupFailureShown = false;
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+    DiagnosticsService.captureFlutterError(details);
+  };
+  ui.PlatformDispatcher.instance.onError =
+      DiagnosticsService.capturePlatformError;
+
+  await runZonedGuarded(_startApp, (error, stackTrace) {
+    DiagnosticsService.capture(
+      kind: 'uncaught_error',
+      error: error,
+      stackTrace: stackTrace,
+    );
+    _showStartupFailure(error, stackTrace);
+  });
+}
+
+Future<void> _startApp() async {
+  try {
+    await _bootstrapApp();
+  } catch (error, stackTrace) {
+    DiagnosticsService.capture(
+      kind: 'startup_error',
+      error: error,
+      stackTrace: stackTrace,
+      context: 'bootstrap',
+    );
+    _showStartupFailure(error, stackTrace);
+  }
+}
+
+void _showStartupFailure(Object error, StackTrace stackTrace) {
+  if (_startupFailureShown) return;
+  _startupFailureShown = true;
+  runApp(
+    StartupFailureApp(
+      message: error.toString(),
+      stackTrace: stackTrace.toString(),
+    ),
+  );
+}
+
+Future<void> _bootstrapApp() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Trava a orientação em Paisagem (Landscape), recomendado para
@@ -44,6 +95,7 @@ Future<void> main() async {
   // Caixa dos Alertas de Transição de Atividade (configurações dos
   // alertas: áudio, horário, checklist).
   await SecureBoxService.openSecureBoxWithMigration(transitionAlertsBoxName);
+  await DiagnosticsService.init();
 
   // Primeiro uso: popula os pictogramas básicos que acompanham o app,
   // para que a criança já tenha cartões disponíveis antes mesmo dos
@@ -54,11 +106,28 @@ Future<void> main() async {
     }
   }
 
-  // Pré-inicializa o TTS para reduzir latência na primeira fala.
-  await TtsService.instance.init();
+  // Pré-inicializa o TTS para reduzir latência na primeira fala. Uma falha
+  // de áudio não pode impedir a comunicação visual.
+  try {
+    await TtsService.instance.init();
+  } catch (error, stackTrace) {
+    DiagnosticsService.capture(
+      kind: 'tts_initialization_error',
+      error: error,
+      stackTrace: stackTrace,
+    );
+  }
 
   // Inicializa o serviço de notificações do Alerta de Transição.
-  await TransitionAlertService.instance.init();
+  try {
+    await TransitionAlertService.instance.init();
+  } catch (error, stackTrace) {
+    DiagnosticsService.capture(
+      kind: 'notifications_initialization_error',
+      error: error,
+      stackTrace: stackTrace,
+    );
+  }
 
   // Quando uma notificação de Alerta de Transição é tocada, abre a
   // tela em tela cheia correspondente, buscando o alerta salvo pelo
@@ -80,7 +149,13 @@ Future<void> main() async {
           const SnackBar(content: Text('Não foi possível abrir este alerta.')),
         );
       }
-    } catch (_) {
+    } catch (error, stackTrace) {
+      DiagnosticsService.capture(
+        kind: 'notification_navigation_error',
+        error: error,
+        stackTrace: stackTrace,
+        context: 'transition_alert_notification',
+      );
       if (ctx != null) {
         ScaffoldMessenger.of(ctx).showSnackBar(
           const SnackBar(content: Text('Não foi possível abrir este alerta.')),
@@ -146,6 +221,60 @@ class _CaaAppState extends State<CaaApp> with WidgetsBindingObserver {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       home: const SplashScreen(),
+    );
+  }
+}
+
+class StartupFailureApp extends StatelessWidget {
+  final String message;
+  final String stackTrace;
+
+  const StartupFailureApp({
+    required this.message,
+    required this.stackTrace,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final report = DiagnosticsService.exportReportJson();
+    return MaterialApp(
+      title: 'Fala Comigo — diagnóstico',
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Falha ao iniciar')),
+        body: Padding(
+          padding: const EdgeInsets.all(24),
+          child: ListView(
+            children: [
+              const Icon(Icons.warning_amber_rounded, size: 64),
+              const SizedBox(height: 16),
+              const Text(
+                'O aplicativo não conseguiu concluir a inicialização. Nenhum dado deve ser perdido por esta tela.',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'Envie o relatório técnico ao suporte autorizado. Não inclua dados da criança na mensagem.',
+              ),
+              const SizedBox(height: 16),
+              SelectableText('Mensagem técnica: $message'),
+              const SizedBox(height: 16),
+              FilledButton.icon(
+                onPressed: () => Clipboard.setData(
+                  ClipboardData(text: report),
+                ),
+                icon: const Icon(Icons.copy_outlined),
+                label: const Text('Copiar relatório técnico'),
+              ),
+              const SizedBox(height: 12),
+              ExpansionTile(
+                title: const Text('Detalhes técnicos'),
+                children: [SelectableText(stackTrace)],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

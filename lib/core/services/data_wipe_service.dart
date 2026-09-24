@@ -4,6 +4,7 @@ import 'media_storage_service.dart';
 import 'parental_pin_service.dart';
 import 'parental_session_service.dart';
 import 'secure_box_service.dart';
+import 'diagnostics_service.dart';
 import '../plans/plan_license_store.dart';
 
 /// Remove os dados criados pelo Fala Comigo neste dispositivo.
@@ -18,6 +19,7 @@ class DataWipeService {
     'behavior_logs',
     'video_diary',
     planLicenseBoxName,
+    DiagnosticsService.boxName,
   ];
 
   static Future<void> deleteAllLocalData() async {
@@ -33,6 +35,7 @@ class DataWipeService {
       }
     }
     await MediaStorageService.clearAllMedia();
+    DiagnosticsService.resetAfterDataWipe();
     await SecureBoxService.deleteEncryptionKey();
     await ParentalPinService.clearCredentials();
 
@@ -45,5 +48,6 @@ class DataWipeService {
     await SecureBoxService.openSecureBox('behavior_logs');
     await SecureBoxService.openSecureBox('video_diary');
     await SecureBoxService.openSecureBox(planLicenseBoxName);
+    await DiagnosticsService.init();
   }
 }
