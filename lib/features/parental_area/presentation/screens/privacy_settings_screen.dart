@@ -83,6 +83,12 @@ class PrivacySettingsScreen extends StatelessWidget {
                 'Caixas sensíveis usam armazenamento protegido. O PIN controla a entrada na Área do Responsável.',
           ),
           _PrivacyCard(
+            icon: Icons.verified_user_outlined,
+            title: 'Transparência de segurança',
+            description:
+                'O projeto passa por testes automatizados e usa o OWASP MASVS como referência. Detalhes e resultados ficam no site, sem sobrecarregar a comunicação.',
+          ),
+          _PrivacyCard(
             icon: Icons.share_outlined,
             title: 'Compartilhamento',
             description:
