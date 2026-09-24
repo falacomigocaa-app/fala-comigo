@@ -77,5 +77,19 @@ h3 { color: var(--navy); font-size: 1.25rem; line-height: 1.15; margin-bottom: 1
 .institution-icon { display: grid; place-items: center; width: 45px; height: 45px; border-radius: 14px; color: var(--navy); background: rgba(255, 253, 248, .72); font-size: 1.7rem; font-weight: 400; }
 .institution-clinic { background: var(--blue); }.institution-school { background: var(--yellow); }.institution-sponsor { background: var(--coral); }
 .institution-note { max-width: 700px; margin: 32px 0 0; color: var(--muted); font-size: .88rem; }
+.institution-rh { background: #dce9ff; }
+.rh-section { padding: 110px 0 100px; background: #fff; }
+.rh-layout { display: grid; grid-template-columns: .78fr 1.22fr; gap: 70px; align-items: start; }
+.rh-layout .section-heading { margin-bottom: 0; }
+.rh-boundaries { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.boundary-card { min-height: 280px; padding: 30px; border-radius: 24px; }
+.boundary-card h3 { margin-top: 18px; }
+.boundary-card ul { display: grid; gap: 10px; padding-left: 20px; margin: 18px 0 0; color: var(--muted); }
+.boundary-kicker { color: var(--navy); font-size: .72rem; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+.boundary-allowed { background: #e6f7ef; }
+.boundary-protected { background: #fff0e9; }
+.rh-note { grid-column: 2; margin: 4px 0 0; color: var(--muted); font-size: .88rem; }
 @media (max-width: 850px) { .institution-grid { grid-template-columns: 1fr; } .institution-card { min-height: 230px; } }
 @media (max-width: 620px) { .institutions-section { padding: 76px 0; } }
+@media (max-width: 850px) { .rh-layout { grid-template-columns: 1fr; gap: 36px; } .rh-note { grid-column: auto; } }
+@media (max-width: 620px) { .rh-section { padding: 76px 0; } .rh-boundaries { grid-template-columns: 1fr; } }
