@@ -58,13 +58,21 @@ android {
 
     buildTypes {
         release {
-            if (!hasReleaseSigning) {
-                error("Release build requires android/key.properties and a production keystore")
+            if (hasReleaseSigning) {
+                signingConfig = signingConfigs.getByName("release")
             }
-            signingConfig = signingConfigs.getByName("release")
         }
     }
 }
+
+tasks.matching { it.name == "assembleRelease" || it.name == "bundleRelease" }
+    .configureEach {
+        doFirst {
+            if (!hasReleaseSigning) {
+                error("Release build requires android/key.properties and a production keystore")
+            }
+        }
+    }
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
