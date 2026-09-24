@@ -67,4 +67,4 @@ A versão não deve ser considerada pronta para lançamento amplo enquanto F01, 
 
 ## Próximo ciclo
 
-O próximo ciclo deve produzir uma ficha de execução para cada fluxo manual pendente, começando por um Android celular e um Android tablet. Depois da execução, os resultados devem ser anexados a esta matriz e ao documento `docs/CONTINUIDADE_ASSISTENTE_IA.md`, mantendo o checklist de retomada atualizado.
+O próximo ciclo deve executar a [ficha operacional para Android celular e tablet](FICHA_EXECUCAO_MANUAL_FLUXOS_CRITICOS.md), começando pelos fluxos F01 a F07. Depois da execução, os resultados devem ser anexados a esta matriz e ao documento `docs/CONTINUIDADE_ASSISTENTE_IA.md`, mantendo o checklist de retomada atualizado. A ficha é um roteiro e não constitui evidência de que os aparelhos já foram testados.
