@@ -356,3 +356,15 @@ A implementação inicial adiciona os entitlements `benefitAdministration` e `ag
 A arquitetura e os critérios de proteção de dados estão em `docs/MODELO_PORTAL_RH_E_BENEFICIO.md`. O documento reforça minimização, finalidade, segregação de organizações, auditoria, convites individuais, métricas agregadas com limiar mínimo, ausência de conteúdo clínico em logs e revisão jurídica/LGPD antes de produção.
 
 Ainda não foi feito merge, push ou alteração na `main`. A próxima etapa é executar formatação, análise, testes e build Web disponíveis; depois revisar o diff e abrir uma PR somente se a validação estiver adequada. Pagamento, reembolso, integração automática com RH, sincronização clínica e dados reais continuam bloqueados.
+
+
+## 18. Etapa automática: contrato técnico do backend RH
+
+**Data:** 23 de setembro de 2026.
+**Branch:** `feat/rh-backend-authorization-contract`.
+
+Após a publicação do console RH sintético, foi iniciado o contrato técnico do backend. O documento `docs/CONTRATO_PORTAL_RH_AUTORIZACAO.md` separa identidade, organização, membership, programa, licença, convite, autorização de cuidado e auditoria.
+
+O contrato reforça que `benefitAdministration` não implica `sponsoredLicense`, que uma licença patrocinada não implica `organizationPortal` e que a comunicação offline continua fora do ciclo comercial. Também define dados mínimos, operações permitidas, negações obrigatórias, estados de licença, transições e requisitos de logs sem conteúdo clínico.
+
+O próximo gate é validar as negações no servidor com duas organizações isoladas antes de qualquer endpoint real, integração de RH, cobrança, sincronização ou dado de produção.
