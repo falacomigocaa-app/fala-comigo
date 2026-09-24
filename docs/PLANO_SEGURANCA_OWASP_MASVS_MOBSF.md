@@ -38,7 +38,7 @@ A revisão deve prestar atenção especial a:
 
 A execução deve ser feita em ambiente isolado. O MobSF oficial oferece imagem Docker e API; o repositório oficial documenta a imagem `opensecurity/mobile-security-framework-mobsf` e o acesso local. O APK deve ser construído com uma chave de teste descartável, nunca com a chave de produção.
 
-O repositório agora contém o workflow manual `.github/workflows/mobsf-security-scan.yml`. Ele usa `workflow_dispatch`, gera um APK **debug de teste** (não é release nem distribuição), inicia o MobSF em container isolado, envia o APK pela API oficial e publica JSON/PDF e o SHA-256 como artefatos da execução. A execução deve ser disparada conscientemente no GitHub Actions e o relatório deve ser revisado antes de qualquer divulgação.
+O repositório agora contém o workflow manual `.github/workflows/mobsf-security-scan.yml`. Ele usa `workflow_dispatch`, cria uma chave efêmera exclusiva da execução, gera um APK **release de teste** (não é distribuição e não usa a chave de produção), inicia o MobSF em container isolado, envia o APK pela API oficial e publica JSON/PDF e o SHA-256 como artefatos da execução. A execução deve ser disparada conscientemente no GitHub Actions e o relatório deve ser revisado antes de qualquer divulgação.
 
 Exemplo operacional, a ser executado somente em ambiente autorizado:
 
@@ -50,7 +50,7 @@ sha256sum build/app/outputs/flutter-apk/app-release.apk
 # salvar o relatório sanitizado em security/reports/mobsf-<sha>.json ou .html
 ```
 
-Para a primeira execução reprodutível, usar o workflow manual em vez de copiar o APK para um serviço externo. O APK debug é deliberadamente identificado como artefato de teste; uma avaliação de release exigirá uma chave de assinatura de teste controlada e aprovação para disponibilizar esse material no CI.
+Para a execução reprodutível, usar o workflow manual em vez de copiar o APK para um serviço externo. A chave é criada e apagada dentro do runner; ela não é a chave de produção. O relatório deve distinguir achados do empacotamento de teste, como assinatura e configuração de debug, de achados aplicáveis ao release real.
 
 O resultado deve ser revisado manualmente. Achados críticos ou altos bloqueiam distribuição; achados médios precisam de plano e prazo; falsos positivos devem ser justificados por escrito. O SHA-256 do artefato deve acompanhar o relatório para garantir rastreabilidade.
 

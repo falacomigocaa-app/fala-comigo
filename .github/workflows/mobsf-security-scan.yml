@@ -27,11 +27,29 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build non-production test APK
-        run: flutter build apk --debug
+      - name: Create ephemeral test signing key
+        run: |
+          keytool -genkeypair \
+            -keystore "$RUNNER_TEMP/mobsf-test.jks" \
+            -storepass changeit \
+            -keypass changeit \
+            -alias mobsf-test \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 1 \
+            -dname "CN=MobSF CI Test, OU=Security, O=Fala Comigo, C=BR"
+          cat > android/key.properties <<EOF
+          storePassword=changeit
+          keyPassword=changeit
+          keyAlias=mobsf-test
+          storeFile=$RUNNER_TEMP/mobsf-test.jks
+          EOF
+
+      - name: Build non-production release test APK
+        run: flutter build apk --release
 
       - name: Record artifact hash
-        run: sha256sum build/app/outputs/flutter-apk/app-debug.apk | tee apk-sha256.txt
+        run: sha256sum build/app/outputs/flutter-apk/app-release.apk | tee apk-sha256.txt
 
       - name: Start isolated MobSF
         run: |
@@ -53,7 +71,7 @@ jobs:
           curl --fail --silent --show-error \
             --request POST "$MOBSF_URL/api/v1/upload" \
             --header "Authorization: $MOBSF_API_KEY" \
-            --form file=@build/app/outputs/flutter-apk/app-debug.apk \
+            --form file=@build/app/outputs/flutter-apk/app-release.apk \
             --output mobsf-upload.json
           cat mobsf-upload.json
 
@@ -95,4 +113,6 @@ jobs:
 
       - name: Stop MobSF
         if: always()
-        run: docker stop mobsf-security-scan || true
+        run: |
+          docker stop mobsf-security-scan || true
+          rm -f android/key.properties "$RUNNER_TEMP/mobsf-test.jks"
