@@ -12,6 +12,8 @@ void main() {
 
     expect(find.text('Privacidade e dados'), findsOneWidget);
     expect(find.text('Armazenamento local'), findsOneWidget);
+    expect(find.text('Transparência de segurança'), findsOneWidget);
+    expect(find.textContaining('OWASP MASVS'), findsOneWidget);
     expect(find.text('Compartilhamento'), findsOneWidget);
     await tester.drag(find.byType(Scrollable), const Offset(0, -600));
     await tester.pumpAndSettle();

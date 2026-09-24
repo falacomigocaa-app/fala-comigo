@@ -1,0 +1,98 @@
+name: MobSF mobile security scan
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mobsf-static-analysis:
+    name: Build test APK and scan with MobSF
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      MOBSF_API_KEY: mobsf-ci-local-key
+      MOBSF_URL: http://127.0.0.1:8000
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.38.0
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build non-production test APK
+        run: flutter build apk --debug
+
+      - name: Record artifact hash
+        run: sha256sum build/app/outputs/flutter-apk/app-debug.apk | tee apk-sha256.txt
+
+      - name: Start isolated MobSF
+        run: |
+          docker run --detach --rm --name mobsf-security-scan \
+            --publish 8000:8000 \
+            --env MOBSF_API_KEY="$MOBSF_API_KEY" \
+            opensecurity/mobile-security-framework-mobsf:latest
+          for attempt in {1..30}; do
+            if curl --fail --silent "$MOBSF_URL" >/dev/null; then
+              exit 0
+            fi
+            sleep 5
+          done
+          docker logs mobsf-security-scan
+          exit 1
+
+      - name: Upload APK to MobSF
+        run: |
+          curl --fail --silent --show-error \
+            --request POST "$MOBSF_URL/api/v1/upload" \
+            --header "Authorization: $MOBSF_API_KEY" \
+            --form file=@build/app/outputs/flutter-apk/app-debug.apk \
+            --output mobsf-upload.json
+          cat mobsf-upload.json
+
+      - name: Scan APK and download reports
+        run: |
+          hash=$(jq -r '.hash' mobsf-upload.json)
+          test -n "$hash" && test "$hash" != "null"
+          curl --fail --silent --show-error \
+            --request POST "$MOBSF_URL/api/v1/scan" \
+            --header "Authorization: $MOBSF_API_KEY" \
+            --data "hash=$hash" \
+            --output mobsf-scan.json
+          curl --fail --silent --show-error \
+            --request POST "$MOBSF_URL/api/v1/report_json" \
+            --header "Authorization: $MOBSF_API_KEY" \
+            --data "hash=$hash" \
+            --output mobsf-report.json
+          curl --fail --silent --show-error \
+            --request POST "$MOBSF_URL/api/v1/download_pdf" \
+            --header "Authorization: $MOBSF_API_KEY" \
+            --data "hash=$hash" \
+            --output mobsf-report.pdf
+          jq '{hash, version, title, security_score, blockers, high, warning, info}' mobsf-report.json > mobsf-summary.json || cp mobsf-report.json mobsf-summary.json
+          cat mobsf-summary.json
+
+      - name: Publish MobSF evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobsf-security-evidence-${{ github.sha }}
+          if-no-files-found: warn
+          path: |
+            apk-sha256.txt
+            mobsf-upload.json
+            mobsf-scan.json
+            mobsf-report.json
+            mobsf-summary.json
+            mobsf-report.pdf
+
+      - name: Stop MobSF
+        if: always()
+        run: docker stop mobsf-security-scan || true

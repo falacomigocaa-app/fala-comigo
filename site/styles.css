@@ -93,3 +93,22 @@ h3 { color: var(--navy); font-size: 1.25rem; line-height: 1.15; margin-bottom: 1
 @media (max-width: 620px) { .institutions-section { padding: 76px 0; } }
 @media (max-width: 850px) { .rh-layout { grid-template-columns: 1fr; gap: 36px; } .rh-note { grid-column: auto; } }
 @media (max-width: 620px) { .rh-section { padding: 76px 0; } .rh-boundaries { grid-template-columns: 1fr; } }
+
+/* Security transparency */
+.security-section { padding: 110px 0 100px; background: #102a43; color: white; }
+.security-layout { display: grid; grid-template-columns: .82fr 1.18fr; gap: 70px; align-items: start; }
+.security-section .eyebrow { color: #92e6d6; }
+.security-section h2 { color: white; }
+.security-section .section-heading > p:last-child { color: #c8d9e5; }
+.security-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.security-card { min-height: 270px; display: flex; flex-direction: column; padding: 30px; border-radius: 24px; color: var(--navy); }
+.security-card h3 { margin-top: 18px; }
+.security-card p { color: var(--muted); }
+.security-card a { margin-top: auto; color: var(--navy); font-weight: 800; text-underline-offset: 4px; }
+.security-primary { background: #e6f7ef; }
+.security-secondary { background: #dce9ff; }
+.security-kicker { color: var(--navy); font-size: .72rem; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+.security-note { grid-column: 2; margin: 4px 0 0; color: #c8d9e5; font-size: .88rem; }
+.security-note a { color: #92e6d6; text-underline-offset: 4px; }
+@media (max-width: 850px) { .security-layout { grid-template-columns: 1fr; gap: 36px; } .security-note { grid-column: auto; } }
+@media (max-width: 620px) { .security-section { padding: 76px 0; } .security-grid { grid-template-columns: 1fr; } }
