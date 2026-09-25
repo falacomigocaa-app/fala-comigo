@@ -2,9 +2,9 @@ name: Flutter quality checks
 
 on:
   push:
-    branches: [main, 'feat/**']
+    branches: [main, 'feat/**', 'recovery/**', 'fix/**']
   pull_request:
-    branches: [main]
+    branches: [main, 'recovery/**']
 
 permissions:
   contents: read
