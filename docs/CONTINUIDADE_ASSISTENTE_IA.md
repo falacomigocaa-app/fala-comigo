@@ -576,3 +576,19 @@ Opções para a próxima etapa:
 Gate: aguardar a escolha A, B ou C. Se A/C, definir provedor do backend e banco. Não trocar o link público atual nem apagar o portal existente antes de haver substituto funcional. O endereço atual do Criador continua provisoriamente em `https://falacomigo-kyrh225w.manus.space/creator`, e isso deve ser explicitamente comunicado até a migração.
 
 Estado da main: nenhuma mudança de código foi feita por esta tentativa. O manual `CONTINUAR_AQUI_PRIMEIRO.md` foi atualizado com o mesmo ponto de parada.
+
+## 42. Opção A confirmada e endereço público oficial reafirmado — 25/09/2026
+
+O proprietário escolheu a **Opção A** para a continuidade: GitHub Pages para o site e a interface pública; backend e banco independentes do Manus, começando por camadas gratuitas quando disponíveis; evolução para planos pagos somente quando a utilização justificar. A solução deve preservar portabilidade, permitir crescimento e não interromper o aplicativo Flutter nem o site público.
+
+O endereço oficial confirmado é exatamente `https://falacomigocaa-app.github.io/fala-comigo/`. Toda mudança pública deve sair de `site/`, ser revisada em Pull Request contra `main`, passar pelo `site-pages.yml` e ser verificada nesse endereço. O link do Manus Space continua provisório até a migração funcional, testada e publicada.
+
+Regra de continuidade: ao concluir cada etapa, atualizar `CONTINUAR_AQUI_PRIMEIRO.md`, este histórico e o documento específico da etapa, registrando branch, commit, PR, workflow, evidência, limitações e próximo gate. Nenhuma senha, token, chave ou dado real deve ser registrado.
+
+## 43. Handoff e ADR da Opção A — 25/09/2026
+
+Foram concluídos os passos documentais iniciais após a escolha da Opção A. O `PROJECT_HANDOFF.md` foi atualizado para registrar `origin/main` em `b43e18b`, a URL pública oficial do GitHub Pages, a separação entre site institucional e portal autenticado e a sequência segura de próximos gates.
+
+Foi criado `docs/ADR-001-opcao-a-portal-independente.md`, formalizando que o GitHub Pages hospeda somente o site institucional e o encaminhamento, enquanto login, portal, API e banco ficam em origem independente. O ADR define PostgreSQL como modelo relacional inicial, desenvolvimento local/CI com fixtures sintéticas, autorização server-side, portabilidade, critérios de escolha de provedor e gates de segurança, operação, custo e migração.
+
+Esta etapa não implementou backend, login ou banco remoto, não criou contas ou credenciais, não ativou cobrança, não coletou dados reais, não alterou o link do Criador e não alterou a `main`. O próximo passo seguro é especificar o MVP sintético, o modelo PostgreSQL, as migrations e a matriz de autorização em branch própria.
