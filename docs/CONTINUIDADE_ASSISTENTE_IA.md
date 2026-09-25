@@ -350,3 +350,21 @@ O primeiro APK debug apresentou em aparelho Android o erro `HiveError: The box "
 A validação automática da correção passou: análise estática, testes Flutter e `flutter build apk --debug`. O novo APK tem aproximadamente 152 MB e SHA-256 `b3baeb02271501953ee212a4bf0f05816fa557dfeb351d2fa52923b435361d70`.
 
 O APK corrigido está fora do Git e deve ser instalado como uma nova versão de teste. A execução humana no Android — tocar, navegar, conceder permissões, testar voz, mídia, offline e acessibilidade — depende do aparelho do responsável e não pode ser simulada ou declarada como concluída pelo ambiente de desenvolvimento.
+
+
+## 25. Início da recuperação controlada do bootstrap
+
+**Data:** 25 de setembro de 2026.
+
+A continuidade foi iniciada a partir de `recovery/pr29-with-current-web`, commit `c14bdb2`, que combina a base Android PR29 validada no aparelho com o site atual. Foi criada a branch `fix/bootstrap-after-runapp` para a primeira alteração isolada.
+
+A alteração move a inicialização de Hive, armazenamento seguro, migrações e dados seed para uma `BootstrapScreen` executada depois de `runApp`. A aplicação agora possui uma tela de carregamento e uma tela de falha com erro/stack trace; TTS, notificações e orientação de tela não bloqueiam a renderização inicial.
+
+**Arquivos alterados:** `lib/main.dart`.
+
+**Gate desta etapa:** validar formatação, CI e geração de APK Debug; instalar no aparelho e confirmar que a primeira tela aparece. Nenhuma funcionalidade posterior deve ser reincorporada antes desse gate.
+
+
+### Resultado do primeiro gate
+
+A PR #65 passou no workflow `Flutter quality checks`, run `36105349247`: formatação, análise estática, política de assinatura, testes e build Web concluídos com sucesso. O CI não substitui o teste de abertura no aparelho; o próximo gate é gerar APK da branch `fix/bootstrap-after-runapp` no Codemagic e confirmar a primeira tela.

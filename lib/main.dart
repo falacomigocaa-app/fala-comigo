@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,57 +27,47 @@ final navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Trava a orientação em Paisagem (Landscape), recomendado para
-  // tablets e celulares usados como pranchas de comunicação.
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
-
-  // Persistência local dos cartões.
-  await Hive.initFlutter();
-  Hive.registerAdapter(PictogramCardAdapter());
-  final box = await SecureBoxService.openSecureBoxWithMigration<PictogramCard>(
-    cardsBoxName,
+  // A orientação é uma preferência de plataforma e não deve impedir o
+  // Flutter de renderizar a primeira tela se o Android demorar ou falhar.
+  unawaited(
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]),
   );
 
-  // Caixa simples de configurações do app (ex: tema de hiperfoco
-  // escolhido pelos pais).
-  await SecureBoxService.openSecureBoxWithMigration('app_settings');
+  // Renderiza o aplicativo imediatamente. Hive, armazenamento seguro e
+  // migrações são executados pela BootstrapScreen após o primeiro frame.
+  runApp(const ProviderScope(child: CaaApp()));
+}
 
-  // Caixa dos Alertas de Transição de Atividade (configurações dos
-  // alertas: áudio, horário, checklist).
-  await SecureBoxService.openSecureBoxWithMigration(transitionAlertsBoxName);
-
-  // Primeiro uso: popula os pictogramas básicos que acompanham o app,
-  // para que a criança já tenha cartões disponíveis antes mesmo dos
-  // pais cadastrarem fotos personalizadas.
-  if (box.isEmpty) {
-    for (final card in SeedCards.defaultCards()) {
-      await box.put(card.id, card);
-    }
+Future<void> _initializeOptionalServices() async {
+  try {
+    await TtsService.instance.init();
+  } catch (_) {
+    // O serviço tenta inicializar novamente quando for usado.
   }
+  try {
+    await TransitionAlertService.instance.init();
+  } catch (_) {
+    // Alertas permanecem indisponíveis nesta plataforma/configuração.
+  }
+}
 
-  // Pré-inicializa o TTS para reduzir latência na primeira fala.
-  await TtsService.instance.init();
-
-  // Inicializa o serviço de notificações do Alerta de Transição.
-  await TransitionAlertService.instance.init();
-
-  // Quando uma notificação de Alerta de Transição é tocada, abre a
-  // tela em tela cheia correspondente, buscando o alerta salvo pelo
-  // ID recebido no payload da notificação.
+void _configureTransitionAlertNavigation() {
   TransitionAlertService.instance.onAlertTriggered = (alertId) {
     final ctx = navigatorKey.currentContext;
     try {
       final alertsBox = Hive.box(transitionAlertsBoxName);
       final rawMap = alertsBox.get(alertId);
       if (rawMap != null) {
-        final alert =
-            TransitionAlert.fromMap(Map<String, dynamic>.from(rawMap as Map));
+        final alert = TransitionAlert.fromMap(
+          Map<String, dynamic>.from(rawMap as Map),
+        );
         navigatorKey.currentState?.push(
           MaterialPageRoute(
-              builder: (_) => TransitionAlertFullScreen(alert: alert)),
+            builder: (_) => TransitionAlertFullScreen(alert: alert),
+          ),
         );
       } else if (ctx != null) {
         ScaffoldMessenger.of(ctx).showSnackBar(
@@ -90,8 +82,6 @@ Future<void> main() async {
       }
     }
   };
-
-  runApp(const ProviderScope(child: CaaApp()));
 }
 
 class CaaApp extends StatefulWidget {
@@ -147,7 +137,124 @@ class _CaaAppState extends State<CaaApp> with WidgetsBindingObserver {
       title: 'Fala Comigo',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const SplashScreen(),
+      home: const BootstrapScreen(),
+    );
+  }
+}
+
+class BootstrapScreen extends StatefulWidget {
+  const BootstrapScreen({super.key});
+
+  @override
+  State<BootstrapScreen> createState() => _BootstrapScreenState();
+}
+
+class _BootstrapScreenState extends State<BootstrapScreen> {
+  Object? _error;
+  StackTrace? _stackTrace;
+  bool _ready = false;
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(_bootstrap());
+  }
+
+  Future<void> _bootstrap() async {
+    try {
+      await Hive.initFlutter();
+      if (!Hive.isAdapterRegistered(0)) {
+        Hive.registerAdapter(PictogramCardAdapter());
+      }
+
+      final box =
+          await SecureBoxService.openSecureBoxWithMigration<PictogramCard>(
+            cardsBoxName,
+          );
+      await SecureBoxService.openSecureBoxWithMigration('app_settings');
+      await SecureBoxService.openSecureBoxWithMigration(
+        transitionAlertsBoxName,
+      );
+
+      if (box.isEmpty) {
+        for (final card in SeedCards.defaultCards()) {
+          await box.put(card.id, card);
+        }
+      }
+
+      _configureTransitionAlertNavigation();
+      if (mounted) {
+        setState(() => _ready = true);
+      }
+
+      // Recursos auxiliares não podem bloquear a primeira tela.
+      unawaited(_initializeOptionalServices());
+    } catch (error, stackTrace) {
+      if (mounted) {
+        setState(() {
+          _error = error;
+          _stackTrace = stackTrace;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_error != null) {
+      return StartupFailureView(error: _error!, stackTrace: _stackTrace);
+    }
+    if (_ready) return const SplashScreen();
+    return const StartupLoadingView();
+  }
+}
+
+class StartupLoadingView extends StatelessWidget {
+  const StartupLoadingView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppTheme.background,
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CircularProgressIndicator(),
+            const SizedBox(height: 20),
+            Text(
+              'Preparando o Fala Comigo…',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class StartupFailureView extends StatelessWidget {
+  const StartupFailureView({
+    required this.error,
+    required this.stackTrace,
+    super.key,
+  });
+
+  final Object error;
+  final StackTrace? stackTrace;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Falha de inicialização')),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: SelectableText(
+          'O aplicativo não conseguiu preparar os dados locais.\n\n'
+          'Erro:\n$error\n\n'
+          'Stack trace:\n${stackTrace ?? 'não disponível'}',
+        ),
+      ),
     );
   }
 }
