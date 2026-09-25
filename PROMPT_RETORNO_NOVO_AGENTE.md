@@ -298,3 +298,18 @@ Comece agora lendo os arquivos obrigatórios e fazendo o diagnóstico do estado 
 ---
 
 ## FIM DO PROMPT
+
+
+---
+
+## 12. Gate atual — Criador sem Manus Space
+
+O proprietário não quer vínculo com Manus ou Manus Space no Espaço do Criador. O e-mail planejado para o futuro login próprio é `falacomigocaa@gmail.com`. A tentativa parcial de implementação foi revertida e não existe login próprio pronto.
+
+Antes de programar, apresente estas opções e aguarde escolha:
+
+- **A (recomendada):** GitHub Pages para site/interface + backend e banco em provedor independente do Manus, com login próprio por e-mail e senha.
+- **B:** somente GitHub Pages, aceitando que haverá apenas interface estática sem autenticação, banco, convites ou permissões reais.
+- **C:** avaliar outro provedor independente escolhido pelo proprietário.
+
+Nunca criar uma falsa autenticação no JavaScript público. GitHub Pages não executa backend contínuo. Não remover o portal atual nem substituir o link `https://falacomigo-kyrh225w.manus.space/creator` até existir uma migração funcional, validada e publicada.
