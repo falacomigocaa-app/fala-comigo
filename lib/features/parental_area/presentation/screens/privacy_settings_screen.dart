@@ -27,7 +27,7 @@ class PrivacySettingsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-        title: const Text('Privacidade e dados'),
+        title: const Text('Privacidade'),
         backgroundColor: AppTheme.professionalBackground,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -56,16 +56,10 @@ class PrivacySettingsScreen extends StatelessWidget {
                 'Os registros e mídias ficam neste aparelho por padrão.',
           ),
           const _PrivacyCard(
-            icon: Icons.enhanced_encryption_outlined,
-            title: 'Proteção',
-            description:
-                'Caixas sensíveis usam armazenamento protegido. O PIN controla a entrada na Área Parental.',
-          ),
-          const _PrivacyCard(
             icon: Icons.verified_user_outlined,
             title: 'Transparência de segurança',
             description:
-                'O projeto usa o OWASP MASVS como referência. Achados de testes automatizados continuam em revisão e não representam certificação.',
+                'Caixas sensíveis usam armazenamento protegido e o PIN controla a Área Parental. O projeto usa o OWASP MASVS como referência; isso não representa certificação.',
           ),
           const _PrivacyCard(
             icon: Icons.share_outlined,
