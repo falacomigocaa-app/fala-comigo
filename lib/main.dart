@@ -25,65 +25,76 @@ final navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Trava a orientação em Paisagem (Landscape), recomendado para
-  // tablets e celulares usados como pranchas de comunicação.
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
+  try {
+    // Trava a orientação em Paisagem (Landscape), recomendado para
+    // tablets e celulares usados como pranchas de comunicação.
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
 
-  // Persistência local dos cartões.
-  await Hive.initFlutter();
-  Hive.registerAdapter(PictogramCardAdapter());
-  final box = await SecureBoxService.openSecureBoxWithMigration(cardsBoxName);
+    // Persistência local dos cartões.
+    await Hive.initFlutter();
+    Hive.registerAdapter(PictogramCardAdapter());
+    final box = await SecureBoxService.openSecureBoxWithMigration(cardsBoxName);
 
-  // Caixa simples de configurações do app (ex: tema de hiperfoco
-  // escolhido pelos pais).
-  await SecureBoxService.openSecureBoxWithMigration('app_settings');
+    // Caixa simples de configurações do app (ex: tema de hiperfoco
+    // escolhido pelos pais).
+    await SecureBoxService.openSecureBoxWithMigration('app_settings');
 
-  // Caixa dos Alertas de Transição de Atividade (configurações dos
-  // alertas: áudio, horário, checklist).
-  await SecureBoxService.openSecureBoxWithMigration(transitionAlertsBoxName);
+    // Caixa dos Alertas de Transição de Atividade (configurações dos
+    // alertas: áudio, horário, checklist).
+    await SecureBoxService.openSecureBoxWithMigration(transitionAlertsBoxName);
 
-  // Primeiro uso: popula os pictogramas básicos que acompanham o app,
-  // para que a criança já tenha cartões disponíveis antes mesmo dos
-  // pais cadastrarem fotos personalizadas.
-  if (box.isEmpty) {
-    for (final card in SeedCards.defaultCards()) {
-      await box.put(card.id, card);
+    // Primeiro uso: popula os pictogramas básicos que acompanham o app,
+    // para que a criança já tenha cartões disponíveis antes mesmo dos
+    // pais cadastrarem fotos personalizadas.
+    if (box.isEmpty) {
+      for (final card in SeedCards.defaultCards()) {
+        await box.put(card.id, card);
+      }
     }
+
+    // Quando uma notificação de Alerta de Transição é tocada, abre a
+    // tela em tela cheia correspondente, buscando o alerta salvo pelo
+    // ID recebido no payload da notificação.
+    TransitionAlertService.instance.onAlertTriggered = (alertId) {
+      final ctx = navigatorKey.currentContext;
+      try {
+        final alertsBox = Hive.box(transitionAlertsBoxName);
+        final rawMap = alertsBox.get(alertId);
+        if (rawMap != null) {
+          final alert = TransitionAlert.fromMap(
+            Map<String, dynamic>.from(rawMap as Map),
+          );
+          navigatorKey.currentState?.push(
+            MaterialPageRoute(
+              builder: (_) => TransitionAlertFullScreen(alert: alert),
+            ),
+          );
+        } else if (ctx != null) {
+          ScaffoldMessenger.of(ctx).showSnackBar(
+            const SnackBar(
+              content: Text('Não foi possível abrir este alerta.'),
+            ),
+          );
+        }
+      } catch (_) {
+        if (ctx != null) {
+          ScaffoldMessenger.of(ctx).showSnackBar(
+            const SnackBar(
+              content: Text('Não foi possível abrir este alerta.'),
+            ),
+          );
+        }
+      }
+    };
+
+    runApp(const ProviderScope(child: CaaApp()));
+  } catch (error, stackTrace) {
+    runApp(StartupFailureApp(error: error, stackTrace: stackTrace));
+    return;
   }
-
-  // Quando uma notificação de Alerta de Transição é tocada, abre a
-  // tela em tela cheia correspondente, buscando o alerta salvo pelo
-  // ID recebido no payload da notificação.
-  TransitionAlertService.instance.onAlertTriggered = (alertId) {
-    final ctx = navigatorKey.currentContext;
-    try {
-      final alertsBox = Hive.box(transitionAlertsBoxName);
-      final rawMap = alertsBox.get(alertId);
-      if (rawMap != null) {
-        final alert =
-            TransitionAlert.fromMap(Map<String, dynamic>.from(rawMap as Map));
-        navigatorKey.currentState?.push(
-          MaterialPageRoute(
-              builder: (_) => TransitionAlertFullScreen(alert: alert)),
-        );
-      } else if (ctx != null) {
-        ScaffoldMessenger.of(ctx).showSnackBar(
-          const SnackBar(content: Text('Não foi possível abrir este alerta.')),
-        );
-      }
-    } catch (_) {
-      if (ctx != null) {
-        ScaffoldMessenger.of(ctx).showSnackBar(
-          const SnackBar(content: Text('Não foi possível abrir este alerta.')),
-        );
-      }
-    }
-  };
-
-  runApp(const ProviderScope(child: CaaApp()));
 
   // Áudio e notificações são recursos auxiliares: uma falha de plugin ou
   // plataforma não pode impedir a grade CAA de abrir e comunicar.
@@ -100,6 +111,35 @@ Future<void> _initializeOptionalServices() async {
     await TransitionAlertService.instance.init();
   } catch (_) {
     // Alertas permanecem indisponíveis nesta plataforma/configuração.
+  }
+}
+
+class StartupFailureApp extends StatelessWidget {
+  const StartupFailureApp({
+    required this.error,
+    required this.stackTrace,
+    super.key,
+  });
+
+  final Object error;
+  final StackTrace stackTrace;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Falha de inicialização')),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: SelectableText(
+            'O aplicativo não conseguiu abrir.\n\n'
+            'Erro:\n$error\n\n'
+            'Stack trace:\n$stackTrace',
+          ),
+        ),
+      ),
+    );
   }
 }
 
