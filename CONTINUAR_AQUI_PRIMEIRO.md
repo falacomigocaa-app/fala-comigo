@@ -51,6 +51,18 @@ Ao concluir **cada etapa**, o agente deve atualizar:
 3. `docs/CONTINUIDADE_ASSISTENTE_IA.md`, para manter a sequência histórica;
 4. o corpo da PR com comandos, resultados, commit, branch e próximo gate.
 
+### Destino oficial das atualizações Web
+
+O endereço público oficial do projeto é:
+
+`https://falacomigocaa-app.github.io/fala-comigo/`
+
+Toda alteração de conteúdo, layout, contato, navegação ou função pública que possa rodar no site estático deve ser feita no diretório `site/`, enviada para uma PR contra `main` e publicada pelo workflow `site-pages.yml`. Não considerar uma mudança concluída enquanto ela não estiver na `main` e confirmada no endereço oficial.
+
+O Manus Space não substitui o GitHub Pages. Ele pode ser usado somente como ambiente técnico separado para backend autenticado, banco, testes ou preview do portal. Nunca apresentar o Manus Space como a página pública oficial nem deixar uma atualização pública somente nele.
+
+Limite técnico obrigatório: autenticação, banco, permissões server-side e assinaturas reais não podem ser protegidos apenas no GitHub Pages. Nesses casos, a interface pública continua no GitHub Pages e deve encaminhar para o backend/portal seguro, com essa separação documentada.
+
 Não registrar neste repositório credenciais, tokens, chaves privadas, PINs, fotos, vídeos, nomes completos ou dados clínicos reais.
 
 ## Histórico curto
@@ -59,6 +71,7 @@ Não registrar neste repositório credenciais, tokens, chaves privadas, PINs, fo
 - **25/09/2026:** causa provável da tela branca identificada na tipagem da caixa Hive; correção seletiva preparada em `fix/main-startup-and-android-build`.
 - **25/09/2026:** APK diagnóstico anterior preservado fora do Git; ele foi gerado pelo GitHub Actions na branch de diagnóstico, não pelo Codemagic e não pela `main` atual.
 - **25/09/2026:** prompt mestre criado em `PROMPT_RETORNO_NOVO_AGENTE.md`, com leitura obrigatória, regras de preservação, comandos de diagnóstico, validação do APK e formato de atualização passo a passo.
+- **25/09/2026:** regra oficial reforçada: atualizações públicas devem terminar no GitHub Pages oficial; Manus Space não pode ser tratado como substituto do site público. Backend seguro permanece separado quando tecnicamente necessário.
 
 ## Comandos de retomada
 
