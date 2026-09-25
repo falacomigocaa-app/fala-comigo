@@ -547,3 +547,13 @@ O proprietário determinou que o endereço público oficial é `https://falacomi
 O Manus Space não deve substituir o GitHub Pages nem ser apresentado como a página pública oficial. Pode existir somente como ambiente técnico separado para backend autenticado, banco, testes ou preview, quando necessário. Autenticação, permissões server-side e assinaturas reais não devem ser simuladas ou protegidas apenas no GitHub Pages; nesse caso a interface pública permanece no Pages e o backend seguro fica separado, com a separação documentada.
 
 A lista de continuidade deve ser atualizada após cada etapa, com branch, PR, commit, workflow, resultado e próximo gate. Uma tarefa Web só será considerada concluída quando o destino correto tiver sido publicado e conferido.
+
+## 40. Auditoria de destino e acesso do criador — 25/09/2026
+
+Foi auditada a diferença entre o site público e o portal conectado. O GitHub Pages está na `origin/main` e o workflow `site-pages.yml` está concluindo com sucesso. O HTML público foi conferido e contém o e-mail `falacomigocaa@gmail.com`, o WhatsApp correto `67 99163-2279` (`wa.me/5567991632279`) e o link `https://falacomigo-kyrh225w.manus.space/creator`.
+
+As mudanças públicas confirmadas na main são os contatos, a entrada discreta do criador, a correção do WhatsApp e as regras de continuidade. As funções autenticadas — organizações, convites, permissões, planos, auditoria e Espaço do Criador — pertencem ao projeto full-stack separado `/home/ubuntu/fala-comigo-portal`, com checkpoint WebDev próprio. Elas não são código do site estático GitHub Pages.
+
+Não existe uma chave do criador versionada no Git. O acesso é protegido no servidor por Manus OAuth e `adminProcedure`, que exige uma conta autenticada com `users.role = admin`. O usuário deve entrar com a conta administrativa do proprietário pelo link Espaço do Criador; não deve procurar `JWT_SECRET`, tokens, cookies ou qualquer segredo no Git. `JWT_SECRET` é segredo de sessão do backend, não é uma senha de criador e nunca deve ser commitado.
+
+Regra operacional: GitHub Pages é o destino oficial da interface pública; Manus Space só pode hospedar o backend/portal seguro quando necessário. O link para o portal não significa que a página pública foi transferida para Manus Space.
