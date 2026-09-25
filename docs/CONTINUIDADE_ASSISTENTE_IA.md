@@ -595,3 +595,13 @@ O workflow pós-merge `Flutter quality checks` foi disparado para o commit `9e97
 A auditoria confirmou que o app atual possui `AccessGrant` e permissões locais, mas não envia convite remoto nem cria autorização server-side. O `site/portal.html` é uma prévia estática com dados sintéticos; seus botões não autenticam, não persistem dados e não processam assinaturas.
 
 Foi criado `docs/ESCOPO_PORTAL_ORGANIZACOES_ASSINANTES.md`, com o fluxo de convite individual e expirável, consentimento separado de benefício, matriz de papéis e escopos, arquitetura Web full-stack, planos de assinantes, fases, testes de negação e decisões necessárias. Não foi ativada cobrança, backend real ou compartilhamento de dados.
+
+## 35. Portal real e contatos públicos — 25/09/2026
+
+O proprietário confirmou que não deseja somente protótipo e já possui escola e clínica ABA para teste controlado. Foi inicializado o projeto Web full-stack real `/home/ubuntu/fala-comigo-portal`, com autenticação Manus, banco MySQL/TiDB, API tRPC e armazenamento preparado.
+
+Primeiro corte implementado: organizações, membros, convites individuais com token hash, expiração, aceite autenticado, auditoria mínima e limite server-side. A regra inicial de piloto foi aplicada: organização começa com `seatLimit = 1`; ao atingir o limite, adicionar pessoa exige ativação do plano Organização. Benefício patrocinado e permissão de dados continuam separados.
+
+O portal tem dashboard autenticado, criação de organização, preparação de convite, cópia/compartilhamento do link, página `/invite/:token` e aceite com visualização de finalidade, escopos e prazo. O fluxo real ainda está em validação automatizada antes do checkpoint/publicação.
+
+O site institucional foi atualizado para contato por `falacomigocaa@gmail.com` e WhatsApp `+55 67 99163-32279`. O portal está separado do site público; `site/portal.html` continua identificado como prévia estática até o portal real ser publicado.
