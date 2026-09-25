@@ -54,6 +54,14 @@ jobs:
           test -x "$apksigner_path"
           "$apksigner_path" verify --verbose build/app/outputs/flutter-apk/app-release.apk
 
+      - name: Stage APK artifact files
+        run: |
+          mkdir -p artifact
+          cp build/app/outputs/flutter-apk/app-release.apk artifact/fala-comigo-test.apk
+          cp apk-sha256.txt artifact/apk-sha256.txt
+          test -s artifact/fala-comigo-test.apk
+          test -s artifact/apk-sha256.txt
+
       - name: Publish installable test artifact
         uses: actions/upload-artifact@v4
         with:
@@ -61,8 +69,8 @@ jobs:
           if-no-files-found: error
           retention-days: 14
           path: |
-            build/app/outputs/flutter-apk/app-release.apk
-            apk-sha256.txt
+            artifact/fala-comigo-test.apk
+            artifact/apk-sha256.txt
 
       - name: Clean ephemeral signing files
         if: always()
