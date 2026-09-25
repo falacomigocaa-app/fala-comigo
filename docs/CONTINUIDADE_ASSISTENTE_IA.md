@@ -583,3 +583,9 @@ O APK corrigido ainda precisa ser instalado e testado no aparelho. O merge da PR
 O proprietário confirmou que o APK da branch `fix/app-settings-box-type` funcionou após a correção da tipagem Hive de `app_settings`. A PR 69 está aberta contra `main`, com `analyze-and-test` aprovado, estado `MERGEABLE` e sem conflito.
 
 A correção está pronta para merge técnico, mas o merge permanece pendente de confirmação explícita do proprietário conforme o manual de continuidade.
+
+## 33. PR 69 mesclada na main — 25/09/2026
+
+Após confirmação explícita do proprietário, a PR 69 foi mesclada na `main`. O commit resultante é `9e97da0` (`Fix app_settings Hive box type`). A correção testada no APK agora está oficial na linha principal.
+
+O workflow pós-merge `Flutter quality checks` foi disparado para o commit `9e97da0` e estava `in_progress` no momento deste registro. O resultado final deve ser verificado antes de declarar a etapa totalmente encerrada.
