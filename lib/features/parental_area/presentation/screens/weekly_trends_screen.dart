@@ -24,10 +24,12 @@ class _WeeklyTrendsScreenState extends State<WeeklyTrendsScreen> {
   Future<void> _load() async {
     final behaviorBox = await SecureBoxService.openSecureBox('behavior_logs');
     final videoBox = await SecureBoxService.openSecureBox('video_diary');
-    final behaviorTimestamps =
-        behaviorBox.values.whereType<Map>().map((entry) => entry['timestamp']);
-    final videoTimestamps =
-        videoBox.values.whereType<Map>().map((entry) => entry['timestamp']);
+    final behaviorTimestamps = behaviorBox.values.whereType<Map>().map(
+          (entry) => entry['timestamp'],
+        );
+    final videoTimestamps = videoBox.values.whereType<Map>().map(
+          (entry) => entry['timestamp'],
+        );
     final points = buildWeeklyTrends(
       behaviorTimestamps: behaviorTimestamps,
       videoTimestamps: videoTimestamps,
@@ -70,14 +72,20 @@ class _WeeklyTrendsScreenState extends State<WeeklyTrendsScreen> {
                   child: const Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.bar_chart_outlined,
-                          color: AppTheme.professionalAccent, size: 28),
+                      Icon(
+                        Icons.bar_chart_outlined,
+                        color: AppTheme.professionalAccent,
+                        size: 28,
+                      ),
                       SizedBox(width: 14),
                       Expanded(
                         child: Text(
                           'Uma visão das anotações feitas nas últimas oito semanas. Os números descrevem registros; não medem a criança.',
                           style: TextStyle(
-                              color: Colors.white, height: 1.35, fontSize: 15),
+                            color: Colors.white,
+                            height: 1.35,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                     ],
@@ -124,9 +132,10 @@ class _LegendItem extends StatelessWidget {
     return Row(
       children: [
         Container(
-            width: 12,
-            height: 12,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
         const SizedBox(width: 6),
         Text(label, style: const TextStyle(fontSize: 12)),
       ],
@@ -156,20 +165,21 @@ class _WeeklyChart extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: points
-                  .map((point) => Expanded(
-                        child: _WeekBar(
-                          point: point,
-                          maxValue: maxValue,
-                        ),
-                      ))
+                  .map(
+                    (point) => Expanded(
+                      child: _WeekBar(point: point, maxValue: maxValue),
+                    ),
+                  )
                   .toList(),
             ),
           ),
           const SizedBox(height: 8),
           const Divider(height: 1),
           const SizedBox(height: 8),
-          const Text('Início de cada semana',
-              style: TextStyle(color: AppTheme.mutedText, fontSize: 11)),
+          const Text(
+            'Início de cada semana',
+            style: TextStyle(color: AppTheme.mutedText, fontSize: 11),
+          ),
         ],
       ),
     );
@@ -197,14 +207,16 @@ class _WeekBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               _Bar(
-                  value: point.behaviorCount,
-                  height: behaviorHeight,
-                  color: AppTheme.primary),
+                value: point.behaviorCount,
+                height: behaviorHeight,
+                color: AppTheme.primary,
+              ),
               const SizedBox(width: 3),
               _Bar(
-                  value: point.videoCount,
-                  height: videoHeight,
-                  color: AppTheme.accentGreen),
+                value: point.videoCount,
+                height: videoHeight,
+                color: AppTheme.accentGreen,
+              ),
             ],
           ),
         ),
@@ -245,10 +257,14 @@ class _SummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final behaviorTotal =
-        points.fold<int>(0, (sum, item) => sum + item.behaviorCount);
-    final videoTotal =
-        points.fold<int>(0, (sum, item) => sum + item.videoCount);
+    final behaviorTotal = points.fold<int>(
+      0,
+      (sum, item) => sum + item.behaviorCount,
+    );
+    final videoTotal = points.fold<int>(
+      0,
+      (sum, item) => sum + item.videoCount,
+    );
     final activeWeeks = points
         .where((point) => point.behaviorCount + point.videoCount > 0)
         .length;
@@ -262,15 +278,19 @@ class _SummaryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Resumo do período',
-              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17)),
+          const Text(
+            'Resumo do período',
+            style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17),
+          ),
           const SizedBox(height: 10),
           Text(
-              '$behaviorTotal registros ABC e $videoTotal vídeos em $activeWeeks de 8 semanas.'),
+            '$behaviorTotal registros ABC e $videoTotal vídeos em $activeWeeks de 8 semanas.',
+          ),
           const SizedBox(height: 6),
           const Text(
-              'Semanas sem registro também aparecem para ajudar a perceber lacunas de anotação.',
-              style: TextStyle(color: AppTheme.mutedText, fontSize: 12)),
+            'Semanas sem registro também aparecem para ajudar a perceber lacunas de anotação.',
+            style: TextStyle(color: AppTheme.mutedText, fontSize: 12),
+          ),
         ],
       ),
     );

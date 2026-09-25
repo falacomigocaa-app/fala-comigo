@@ -50,9 +50,10 @@ class TransitionAlertsListScreen extends ConsumerWidget {
                       'Para os alertas funcionarem mesmo com a tela bloqueada, '
                       'autorize as permissões do celular (uma vez só).',
                       style: TextStyle(
-                          fontSize: 13,
-                          color: AppTheme.mutedText,
-                          height: 1.35),
+                        fontSize: 13,
+                        color: AppTheme.mutedText,
+                        height: 1.35,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -76,7 +77,8 @@ class TransitionAlertsListScreen extends ConsumerWidget {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(
-                                  'Não foi possível configurar as permissões.'),
+                                'Não foi possível configurar as permissões.',
+                              ),
                             ),
                           );
                         }
@@ -100,7 +102,8 @@ class TransitionAlertsListScreen extends ConsumerWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text(
-                        'Teste agendado para daqui 30 segundos. Bloqueie a tela agora.'),
+                      'Teste agendado para daqui 30 segundos. Bloqueie a tela agora.',
+                    ),
                   ),
                 );
               }
@@ -117,7 +120,10 @@ class TransitionAlertsListScreen extends ConsumerWidget {
                   'Nenhum alerta criado ainda.\nToque em "Novo alerta" para começar.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: AppTheme.mutedText, fontSize: 15, height: 1.35),
+                    color: AppTheme.mutedText,
+                    fontSize: 15,
+                    height: 1.35,
+                  ),
                 ),
               ),
             ),
@@ -145,7 +151,7 @@ class _AlertCard extends ConsumerWidget {
       4: 'Qua',
       5: 'Qui',
       6: 'Sex',
-      7: 'Sáb'
+      7: 'Sáb',
     };
     final days = alert.scheduledWeekdays.map((d) => labels[d] ?? '').join(', ');
     final hour = (alert.scheduledHour ?? 0).toString().padLeft(2, '0');
@@ -158,8 +164,10 @@ class _AlertCard extends ConsumerWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
-        leading: const Icon(Icons.notifications_active_outlined,
-            color: AppTheme.primary),
+        leading: const Icon(
+          Icons.notifications_active_outlined,
+          color: AppTheme.primary,
+        ),
         title: Text(alert.title.isEmpty ? '(sem título)' : alert.title),
         subtitle: Text(
           '${alert.audioType == 'gravado' ? 'Áudio gravado' : 'Texto falado'} • '
@@ -167,14 +175,17 @@ class _AlertCard extends ConsumerWidget {
         ),
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute(
-              builder: (_) => TransitionAlertEditScreen(existingAlert: alert)),
+            builder: (_) => TransitionAlertEditScreen(existingAlert: alert),
+          ),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.play_circle_outline,
-                  color: AppTheme.accentGreen),
+              icon: const Icon(
+                Icons.play_circle_outline,
+                color: AppTheme.accentGreen,
+              ),
               tooltip: 'Testar agora',
               onPressed: () async {
                 try {
@@ -183,7 +194,8 @@ class _AlertCard extends ConsumerWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text(
-                            'Notificação disparada! Verifique a barra de notificações.'),
+                          'Notificação disparada! Verifique a barra de notificações.',
+                        ),
                       ),
                     );
                   }

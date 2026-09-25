@@ -83,27 +83,29 @@ void main() {
     }
   });
 
-  test('licença suspensa pode ser reativada somente por operador autorizado',
-      () {
-    expect(
-      RhLicenseStateMachine.decide(
-        from: RhLicenseState.suspended,
-        to: RhLicenseState.active,
-        actorAuthorized: false,
-        reason: null,
-      ).reason,
-      RhLicenseTransitionReason.actorNotAuthorized,
-    );
-    expect(
-      RhLicenseStateMachine.decide(
-        from: RhLicenseState.suspended,
-        to: RhLicenseState.active,
-        actorAuthorized: true,
-        reason: null,
-      ).allowed,
-      isTrue,
-    );
-  });
+  test(
+    'licença suspensa pode ser reativada somente por operador autorizado',
+    () {
+      expect(
+        RhLicenseStateMachine.decide(
+          from: RhLicenseState.suspended,
+          to: RhLicenseState.active,
+          actorAuthorized: false,
+          reason: null,
+        ).reason,
+        RhLicenseTransitionReason.actorNotAuthorized,
+      );
+      expect(
+        RhLicenseStateMachine.decide(
+          from: RhLicenseState.suspended,
+          to: RhLicenseState.active,
+          actorAuthorized: true,
+          reason: null,
+        ).allowed,
+        isTrue,
+      );
+    },
+  );
 
   test('transição para o mesmo estado não gera evento duplicado', () {
     final decision = RhLicenseStateMachine.decide(

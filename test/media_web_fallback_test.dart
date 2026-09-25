@@ -30,13 +30,12 @@ void main() {
     );
   });
 
-  testWidgets('exibe placeholder acessível para imagem privada Web',
-      (tester) async {
+  testWidgets('exibe placeholder acessível para imagem privada Web', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       const MaterialApp(
-        home: Scaffold(
-          body: SecureMediaImage(path: 'private-photo.fcm'),
-        ),
+        home: Scaffold(body: SecureMediaImage(path: 'private-photo.fcm')),
       ),
     );
 

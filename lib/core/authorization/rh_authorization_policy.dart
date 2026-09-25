@@ -8,13 +8,7 @@ enum RhOperation {
   createCareAuthorization,
 }
 
-enum RhRole {
-  benefitAdministrator,
-  support,
-  family,
-  clinician,
-  school,
-}
+enum RhRole { benefitAdministrator, support, family, clinician, school }
 
 enum RhAuthorizationReason {
   allowed,

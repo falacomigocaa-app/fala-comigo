@@ -4,11 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fala_comigo/features/parental_area/presentation/screens/privacy_settings_screen.dart';
 
 void main() {
-  testWidgets('mostra controles de privacidade locais e política pública',
-      (tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(home: PrivacySettingsScreen()),
-    );
+  testWidgets('mostra controles de privacidade locais e política pública', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: PrivacySettingsScreen()));
 
     expect(find.text('Privacidade e dados'), findsOneWidget);
     expect(find.text('Armazenamento local'), findsOneWidget);

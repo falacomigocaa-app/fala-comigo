@@ -21,10 +21,8 @@ class ParentalPinService {
   static const _iterations = 100000;
   static final _random = Random.secure();
 
-  static Pbkdf2 get _kdf => Pbkdf2.hmacSha256(
-        iterations: _iterations,
-        bits: 256,
-      );
+  static Pbkdf2 get _kdf =>
+      Pbkdf2.hmacSha256(iterations: _iterations, bits: 256);
 
   static Future<bool> hasPin() async {
     final salt = await _storage.read(key: _saltKey);
@@ -36,8 +34,9 @@ class ParentalPinService {
     final raw = await _storage.read(key: _lockoutUntilKey);
     final until = int.tryParse(raw ?? '');
     if (until == null) return null;
-    final remaining =
-        DateTime.fromMillisecondsSinceEpoch(until).difference(DateTime.now());
+    final remaining = DateTime.fromMillisecondsSinceEpoch(
+      until,
+    ).difference(DateTime.now());
     if (remaining <= Duration.zero) {
       await _storage.delete(key: _lockoutUntilKey);
       return null;
@@ -83,7 +82,8 @@ class ParentalPinService {
   static void _validatePin(String pin) {
     if (!RegExp(r'^\d{4}$').hasMatch(pin)) {
       throw const FormatException(
-          'O PIN deve conter exatamente quatro dígitos.');
+        'O PIN deve conter exatamente quatro dígitos.',
+      );
     }
     if (pin == '1234' ||
         pin == '0000' ||

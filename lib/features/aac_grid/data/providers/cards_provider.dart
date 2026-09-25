@@ -48,7 +48,9 @@ class CardsNotifier extends StateNotifier<List<PictogramCard>> {
       imagePath: imagePath,
       isCustomImage: isCustomImage,
       category: category,
-      order: state.length,
+      order: state.isEmpty
+          ? 0
+          : state.map((card) => card.order).reduce((a, b) => a > b ? a : b) + 1,
     );
     await _box.put(card.id, card);
     state = _box.values.toList()..sort((a, b) => a.order.compareTo(b.order));
@@ -171,7 +173,8 @@ class CardTapBehaviorNotifier extends StateNotifier<CardTapBehavior> {
 
 final cardTapBehaviorProvider =
     StateNotifierProvider<CardTapBehaviorNotifier, CardTapBehavior>(
-        (ref) => CardTapBehaviorNotifier());
+  (ref) => CardTapBehaviorNotifier(),
+);
 
 /// Configurações bloqueadas (Modo Infantil Sensorial ativo).
 final settingsLockedProvider = StateProvider<bool>((ref) => true);

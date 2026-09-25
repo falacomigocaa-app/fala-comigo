@@ -6,6 +6,8 @@ Este documento transforma a visão do Fala Comigo em um plano de execução incr
 
 O roadmap separa o aplicativo local-first do portal conectado. A comunicação básica não dependerá de internet. Recursos clínicos, educacionais e corporativos somente serão ativados quando houver um servidor com autorização por recurso, consentimento compreensível, auditoria e isolamento entre organizações.
 
+O contrato comum entre aplicativo, portal web e futuro backend está documentado em [`CONTRATO_PORTAL_CONECTADO.md`](CONTRATO_PORTAL_CONECTADO.md). Ele define entidades, estados, escopos, aceite de tarefas e fila offline para evitar que app e web evoluam com regras incompatíveis.
+
 A estratégia financeira complementar está documentada em [`MODELO_CUSTOS_E_PLANOS.md`](MODELO_CUSTOS_E_PLANOS.md). Ela prioriza um núcleo gratuito e offline, serviços conectados sob demanda, planos acessíveis e aquisição do domínio somente na etapa de lançamento público.
 
 A execução até o primeiro build está detalhada em [`PLANO_SEQUENCIAL_ATE_BUILD.md`](PLANO_SEQUENCIAL_ATE_BUILD.md), com telas, módulos, testes, dependências e critérios de conclusão numerados.

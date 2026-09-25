@@ -1,11 +1,4 @@
-enum RhLicenseState {
-  invited,
-  active,
-  grace,
-  suspended,
-  expired,
-  revoked,
-}
+enum RhLicenseState { invited, active, grace, suspended, expired, revoked }
 
 enum RhLicenseTransitionReason {
   allowed,

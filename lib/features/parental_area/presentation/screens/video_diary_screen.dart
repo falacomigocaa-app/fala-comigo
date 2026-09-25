@@ -82,9 +82,9 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
     FocusScope.of(context).unfocus();
 
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Vídeo salvo.')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Vídeo salvo.')));
   }
 
   void _deleteEntry(dynamic key, String? videoPath) {
@@ -170,25 +170,32 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
                     child: const Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.videocam_outlined,
-                            color: AppTheme.professionalAccent, size: 28),
+                        Icon(
+                          Icons.videocam_outlined,
+                          color: AppTheme.professionalAccent,
+                          size: 28,
+                        ),
                         SizedBox(width: 14),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Diário de Vídeo',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 20)),
+                              Text(
+                                'Diário de Vídeo',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 20,
+                                ),
+                              ),
                               SizedBox(height: 6),
                               Text(
                                 'Grave um momento curto, registre o contexto e decida quando compartilhar.',
                                 style: TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.white70,
-                                    height: 1.35),
+                                  fontSize: 13,
+                                  color: Colors.white70,
+                                  height: 1.35,
+                                ),
                               ),
                             ],
                           ),
@@ -223,8 +230,8 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
                           const Icon(Icons.check_circle, color: Colors.green),
                           const SizedBox(width: 8),
                           const Expanded(
-                              child:
-                                  Text('Vídeo gravado, pronto para salvar.')),
+                            child: Text('Vídeo gravado, pronto para salvar.'),
+                          ),
                         ],
                       ),
                     ),
@@ -293,8 +300,9 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
                               margin: const EdgeInsets.symmetric(vertical: 4),
                               child: ListTile(
                                 leading: const Icon(Icons.videocam_outlined),
-                                title:
-                                    Text(_formatDate(entry['timestamp'] ?? '')),
+                                title: Text(
+                                  _formatDate(entry['timestamp'] ?? ''),
+                                ),
                                 subtitle: Text(
                                   entryContext.isEmpty
                                       ? '(sem contexto)'
@@ -309,8 +317,10 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
                                           _shareEntry(videoPath, entryContext),
                                     ),
                                     IconButton(
-                                      icon: const Icon(Icons.delete_outline,
-                                          color: Colors.redAccent),
+                                      icon: const Icon(
+                                        Icons.delete_outline,
+                                        color: Colors.redAccent,
+                                      ),
                                       onPressed: () =>
                                           _deleteEntry(key, videoPath),
                                     ),

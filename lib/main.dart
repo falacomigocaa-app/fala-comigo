@@ -17,57 +17,59 @@ import 'features/transition_alerts/data/providers/transition_alerts_provider.dar
 import 'features/transition_alerts/domain/models/transition_alert.dart';
 import 'features/transition_alerts/presentation/screens/transition_alert_full_screen.dart';
 
-/// Chave global de navegação: permite abrir uma tela (como o alerta
-/// de transição em tela cheia) a partir de fora da árvore de widgets,
-/// por exemplo quando uma notificação é tocada.
 final navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  runApp(const ProviderScope(child: CaaApp()));
+}
 
-  // Trava a orientação em Paisagem (Landscape), recomendado para
-  // tablets e celulares usados como pranchas de comunicação.
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
+Future<void> _bootstrap() async {
+  try {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+  } catch (_) {
+    // Orientação é uma preferência de UX e não pode impedir o primeiro uso.
+  }
 
-  // Persistência local dos cartões.
   await Hive.initFlutter();
-  Hive.registerAdapter(PictogramCardAdapter());
-  final box = await SecureBoxService.openSecureBoxWithMigration(cardsBoxName);
+  if (!Hive.isAdapterRegistered(PictogramCardAdapter().typeId)) {
+    Hive.registerAdapter(PictogramCardAdapter());
+  }
 
-  // Caixa simples de configurações do app (ex: tema de hiperfoco
-  // escolhido pelos pais).
-  await SecureBoxService.openSecureBoxWithMigration('app_settings');
-
-  // Caixa dos Alertas de Transição de Atividade (configurações dos
-  // alertas: áudio, horário, checklist).
+  final box = await SecureBoxService.openSecureBoxWithMigration<PictogramCard>(
+    cardsBoxName,
+  );
+  await SecureBoxService.openSecureBoxWithMigration<PictogramCard>(
+    'app_settings',
+  );
   await SecureBoxService.openSecureBoxWithMigration(transitionAlertsBoxName);
 
-  // Primeiro uso: popula os pictogramas básicos que acompanham o app,
-  // para que a criança já tenha cartões disponíveis antes mesmo dos
-  // pais cadastrarem fotos personalizadas.
   if (box.isEmpty) {
     for (final card in SeedCards.defaultCards()) {
       await box.put(card.id, card);
     }
   }
 
-  // Quando uma notificação de Alerta de Transição é tocada, abre a
-  // tela em tela cheia correspondente, buscando o alerta salvo pelo
-  // ID recebido no payload da notificação.
-  TransitionAlertService.instance.onAlertTriggered = (alertId) {
+  _configureAlertHandler();
+}
+
+void _configureAlertHandler() {
+  TransitionAlertService.instance.setAlertHandler((alertId) {
     final ctx = navigatorKey.currentContext;
     try {
       final alertsBox = Hive.box(transitionAlertsBoxName);
       final rawMap = alertsBox.get(alertId);
       if (rawMap != null) {
-        final alert =
-            TransitionAlert.fromMap(Map<String, dynamic>.from(rawMap as Map));
+        final alert = TransitionAlert.fromMap(
+          Map<String, dynamic>.from(rawMap as Map),
+        );
         navigatorKey.currentState?.push(
           MaterialPageRoute(
-              builder: (_) => TransitionAlertFullScreen(alert: alert)),
+            builder: (_) => TransitionAlertFullScreen(alert: alert),
+          ),
         );
       } else if (ctx != null) {
         ScaffoldMessenger.of(ctx).showSnackBar(
@@ -81,13 +83,7 @@ Future<void> main() async {
         );
       }
     }
-  };
-
-  runApp(const ProviderScope(child: CaaApp()));
-
-  // Áudio e notificações são recursos auxiliares: uma falha de plugin ou
-  // plataforma não pode impedir a grade CAA de abrir e comunicar.
-  _initializeOptionalServices();
+  });
 }
 
 Future<void> _initializeOptionalServices() async {
@@ -112,12 +108,14 @@ class CaaApp extends StatefulWidget {
 
 class _CaaAppState extends State<CaaApp> with WidgetsBindingObserver {
   bool _wasInBackground = false;
+  late Future<void> _bootstrapFuture;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     ParentalSessionService.onExpired = _showParentalGate;
+    _bootstrapFuture = _bootstrap();
   }
 
   @override
@@ -127,6 +125,10 @@ class _CaaAppState extends State<CaaApp> with WidgetsBindingObserver {
     }
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  void _retryBootstrap() {
+    setState(() => _bootstrapFuture = _bootstrap());
   }
 
   @override
@@ -156,7 +158,87 @@ class _CaaAppState extends State<CaaApp> with WidgetsBindingObserver {
       title: 'Fala Comigo',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const SplashScreen(),
+      home: FutureBuilder<void>(
+        future: _bootstrapFuture,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return _BootstrapError(onRetry: _retryBootstrap);
+          }
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const _BootstrapLoading();
+          }
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _initializeOptionalServices();
+          });
+          return const SplashScreen();
+        },
+      ),
+    );
+  }
+}
+
+class _BootstrapLoading extends StatelessWidget {
+  const _BootstrapLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      backgroundColor: AppTheme.background,
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 20),
+            Text('Preparando a comunicação…'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BootstrapError extends StatelessWidget {
+  final VoidCallback onRetry;
+
+  const _BootstrapError({required this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppTheme.background,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.cloud_off_outlined,
+                size: 48,
+                color: AppTheme.primary,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Não foi possível preparar os dados locais.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Nenhum dado foi apagado. Tente novamente para recuperar o uso offline.',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: onRetry,
+                icon: const Icon(Icons.refresh),
+                label: const Text('Tentar novamente'),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

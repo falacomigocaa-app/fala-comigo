@@ -62,13 +62,15 @@ class _VisualRoutineScreenState extends State<VisualRoutineScreen> {
     final title = _titleController.text.trim();
     if (title.isEmpty) return;
     setState(() {
-      _items.add(VisualRoutineItem(
-        id: VisualRoutineStore.newId(),
-        title: title,
-        emoji: _emojiController.text.trim().isEmpty
-            ? '⭐'
-            : _emojiController.text.trim(),
-      ));
+      _items.add(
+        VisualRoutineItem(
+          id: VisualRoutineStore.newId(),
+          title: title,
+          emoji: _emojiController.text.trim().isEmpty
+              ? '⭐'
+              : _emojiController.text.trim(),
+        ),
+      );
       _titleController.clear();
       _emojiController.text = '⭐';
     });
@@ -170,9 +172,10 @@ class _RoutineHeader extends StatelessWidget {
                 Text(
                   readOnly ? 'O que vem agora?' : 'Organize o dia',
                   style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800),
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
                 const SizedBox(height: 6),
                 Text(
@@ -180,7 +183,10 @@ class _RoutineHeader extends StatelessWidget {
                       ? 'O responsável pode adicionar passos simples para a rotina.'
                       : '$completed de $total itens marcados. Você pode mudar a ordem do seu dia.',
                   style: const TextStyle(
-                      color: Colors.white70, height: 1.35, fontSize: 13),
+                    color: Colors.white70,
+                    height: 1.35,
+                    fontSize: 13,
+                  ),
                 ),
               ],
             ),
@@ -230,7 +236,8 @@ class _RoutineItemTile extends StatelessWidget {
           ),
         ),
         subtitle: Text(
-            item.completed ? 'Concluído por agora' : 'Toque quando quiser'),
+          item.completed ? 'Concluído por agora' : 'Toque quando quiser',
+        ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -277,8 +284,10 @@ class _AddRoutineItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text('Adicionar passo',
-                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17)),
+            const Text(
+              'Adicionar passo',
+              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17),
+            ),
             const SizedBox(height: 10),
             Row(
               children: [
@@ -288,7 +297,9 @@ class _AddRoutineItem extends StatelessWidget {
                     controller: emojiController,
                     textAlign: TextAlign.center,
                     decoration: const InputDecoration(
-                        labelText: 'Ícone', border: OutlineInputBorder()),
+                      labelText: 'Ícone',
+                      border: OutlineInputBorder(),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -297,8 +308,9 @@ class _AddRoutineItem extends StatelessWidget {
                     controller: titleController,
                     onSubmitted: (_) => onAdd(),
                     decoration: const InputDecoration(
-                        labelText: 'Ex.: Lavar as mãos',
-                        border: OutlineInputBorder()),
+                      labelText: 'Ex.: Lavar as mãos',
+                      border: OutlineInputBorder(),
+                    ),
                   ),
                 ),
               ],
@@ -332,13 +344,17 @@ class _EmptyRoutine extends StatelessWidget {
         children: [
           Icon(Icons.view_timeline_outlined, size: 46, color: AppTheme.primary),
           SizedBox(height: 10),
-          Text('Nenhum passo foi adicionado ainda.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+          Text(
+            'Nenhum passo foi adicionado ainda.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+          ),
           SizedBox(height: 5),
-          Text('A rotina é opcional e pode mudar conforme o dia.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: AppTheme.mutedText)),
+          Text(
+            'A rotina é opcional e pode mudar conforme o dia.',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: AppTheme.mutedText),
+          ),
         ],
       ),
     );

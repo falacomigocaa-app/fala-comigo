@@ -29,14 +29,7 @@ extension PlanFeatureMetadata on PlanFeature {
 }
 
 /// Estados possíveis de uma licença, independentemente do provedor de cobrança.
-enum LicenseStatus {
-  invited,
-  active,
-  grace,
-  suspended,
-  expired,
-  revoked,
-}
+enum LicenseStatus { invited, active, grace, suspended, expired, revoked }
 
 /// Definição comercial de um plano. Valores são armazenados em centavos para
 /// evitar cálculos monetários com ponto flutuante.

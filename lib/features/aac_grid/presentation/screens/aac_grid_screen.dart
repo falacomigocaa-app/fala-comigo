@@ -45,9 +45,7 @@ class AACGridScreen extends ConsumerWidget {
               children: [
                 Text(reward.emoji, style: const TextStyle(fontSize: 24)),
                 const SizedBox(width: 10),
-                Expanded(
-                  child: Text('${reward.title}\n${reward.message}'),
-                ),
+                Expanded(child: Text('${reward.title}\n${reward.message}')),
               ],
             ),
           ),
@@ -56,9 +54,9 @@ class AACGridScreen extends ConsumerWidget {
 
     void chooseCategory(String category) {
       ref.read(selectedCategoryProvider.notifier).state = category;
-      showReward(ref
-          .read(communicationRewardsProvider.notifier)
-          .recordCategoryChoice());
+      showReward(
+        ref.read(communicationRewardsProvider.notifier).recordCategoryChoice(),
+      );
     }
 
     return Scaffold(
@@ -76,20 +74,26 @@ class AACGridScreen extends ConsumerWidget {
                   child: Row(
                     children: [
                       if (hyperfocusTheme != HyperfocusTheme.padrao) ...[
-                        Text(hyperfocusTheme.emoji,
-                            style: const TextStyle(fontSize: 24)),
+                        Text(
+                          hyperfocusTheme.emoji,
+                          style: const TextStyle(fontSize: 24),
+                        ),
                         const SizedBox(width: 8),
                       ],
                       const Expanded(
                         child: Text(
                           'Fala Comigo',
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w800),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 6),
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: AppTheme.accentGreen.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(20),
@@ -97,24 +101,33 @@ class AACGridScreen extends ConsumerWidget {
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.cloud_off_outlined,
-                                size: 16, color: AppTheme.accentGreen),
+                            Icon(
+                              Icons.cloud_off_outlined,
+                              size: 16,
+                              color: AppTheme.accentGreen,
+                            ),
                             SizedBox(width: 5),
-                            Text('Offline',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppTheme.accentGreen)),
+                            Text(
+                              'Offline',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: AppTheme.accentGreen,
+                              ),
+                            ),
                           ],
                         ),
                       ),
                       IconButton(
-                        icon:
-                            const Icon(Icons.view_timeline_outlined, size: 27),
+                        icon: const Icon(
+                          Icons.view_timeline_outlined,
+                          size: 27,
+                        ),
                         tooltip: 'Rotina visual',
                         onPressed: () => Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (_) => const VisualRoutineScreen()),
+                            builder: (_) => const VisualRoutineScreen(),
+                          ),
                         ),
                       ),
                       IconButton(
@@ -122,7 +135,8 @@ class AACGridScreen extends ConsumerWidget {
                         tooltip: 'Área do Responsável',
                         onPressed: () => Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (_) => const ParentalGateScreen()),
+                            builder: (_) => const ParentalGateScreen(),
+                          ),
                         ),
                       ),
                     ],
@@ -172,23 +186,29 @@ class AACGridScreen extends ConsumerWidget {
                             child: const Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.grid_view_outlined,
-                                    size: 42, color: AppTheme.primary),
+                                Icon(
+                                  Icons.grid_view_outlined,
+                                  size: 42,
+                                  color: AppTheme.primary,
+                                ),
                                 SizedBox(height: 12),
                                 Text(
                                   'Nenhum cartão nesta categoria ainda.',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      color: AppTheme.textDark,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700),
+                                    color: AppTheme.textDark,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                                 SizedBox(height: 6),
                                 Text(
                                   'O responsável pode adicionar cartões pelo painel.',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      color: AppTheme.mutedText, fontSize: 14),
+                                    color: AppTheme.mutedText,
+                                    fontSize: 14,
+                                  ),
                                 ),
                               ],
                             ),
@@ -204,7 +224,8 @@ class AACGridScreen extends ConsumerWidget {
 
                             return GridView.builder(
                               padding: const EdgeInsets.all(
-                                  AppConstants.gridSpacing),
+                                AppConstants.gridSpacing,
+                              ),
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: crossAxisCount,
@@ -220,10 +241,14 @@ class AACGridScreen extends ConsumerWidget {
                                   scale: scale,
                                   semanticHint: tapSemanticHint,
                                   onTap: () {
-                                    showReward(ref
-                                        .read(communicationRewardsProvider
-                                            .notifier)
-                                        .recordCardTap(categoryChosen: false));
+                                    showReward(
+                                      ref
+                                          .read(
+                                            communicationRewardsProvider
+                                                .notifier,
+                                          )
+                                          .recordCardTap(categoryChosen: false),
+                                    );
                                     if (tapBehavior !=
                                         CardTapBehavior.addOnly) {
                                       TtsService.instance.speak(card.label);

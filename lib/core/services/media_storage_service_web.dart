@@ -29,4 +29,6 @@ class MediaStorageService {
   static Future<void> deleteFile(String path) async {}
 
   static Future<void> clearAllMedia() async {}
+
+  static Future<void> deleteEncryptionKey() async {}
 }

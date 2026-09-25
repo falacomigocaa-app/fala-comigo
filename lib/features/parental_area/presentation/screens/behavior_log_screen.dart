@@ -79,9 +79,9 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
     _notesController.clear();
     FocusScope.of(context).unfocus();
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Registro salvo.')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Registro salvo.')));
   }
 
   void _deleteEntry(dynamic key) {
@@ -125,12 +125,12 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
                 CheckboxListTile(
                   contentPadding: EdgeInsets.zero,
                   value: includeData,
-                  onChanged: (value) => setDialogState(
-                    () => includeData = value ?? false,
-                  ),
+                  onChanged: (value) =>
+                      setDialogState(() => includeData = value ?? false),
                   title: const Text('Incluir dados identificadores'),
                   subtitle: const Text(
-                      'Nome, responsável, escola e nível de suporte'),
+                    'Nome, responsável, escola e nível de suporte',
+                  ),
                   controlAffinity: ListTileControlAffinity.leading,
                 ),
               ],
@@ -189,8 +189,10 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  pw.Text('Paciente: $patientName',
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  pw.Text(
+                    'Paciente: $patientName',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                  ),
                   if (birthDate.toString().isNotEmpty)
                     pw.Text('Data de nascimento: $birthDate'),
                   if (supportLevel.toString().isNotEmpty)
@@ -271,25 +273,32 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
                     child: const Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.fact_check_outlined,
-                            color: AppTheme.professionalAccent, size: 28),
+                        Icon(
+                          Icons.fact_check_outlined,
+                          color: AppTheme.professionalAccent,
+                          size: 28,
+                        ),
                         SizedBox(width: 14),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Modelo ABC',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 20)),
+                              Text(
+                                'Modelo ABC',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 20,
+                                ),
+                              ),
                               SizedBox(height: 6),
                               Text(
                                 'Descreva o contexto, o que foi observado e o apoio oferecido. Prefira fatos concretos.',
                                 style: TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.white70,
-                                    height: 1.35),
+                                  fontSize: 13,
+                                  color: Colors.white70,
+                                  height: 1.35,
+                                ),
                               ),
                             ],
                           ),
@@ -374,8 +383,9 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
                             return Card(
                               margin: const EdgeInsets.symmetric(vertical: 4),
                               child: ListTile(
-                                title:
-                                    Text(_formatDate(entry['timestamp'] ?? '')),
+                                title: Text(
+                                  _formatDate(entry['timestamp'] ?? ''),
+                                ),
                                 subtitle: Text(
                                   'A: ${entry['antecedent']}\n'
                                   'B: ${entry['behavior']}\n'
@@ -383,8 +393,10 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
                                 ),
                                 isThreeLine: true,
                                 trailing: IconButton(
-                                  icon: const Icon(Icons.delete_outline,
-                                      color: Colors.redAccent),
+                                  icon: const Icon(
+                                    Icons.delete_outline,
+                                    color: Colors.redAccent,
+                                  ),
                                   onPressed: () => _deleteEntry(key),
                                 ),
                               ),

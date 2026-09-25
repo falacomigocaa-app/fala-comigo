@@ -13,8 +13,9 @@ void main() {
     await Hive.openBox('app_settings');
   });
 
-  testWidgets('anuncia um cartão como um único botão acionável',
-      (tester) async {
+  testWidgets('anuncia um cartão como um único botão acionável', (
+    tester,
+  ) async {
     final card = PictogramCard(
       id: 'maca',
       label: 'Maçã',

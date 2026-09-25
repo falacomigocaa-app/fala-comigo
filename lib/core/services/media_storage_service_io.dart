@@ -62,10 +62,10 @@ class MediaStorageService {
       secretKey: await _getOrCreateKey(),
     );
 
-    await destination.writeAsBytes(
-      <int>[...utf8.encode(_fileMagic), ...secretBox.concatenation()],
-      flush: true,
-    );
+    await destination.writeAsBytes(<int>[
+      ...utf8.encode(_fileMagic),
+      ...secretBox.concatenation(),
+    ], flush: true);
     return destination.path;
   }
 
@@ -105,6 +105,10 @@ class MediaStorageService {
     _previewCache.clear();
   }
 
+  static Future<void> deleteEncryptionKey() async {
+    await _storage.delete(key: _keyStorageKey);
+  }
+
   static Future<File> _materialize(String path) async {
     final source = File(path);
     if (!await source.exists()) {
@@ -116,8 +120,10 @@ class MediaStorageService {
 
     final bytes = await source.readAsBytes();
     final isEncrypted = bytes.length >= _fileMagic.length &&
-        utf8.decode(bytes.take(_fileMagic.length).toList(),
-                allowMalformed: true) ==
+        utf8.decode(
+              bytes.take(_fileMagic.length).toList(),
+              allowMalformed: true,
+            ) ==
             _fileMagic;
     final plainBytes = isEncrypted
         ? await _decrypt(bytes.sublist(_fileMagic.length))

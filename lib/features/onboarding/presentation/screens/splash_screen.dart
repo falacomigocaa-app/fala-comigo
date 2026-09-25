@@ -38,10 +38,8 @@ class _SplashScreenState extends State<SplashScreen>
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 500),
-            pageBuilder: (_, animation, __) => FadeTransition(
-              opacity: animation,
-              child: widget.destination,
-            ),
+            pageBuilder: (_, animation, __) =>
+                FadeTransition(opacity: animation, child: widget.destination),
           ),
         );
       }
@@ -71,8 +69,11 @@ class _SplashScreenState extends State<SplashScreen>
                   color: AppTheme.primary.withValues(alpha: 0.12),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.chat_bubble_outline,
-                    size: 48, color: AppTheme.primary),
+                child: const Icon(
+                  Icons.chat_bubble_outline,
+                  size: 48,
+                  color: AppTheme.primary,
+                ),
               ),
               const SizedBox(height: 20),
               const Text(

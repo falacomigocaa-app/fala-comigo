@@ -12,8 +12,9 @@ final transitionAlertsBoxProvider = Provider<Box>((ref) {
 });
 
 final transitionAlertsListProvider =
-    StateNotifierProvider<TransitionAlertsNotifier, List<TransitionAlert>>(
-        (ref) {
+    StateNotifierProvider<TransitionAlertsNotifier, List<TransitionAlert>>((
+  ref,
+) {
   final box = ref.watch(transitionAlertsBoxProvider);
   return TransitionAlertsNotifier(box);
 });
@@ -26,7 +27,8 @@ class TransitionAlertsNotifier extends StateNotifier<List<TransitionAlert>> {
   static List<TransitionAlert> _loadAll(Box box) {
     return box.values
         .map(
-            (e) => TransitionAlert.fromMap(Map<String, dynamic>.from(e as Map)))
+          (e) => TransitionAlert.fromMap(Map<String, dynamic>.from(e as Map)),
+        )
         .toList();
   }
 

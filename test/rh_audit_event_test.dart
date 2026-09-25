@@ -49,12 +49,14 @@ void main() {
     expect(denied.toJson()['result'], 'denied');
   });
 
-  test('identidade, organização, operação e motivo vazios invalidam evento',
-      () {
-    expect(event(actorId: '').isValid, isFalse);
-    expect(event(organizationId: '').isValid, isFalse);
-    expect(event(reason: '').isValid, isFalse);
-  });
+  test(
+    'identidade, organização, operação e motivo vazios invalidam evento',
+    () {
+      expect(event(actorId: '').isValid, isFalse);
+      expect(event(organizationId: '').isValid, isFalse);
+      expect(event(reason: '').isValid, isFalse);
+    },
+  );
 
   test('evento inválido não pode ser serializado', () {
     expect(() => event(actorId: '').toJson(), throwsStateError);

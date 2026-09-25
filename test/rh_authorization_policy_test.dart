@@ -44,13 +44,15 @@ void main() {
     );
   }
 
-  test('administrador com produto e finalidade corretos pode ver o programa',
-      () {
-    final decision = RhAuthorizationPolicy.decide(request());
+  test(
+    'administrador com produto e finalidade corretos pode ver o programa',
+    () {
+      final decision = RhAuthorizationPolicy.decide(request());
 
-    expect(decision.allowed, isTrue);
-    expect(decision.reason, RhAuthorizationReason.allowed);
-  });
+      expect(decision.allowed, isTrue);
+      expect(decision.reason, RhAuthorizationReason.allowed);
+    },
+  );
 
   test('nega sessão ausente, conta inativa e organização divergente', () {
     expect(
@@ -102,38 +104,34 @@ void main() {
     expect(decision.reason, RhAuthorizationReason.aggregateThresholdNotMet);
   });
 
-  test('RH nunca acessa conteúdo familiar, exportação ou consentimento clínico',
-      () {
-    for (final operation in [
-      RhOperation.viewFamilyContent,
-      RhOperation.exportFamilyContent,
-      RhOperation.createCareAuthorization,
-    ]) {
-      final decision = RhAuthorizationPolicy.decide(
-        request(operation: operation),
-      );
+  test(
+    'RH nunca acessa conteúdo familiar, exportação ou consentimento clínico',
+    () {
+      for (final operation in [
+        RhOperation.viewFamilyContent,
+        RhOperation.exportFamilyContent,
+        RhOperation.createCareAuthorization,
+      ]) {
+        final decision = RhAuthorizationPolicy.decide(
+          request(operation: operation),
+        );
 
-      expect(decision.allowed, isFalse);
-      expect(decision.reason, RhAuthorizationReason.operationNotAllowed);
-    }
-  });
+        expect(decision.allowed, isFalse);
+        expect(decision.reason, RhAuthorizationReason.operationNotAllowed);
+      }
+    },
+  );
 
   test('finalidade, escopo e prazo inválidos são negados', () {
     expect(
       RhAuthorizationPolicy.decide(
-        request(
-          requiredPurpose: 'benefit_administration',
-          purpose: 'support',
-        ),
+        request(requiredPurpose: 'benefit_administration', purpose: 'support'),
       ).reason,
       RhAuthorizationReason.purposeMismatch,
     );
     expect(
       RhAuthorizationPolicy.decide(
-        request(
-          scope: 'family_content',
-          requiredScope: 'benefit_program',
-        ),
+        request(scope: 'family_content', requiredScope: 'benefit_program'),
       ).reason,
       RhAuthorizationReason.scopeMissing,
     );
@@ -146,9 +144,7 @@ void main() {
   });
 
   test('auditoria é obrigatória para toda operação administrativa', () {
-    final decision = RhAuthorizationPolicy.decide(
-      request(auditReady: false),
-    );
+    final decision = RhAuthorizationPolicy.decide(request(auditReady: false));
 
     expect(decision.reason, RhAuthorizationReason.auditRequirementsMissing);
   });

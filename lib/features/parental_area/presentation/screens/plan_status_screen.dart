@@ -6,6 +6,7 @@ import '../../../../core/plans/plan_access_provider.dart';
 import '../../../../core/plans/plan_catalog.dart';
 import '../../../../core/plans/plan_models.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../widgets/parental_ui.dart';
 
 /// Exibe o estado comercial sem exigir conta, cobrança ou conexão.
 class PlanStatusScreen extends ConsumerStatefulWidget {
@@ -36,10 +37,17 @@ class _PlanStatusScreenState extends ConsumerState<PlanStatusScreen> {
         elevation: 0,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(20, 24, 20, 28),
         children: [
+          const ParentalSectionHeading(
+            eyebrow: 'ACESSO E RECURSOS',
+            title: 'Plano e recursos',
+            description:
+                'Consulte o que está disponível neste aparelho sem bloquear a comunicação básica.',
+          ),
+          const SizedBox(height: 18),
           _CurrentPlanCard(access: access),
-          const SizedBox(height: 20),
+          const SizedBox(height: 18),
           const _PlanSectionTitle(
             icon: Icons.verified_outlined,
             title: 'Recursos da comunicação',
@@ -73,10 +81,8 @@ class _PlanStatusScreenState extends ConsumerState<PlanStatusScreen> {
           ),
           const SizedBox(height: 8),
           ...PlanCatalog.publicPlans.map(
-            (plan) => _PlanCard(
-              plan: plan,
-              selected: plan.id == access.plan.id,
-            ),
+            (plan) =>
+                _PlanCard(plan: plan, selected: plan.id == access.plan.id),
           ),
           if (license == null)
             const Padding(
@@ -103,14 +109,14 @@ class _CurrentPlanCard extends StatelessWidget {
     final status = license == null ? 'Uso local' : _statusLabel(license.status);
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
       decoration: BoxDecoration(
         color: AppTheme.professionalBackground,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
         gradient: const LinearGradient(
           colors: [
             AppTheme.professionalBackground,
-            AppTheme.professionalSurface
+            AppTheme.professionalSurface,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -129,15 +135,20 @@ class _CurrentPlanCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Plano atual',
-              style: TextStyle(color: Colors.white70, fontSize: 13),
+              'PLANO ATUAL',
+              style: TextStyle(
+                color: AppTheme.professionalAccent,
+                fontSize: 10,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1.05,
+              ),
             ),
             const SizedBox(height: 4),
             Text(
               access.plan.name,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 25,
+                fontSize: 22,
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -154,7 +165,11 @@ class _CurrentPlanCard extends StatelessWidget {
             const SizedBox(height: 8),
             const Text(
               'A comunicação básica não depende de assinatura e não será bloqueada por falta de conexão.',
-              style: TextStyle(color: Colors.white70, fontSize: 13),
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 12,
+                height: 1.35,
+              ),
             ),
           ],
         ),
@@ -200,8 +215,10 @@ class _FeatureTile extends StatelessWidget {
         ),
         child: ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: Icon(icon,
-              color: enabled ? AppTheme.primary : AppTheme.mutedText),
+          leading: Icon(
+            icon,
+            color: enabled ? AppTheme.primary : AppTheme.mutedText,
+          ),
           title: Text(title),
           subtitle: Text(description),
           trailing: Icon(
@@ -277,8 +294,10 @@ class _PlanSectionTitle extends StatelessWidget {
       children: [
         Icon(icon, color: AppTheme.primary),
         const SizedBox(width: 10),
-        Text(title,
-            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 17)),
+        Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 17),
+        ),
       ],
     );
   }

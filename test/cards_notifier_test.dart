@@ -50,11 +50,7 @@ void main() {
     await box.put(card.id, card);
     final notifier = CardsNotifier(box);
 
-    await notifier.updateCard(
-      id: card.id,
-      label: 'Beber',
-      category: 'comidas',
-    );
+    await notifier.updateCard(id: card.id, label: 'Beber', category: 'comidas');
 
     expect(notifier.state.single.id, 'card-1');
     expect(notifier.state.single.label, 'Beber');
