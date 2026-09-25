@@ -605,3 +605,9 @@ Primeiro corte implementado: organizações, membros, convites individuais com t
 O portal tem dashboard autenticado, criação de organização, preparação de convite, cópia/compartilhamento do link, página `/invite/:token` e aceite com visualização de finalidade, escopos e prazo. O fluxo real ainda está em validação automatizada antes do checkpoint/publicação.
 
 O site institucional foi atualizado para contato por `falacomigocaa@gmail.com` e WhatsApp `+55 67 99163-32279`. O portal está separado do site público; `site/portal.html` continua identificado como prévia estática até o portal real ser publicado.
+
+## 36. Espaço do Criador protegido — 25/09/2026
+
+Foi solicitado um espaço reservado para o criador entrar pela página pública e administrar planos. A solução adotada é segura: o site público tem apenas um link discreto no rodapé para o portal; o servidor protege `/creator` com `adminProcedure` e a conta administrativa do proprietário.
+
+O Espaço do Criador permite consultar organizações e alterar plano/limite de pessoas, registrando a ação na auditoria. O piloto começa com uma pessoa e pode ser ampliado somente pelo administrador após confirmação comercial. Não foi colocada uma chave secreta no JavaScript público; uma chave exposta seria copiável e não protegeria o sistema. Se for necessária uma segunda camada, ela deverá ser configurada como segredo de servidor, nunca como texto no site.
