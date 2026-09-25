@@ -54,12 +54,6 @@ Future<void> main() async {
     }
   }
 
-  // Pré-inicializa o TTS para reduzir latência na primeira fala.
-  await TtsService.instance.init();
-
-  // Inicializa o serviço de notificações do Alerta de Transição.
-  await TransitionAlertService.instance.init();
-
   // Quando uma notificação de Alerta de Transição é tocada, abre a
   // tela em tela cheia correspondente, buscando o alerta salvo pelo
   // ID recebido no payload da notificação.
@@ -90,6 +84,23 @@ Future<void> main() async {
   };
 
   runApp(const ProviderScope(child: CaaApp()));
+
+  // Áudio e notificações são recursos auxiliares: uma falha de plugin ou
+  // plataforma não pode impedir a grade CAA de abrir e comunicar.
+  _initializeOptionalServices();
+}
+
+Future<void> _initializeOptionalServices() async {
+  try {
+    await TtsService.instance.init();
+  } catch (_) {
+    // O serviço tenta inicializar novamente quando for usado.
+  }
+  try {
+    await TransitionAlertService.instance.init();
+  } catch (_) {
+    // Alertas permanecem indisponíveis nesta plataforma/configuração.
+  }
 }
 
 class CaaApp extends StatefulWidget {

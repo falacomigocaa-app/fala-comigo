@@ -61,6 +61,26 @@ void main() {
     expect(notifier.state.single.category, 'comidas');
   });
 
+  test('marca imagem personalizada ao substituir a imagem do cartão', () async {
+    final card = PictogramCard(
+      id: 'card-with-image',
+      label: 'Comer',
+      imagePath: 'assets/images/cards/comer.png',
+      category: 'acoes',
+    );
+    await box.put(card.id, card);
+    final notifier = CardsNotifier(box);
+
+    await notifier.updateCard(
+      id: card.id,
+      imagePath: '/private/card-image.fcm',
+      isCustomImage: true,
+    );
+
+    expect(notifier.state.single.isCustomImage, isTrue);
+    expect(box.get(card.id)?.isCustomImage, isTrue);
+  });
+
   test('reordena cartões e persiste a nova ordem', () async {
     final first = PictogramCard(
       id: 'first',

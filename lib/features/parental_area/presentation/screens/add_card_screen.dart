@@ -64,7 +64,7 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
     }
   }
 
-  void _saveCard() {
+  Future<void> _saveCard() async {
     if (_selectedImagePath == null || _labelController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -74,14 +74,16 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
     }
 
     if (_isEditing) {
-      ref.read(cardsListProvider.notifier).updateCard(
+      await ref.read(cardsListProvider.notifier).updateCard(
             id: widget.existingCard!.id,
             label: _labelController.text.trim(),
             imagePath: _selectedImagePath!,
+            isCustomImage: widget.existingCard!.isCustomImage ||
+                _selectedImagePath != widget.existingCard!.imagePath,
             category: _category,
           );
     } else {
-      ref.read(cardsListProvider.notifier).addCard(
+      await ref.read(cardsListProvider.notifier).addCard(
             label: _labelController.text.trim(),
             imagePath: _selectedImagePath!,
             isCustomImage: true,

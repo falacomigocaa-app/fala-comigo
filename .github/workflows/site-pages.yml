@@ -25,7 +25,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Preparar site
-        run: test -s site/index.html && test -s site/styles.css && test -s site/privacy.html
+        run: |
+          test -s site/index.html
+          test -s site/styles.css
+          test -s site/privacy.html
+          test -s site/rh/index.html
+          test -s site/rh/styles.css
 
       - name: Configurar Pages
         uses: actions/configure-pages@v5
