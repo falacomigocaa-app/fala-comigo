@@ -7,49 +7,55 @@ import 'package:fala_comigo/core/plans/plan_models.dart';
 void main() {
   final issuedAt = DateTime.utc(2026, 9, 22);
 
-  test('catálogo público começa com planos acessíveis e sem cobrança definida',
-      () {
-    expect(PlanCatalog.publicPlans.map((plan) => plan.id), [
-      'essential',
-      'family',
-      'connected_care',
-      'sponsored',
-    ]);
-    expect(PlanCatalog.essential.isFree, isTrue);
-    expect(PlanCatalog.family.pricePending, isTrue);
-    expect(PlanCatalog.organization.publiclyVisible, isFalse);
-  });
+  test(
+    'catálogo público começa com planos acessíveis e sem cobrança definida',
+    () {
+      expect(PlanCatalog.publicPlans.map((plan) => plan.id), [
+        'essential',
+        'family',
+        'connected_care',
+        'sponsored',
+      ]);
+      expect(PlanCatalog.essential.isFree, isTrue);
+      expect(PlanCatalog.family.pricePending, isTrue);
+      expect(PlanCatalog.organization.publiclyVisible, isFalse);
+    },
+  );
 
-  test('plano Essencial mantém comunicação e controles offline disponíveis',
-      () {
-    final access = PlanAccessController(plan: PlanCatalog.essential);
+  test(
+    'plano Essencial mantém comunicação e controles offline disponíveis',
+    () {
+      final access = PlanAccessController(plan: PlanCatalog.essential);
 
-    expect(access.canUse(PlanFeature.offlineCommunication), isTrue);
-    expect(access.canUse(PlanFeature.parentalControls), isTrue);
-    expect(access.canUse(PlanFeature.accessibility), isTrue);
-    expect(access.canUse(PlanFeature.localStorage), isTrue);
-    expect(access.canUse(PlanFeature.remoteBackup), isFalse);
-    expect(access.communicationRemainsAvailable, isTrue);
-  });
+      expect(access.canUse(PlanFeature.offlineCommunication), isTrue);
+      expect(access.canUse(PlanFeature.parentalControls), isTrue);
+      expect(access.canUse(PlanFeature.accessibility), isTrue);
+      expect(access.canUse(PlanFeature.localStorage), isTrue);
+      expect(access.canUse(PlanFeature.remoteBackup), isFalse);
+      expect(access.communicationRemainsAvailable, isTrue);
+    },
+  );
 
-  test('portal RH pode ser contratado sem conceder acesso ao benefício familiar',
-      () {
-    final access = PlanAccessController.fromLicense(
-      PlanLicense(
-        id: 'organization-license-1',
-        planId: PlanCatalog.organization.id,
-        status: LicenseStatus.active,
-        issuedAt: issuedAt,
-      ),
-    );
+  test(
+    'portal RH pode ser contratado sem conceder acesso ao benefício familiar',
+    () {
+      final access = PlanAccessController.fromLicense(
+        PlanLicense(
+          id: 'organization-license-1',
+          planId: PlanCatalog.organization.id,
+          status: LicenseStatus.active,
+          issuedAt: issuedAt,
+        ),
+      );
 
-    expect(access.canUse(PlanFeature.organizationPortal), isTrue);
-    expect(access.canUse(PlanFeature.benefitAdministration), isTrue);
-    expect(access.canUse(PlanFeature.aggregateReporting), isTrue);
-    expect(access.canUse(PlanFeature.sponsoredLicense), isFalse);
-    expect(access.canUse(PlanFeature.careNetwork), isFalse);
-    expect(access.communicationRemainsAvailable, isTrue);
-  });
+      expect(access.canUse(PlanFeature.organizationPortal), isTrue);
+      expect(access.canUse(PlanFeature.benefitAdministration), isTrue);
+      expect(access.canUse(PlanFeature.aggregateReporting), isTrue);
+      expect(access.canUse(PlanFeature.sponsoredLicense), isFalse);
+      expect(access.canUse(PlanFeature.careNetwork), isFalse);
+      expect(access.communicationRemainsAvailable, isTrue);
+    },
+  );
 
   test('licença patrocinada da família não concede portal ou dados de RH', () {
     final access = PlanAccessController.fromLicense(
@@ -137,8 +143,9 @@ void main() {
 
     expect(license.status, LicenseStatus.invited);
     expect(
-        PlanAccessController.fromLicense(license).communicationRemainsAvailable,
-        isTrue);
+      PlanAccessController.fromLicense(license).communicationRemainsAvailable,
+      isTrue,
+    );
   });
 
   test('plano e licença podem ser serializados sem dados clínicos', () {
