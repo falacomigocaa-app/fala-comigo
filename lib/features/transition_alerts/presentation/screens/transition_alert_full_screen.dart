@@ -92,8 +92,10 @@ class _TransitionAlertFullScreenState
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (hyperfocusTheme != HyperfocusTheme.padrao)
-                  Text(hyperfocusTheme.emoji,
-                      style: const TextStyle(fontSize: 64)),
+                  Text(
+                    hyperfocusTheme.emoji,
+                    style: const TextStyle(fontSize: 64),
+                  ),
                 const SizedBox(height: 16),
                 Text(
                   widget.alert.title.isEmpty
@@ -145,9 +147,12 @@ class _TransitionAlertFullScreenState
                     foregroundColor: color,
                     minimumSize: const Size(240, 64),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32)),
+                      borderRadius: BorderRadius.circular(32),
+                    ),
                     textStyle: const TextStyle(
-                        fontSize: 22, fontWeight: FontWeight.bold),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   child: const Text('Vamos lá! 👉'),
                 ),

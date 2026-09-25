@@ -113,9 +113,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         actions: [
           IconButton.filledTonal(
             tooltip: 'Novo cartão',
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const AddCardScreen()),
-            ),
+            onPressed: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => const AddCardScreen())),
             icon: const Icon(Icons.add_a_photo_outlined),
           ),
           const SizedBox(width: 8),
@@ -143,9 +142,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Tamanho dos botões',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+                const Text(
+                  'Tamanho dos botões',
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                ),
                 Slider(
                   value: scale,
                   min: 0.8,
@@ -157,13 +157,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       ref.read(buttonScaleProvider.notifier).state = v,
                 ),
                 const SizedBox(height: 6),
-                const Text('Ao tocar em um cartão',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+                const Text(
+                  'Ao tocar em um cartão',
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                ),
                 const SizedBox(height: 3),
                 const Text(
-                    'Escolha se o toque fala, monta uma mensagem ou faz as duas coisas.',
-                    style: TextStyle(fontSize: 13, color: AppTheme.mutedText)),
+                  'Escolha se o toque fala, monta uma mensagem ou faz as duas coisas.',
+                  style: TextStyle(fontSize: 13, color: AppTheme.mutedText),
+                ),
                 RadioListTile<CardTapBehavior>(
                   contentPadding: EdgeInsets.zero,
                   value: CardTapBehavior.speakAndAdd,
@@ -211,9 +213,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Tema e estímulos visuais',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+                const Text(
+                  'Tema e estímulos visuais',
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                ),
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 8,
@@ -228,28 +231,36 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           .setTheme(theme),
                       selectedColor: theme.primaryColor.withValues(alpha: 0.2),
                       labelStyle: TextStyle(
-                          color:
-                              selected ? theme.primaryColor : AppTheme.textDark,
-                          fontWeight:
-                              selected ? FontWeight.w700 : FontWeight.w500),
+                        color: selected
+                            ? theme.primaryColor
+                            : AppTheme.textDark,
+                        fontWeight: selected
+                            ? FontWeight.w700
+                            : FontWeight.w500,
+                      ),
                     );
                   }).toList(),
                 ),
                 const SizedBox(height: 18),
-                const Text('Orientação da tela da criança',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+                const Text(
+                  'Orientação da tela da criança',
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                ),
                 const SizedBox(height: 4),
                 const Text(
-                    'A paisagem é recomendada para mostrar cartões maiores. Escolha vertical se o aparelho for usado normalmente em pé.',
-                    style: TextStyle(fontSize: 13, color: AppTheme.mutedText)),
+                  'A paisagem é recomendada para mostrar cartões maiores. Escolha vertical se o aparelho for usado normalmente em pé.',
+                  style: TextStyle(fontSize: 13, color: AppTheme.mutedText),
+                ),
                 const SizedBox(height: 8),
                 SegmentedButton<ChildOrientation>(
                   segments: ChildOrientation.values
-                      .map((orientation) => ButtonSegment<ChildOrientation>(
+                      .map(
+                        (orientation) => ButtonSegment<ChildOrientation>(
                           value: orientation,
                           icon: Text(childOrientationIcon(orientation)),
-                          label: Text(childOrientationLabel(orientation))))
+                          label: Text(childOrientationLabel(orientation)),
+                        ),
+                      )
                       .toList(),
                   selected: {ref.watch(childOrientationProvider)},
                   onSelectionChanged: (selection) => ref
@@ -267,41 +278,65 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: Column(
               children: [
                 _OptionAListAction(
-                    icon: Icons.fact_check_outlined,
-                    title: 'Registro de Comportamento',
-                    subtitle: 'Registrar gatilhos no modelo ABC',
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => const BehaviorLogScreen()))),
+                  icon: Icons.fact_check_outlined,
+                  title: 'Registro de Comportamento',
+                  subtitle: 'Registrar gatilhos no modelo ABC',
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const BehaviorLogScreen(),
+                    ),
+                  ),
+                ),
                 _OptionAListAction(
-                    icon: Icons.insights_outlined,
-                    title: 'Relatórios de progresso',
-                    subtitle: 'Ver resumo local e exportar dados',
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => const ProgressReportScreen()))),
+                  icon: Icons.insights_outlined,
+                  title: 'Relatórios de progresso',
+                  subtitle: 'Ver resumo local e exportar dados',
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const ProgressReportScreen(),
+                    ),
+                  ),
+                ),
                 _OptionAListAction(
-                    icon: Icons.alarm_on_outlined,
-                    title: 'Alertas de Transição',
-                    subtitle: 'Avisar antes de mudar de atividade',
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => const TransitionAlertsListScreen()))),
+                  icon: Icons.alarm_on_outlined,
+                  title: 'Alertas de Transição',
+                  subtitle: 'Avisar antes de mudar de atividade',
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const TransitionAlertsListScreen(),
+                    ),
+                  ),
+                ),
                 _OptionAListAction(
-                    icon: Icons.notifications_none_outlined,
-                    title: 'Lembretes do responsável',
-                    subtitle: 'Agendar avisos locais',
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => const ParentRemindersScreen()))),
+                  icon: Icons.notifications_none_outlined,
+                  title: 'Lembretes do responsável',
+                  subtitle: 'Agendar avisos locais',
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const ParentRemindersScreen(),
+                    ),
+                  ),
+                ),
                 _OptionAListAction(
-                    icon: Icons.add_task_outlined,
-                    title: 'Tarefas compartilhadas',
-                    subtitle: 'Combinar próximos passos com a rede de cuidado',
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => const SharedTasksScreen()))),
+                  icon: Icons.add_task_outlined,
+                  title: 'Tarefas compartilhadas',
+                  subtitle: 'Combinar próximos passos com a rede de cuidado',
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const SharedTasksScreen(),
+                    ),
+                  ),
+                ),
                 _OptionAListAction(
-                    icon: Icons.hub_outlined,
-                    title: 'Continuidade do cuidado',
-                    subtitle: 'Perfil funcional, plano de comunicação e agenda',
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => const CareCoordinationScreen()))),
+                  icon: Icons.hub_outlined,
+                  title: 'Continuidade do cuidado',
+                  subtitle: 'Perfil funcional, plano de comunicação e agenda',
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const CareCoordinationScreen(),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -313,12 +348,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Cartões cadastrados (${cards.length})',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w800, fontSize: 16)),
+                Text(
+                  'Cartões cadastrados (${cards.length})',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 16,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                const Text('Segure e arraste um cartão para reordenar.',
-                    style: TextStyle(fontSize: 12, color: AppTheme.mutedText)),
+                const Text(
+                  'Segure e arraste um cartão para reordenar.',
+                  style: TextStyle(fontSize: 12, color: AppTheme.mutedText),
+                ),
                 const SizedBox(height: 8),
                 ReorderableListView.builder(
                   shrinkWrap: true,
@@ -333,26 +374,38 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       key: ValueKey(card.id),
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       child: ListTile(
-                        leading: const Icon(Icons.drag_indicator,
-                            color: AppTheme.mutedText),
+                        leading: const Icon(
+                          Icons.drag_indicator,
+                          color: AppTheme.mutedText,
+                        ),
                         title: Text(card.label),
                         subtitle: Text(card.category),
-                        trailing:
-                            Row(mainAxisSize: MainAxisSize.min, children: [
-                          IconButton(
-                              icon: const Icon(Icons.edit_outlined,
-                                  color: AppTheme.primary),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.edit_outlined,
+                                color: AppTheme.primary,
+                              ),
                               onPressed: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) =>
-                                          AddCardScreen(existingCard: card)))),
-                          IconButton(
-                              icon: const Icon(Icons.delete_outline,
-                                  color: Colors.redAccent),
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      AddCardScreen(existingCard: card),
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.delete_outline,
+                                color: Colors.redAccent,
+                              ),
                               onPressed: () => ref
                                   .read(cardsListProvider.notifier)
-                                  .removeCard(card.id)),
-                        ]),
+                                  .removeCard(card.id),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -365,45 +418,66 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             icon: Icons.admin_panel_settings_outlined,
             title: 'Conta, plano e privacidade',
             description: 'Proteções, perfil, PIN e dados locais.',
-            child: Column(children: [
-              ListTile(
+            child: Column(
+              children: [
+                ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.workspace_premium_outlined),
                   title: const Text('Plano e recursos'),
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const PlanStatusScreen()))),
-              ListTile(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const PlanStatusScreen()),
+                  ),
+                ),
+                ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.person_outline),
                   title: const Text('Perfil do Paciente'),
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const PatientProfileScreen()))),
-              ListTile(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const PatientProfileScreen(),
+                    ),
+                  ),
+                ),
+                ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.privacy_tip_outlined),
                   title: const Text('Privacidade e dados'),
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const PrivacySettingsScreen()))),
-              ListTile(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const PrivacySettingsScreen(),
+                    ),
+                  ),
+                ),
+                ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.people_alt_outlined),
                   title: const Text('Pessoas e organizações'),
                   subtitle: const Text('Quem pode acessar?'),
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const AccessManagementScreen()))),
-              ListTile(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const AccessManagementScreen(),
+                    ),
+                  ),
+                ),
+                ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.lock_reset_outlined),
                   title: const Text('Trocar PIN'),
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const ChangePinScreen()))),
-              ListTile(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const ChangePinScreen()),
+                  ),
+                ),
+                ListTile(
                   contentPadding: EdgeInsets.zero,
-                  leading: const Icon(Icons.delete_forever_outlined,
-                      color: Colors.redAccent),
+                  leading: const Icon(
+                    Icons.delete_forever_outlined,
+                    color: Colors.redAccent,
+                  ),
                   title: const Text('Apagar todos os dados'),
-                  onTap: _deleteAllLocalData),
-            ]),
+                  onTap: _deleteAllLocalData,
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 24),
         ],
@@ -415,23 +489,33 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         unselectedItemColor: AppTheme.mutedText,
         onTap: (index) {
           if (index != 0) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
                 content: Text(
-                    'Esta seção será aberta na próxima etapa do painel.')));
+                  'Esta seção será aberta na próxima etapa do painel.',
+                ),
+              ),
+            );
           }
         },
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home),
-              label: 'Início'),
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
+            label: 'Início',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.track_changes_outlined),
-              label: 'Acompanhamento'),
+            icon: Icon(Icons.track_changes_outlined),
+            label: 'Acompanhamento',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.location_on_outlined), label: 'Localização'),
+            icon: Icon(Icons.location_on_outlined),
+            label: 'Localização',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined), label: 'Configurações'),
+            icon: Icon(Icons.settings_outlined),
+            label: 'Configurações',
+          ),
         ],
       ),
     );
@@ -483,8 +567,9 @@ class _OptionASectionBox extends StatelessWidget {
       child: ExpansionTile(
         initiallyExpanded: initiallyExpanded,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
-        collapsedShape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+        collapsedShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(22),
+        ),
         tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
         childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         leading: _IconBubble(icon: icon, color: AppTheme.primary),
@@ -505,8 +590,11 @@ class _OptionARoutineGrid extends StatelessWidget {
         title: 'Rotina visual diária',
         subtitle: 'Organizar passos',
         color: const Color(0xFF15803D),
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => const VisualRoutineScreen(readOnly: false))),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const VisualRoutineScreen(readOnly: false),
+          ),
+        ),
       ),
       _OptionAFeature(
         icon: Icons.videocam_outlined,
@@ -521,16 +609,18 @@ class _OptionARoutineGrid extends StatelessWidget {
         title: 'Alertas de transição',
         subtitle: 'Preparar mudanças',
         color: const Color(0xFFB45309),
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => const TransitionAlertsListScreen())),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const TransitionAlertsListScreen()),
+        ),
       ),
       _OptionAFeature(
         icon: Icons.insights_outlined,
         title: 'Tendências semanais',
         subtitle: 'Registros ABC',
         color: AppTheme.primary,
-        onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const WeeklyTrendsScreen())),
+        onTap: () => Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (_) => const WeeklyTrendsScreen())),
       ),
       _OptionAFeature(
         icon: Icons.picture_as_pdf_outlined,
@@ -549,8 +639,12 @@ class _OptionARoutineGrid extends StatelessWidget {
           spacing: 10,
           runSpacing: 10,
           children: items
-              .map((item) => SizedBox(
-                  width: item.wide ? constraints.maxWidth : width, child: item))
+              .map(
+                (item) => SizedBox(
+                  width: item.wide ? constraints.maxWidth : width,
+                  child: item,
+                ),
+              )
               .toList(),
         );
       },
@@ -596,19 +690,32 @@ class _OptionAFeature extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             Expanded(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                  Text(title,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w800, fontSize: 13)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 13,
+                    ),
+                  ),
                   const SizedBox(height: 2),
-                  Text(subtitle,
-                      style: const TextStyle(
-                          color: AppTheme.mutedText, fontSize: 11)),
-                ])),
-            const Icon(Icons.arrow_forward_ios_rounded,
-                size: 13, color: AppTheme.mutedText),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: AppTheme.mutedText,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 13,
+              color: AppTheme.mutedText,
+            ),
           ],
         ),
       ),
@@ -622,11 +729,12 @@ class _OptionAListAction extends StatelessWidget {
   final String subtitle;
   final VoidCallback onTap;
 
-  const _OptionAListAction(
-      {required this.icon,
-      required this.title,
-      required this.subtitle,
-      required this.onTap});
+  const _OptionAListAction({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -669,12 +777,18 @@ class _LocationHeroCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Localização & Segurança',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w800)),
+                    Text(
+                      'Localização & Segurança',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
                     SizedBox(height: 3),
-                    Text('Módulo web autenticado em preparação',
-                        style: TextStyle(color: AppTheme.mutedText)),
+                    Text(
+                      'Módulo web autenticado em preparação',
+                      style: TextStyle(color: AppTheme.mutedText),
+                    ),
                   ],
                 ),
               ),
@@ -684,11 +798,14 @@ class _LocationHeroCard extends StatelessWidget {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Text('OFFLINE',
-                    style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
-                        color: AppTheme.mutedText)),
+                child: const Text(
+                  'OFFLINE',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                    color: AppTheme.mutedText,
+                  ),
+                ),
               ),
             ],
           ),
@@ -714,17 +831,23 @@ class _LocationHeroCard extends StatelessWidget {
                         BoxShadow(color: Color(0x3314253D), blurRadius: 12),
                       ],
                     ),
-                    child: const Icon(Icons.lock_outline,
-                        color: AppTheme.mutedText, size: 28),
+                    child: const Icon(
+                      Icons.lock_outline,
+                      color: AppTheme.mutedText,
+                      size: 28,
+                    ),
                   ),
                 ),
                 const Positioned(
                   left: 14,
                   bottom: 12,
-                  child: Text('Nenhuma localização compartilhada',
-                      style: TextStyle(
-                          color: AppTheme.mutedText,
-                          fontWeight: FontWeight.w700)),
+                  child: Text(
+                    'Nenhuma localização compartilhada',
+                    style: TextStyle(
+                      color: AppTheme.mutedText,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -762,8 +885,10 @@ class _DashboardSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+        Text(
+          title,
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+        ),
         const SizedBox(height: 4),
         Text(description, style: const TextStyle(color: AppTheme.mutedText)),
         const SizedBox(height: 12),
@@ -772,10 +897,14 @@ class _DashboardSection extends StatelessWidget {
             final width = constraints.maxWidth > 650
                 ? (constraints.maxWidth - 12) / 2
                 : constraints.maxWidth;
-            return Wrap(spacing: 12, runSpacing: 12, children: [
-              for (final child in children)
-                SizedBox(width: width, child: child),
-            ]);
+            return Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                for (final child in children)
+                  SizedBox(width: width, child: child),
+              ],
+            );
           },
         ),
       ],
@@ -820,17 +949,25 @@ class _DashboardActionCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title,
-                        style: const TextStyle(fontWeight: FontWeight.w800)),
+                    Text(
+                      title,
+                      style: const TextStyle(fontWeight: FontWeight.w800),
+                    ),
                     const SizedBox(height: 4),
-                    Text(description,
-                        style: const TextStyle(
-                            color: AppTheme.mutedText, fontSize: 13)),
+                    Text(
+                      description,
+                      style: const TextStyle(
+                        color: AppTheme.mutedText,
+                        fontSize: 13,
+                      ),
+                    ),
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right_rounded,
-                  color: AppTheme.mutedText),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: AppTheme.mutedText,
+              ),
             ],
           ),
         ),
@@ -891,7 +1028,7 @@ class _SettingsHero extends StatelessWidget {
         gradient: const LinearGradient(
           colors: [
             AppTheme.professionalBackground,
-            AppTheme.professionalSurface
+            AppTheme.professionalSurface,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -909,8 +1046,10 @@ class _SettingsHero extends StatelessWidget {
           CircleAvatar(
             radius: 22,
             backgroundColor: AppTheme.professionalAccent,
-            child: Icon(Icons.shield_outlined,
-                color: AppTheme.professionalBackground),
+            child: Icon(
+              Icons.shield_outlined,
+              color: AppTheme.professionalBackground,
+            ),
           ),
           SizedBox(width: 13),
           Expanded(
@@ -939,7 +1078,10 @@ class _SettingsHero extends StatelessWidget {
                 Text(
                   'Personalize a comunicação e mantenha o controle dos dados locais.',
                   style: TextStyle(
-                      color: Color(0xFFD8E7F0), fontSize: 12, height: 1.3),
+                    color: Color(0xFFD8E7F0),
+                    fontSize: 12,
+                    height: 1.3,
+                  ),
                 ),
               ],
             ),
@@ -991,15 +1133,22 @@ class _SettingsSection extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w800, fontSize: 17)),
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 17,
+                      ),
+                    ),
                     const SizedBox(height: 4),
-                    Text(description,
-                        style: const TextStyle(
-                            color: AppTheme.mutedText,
-                            fontSize: 13,
-                            height: 1.35)),
+                    Text(
+                      description,
+                      style: const TextStyle(
+                        color: AppTheme.mutedText,
+                        fontSize: 13,
+                        height: 1.35,
+                      ),
+                    ),
                   ],
                 ),
               ),

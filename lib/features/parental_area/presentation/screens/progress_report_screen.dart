@@ -115,8 +115,10 @@ class _ProgressReportScreenState extends State<ProgressReportScreen> {
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  pw.Text('Perfil informado',
-                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  pw.Text(
+                    'Perfil informado',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                  ),
                   if ('${_profile?['name'] ?? ''}'.isNotEmpty)
                     pw.Text('Nome: ${_profile?['name']}'),
                   if ('${_profile?['guardian'] ?? ''}'.isNotEmpty)
@@ -127,15 +129,20 @@ class _ProgressReportScreenState extends State<ProgressReportScreen> {
               ),
             ),
           pw.SizedBox(height: 12),
-          pw.Text('Indicadores descritivos',
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          pw.Text(
+            'Indicadores descritivos',
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+          ),
           pw.Bullet(text: 'Registros ABC no aparelho: $_behaviorCount'),
           pw.Bullet(
-              text: 'Registros ABC nos últimos 7 dias: $_recentBehaviorCount'),
+            text: 'Registros ABC nos últimos 7 dias: $_recentBehaviorCount',
+          ),
           pw.Bullet(text: 'Vídeos no diário local: $_videoCount'),
           pw.SizedBox(height: 12),
-          pw.Text('Registros recentes',
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          pw.Text(
+            'Registros recentes',
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+          ),
           if (recentEntries.isEmpty) pw.Text('Nenhum registro ABC disponível.'),
           ...recentEntries.map(
             (entry) => pw.Container(
@@ -154,7 +161,8 @@ class _ProgressReportScreenState extends State<ProgressReportScreen> {
           ),
           pw.SizedBox(height: 12),
           pw.Text(
-              'Este resumo descreve registros feitos pela família. Não é avaliação clínica, diagnóstico ou previsão de evolução.'),
+            'Este resumo descreve registros feitos pela família. Não é avaliação clínica, diagnóstico ou previsão de evolução.',
+          ),
         ],
       ),
     );
@@ -196,14 +204,20 @@ class _ProgressReportScreenState extends State<ProgressReportScreen> {
                   child: const Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.insights_outlined,
-                          color: AppTheme.professionalAccent, size: 28),
+                      Icon(
+                        Icons.insights_outlined,
+                        color: AppTheme.professionalAccent,
+                        size: 28,
+                      ),
                       SizedBox(width: 14),
                       Expanded(
                         child: Text(
                           'Um resumo do que foi registrado no aparelho, sem interpretar ou diagnosticar.',
                           style: TextStyle(
-                              color: Colors.white, height: 1.35, fontSize: 16),
+                            color: Colors.white,
+                            height: 1.35,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ],
@@ -236,14 +250,17 @@ class _ProgressReportScreenState extends State<ProgressReportScreen> {
                   label: 'registros ABC nos últimos 7 dias',
                 ),
                 const SizedBox(height: 18),
-                const Text('Registros recentes',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                const Text(
+                  'Registros recentes',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                ),
                 const SizedBox(height: 8),
                 if (_behaviorEntries.isEmpty)
                   const _EmptyReportState()
                 else
-                  ..._behaviorEntries.take(5).map(
+                  ..._behaviorEntries
+                      .take(5)
+                      .map(
                         (entry) => _RecentEntryCard(
                           date: _formatDate(entry['timestamp']),
                           behavior: '${entry['behavior'] ?? ''}',
@@ -260,7 +277,8 @@ class _ProgressReportScreenState extends State<ProgressReportScreen> {
                     foregroundColor: AppTheme.primary,
                     side: const BorderSide(color: AppTheme.cardBorder),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
                 ),
               ],
@@ -297,12 +315,20 @@ class _MetricCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(value,
-                    style: const TextStyle(
-                        fontSize: 23, fontWeight: FontWeight.w800)),
-                Text(label,
-                    style: const TextStyle(
-                        color: AppTheme.mutedText, fontSize: 12)),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 23,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                Text(
+                  label,
+                  style: const TextStyle(
+                    color: AppTheme.mutedText,
+                    fontSize: 12,
+                  ),
+                ),
               ],
             ),
           ),
@@ -336,14 +362,20 @@ class _RecentEntryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(date,
-              style: const TextStyle(
-                  color: AppTheme.primary, fontWeight: FontWeight.w800)),
+          Text(
+            date,
+            style: const TextStyle(
+              color: AppTheme.primary,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
           const SizedBox(height: 6),
           Text(
-              'Comportamento: ${behavior.isEmpty ? 'não informado' : behavior}'),
+            'Comportamento: ${behavior.isEmpty ? 'não informado' : behavior}',
+          ),
           Text(
-              'Apoio/consequência: ${consequence.isEmpty ? 'não informado' : consequence}'),
+            'Apoio/consequência: ${consequence.isEmpty ? 'não informado' : consequence}',
+          ),
         ],
       ),
     );
@@ -366,14 +398,17 @@ class _EmptyReportState extends StatelessWidget {
         children: [
           Icon(Icons.insert_chart_outlined, color: AppTheme.primary, size: 40),
           SizedBox(height: 8),
-          Text('Ainda não há registros para resumir.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.w700)),
+          Text(
+            'Ainda não há registros para resumir.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
           SizedBox(height: 4),
           Text(
-              'Os dados aparecem aqui depois que a família registrar uma rotina.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: AppTheme.mutedText)),
+            'Os dados aparecem aqui depois que a família registrar uma rotina.',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: AppTheme.mutedText),
+          ),
         ],
       ),
     );

@@ -41,7 +41,11 @@ class _SharedTasksScreenState extends State<SharedTasksScreen> {
     if (task == null) return;
     await SharedTaskStore.save(task);
     if (!mounted) return;
-    setState(() => _tasks = [..._tasks, task]..sort((a, b) => a.dueAt.compareTo(b.dueAt)));
+    setState(
+      () =>
+          _tasks = [..._tasks, task]
+            ..sort((a, b) => a.dueAt.compareTo(b.dueAt)),
+    );
   }
 
   Future<void> _changeStatus(SharedTask task, SharedTaskStatus status) async {
@@ -68,13 +72,17 @@ class _SharedTasksScreenState extends State<SharedTasksScreen> {
     );
     await SharedTaskStore.save(updated);
     if (!mounted) return;
-    setState(() => _tasks = _tasks
-        .map((item) => item.id == task.id ? updated : item)
-        .toList());
+    setState(
+      () => _tasks = _tasks
+          .map((item) => item.id == task.id ? updated : item)
+          .toList(),
+    );
   }
 
   Future<void> _changeAcceptance(
-      SharedTask task, TaskAcceptanceStatus acceptance) async {
+    SharedTask task,
+    TaskAcceptanceStatus acceptance,
+  ) async {
     final updated = task.copyWith(
       acceptance: acceptance,
       updatedAt: DateTime.now(),
@@ -90,9 +98,11 @@ class _SharedTasksScreenState extends State<SharedTasksScreen> {
     );
     await SharedTaskStore.save(updated);
     if (!mounted) return;
-    setState(() => _tasks = _tasks
-        .map((item) => item.id == task.id ? updated : item)
-        .toList());
+    setState(
+      () => _tasks = _tasks
+          .map((item) => item.id == task.id ? updated : item)
+          .toList(),
+    );
   }
 
   Future<String?> _askFeedback(SharedTaskStatus status) async {
@@ -110,15 +120,19 @@ class _SharedTasksScreenState extends State<SharedTasksScreen> {
           autofocus: true,
           maxLines: 3,
           decoration: const InputDecoration(
-              hintText: 'Opcional, mas ajuda a equipe a entender o contexto.'),
+            hintText: 'Opcional, mas ajuda a equipe a entender o contexto.',
+          ),
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('Pular')),
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('Pular'),
+          ),
           FilledButton(
-              onPressed: () => Navigator.of(dialogContext).pop(controller.text.trim()),
-              child: const Text('Salvar retorno')),
+            onPressed: () =>
+                Navigator.of(dialogContext).pop(controller.text.trim()),
+            child: const Text('Salvar retorno'),
+          ),
         ],
       ),
     );
@@ -151,43 +165,53 @@ class _SharedTasksScreenState extends State<SharedTasksScreen> {
                 const ParentalSectionHeading(
                   eyebrow: 'COORDENAÇÃO DO CUIDADO',
                   title: 'Tarefas que conectam',
-                  description:
-                      'Família, escola e profissionais podem combinar o próximo passo sem perder o contexto.',
+                  description: 'Família, escola e profissionais podem combinar o próximo passo sem perder o contexto.',
                 ),
                 const SizedBox(height: 18),
                 const ParentalInfoBanner(
                   icon: Icons.handshake_outlined,
                   eyebrow: 'RETORNO SEM CULPA',
-                  message:
-                      'Não realizada, recusada e preciso de ajuda são respostas válidas. Elas orientam o próximo apoio e não penalizam a criança.',
+                  message: 'Não realizada, recusada e preciso de ajuda são respostas válidas. Elas orientam o próximo apoio e não penalizam a criança.',
                 ),
                 const SizedBox(height: 18),
                 if (_tasks.isEmpty)
                   const ParentalSurface(
                     child: Column(
                       children: [
-                        Icon(Icons.checklist_outlined,
-                            size: 42, color: AppTheme.primary),
+                        Icon(
+                          Icons.checklist_outlined,
+                          size: 42,
+                          color: AppTheme.primary,
+                        ),
                         SizedBox(height: 10),
-                        Text('Nenhuma tarefa compartilhada',
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.w800)),
+                        Text(
+                          'Nenhuma tarefa compartilhada',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                         SizedBox(height: 5),
                         Text(
                           'Crie uma tarefa para a família, escola ou profissional acompanhar um próximo passo.',
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: AppTheme.mutedText, height: 1.35),
+                          style: TextStyle(
+                            color: AppTheme.mutedText,
+                            height: 1.35,
+                          ),
                         ),
                       ],
                     ),
                   )
                 else
-                  ..._tasks.map((task) => _TaskCard(
-                        task: task,
-                        onStatus: (status) => _changeStatus(task, status),
-                        onAcceptance: (acceptance) =>
-                            _changeAcceptance(task, acceptance),
-                      )),
+                  ..._tasks.map(
+                    (task) => _TaskCard(
+                      task: task,
+                      onStatus: (status) => _changeStatus(task, status),
+                      onAcceptance: (acceptance) =>
+                          _changeAcceptance(task, acceptance),
+                    ),
+                  ),
               ],
             ),
     );
@@ -223,9 +247,13 @@ class _TaskCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: Text(task.title,
-                    style: const TextStyle(
-                        fontSize: 17, fontWeight: FontWeight.w800)),
+                child: Text(
+                  task.title,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
               ),
               PopupMenuButton<SharedTaskStatus>(
                 tooltip: 'Atualizar tarefa',
@@ -246,13 +274,16 @@ class _TaskCard extends StatelessWidget {
           if (task.organizationName.isNotEmpty) ...[
             const SizedBox(height: 3),
             Text(
-                '${task.organizationName} · ${task.recipientRole} · ${task.assignedTo}',
-                style: const TextStyle(color: AppTheme.mutedText)),
+              '${task.organizationName} · ${task.recipientRole} · ${task.assignedTo}',
+              style: const TextStyle(color: AppTheme.mutedText),
+            ),
           ],
           if (task.description.isNotEmpty) ...[
             const SizedBox(height: 5),
-            Text(task.description,
-                style: const TextStyle(color: AppTheme.mutedText, height: 1.3)),
+            Text(
+              task.description,
+              style: const TextStyle(color: AppTheme.mutedText, height: 1.3),
+            ),
           ],
           const SizedBox(height: 11),
           Wrap(
@@ -260,7 +291,10 @@ class _TaskCard extends StatelessWidget {
             runSpacing: 7,
             children: [
               _MetaChip(icon: Icons.person_outline, label: task.assignedTo),
-              _MetaChip(icon: Icons.category_outlined, label: task.contextLabel),
+              _MetaChip(
+                icon: Icons.category_outlined,
+                label: task.contextLabel,
+              ),
               _MetaChip(icon: Icons.event_outlined, label: _date(task.dueAt)),
             ],
           ),
@@ -268,17 +302,26 @@ class _TaskCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(20)),
-                child: Text(task.statusLabel,
-                    style: TextStyle(color: color, fontWeight: FontWeight.w800)),
+                  color: color.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  task.statusLabel,
+                  style: TextStyle(color: color, fontWeight: FontWeight.w800),
+                ),
               ),
               const Spacer(),
               if (task.reminderEnabled)
-                const Icon(Icons.notifications_active_outlined,
-                    size: 18, color: AppTheme.mutedText),
+                const Icon(
+                  Icons.notifications_active_outlined,
+                  size: 18,
+                  color: AppTheme.mutedText,
+                ),
               if (task.acceptance != TaskAcceptanceStatus.notRequired) ...[
                 const SizedBox(width: 8),
                 PopupMenuButton<TaskAcceptanceStatus>(
@@ -286,11 +329,13 @@ class _TaskCard extends StatelessWidget {
                   onSelected: onAcceptance,
                   itemBuilder: (_) => const [
                     PopupMenuItem(
-                        value: TaskAcceptanceStatus.accepted,
-                        child: Text('Destinatário aceitou')),
+                      value: TaskAcceptanceStatus.accepted,
+                      child: Text('Destinatário aceitou'),
+                    ),
                     PopupMenuItem(
-                        value: TaskAcceptanceStatus.declined,
-                        child: Text('Destinatário recusou')),
+                      value: TaskAcceptanceStatus.declined,
+                      child: Text('Destinatário recusou'),
+                    ),
                   ],
                   child: Chip(
                     label: Text(task.acceptanceLabel),
@@ -311,8 +356,10 @@ class _TaskCard extends StatelessWidget {
             ),
           if (task.feedback?.isNotEmpty == true) ...[
             const Divider(height: 22),
-            Text('Retorno: ${task.feedback}',
-                style: const TextStyle(color: AppTheme.mutedText, height: 1.3)),
+            Text(
+              'Retorno: ${task.feedback}',
+              style: const TextStyle(color: AppTheme.mutedText, height: 1.3),
+            ),
           ],
         ],
       ),
@@ -320,21 +367,21 @@ class _TaskCard extends StatelessWidget {
   }
 
   static Color _statusColor(SharedTaskStatus status) => switch (status) {
-        SharedTaskStatus.completed => AppTheme.accentGreen,
-        SharedTaskStatus.needsHelp => Colors.orange.shade800,
-        SharedTaskStatus.declined => Colors.redAccent,
-        SharedTaskStatus.cancelled => AppTheme.mutedText,
-        _ => AppTheme.primary,
-      };
+    SharedTaskStatus.completed => AppTheme.accentGreen,
+    SharedTaskStatus.needsHelp => Colors.orange.shade800,
+    SharedTaskStatus.declined => Colors.redAccent,
+    SharedTaskStatus.cancelled => AppTheme.mutedText,
+    _ => AppTheme.primary,
+  };
 
   static String _label(SharedTaskStatus status) => switch (status) {
-        SharedTaskStatus.inProgress => 'Em andamento',
-        SharedTaskStatus.completed => 'Concluída',
-        SharedTaskStatus.partiallyCompleted => 'Concluída parcialmente',
-        SharedTaskStatus.needsHelp => 'Preciso de ajuda',
-        SharedTaskStatus.declined => 'Não realizada',
-        _ => 'Atualizar',
-      };
+    SharedTaskStatus.inProgress => 'Em andamento',
+    SharedTaskStatus.completed => 'Concluída',
+    SharedTaskStatus.partiallyCompleted => 'Concluída parcialmente',
+    SharedTaskStatus.needsHelp => 'Preciso de ajuda',
+    SharedTaskStatus.declined => 'Não realizada',
+    _ => 'Atualizar',
+  };
 
   void _showEvents(BuildContext context) {
     showModalBottomSheet<void>(
@@ -344,17 +391,24 @@ class _TaskCard extends StatelessWidget {
           shrinkWrap: true,
           padding: const EdgeInsets.all(20),
           children: [
-            const Text('Histórico da tarefa',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+            const Text(
+              'Histórico da tarefa',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+            ),
             const SizedBox(height: 12),
-            ...task.events.reversed.map((event) => ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(Icons.radio_button_checked_outlined,
-                      color: AppTheme.primary),
-                  title: Text(_eventLabel(event.type)),
-                  subtitle: Text(
-                      '${event.actor} · ${event.occurredAt.day.toString().padLeft(2, '0')}/${event.occurredAt.month.toString().padLeft(2, '0')} ${event.note ?? ''}'),
-                )),
+            ...task.events.reversed.map(
+              (event) => ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(
+                  Icons.radio_button_checked_outlined,
+                  color: AppTheme.primary,
+                ),
+                title: Text(_eventLabel(event.type)),
+                subtitle: Text(
+                  '${event.actor} · ${event.occurredAt.day.toString().padLeft(2, '0')}/${event.occurredAt.month.toString().padLeft(2, '0')} ${event.note ?? ''}',
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -379,11 +433,11 @@ class _MetaChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Chip(
-        avatar: Icon(icon, size: 16, color: AppTheme.mutedText),
-        label: Text(label),
-        visualDensity: VisualDensity.compact,
-        side: const BorderSide(color: AppTheme.cardBorder),
-      );
+    avatar: Icon(icon, size: 16, color: AppTheme.mutedText),
+    label: Text(label),
+    visualDensity: VisualDensity.compact,
+    side: const BorderSide(color: AppTheme.cardBorder),
+  );
 }
 
 class _TaskForm extends StatefulWidget {
@@ -422,124 +476,155 @@ class _TaskFormState extends State<_TaskForm> {
       initialDate: _dueAt,
     );
     if (selected == null || !mounted) return;
-    setState(() => _dueAt = DateTime(
-        selected.year, selected.month, selected.day, _dueAt.hour, _dueAt.minute));
+    setState(
+      () => _dueAt = DateTime(
+        selected.year,
+        selected.month,
+        selected.day,
+        _dueAt.hour,
+        _dueAt.minute,
+      ),
+    );
   }
 
   void _submit() {
     if (_title.text.trim().isEmpty || _assignedTo.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Informe o título e quem receberá a tarefa.')));
+        const SnackBar(
+          content: Text('Informe o título e quem receberá a tarefa.'),
+        ),
+      );
       return;
     }
     final now = DateTime.now();
-    Navigator.of(context).pop(SharedTask(
-      id: widget.id,
-      title: _title.text.trim(),
-      description: _description.text.trim(),
-      createdBy: 'Família',
-      assignedTo: _assignedTo.text.trim(),
-      organizationName: _organization.text.trim(),
-      recipientRole: _organization.text.trim().isEmpty
-          ? 'Família'
-          : 'Organização convidada',
-      contextLabel: _context.text.trim().isEmpty ? 'Rotina' : _context.text.trim(),
-      dueAt: _dueAt,
-      reminderEnabled: _reminder,
-      status: SharedTaskStatus.pending,
-      acceptance: _organization.text.trim().isEmpty
-          ? TaskAcceptanceStatus.notRequired
-          : TaskAcceptanceStatus.pending,
-      feedback: null,
-      createdAt: now,
-      updatedAt: now,
-      events: [
-        SharedTaskEvent(
-          type: 'created',
-          actor: 'Família',
-          note: null,
-          occurredAt: now,
-        ),
-      ],
-    ));
+    Navigator.of(context).pop(
+      SharedTask(
+        id: widget.id,
+        title: _title.text.trim(),
+        description: _description.text.trim(),
+        createdBy: 'Família',
+        assignedTo: _assignedTo.text.trim(),
+        organizationName: _organization.text.trim(),
+        recipientRole: _organization.text.trim().isEmpty
+            ? 'Família'
+            : 'Organização convidada',
+        contextLabel: _context.text.trim().isEmpty
+            ? 'Rotina'
+            : _context.text.trim(),
+        dueAt: _dueAt,
+        reminderEnabled: _reminder,
+        status: SharedTaskStatus.pending,
+        acceptance: _organization.text.trim().isEmpty
+            ? TaskAcceptanceStatus.notRequired
+            : TaskAcceptanceStatus.pending,
+        feedback: null,
+        createdAt: now,
+        updatedAt: now,
+        events: [
+          SharedTaskEvent(
+            type: 'created',
+            actor: 'Família',
+            note: null,
+            occurredAt: now,
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 22,
-            bottom: MediaQuery.viewInsetsOf(context).bottom + 24),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const ParentalSectionHeading(
-                  eyebrow: 'NOVA TAREFA',
-                  title: 'Combinar o próximo passo',
-                  description:
-                      'A tarefa pode ser ajustada, adiada ou respondida com um pedido de ajuda.',
-                ),
-                const SizedBox(height: 18),
-                TextField(
-                    controller: _title,
-                    autofocus: true,
-                    decoration: parentalInputDecoration(
-                        labelText: 'Título curto', icon: Icons.title_outlined)),
-                const SizedBox(height: 12),
-                TextField(
-                    controller: _description,
-                    maxLines: 3,
-                    decoration: parentalInputDecoration(
-                        labelText: 'Instrução ou materiais (opcional)',
-                        icon: Icons.notes_outlined)),
-                const SizedBox(height: 12),
-                TextField(
-                    controller: _assignedTo,
-                    decoration: parentalInputDecoration(
-                        labelText: 'Para quem?', icon: Icons.person_outline)),
-                const SizedBox(height: 12),
-                TextField(
-                    controller: _organization,
-                    decoration: parentalInputDecoration(
-                        labelText: 'Organização (opcional)',
-                        icon: Icons.apartment_outlined)),
-                const SizedBox(height: 12),
-                TextField(
-                    controller: _context,
-                    decoration: parentalInputDecoration(
-                        labelText: 'Contexto', icon: Icons.category_outlined)),
-                const SizedBox(height: 12),
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(Icons.event_outlined),
-                  title: const Text('Prazo'),
-                  subtitle: Text(
-                      '${_dueAt.day.toString().padLeft(2, '0')}/${_dueAt.month.toString().padLeft(2, '0')}/${_dueAt.year}'),
-                  onTap: _pickDate,
-                ),
-                SwitchListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: const Text('Lembrar no aparelho'),
-                  subtitle: const Text('O agendamento será conectado na próxima etapa.'),
-                  value: _reminder,
-                  onChanged: (value) => setState(() => _reminder = value),
-                ),
-                const SizedBox(height: 12),
-                FilledButton.icon(
-                  onPressed: _submit,
-                  icon: const Icon(Icons.check_outlined),
-                  label: const Text('Criar tarefa'),
-                  style: FilledButton.styleFrom(
-                      minimumSize: const Size.fromHeight(52),
-                      backgroundColor: AppTheme.professionalBackground,
-                      foregroundColor: Colors.white),
-                ),
-              ],
+    padding: EdgeInsets.only(
+      left: 20,
+      right: 20,
+      top: 22,
+      bottom: MediaQuery.viewInsetsOf(context).bottom + 24,
+    ),
+    child: SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const ParentalSectionHeading(
+              eyebrow: 'NOVA TAREFA',
+              title: 'Combinar o próximo passo',
+              description: 'A tarefa pode ser ajustada, adiada ou respondida com um pedido de ajuda.',
             ),
-          ),
+            const SizedBox(height: 18),
+            TextField(
+              controller: _title,
+              autofocus: true,
+              decoration: parentalInputDecoration(
+                labelText: 'Título curto',
+                icon: Icons.title_outlined,
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _description,
+              maxLines: 3,
+              decoration: parentalInputDecoration(
+                labelText: 'Instrução ou materiais (opcional)',
+                icon: Icons.notes_outlined,
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _assignedTo,
+              decoration: parentalInputDecoration(
+                labelText: 'Para quem?',
+                icon: Icons.person_outline,
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _organization,
+              decoration: parentalInputDecoration(
+                labelText: 'Organização (opcional)',
+                icon: Icons.apartment_outlined,
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _context,
+              decoration: parentalInputDecoration(
+                labelText: 'Contexto',
+                icon: Icons.category_outlined,
+              ),
+            ),
+            const SizedBox(height: 12),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.event_outlined),
+              title: const Text('Prazo'),
+              subtitle: Text(
+                '${_dueAt.day.toString().padLeft(2, '0')}/${_dueAt.month.toString().padLeft(2, '0')}/${_dueAt.year}',
+              ),
+              onTap: _pickDate,
+            ),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: const Text('Lembrar no aparelho'),
+              subtitle: const Text(
+                'O agendamento será conectado na próxima etapa.',
+              ),
+              value: _reminder,
+              onChanged: (value) => setState(() => _reminder = value),
+            ),
+            const SizedBox(height: 12),
+            FilledButton.icon(
+              onPressed: _submit,
+              icon: const Icon(Icons.check_outlined),
+              label: const Text('Criar tarefa'),
+              style: FilledButton.styleFrom(
+                minimumSize: const Size.fromHeight(52),
+                backgroundColor: AppTheme.professionalBackground,
+                foregroundColor: Colors.white,
+              ),
+            ),
+          ],
         ),
-      );
+      ),
+    ),
+  );
 }

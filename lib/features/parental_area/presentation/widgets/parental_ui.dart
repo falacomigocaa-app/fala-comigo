@@ -157,10 +157,7 @@ class ParentalSectionHeading extends StatelessWidget {
           const SizedBox(height: 5),
           Text(
             description!,
-            style: const TextStyle(
-              color: AppTheme.mutedText,
-              height: 1.35,
-            ),
+            style: const TextStyle(color: AppTheme.mutedText, height: 1.35),
           ),
         ],
       ],

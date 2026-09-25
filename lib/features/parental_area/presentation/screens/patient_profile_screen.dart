@@ -101,9 +101,8 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
       'consentAt': DateTime.now().toIso8601String(),
     });
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Perfil salvo.')),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('Perfil salvo.')));
   }
 
   @override
@@ -126,8 +125,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                   const ParentalInfoBanner(
                     icon: Icons.shield_outlined,
                     eyebrow: 'PERFIL LOCAL',
-                    message:
-                        'Tudo é opcional. Preencha somente o necessário; os dados aparecem nos relatórios em PDF gerados pelo app.',
+                    message: 'Tudo é opcional. Preencha somente o necessário; os dados aparecem nos relatórios em PDF gerados pelo app.',
                   ),
                   const SizedBox(height: 16),
                   ParentalSurface(
@@ -135,26 +133,31 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                       children: [
                         TextField(
                           controller: _nameController,
-                            decoration: parentalInputDecoration(
-                                labelText: 'Nome completo da criança',
-                                icon: Icons.person_outline),
+                          decoration: parentalInputDecoration(
+                            labelText: 'Nome completo da criança',
+                            icon: Icons.person_outline,
+                          ),
                         ),
                         const SizedBox(height: 12),
                         TextField(
                           controller: _birthDateController,
                           decoration: parentalInputDecoration(
-                              labelText: 'Data de nascimento (opcional)',
-                              icon: Icons.event_outlined),
+                            labelText: 'Data de nascimento (opcional)',
+                            icon: Icons.event_outlined,
+                          ),
                         ),
                         const SizedBox(height: 12),
                         DropdownButtonFormField<String>(
                           initialValue: _supportLevel,
                           decoration: parentalInputDecoration(
-                              labelText: 'Nível de suporte (opcional)',
-                              icon: Icons.tune_outlined),
+                            labelText: 'Nível de suporte (opcional)',
+                            icon: Icons.tune_outlined,
+                          ),
                           items: _supportLevels
-                              .map((e) =>
-                                  DropdownMenuItem(value: e, child: Text(e)))
+                              .map(
+                                (e) =>
+                                    DropdownMenuItem(value: e, child: Text(e)),
+                              )
                               .toList(),
                           onChanged: (v) =>
                               setState(() => _supportLevel = v ?? 'Nível 1'),
@@ -163,15 +166,17 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                         TextField(
                           controller: _guardianController,
                           decoration: parentalInputDecoration(
-                              labelText: 'Nome do responsável (opcional)',
-                              icon: Icons.badge_outlined),
+                            labelText: 'Nome do responsável (opcional)',
+                            icon: Icons.badge_outlined,
+                          ),
                         ),
                         const SizedBox(height: 12),
                         TextField(
                           controller: _schoolController,
                           decoration: parentalInputDecoration(
-                              labelText: 'Escola/clínica (opcional)',
-                              icon: Icons.school_outlined),
+                            labelText: 'Escola/clínica (opcional)',
+                            icon: Icons.school_outlined,
+                          ),
                         ),
                         const SizedBox(height: 20),
                         SizedBox(
@@ -185,7 +190,8 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                               backgroundColor: AppTheme.professionalBackground,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16)),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
                             ),
                           ),
                         ),

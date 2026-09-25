@@ -21,8 +21,7 @@ class PlanCatalog {
   static const family = Plan(
     id: 'family',
     name: 'Família',
-    description:
-        'Recursos remotos opcionais para continuar o cuidado em mais de um dispositivo.',
+    description: 'Recursos remotos opcionais para continuar o cuidado em mais de um dispositivo.',
     monthlyPriceCents: null,
     features: {
       PlanFeature.offlineCommunication,
@@ -38,8 +37,7 @@ class PlanCatalog {
   static const connectedCare = Plan(
     id: 'connected_care',
     name: 'Cuidado Conectado',
-    description:
-        'Vínculos autorizados com profissionais e escolas, sempre com escopo e prazo.',
+    description: 'Vínculos autorizados com profissionais e escolas, sempre com escopo e prazo.',
     monthlyPriceCents: null,
     features: {
       PlanFeature.offlineCommunication,
@@ -57,8 +55,7 @@ class PlanCatalog {
   static const sponsored = Plan(
     id: 'sponsored',
     name: 'Patrocinado',
-    description:
-        'Acesso financiado por uma empresa ou instituição sem expor o conteúdo familiar.',
+    description: 'Acesso financiado por uma empresa ou instituição sem expor o conteúdo familiar.',
     monthlyPriceCents: null,
     features: {
       PlanFeature.offlineCommunication,
@@ -75,8 +72,7 @@ class PlanCatalog {
   static const organization = Plan(
     id: 'organization',
     name: 'Organização',
-    description:
-        'Portal administrativo, controle de benefícios e métricas agregadas sem conteúdo familiar.',
+    description: 'Portal administrativo, controle de benefícios e métricas agregadas sem conteúdo familiar.',
     monthlyPriceCents: 0,
     features: {
       PlanFeature.accessibility,

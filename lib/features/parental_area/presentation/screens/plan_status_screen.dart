@@ -42,8 +42,7 @@ class _PlanStatusScreenState extends ConsumerState<PlanStatusScreen> {
           const ParentalSectionHeading(
             eyebrow: 'ACESSO E RECURSOS',
             title: 'Plano e recursos',
-            description:
-                'Consulte o que está disponível neste aparelho sem bloquear a comunicação básica.',
+            description: 'Consulte o que está disponível neste aparelho sem bloquear a comunicação básica.',
           ),
           const SizedBox(height: 18),
           _CurrentPlanCard(access: access),
@@ -81,10 +80,8 @@ class _PlanStatusScreenState extends ConsumerState<PlanStatusScreen> {
           ),
           const SizedBox(height: 8),
           ...PlanCatalog.publicPlans.map(
-            (plan) => _PlanCard(
-              plan: plan,
-              selected: plan.id == access.plan.id,
-            ),
+            (plan) =>
+                _PlanCard(plan: plan, selected: plan.id == access.plan.id),
           ),
           if (license == null)
             const Padding(
@@ -118,7 +115,7 @@ class _CurrentPlanCard extends StatelessWidget {
         gradient: const LinearGradient(
           colors: [
             AppTheme.professionalBackground,
-            AppTheme.professionalSurface
+            AppTheme.professionalSurface,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -136,12 +133,15 @@ class _CurrentPlanCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('PLANO ATUAL',
-                style: TextStyle(
-                    color: AppTheme.professionalAccent,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 1.05)),
+            const Text(
+              'PLANO ATUAL',
+              style: TextStyle(
+                color: AppTheme.professionalAccent,
+                fontSize: 10,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1.05,
+              ),
+            ),
             const SizedBox(height: 4),
             Text(
               access.plan.name,
@@ -164,7 +164,11 @@ class _CurrentPlanCard extends StatelessWidget {
             const SizedBox(height: 8),
             const Text(
               'A comunicação básica não depende de assinatura e não será bloqueada por falta de conexão.',
-              style: TextStyle(color: Colors.white70, fontSize: 12, height: 1.35),
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 12,
+                height: 1.35,
+              ),
             ),
           ],
         ),
@@ -173,13 +177,13 @@ class _CurrentPlanCard extends StatelessWidget {
   }
 
   String _statusLabel(LicenseStatus status) => switch (status) {
-        LicenseStatus.invited => 'Convite pendente',
-        LicenseStatus.active => 'Ativo',
-        LicenseStatus.grace => 'Período de transição',
-        LicenseStatus.suspended => 'Suspenso — uso local preservado',
-        LicenseStatus.expired => 'Expirado — uso local preservado',
-        LicenseStatus.revoked => 'Revogado — uso local preservado',
-      };
+    LicenseStatus.invited => 'Convite pendente',
+    LicenseStatus.active => 'Ativo',
+    LicenseStatus.grace => 'Período de transição',
+    LicenseStatus.suspended => 'Suspenso — uso local preservado',
+    LicenseStatus.expired => 'Expirado — uso local preservado',
+    LicenseStatus.revoked => 'Revogado — uso local preservado',
+  };
 }
 
 class _FeatureTile extends StatelessWidget {
@@ -210,8 +214,10 @@ class _FeatureTile extends StatelessWidget {
         ),
         child: ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: Icon(icon,
-              color: enabled ? AppTheme.primary : AppTheme.mutedText),
+          leading: Icon(
+            icon,
+            color: enabled ? AppTheme.primary : AppTheme.mutedText,
+          ),
           title: Text(title),
           subtitle: Text(description),
           trailing: Icon(
@@ -235,8 +241,8 @@ class _PlanCard extends StatelessWidget {
     final price = plan.isFree
         ? 'Gratuito'
         : plan.pricePending
-            ? 'Preço a definir'
-            : 'R\$ ${(plan.monthlyPriceCents! / 100).toStringAsFixed(2)} / mês';
+        ? 'Preço a definir'
+        : 'R\$ ${(plan.monthlyPriceCents! / 100).toStringAsFixed(2)} / mês';
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
@@ -287,8 +293,10 @@ class _PlanSectionTitle extends StatelessWidget {
       children: [
         Icon(icon, color: AppTheme.primary),
         const SizedBox(width: 10),
-        Text(title,
-            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 17)),
+        Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 17),
+        ),
       ],
     );
   }

@@ -73,9 +73,11 @@ class _AccessManagementScreenState extends State<AccessManagementScreen> {
     if (!mounted) return;
     setState(() {
       _grants = _grants
-          .map((item) => item.id == grant.id
-              ? item.copyWith(status: AccessGrantStatus.revoked)
-              : item)
+          .map(
+            (item) => item.id == grant.id
+                ? item.copyWith(status: AccessGrantStatus.revoked)
+                : item,
+          )
           .toList();
     });
   }
@@ -105,41 +107,51 @@ class _AccessManagementScreenState extends State<AccessManagementScreen> {
                 const ParentalSectionHeading(
                   eyebrow: 'CONTROLE DA FAMÍLIA',
                   title: 'Quem pode acessar?',
-                  description:
-                      'A licença e a autorização são coisas diferentes. Você decide o que cada organização pode ver.',
+                  description: 'A licença e a autorização são coisas diferentes. Você decide o que cada organização pode ver.',
                 ),
                 const SizedBox(height: 18),
                 const ParentalInfoBanner(
                   icon: Icons.verified_user_outlined,
                   eyebrow: 'PRIVACIDADE POR PADRÃO',
-                  message:
-                      'Clínicas, escolas e profissionais não recebem acesso automático aos cartões, documentos ou registros da criança.',
+                  message: 'Clínicas, escolas e profissionais não recebem acesso automático aos cartões, documentos ou registros da criança.',
                 ),
                 const SizedBox(height: 18),
                 if (_grants.isEmpty)
                   const ParentalSurface(
                     child: Column(
                       children: [
-                        Icon(Icons.people_outline,
-                            size: 42, color: AppTheme.primary),
+                        Icon(
+                          Icons.people_outline,
+                          size: 42,
+                          color: AppTheme.primary,
+                        ),
                         SizedBox(height: 10),
-                        Text('Nenhum acesso compartilhado',
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.w800)),
+                        Text(
+                          'Nenhum acesso compartilhado',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                         SizedBox(height: 5),
                         Text(
                           'Convide uma clínica, escola ou profissional quando quiser compartilhar uma finalidade específica.',
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: AppTheme.mutedText, height: 1.35),
+                          style: TextStyle(
+                            color: AppTheme.mutedText,
+                            height: 1.35,
+                          ),
                         ),
                       ],
                     ),
                   )
                 else
-                  ..._grants.map((grant) => _AccessGrantCard(
-                        grant: grant,
-                        onRevoke: grant.canRevoke ? () => _revoke(grant) : null,
-                      )),
+                  ..._grants.map(
+                    (grant) => _AccessGrantCard(
+                      grant: grant,
+                      onRevoke: grant.canRevoke ? () => _revoke(grant) : null,
+                    ),
+                  ),
                 const SizedBox(height: 18),
                 const ParentalSurface(
                   child: Row(
@@ -150,7 +162,10 @@ class _AccessManagementScreenState extends State<AccessManagementScreen> {
                       Expanded(
                         child: Text(
                           'Ao encerrar o vínculo, o acesso é revogado. Seus cartões, preferências e comunicação offline continuam no aparelho.',
-                          style: TextStyle(color: AppTheme.mutedText, height: 1.35),
+                          style: TextStyle(
+                            color: AppTheme.mutedText,
+                            height: 1.35,
+                          ),
                         ),
                       ),
                     ],
@@ -188,20 +203,28 @@ class _AccessGrantCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 backgroundColor: AppTheme.primary.withValues(alpha: 0.1),
-                child: Icon(_iconFor(grant.organizationKind),
-                    color: AppTheme.primary),
+                child: Icon(
+                  _iconFor(grant.organizationKind),
+                  color: AppTheme.primary,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(grant.organizationName,
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w800)),
+                    Text(
+                      grant.organizationName,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
                     const SizedBox(height: 2),
-                    Text('${grant.organizationKindLabel} · ${grant.personName}',
-                        style: const TextStyle(color: AppTheme.mutedText)),
+                    Text(
+                      '${grant.organizationKindLabel} · ${grant.personName}',
+                      style: const TextStyle(color: AppTheme.mutedText),
+                    ),
                   ],
                 ),
               ),
@@ -211,45 +234,58 @@ class _AccessGrantCard extends StatelessWidget {
                   color: color.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Text(grant.statusLabel,
-                    style: TextStyle(
-                        color: color,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800)),
+                child: Text(
+                  grant.statusLabel,
+                  style: TextStyle(
+                    color: color,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
               ),
             ],
           ),
           const SizedBox(height: 13),
-          Text('Finalidade: ${grant.purpose}',
-              style: const TextStyle(color: AppTheme.mutedText, height: 1.3)),
+          Text(
+            'Finalidade: ${grant.purpose}',
+            style: const TextStyle(color: AppTheme.mutedText, height: 1.3),
+          ),
           const SizedBox(height: 10),
           Wrap(
             spacing: 6,
             runSpacing: 6,
             children: grant.scopes
-                .map((scope) => Chip(
-                      label: Text(scope),
-                      visualDensity: VisualDensity.compact,
-                      side: const BorderSide(color: AppTheme.cardBorder),
-                    ))
+                .map(
+                  (scope) => Chip(
+                    label: Text(scope),
+                    visualDensity: VisualDensity.compact,
+                    side: const BorderSide(color: AppTheme.cardBorder),
+                  ),
+                )
                 .toList(),
           ),
           const SizedBox(height: 4),
           Row(
             children: [
-              const Icon(Icons.event_outlined,
-                  size: 16, color: AppTheme.mutedText),
+              const Icon(
+                Icons.event_outlined,
+                size: 16,
+                color: AppTheme.mutedText,
+              ),
               const SizedBox(width: 5),
-              Text('Até ${_date(grant.expiresAt)}',
-                  style: const TextStyle(
-                      color: AppTheme.mutedText, fontSize: 12)),
+              Text(
+                'Até ${_date(grant.expiresAt)}',
+                style: const TextStyle(color: AppTheme.mutedText, fontSize: 12),
+              ),
               const Spacer(),
               if (onRevoke != null)
                 TextButton.icon(
                   onPressed: onRevoke,
                   icon: const Icon(Icons.block_outlined, size: 17),
                   label: const Text('Revogar'),
-                  style: TextButton.styleFrom(foregroundColor: Colors.redAccent),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.redAccent,
+                  ),
                 ),
             ],
           ),
@@ -259,11 +295,11 @@ class _AccessGrantCard extends StatelessWidget {
   }
 
   static IconData _iconFor(OrganizationKind kind) => switch (kind) {
-        OrganizationKind.clinic => Icons.local_hospital_outlined,
-        OrganizationKind.school => Icons.school_outlined,
-        OrganizationKind.company => Icons.business_outlined,
-        OrganizationKind.professional => Icons.badge_outlined,
-      };
+    OrganizationKind.clinic => Icons.local_hospital_outlined,
+    OrganizationKind.school => Icons.school_outlined,
+    OrganizationKind.company => Icons.business_outlined,
+    OrganizationKind.professional => Icons.badge_outlined,
+  };
 
   static String _date(DateTime date) =>
       '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
@@ -303,33 +339,40 @@ class _AddAccessSheetState extends State<_AddAccessSheet> {
         _personController.text.trim().isEmpty ||
         _scopes.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Preencha a organização, a pessoa e ao menos um acesso.')),
+        const SnackBar(
+          content: Text(
+            'Preencha a organização, a pessoa e ao menos um acesso.',
+          ),
+        ),
       );
       return;
     }
     final now = DateTime.now();
-    Navigator.of(context).pop(AccessGrant(
-      id: widget.id,
-      organizationName: _organizationController.text.trim(),
-      organizationKind: _kind,
-      personName: _personController.text.trim(),
-      role: 'Colaborador convidado',
-      scopes: _scopes.toList(),
-      status: AccessGrantStatus.pending,
-      startsAt: now,
-      expiresAt: now.add(const Duration(days: 90)),
-      purpose: 'Coordenação autorizada com a família',
-    ));
+    Navigator.of(context).pop(
+      AccessGrant(
+        id: widget.id,
+        organizationName: _organizationController.text.trim(),
+        organizationKind: _kind,
+        personName: _personController.text.trim(),
+        role: 'Colaborador convidado',
+        scopes: _scopes.toList(),
+        status: AccessGrantStatus.pending,
+        startsAt: now,
+        expiresAt: now.add(const Duration(days: 90)),
+        purpose: 'Coordenação autorizada com a família',
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-          left: 20,
-          right: 20,
-          top: 22,
-          bottom: MediaQuery.viewInsetsOf(context).bottom + 24),
+        left: 20,
+        right: 20,
+        top: 22,
+        bottom: MediaQuery.viewInsetsOf(context).bottom + 24,
+      ),
       child: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -338,24 +381,30 @@ class _AddAccessSheetState extends State<_AddAccessSheet> {
               const ParentalSectionHeading(
                 eyebrow: 'NOVO VÍNCULO',
                 title: 'Convidar organização',
-                description:
-                    'Este registro é local nesta primeira etapa. A sincronização e o aceite remoto virão no portal.',
+                description: 'Este registro é local nesta primeira etapa. A sincronização e o aceite remoto virão no portal.',
               ),
               const SizedBox(height: 18),
               TextField(
                 controller: _organizationController,
                 decoration: parentalInputDecoration(
-                    labelText: 'Nome da clínica, escola ou empresa',
-                    icon: Icons.apartment_outlined),
+                  labelText: 'Nome da clínica, escola ou empresa',
+                  icon: Icons.apartment_outlined,
+                ),
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<OrganizationKind>(
                 initialValue: _kind,
                 decoration: parentalInputDecoration(
-                    labelText: 'Tipo de organização', icon: Icons.category_outlined),
+                  labelText: 'Tipo de organização',
+                  icon: Icons.category_outlined,
+                ),
                 items: OrganizationKind.values
-                    .map((value) => DropdownMenuItem(
-                        value: value, child: Text(_kindLabel(value))))
+                    .map(
+                      (value) => DropdownMenuItem(
+                        value: value,
+                        child: Text(_kindLabel(value)),
+                      ),
+                    )
                     .toList(),
                 onChanged: (value) => setState(() => _kind = value ?? _kind),
               ),
@@ -363,36 +412,45 @@ class _AddAccessSheetState extends State<_AddAccessSheet> {
               TextField(
                 controller: _personController,
                 decoration: parentalInputDecoration(
-                    labelText: 'Pessoa de contato', icon: Icons.person_outline),
+                  labelText: 'Pessoa de contato',
+                  icon: Icons.person_outline,
+                ),
               ),
               const SizedBox(height: 16),
-              const Text('Escopo inicial',
-                  style: TextStyle(fontWeight: FontWeight.w800)),
+              const Text(
+                'Escopo inicial',
+                style: TextStyle(fontWeight: FontWeight.w800),
+              ),
               const SizedBox(height: 4),
-              const Text('Comece pelo mínimo necessário. Você poderá revogar depois.',
-                  style: TextStyle(color: AppTheme.mutedText)),
+              const Text(
+                'Comece pelo mínimo necessário. Você poderá revogar depois.',
+                style: TextStyle(color: AppTheme.mutedText),
+              ),
               const SizedBox(height: 6),
-              ..._availableScopes.map((scope) => CheckboxListTile(
-                    contentPadding: EdgeInsets.zero,
-                    value: _scopes.contains(scope),
-                    title: Text(scope),
-                    onChanged: (selected) => setState(() {
-                      if (selected == true) {
-                        _scopes.add(scope);
-                      } else {
-                        _scopes.remove(scope);
-                      }
-                    }),
-                  )),
+              ..._availableScopes.map(
+                (scope) => CheckboxListTile(
+                  contentPadding: EdgeInsets.zero,
+                  value: _scopes.contains(scope),
+                  title: Text(scope),
+                  onChanged: (selected) => setState(() {
+                    if (selected == true) {
+                      _scopes.add(scope);
+                    } else {
+                      _scopes.remove(scope);
+                    }
+                  }),
+                ),
+              ),
               const SizedBox(height: 12),
               FilledButton.icon(
                 onPressed: _submit,
                 icon: const Icon(Icons.send_outlined),
                 label: const Text('Registrar convite'),
                 style: FilledButton.styleFrom(
-                    minimumSize: const Size.fromHeight(52),
-                    backgroundColor: AppTheme.professionalBackground,
-                    foregroundColor: Colors.white),
+                  minimumSize: const Size.fromHeight(52),
+                  backgroundColor: AppTheme.professionalBackground,
+                  foregroundColor: Colors.white,
+                ),
               ),
             ],
           ),
@@ -402,9 +460,9 @@ class _AddAccessSheetState extends State<_AddAccessSheet> {
   }
 
   static String _kindLabel(OrganizationKind value) => switch (value) {
-        OrganizationKind.clinic => 'Clínica',
-        OrganizationKind.school => 'Escola',
-        OrganizationKind.company => 'Empresa patrocinadora',
-        OrganizationKind.professional => 'Profissional independente',
-      };
+    OrganizationKind.clinic => 'Clínica',
+    OrganizationKind.school => 'Escola',
+    OrganizationKind.company => 'Empresa patrocinadora',
+    OrganizationKind.professional => 'Profissional independente',
+  };
 }

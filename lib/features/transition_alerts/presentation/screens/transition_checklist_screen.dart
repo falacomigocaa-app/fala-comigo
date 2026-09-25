@@ -56,7 +56,10 @@ class _TransitionChecklistScreenState
               Text(
                 'Checklist',
                 style: TextStyle(
-                    fontSize: 28, fontWeight: FontWeight.w800, color: color),
+                  fontSize: 28,
+                  fontWeight: FontWeight.w800,
+                  color: color,
+                ),
               ),
               const SizedBox(height: 12),
               if (total > 0)
@@ -76,8 +79,9 @@ class _TransitionChecklistScreenState
                         child: ElevatedButton(
                           onPressed: _closeAll,
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: color,
-                              foregroundColor: Colors.white),
+                            backgroundColor: color,
+                            foregroundColor: Colors.white,
+                          ),
                           child: const Text('Concluir'),
                         ),
                       )
@@ -89,8 +93,10 @@ class _TransitionChecklistScreenState
                             margin: const EdgeInsets.only(bottom: 12),
                             child: CheckboxListTile(
                               value: _checked[i],
-                              title: Text(item,
-                                  style: const TextStyle(fontSize: 20)),
+                              title: Text(
+                                item,
+                                style: const TextStyle(fontSize: 20),
+                              ),
                               activeColor: color,
                               onChanged: (v) {
                                 setState(() => _checked[i] = v ?? false);
@@ -110,8 +116,10 @@ class _TransitionChecklistScreenState
                       foregroundColor: Colors.white,
                       minimumSize: const Size.fromHeight(56),
                     ),
-                    child: const Text('Concluído! 🎉',
-                        style: TextStyle(fontSize: 20)),
+                    child: const Text(
+                      'Concluído! 🎉',
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
                 ),
             ],

@@ -37,10 +37,7 @@ class SecureBoxService {
   static Future<Box<T>> openSecureBoxWithMigration<T>(String name) async {
     final key = await _getOrCreateEncryptionKey();
     try {
-      return await Hive.openBox<T>(
-        name,
-        encryptionCipher: HiveAesCipher(key),
-      );
+      return await Hive.openBox<T>(name, encryptionCipher: HiveAesCipher(key));
     } catch (_) {
       if (Hive.isBoxOpen(name)) {
         await Hive.box(name).close();

@@ -29,7 +29,9 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
 
   Future<void> _submit() async {
     setState(() => _error = null);
-    final currentOk = await ParentalPinService.checkPin(_currentController.text);
+    final currentOk = await ParentalPinService.checkPin(
+      _currentController.text,
+    );
     if (!currentOk) {
       setState(() => _error = 'PIN atual incorreto.');
       return;
@@ -102,15 +104,13 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                   const ParentalSectionHeading(
                     eyebrow: 'SEGURANÇA LOCAL',
                     title: 'Atualizar acesso',
-                    description:
-                        'Altere o código usado para abrir a Área Parental neste aparelho.',
+                    description: 'Altere o código usado para abrir a Área Parental neste aparelho.',
                   ),
                   const SizedBox(height: 18),
                   const ParentalInfoBanner(
                     icon: Icons.lock_outline,
                     eyebrow: 'PROTEÇÃO DO APARELHO',
-                    message:
-                        'O PIN permanece local. Escolha um código que o responsável consiga guardar com segurança.',
+                    message: 'O PIN permanece local. Escolha um código que o responsável consiga guardar com segurança.',
                   ),
                   const SizedBox(height: 16),
                   ParentalSurface(
@@ -128,12 +128,15 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                               color: const Color(0xFFFFF1F1),
                               borderRadius: BorderRadius.circular(11),
                               border: Border.all(
-                                  color: const Color(0xFFF4C7C7)),
+                                color: const Color(0xFFF4C7C7),
+                              ),
                             ),
                             child: Text(
                               _error!,
                               style: const TextStyle(
-                                  color: Color(0xFFB42318), height: 1.3),
+                                color: Color(0xFFB42318),
+                                height: 1.3,
+                              ),
                             ),
                           ),
                         SizedBox(
@@ -147,7 +150,8 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                               backgroundColor: AppTheme.professionalBackground,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(13)),
+                                borderRadius: BorderRadius.circular(13),
+                              ),
                             ),
                           ),
                         ),

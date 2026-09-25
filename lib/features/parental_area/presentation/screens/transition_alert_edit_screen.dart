@@ -79,7 +79,9 @@ class _TransitionAlertEditScreenState
 
     if (existing?.scheduledHour != null && existing?.scheduledMinute != null) {
       _scheduledTimeOfDay = TimeOfDay(
-          hour: existing!.scheduledHour!, minute: existing.scheduledMinute!);
+        hour: existing!.scheduledHour!,
+        minute: existing.scheduledMinute!,
+      );
     }
   }
 
@@ -126,8 +128,9 @@ class _TransitionAlertEditScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content:
-                Text('É preciso autorizar o uso do microfone para gravar.'),
+            content: Text(
+              'É preciso autorizar o uso do microfone para gravar.',
+            ),
           ),
         );
       }
@@ -135,16 +138,19 @@ class _TransitionAlertEditScreenState
     }
 
     final path = await _recordingFilePath();
-    await _recorder.start(const RecordConfig(encoder: AudioEncoder.aacLc),
-        path: path);
+    await _recorder.start(
+      const RecordConfig(encoder: AudioEncoder.aacLc),
+      path: path,
+    );
     setState(() => _isRecording = true);
   }
 
   Future<void> _playPreview() async {
     if (_recordedAudioPath == null) return;
     setState(() => _isPlayingPreview = true);
-    final preview =
-        await MediaStorageService.materializeForReading(_recordedAudioPath!);
+    final preview = await MediaStorageService.materializeForReading(
+      _recordedAudioPath!,
+    );
     await _player.play(DeviceFileSource(preview.path));
     _player.onPlayerComplete.first.then((_) {
       if (mounted) setState(() => _isPlayingPreview = false);
@@ -191,7 +197,8 @@ class _TransitionAlertEditScreenState
     if (_titleController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text('Dê um nome para o alerta antes de salvar.')),
+          content: Text('Dê um nome para o alerta antes de salvar.'),
+        ),
       );
       return;
     }
@@ -245,8 +252,11 @@ class _TransitionAlertEditScreenState
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.notifications_active_outlined,
-                    color: AppTheme.professionalAccent, size: 26),
+                const Icon(
+                  Icons.notifications_active_outlined,
+                  color: AppTheme.professionalAccent,
+                  size: 26,
+                ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
@@ -254,15 +264,20 @@ class _TransitionAlertEditScreenState
                         ? 'Atualize o alerta conforme a rotina atual. As mudanças ficam salvas localmente.'
                         : 'Crie um aviso previsível para apoiar a próxima mudança de atividade.',
                     style: const TextStyle(
-                        color: Colors.white, height: 1.35, fontSize: 13),
+                      color: Colors.white,
+                      height: 1.35,
+                      fontSize: 13,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 18),
-          const Text('Nome do alerta',
-              style: TextStyle(fontWeight: FontWeight.w700)),
+          const Text(
+            'Nome do alerta',
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 4),
           TextField(
             controller: _titleController,
@@ -272,8 +287,10 @@ class _TransitionAlertEditScreenState
             ),
           ),
           const Divider(height: 32),
-          const Text('Mensagem de áudio',
-              style: TextStyle(fontWeight: FontWeight.w700)),
+          const Text(
+            'Mensagem de áudio',
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -299,8 +316,9 @@ class _TransitionAlertEditScreenState
                   icon: Icon(_isRecording ? Icons.stop : Icons.mic),
                   label: Text(_isRecording ? 'Parar' : 'Gravar'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        _isRecording ? Colors.redAccent : AppTheme.primary,
+                    backgroundColor: _isRecording
+                        ? Colors.redAccent
+                        : AppTheme.primary,
                     foregroundColor: Colors.white,
                   ),
                 ),
@@ -308,8 +326,11 @@ class _TransitionAlertEditScreenState
                 if (_recordedAudioPath != null)
                   IconButton(
                     onPressed: _isPlayingPreview ? null : _playPreview,
-                    icon: const Icon(Icons.play_circle,
-                        color: AppTheme.accentGreen, size: 32),
+                    icon: const Icon(
+                      Icons.play_circle,
+                      color: AppTheme.accentGreen,
+                      size: 32,
+                    ),
                     tooltip: 'Ouvir gravação',
                   ),
               ],
@@ -324,10 +345,14 @@ class _TransitionAlertEditScreenState
               ),
             ),
           const Divider(height: 32),
-          const Text('Contagem visual',
-              style: TextStyle(fontWeight: FontWeight.w700)),
-          Text('$_countdownSeconds segundos',
-              style: const TextStyle(color: Colors.grey)),
+          const Text(
+            'Contagem visual',
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
+          Text(
+            '$_countdownSeconds segundos',
+            style: const TextStyle(color: Colors.grey),
+          ),
           Slider(
             value: _countdownSeconds.toDouble(),
             min: 10,
@@ -340,8 +365,10 @@ class _TransitionAlertEditScreenState
           Row(
             children: [
               const Expanded(
-                child: Text('Repetir em horário fixo',
-                    style: TextStyle(fontWeight: FontWeight.w700)),
+                child: Text(
+                  'Repetir em horário fixo',
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
               ),
               Switch(
                 value: _isScheduled,
@@ -382,8 +409,10 @@ class _TransitionAlertEditScreenState
             ),
           ],
           const Divider(height: 32),
-          const Text('Checklist depois do alerta',
-              style: TextStyle(fontWeight: FontWeight.w700)),
+          const Text(
+            'Checklist depois do alerta',
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 4),
           const Text(
             'Dica: comece cada item com um emoji, ex: "🧸 Guardar os brinquedos".',
@@ -404,8 +433,11 @@ class _TransitionAlertEditScreenState
               ),
               IconButton(
                 onPressed: _addChecklistItem,
-                icon: const Icon(Icons.add_circle,
-                    color: AppTheme.primary, size: 32),
+                icon: const Icon(
+                  Icons.add_circle,
+                  color: AppTheme.primary,
+                  size: 32,
+                ),
               ),
             ],
           ),

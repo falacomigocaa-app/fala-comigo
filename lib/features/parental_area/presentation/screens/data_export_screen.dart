@@ -68,10 +68,10 @@ class _DataExportScreenState extends State<DataExportScreen> {
   }
 
   String _periodLabel() => switch (_period) {
-        ExportPeriod.sevenDays => 'últimos 7 dias',
-        ExportPeriod.thirtyDays => 'últimos 30 dias',
-        ExportPeriod.all => 'todo o período disponível',
-      };
+    ExportPeriod.sevenDays => 'últimos 7 dias',
+    ExportPeriod.thirtyDays => 'últimos 30 dias',
+    ExportPeriod.all => 'todo o período disponível',
+  };
 
   String _formatDate(dynamic value) {
     final date = DateTime.tryParse('$value');
@@ -102,8 +102,10 @@ class _DataExportScreenState extends State<DataExportScreen> {
         child: pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            pw.Text('Perfil informado',
-                style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+            pw.Text(
+              'Perfil informado',
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            ),
             ...fields.map(pw.Text.new),
           ],
         ),
@@ -113,9 +115,9 @@ class _DataExportScreenState extends State<DataExportScreen> {
   }
 
   pw.Widget _footerNote() => pw.Text(
-        'Dados exportados do aparelho por escolha do responsável. Este documento não é diagnóstico, avaliação clínica ou previsão de evolução.',
-        style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700),
-      );
+    'Dados exportados do aparelho por escolha do responsável. Este documento não é diagnóstico, avaliação clínica ou previsão de evolução.',
+    style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700),
+  );
 
   Future<void> _share(pw.Document document, String filename) async {
     await Printing.sharePdf(bytes: await document.save(), filename: filename);
@@ -124,93 +126,113 @@ class _DataExportScreenState extends State<DataExportScreen> {
   Future<void> _exportSummary() async {
     final doc = pw.Document();
     final completed = _routine.where((item) => item.completed).length;
-    doc.addPage(pw.MultiPage(
+    doc.addPage(
+      pw.MultiPage(
         build: (context) => [
-              pw.Header(level: 0, child: pw.Text('Fala Comigo — Resumo local')),
-              pw.Text(
-                  'Gerado em ${_formatDate(DateTime.now().toIso8601String())}'),
-              pw.SizedBox(height: 12),
-              ..._profileSection(),
-              pw.Text('Período: ${_periodLabel()}'),
-              pw.SizedBox(height: 8),
-              pw.Bullet(text: 'Registros ABC: ${_entries.length}'),
-              pw.Bullet(
-                  text:
-                      'Vídeos armazenados localmente: ${_videoBox?.length ?? 0}'),
-              pw.Bullet(text: 'Passos da rotina visual: ${_routine.length}'),
-              pw.Bullet(text: 'Passos marcados na rotina: $completed'),
-              pw.SizedBox(height: 16),
-              pw.Text('Registros recentes',
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-              if (_entries.isEmpty) pw.Text('Nenhum registro ABC no período.'),
-              ..._entries.take(10).map((entry) => pw.Container(
-                    margin: const pw.EdgeInsets.only(top: 8),
-                    child: pw.Text(
-                        '${_formatDate(entry['timestamp'])} — ${entry['behavior'] ?? 'Sem descrição'}'),
-                  )),
-              pw.SizedBox(height: 16),
-              _footerNote(),
-            ]));
+          pw.Header(level: 0, child: pw.Text('Fala Comigo — Resumo local')),
+          pw.Text('Gerado em ${_formatDate(DateTime.now().toIso8601String())}'),
+          pw.SizedBox(height: 12),
+          ..._profileSection(),
+          pw.Text('Período: ${_periodLabel()}'),
+          pw.SizedBox(height: 8),
+          pw.Bullet(text: 'Registros ABC: ${_entries.length}'),
+          pw.Bullet(
+            text: 'Vídeos armazenados localmente: ${_videoBox?.length ?? 0}',
+          ),
+          pw.Bullet(text: 'Passos da rotina visual: ${_routine.length}'),
+          pw.Bullet(text: 'Passos marcados na rotina: $completed'),
+          pw.SizedBox(height: 16),
+          pw.Text(
+            'Registros recentes',
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+          ),
+          if (_entries.isEmpty) pw.Text('Nenhum registro ABC no período.'),
+          ..._entries
+              .take(10)
+              .map(
+                (entry) => pw.Container(
+                  margin: const pw.EdgeInsets.only(top: 8),
+                  child: pw.Text(
+                    '${_formatDate(entry['timestamp'])} — ${entry['behavior'] ?? 'Sem descrição'}',
+                  ),
+                ),
+              ),
+          pw.SizedBox(height: 16),
+          _footerNote(),
+        ],
+      ),
+    );
     await _share(doc, 'resumo_fala_comigo.pdf');
   }
 
   Future<void> _exportAbc() async {
     final doc = pw.Document();
-    doc.addPage(pw.MultiPage(
+    doc.addPage(
+      pw.MultiPage(
         build: (context) => [
-              pw.Header(
-                  level: 0, child: pw.Text('Fala Comigo — Registros ABC')),
-              pw.Text('Período: ${_periodLabel()}'),
-              pw.SizedBox(height: 10),
-              ..._profileSection(),
-              if (_entries.isEmpty) pw.Text('Nenhum registro ABC no período.'),
-              ..._entries.map((entry) => pw.Container(
-                    margin: const pw.EdgeInsets.only(bottom: 10),
-                    padding: const pw.EdgeInsets.all(8),
-                    decoration: pw.BoxDecoration(
-                        border: pw.Border.all(color: PdfColors.grey400)),
-                    child: pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                        pw.Text(_formatDate(entry['timestamp']),
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                        pw.Text('Antecedente: ${entry['antecedent'] ?? ''}'),
-                        pw.Text('Comportamento: ${entry['behavior'] ?? ''}'),
-                        pw.Text(
-                            'Apoio/consequência: ${entry['consequence'] ?? ''}'),
-                        if ('${entry['notes'] ?? ''}'.isNotEmpty)
-                          pw.Text('Notas: ${entry['notes']}'),
-                      ],
-                    ),
-                  )),
-              pw.SizedBox(height: 8),
-              _footerNote(),
-            ]));
+          pw.Header(level: 0, child: pw.Text('Fala Comigo — Registros ABC')),
+          pw.Text('Período: ${_periodLabel()}'),
+          pw.SizedBox(height: 10),
+          ..._profileSection(),
+          if (_entries.isEmpty) pw.Text('Nenhum registro ABC no período.'),
+          ..._entries.map(
+            (entry) => pw.Container(
+              margin: const pw.EdgeInsets.only(bottom: 10),
+              padding: const pw.EdgeInsets.all(8),
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(color: PdfColors.grey400),
+              ),
+              child: pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Text(
+                    _formatDate(entry['timestamp']),
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                  ),
+                  pw.Text('Antecedente: ${entry['antecedent'] ?? ''}'),
+                  pw.Text('Comportamento: ${entry['behavior'] ?? ''}'),
+                  pw.Text('Apoio/consequência: ${entry['consequence'] ?? ''}'),
+                  if ('${entry['notes'] ?? ''}'.isNotEmpty)
+                    pw.Text('Notas: ${entry['notes']}'),
+                ],
+              ),
+            ),
+          ),
+          pw.SizedBox(height: 8),
+          _footerNote(),
+        ],
+      ),
+    );
     await _share(doc, 'registros_abc_fala_comigo.pdf');
   }
 
   Future<void> _exportRoutine() async {
     final doc = pw.Document();
-    doc.addPage(pw.MultiPage(
+    doc.addPage(
+      pw.MultiPage(
         build: (context) => [
-              pw.Header(
-                  level: 0, child: pw.Text('Fala Comigo — Rotina visual')),
-              pw.Text('Estado salvo no aparelho no momento da exportação.'),
-              pw.SizedBox(height: 12),
-              ..._profileSection(),
-              if (_routine.isEmpty) pw.Text('Nenhum passo configurado.'),
-              ..._routine.asMap().entries.map((entry) => pw.Container(
-                    margin: const pw.EdgeInsets.only(bottom: 8),
-                    padding: const pw.EdgeInsets.all(8),
-                    decoration: pw.BoxDecoration(
-                        border: pw.Border.all(color: PdfColors.grey400)),
-                    child: pw.Text(
-                        '${entry.key + 1}. ${entry.value.emoji} ${entry.value.title} — ${entry.value.completed ? 'concluído por agora' : 'não marcado'}'),
-                  )),
-              pw.SizedBox(height: 8),
-              _footerNote(),
-            ]));
+          pw.Header(level: 0, child: pw.Text('Fala Comigo — Rotina visual')),
+          pw.Text('Estado salvo no aparelho no momento da exportação.'),
+          pw.SizedBox(height: 12),
+          ..._profileSection(),
+          if (_routine.isEmpty) pw.Text('Nenhum passo configurado.'),
+          ..._routine.asMap().entries.map(
+            (entry) => pw.Container(
+              margin: const pw.EdgeInsets.only(bottom: 8),
+              padding: const pw.EdgeInsets.all(8),
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(color: PdfColors.grey400),
+              ),
+              child: pw.Text(
+                '${entry.key + 1}. ${entry.value.emoji} ${entry.value.title} — ${entry.value.completed ? 'concluído por agora' : 'não marcado'}',
+              ),
+            ),
+          ),
+          pw.SizedBox(height: 8),
+          _footerNote(),
+        ],
+      ),
+    );
     await _share(doc, 'rotina_visual_fala_comigo.pdf');
   }
 
@@ -238,39 +260,49 @@ class _DataExportScreenState extends State<DataExportScreen> {
                   child: const Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.picture_as_pdf_outlined,
-                          color: AppTheme.professionalAccent, size: 28),
+                      Icon(
+                        Icons.picture_as_pdf_outlined,
+                        color: AppTheme.professionalAccent,
+                        size: 28,
+                      ),
                       SizedBox(width: 14),
                       Expanded(
                         child: Text(
                           'Escolha exatamente o relatório que deseja compartilhar. Nada é enviado automaticamente.',
                           style: TextStyle(
-                              color: Colors.white, height: 1.35, fontSize: 15),
+                            color: Colors.white,
+                            height: 1.35,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text('Período dos registros ABC',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+                const Text(
+                  'Período dos registros ABC',
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                ),
                 DropdownButtonFormField<ExportPeriod>(
                   value: _period,
                   decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      helperText:
-                          'A rotina visual sempre mostra o estado atual.'),
+                    border: OutlineInputBorder(),
+                    helperText: 'A rotina visual sempre mostra o estado atual.',
+                  ),
                   items: const [
                     DropdownMenuItem(
-                        value: ExportPeriod.sevenDays,
-                        child: Text('Últimos 7 dias')),
+                      value: ExportPeriod.sevenDays,
+                      child: Text('Últimos 7 dias'),
+                    ),
                     DropdownMenuItem(
-                        value: ExportPeriod.thirtyDays,
-                        child: Text('Últimos 30 dias')),
+                      value: ExportPeriod.thirtyDays,
+                      child: Text('Últimos 30 dias'),
+                    ),
                     DropdownMenuItem(
-                        value: ExportPeriod.all,
-                        child: Text('Todo o período disponível')),
+                      value: ExportPeriod.all,
+                      child: Text('Todo o período disponível'),
+                    ),
                   ],
                   onChanged: (value) {
                     if (value != null) setState(() => _period = value);
@@ -283,7 +315,8 @@ class _DataExportScreenState extends State<DataExportScreen> {
                       setState(() => _includeProfile = value ?? false),
                   title: const Text('Incluir dados identificadores'),
                   subtitle: const Text(
-                      'Desmarcado por padrão: nome, responsável e escola/clínica.'),
+                    'Desmarcado por padrão: nome, responsável e escola/clínica.',
+                  ),
                   controlAffinity: ListTileControlAffinity.leading,
                 ),
                 const SizedBox(height: 8),

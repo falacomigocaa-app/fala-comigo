@@ -48,9 +48,10 @@ class DataWipeService {
 
     // Recria caixas vazias com uma nova chave para que o app continue
     // utilizável sem exigir uma reinicialização do processo Flutter.
-    final cardsBox = await SecureBoxService.openSecureBoxWithMigration<PictogramCard>(
-      'pictogram_cards',
-    );
+    final cardsBox =
+        await SecureBoxService.openSecureBoxWithMigration<PictogramCard>(
+          'pictogram_cards',
+        );
     for (final card in SeedCards.defaultCards()) {
       await cardsBox.put(card.id, card);
     }

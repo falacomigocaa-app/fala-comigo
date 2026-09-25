@@ -48,8 +48,8 @@ const communicationRewards = [
 
 final communicationRewardsProvider =
     StateNotifierProvider<CommunicationRewardsNotifier, Set<String>>(
-  (ref) => CommunicationRewardsNotifier(),
-);
+      (ref) => CommunicationRewardsNotifier(),
+    );
 
 class CommunicationRewardsNotifier extends StateNotifier<Set<String>> {
   CommunicationRewardsNotifier() : super(_loadRewards());

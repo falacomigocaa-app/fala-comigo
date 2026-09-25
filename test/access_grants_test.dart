@@ -25,8 +25,7 @@ void main() {
 
     expect(restored.id, 'grant-1');
     expect(restored.organizationKind, OrganizationKind.clinic);
-    expect(restored.scopes,
-        ['Tarefas e retornos', 'Perfil de comunicação']);
+    expect(restored.scopes, ['Tarefas e retornos', 'Perfil de comunicação']);
     expect(restored.status, AccessGrantStatus.active);
     expect(restored.canRevoke, isTrue);
   });

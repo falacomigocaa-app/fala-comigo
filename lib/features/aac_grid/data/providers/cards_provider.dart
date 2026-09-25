@@ -26,15 +26,15 @@ final cardsBoxProvider = Provider<Box<PictogramCard>>((ref) {
 /// Lista reativa de todos os cartões cadastrados, ordenada.
 final cardsListProvider =
     StateNotifierProvider<CardsNotifier, List<PictogramCard>>((ref) {
-  final box = ref.watch(cardsBoxProvider);
-  return CardsNotifier(box);
-});
+      final box = ref.watch(cardsBoxProvider);
+      return CardsNotifier(box);
+    });
 
 class CardsNotifier extends StateNotifier<List<PictogramCard>> {
   final Box<PictogramCard> _box;
 
   CardsNotifier(this._box)
-      : super(_box.values.toList()..sort((a, b) => a.order.compareTo(b.order)));
+    : super(_box.values.toList()..sort((a, b) => a.order.compareTo(b.order)));
 
   Future<void> addCard({
     required String label,
@@ -120,8 +120,8 @@ final selectedCategoryProvider = StateProvider<String>((ref) => 'todas');
 /// selecionou para montar uma frase (ex: "Eu Quero" + "Comer" + "Maçã").
 final sentenceBarProvider =
     StateNotifierProvider<SentenceBarNotifier, List<PictogramCard>>((ref) {
-  return SentenceBarNotifier();
-});
+      return SentenceBarNotifier();
+    });
 
 class SentenceBarNotifier extends StateNotifier<List<PictogramCard>> {
   SentenceBarNotifier() : super([]);
@@ -173,7 +173,8 @@ class CardTapBehaviorNotifier extends StateNotifier<CardTapBehavior> {
 
 final cardTapBehaviorProvider =
     StateNotifierProvider<CardTapBehaviorNotifier, CardTapBehavior>(
-        (ref) => CardTapBehaviorNotifier());
+      (ref) => CardTapBehaviorNotifier(),
+    );
 
 /// Configurações bloqueadas (Modo Infantil Sensorial ativo).
 final settingsLockedProvider = StateProvider<bool>((ref) => true);

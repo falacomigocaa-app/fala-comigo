@@ -43,7 +43,9 @@ Future<void> _bootstrap() async {
   final box = await SecureBoxService.openSecureBoxWithMigration<PictogramCard>(
     cardsBoxName,
   );
-  await SecureBoxService.openSecureBoxWithMigration<PictogramCard>('app_settings');
+  await SecureBoxService.openSecureBoxWithMigration<PictogramCard>(
+    'app_settings',
+  );
   await SecureBoxService.openSecureBoxWithMigration(transitionAlertsBoxName);
 
   if (box.isEmpty) {
@@ -62,8 +64,9 @@ void _configureAlertHandler() {
       final alertsBox = Hive.box(transitionAlertsBoxName);
       final rawMap = alertsBox.get(alertId);
       if (rawMap != null) {
-        final alert =
-            TransitionAlert.fromMap(Map<String, dynamic>.from(rawMap as Map));
+        final alert = TransitionAlert.fromMap(
+          Map<String, dynamic>.from(rawMap as Map),
+        );
         navigatorKey.currentState?.push(
           MaterialPageRoute(
             builder: (_) => TransitionAlertFullScreen(alert: alert),
@@ -211,8 +214,11 @@ class _BootstrapError extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.cloud_off_outlined,
-                  size: 48, color: AppTheme.primary),
+              const Icon(
+                Icons.cloud_off_outlined,
+                size: 48,
+                color: AppTheme.primary,
+              ),
               const SizedBox(height: 16),
               const Text(
                 'Não foi possível preparar os dados locais.',

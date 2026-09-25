@@ -13,7 +13,10 @@ import 'settings_screen.dart';
 class ParentalGateScreen extends StatefulWidget {
   final Widget destination;
 
-  const ParentalGateScreen({super.key, this.destination = const SettingsScreen()});
+  const ParentalGateScreen({
+    super.key,
+    this.destination = const SettingsScreen(),
+  });
 
   @override
   State<ParentalGateScreen> createState() => _ParentalGateScreenState();
@@ -75,7 +78,8 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
     final locked = await ParentalPinService.remainingLockout();
     if (locked != null) {
       setState(
-          () => _error = 'Acesso temporariamente bloqueado. Tente mais tarde.');
+        () => _error = 'Acesso temporariamente bloqueado. Tente mais tarde.',
+      );
       return;
     }
     final isValid = await ParentalPinService.checkPin(_pinController.text);
@@ -228,13 +232,18 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
                             decoration: BoxDecoration(
                               color: const Color(0xFFFFF1F1),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: const Color(0xFFF4C7C7)),
+                              border: Border.all(
+                                color: const Color(0xFFF4C7C7),
+                              ),
                             ),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Icon(Icons.error_outline,
-                                    color: Color(0xFFB42318), size: 20),
+                                const Icon(
+                                  Icons.error_outline,
+                                  color: Color(0xFFB42318),
+                                  size: 20,
+                                ),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
@@ -252,11 +261,14 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
                         const SizedBox(height: 18),
                         FilledButton.icon(
                           onPressed: _submit,
-                          icon: Icon(_setupMode
-                              ? Icons.verified_user_outlined
-                              : Icons.login_rounded),
+                          icon: Icon(
+                            _setupMode
+                                ? Icons.verified_user_outlined
+                                : Icons.login_rounded,
+                          ),
                           label: Text(
-                              _setupMode ? 'Criar PIN e continuar' : 'Entrar'),
+                            _setupMode ? 'Criar PIN e continuar' : 'Entrar',
+                          ),
                           style: FilledButton.styleFrom(
                             minimumSize: const Size.fromHeight(54),
                             backgroundColor: AppTheme.professionalBackground,
@@ -270,8 +282,11 @@ class _ParentalGateScreenState extends State<ParentalGateScreen> {
                         const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.shield_outlined,
-                                color: AppTheme.accentGreen, size: 17),
+                            Icon(
+                              Icons.shield_outlined,
+                              color: AppTheme.accentGreen,
+                              size: 17,
+                            ),
                             SizedBox(width: 6),
                             Text(
                               'Dados protegidos neste aparelho',

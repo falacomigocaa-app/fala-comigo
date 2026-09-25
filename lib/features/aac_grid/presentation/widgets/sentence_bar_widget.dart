@@ -79,8 +79,10 @@ class SentenceBarWidget extends ConsumerWidget {
                                     borderRadius: BorderRadius.circular(8),
                                     child: card.isCustomImage
                                         ? SecureMediaImage(path: card.imagePath)
-                                        : Image.asset(card.imagePath,
-                                            fit: BoxFit.cover),
+                                        : Image.asset(
+                                            card.imagePath,
+                                            fit: BoxFit.cover,
+                                          ),
                                   ),
                                 ),
                                 Text(
@@ -116,7 +118,8 @@ class SentenceBarWidget extends ConsumerWidget {
                             behavior: SnackBarBehavior.floating,
                             duration: const Duration(milliseconds: 2200),
                             content: Text(
-                                '${reward.emoji} ${reward.title}\n${reward.message}'),
+                              '${reward.emoji} ${reward.title}\n${reward.message}',
+                            ),
                           ),
                         );
                     }
@@ -126,11 +129,14 @@ class SentenceBarWidget extends ConsumerWidget {
               foregroundColor: Colors.white,
               minimumSize: const Size(64, 64),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
+                borderRadius: BorderRadius.circular(16),
+              ),
             ),
             icon: const Icon(Icons.volume_up, size: 28),
-            label: const Text('Falar',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            label: const Text(
+              'Falar',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            ),
           ),
           const SizedBox(width: 8),
           IconButton(

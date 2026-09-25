@@ -46,25 +46,24 @@ void main() {
       );
 
       expect(decision.allowed, isFalse, reason: operation.name);
-      expect(
-        decision.reason,
-        RhAuthorizationReason.organizationScopeMismatch,
-      );
+      expect(decision.reason, RhAuthorizationReason.organizationScopeMismatch);
     }
   });
 
-  test('organização cruzada é negada antes de avaliar entitlement ou limiar',
-      () {
-    final decision = RhAuthorizationPolicy.decide(
-      request(
-        operation: RhOperation.viewAggregateReport,
-        sameOrganization: false,
-        entitlements: const {},
-      ),
-    );
+  test(
+    'organização cruzada é negada antes de avaliar entitlement ou limiar',
+    () {
+      final decision = RhAuthorizationPolicy.decide(
+        request(
+          operation: RhOperation.viewAggregateReport,
+          sameOrganization: false,
+          entitlements: const {},
+        ),
+      );
 
-    expect(decision.reason, RhAuthorizationReason.organizationScopeMismatch);
-  });
+      expect(decision.reason, RhAuthorizationReason.organizationScopeMismatch);
+    },
+  );
 
   test('papéis de família, clínica e escola não administram o programa RH', () {
     for (final role in [RhRole.family, RhRole.clinician, RhRole.school]) {
@@ -89,12 +88,14 @@ void main() {
     expect(decision.reason, RhAuthorizationReason.entitlementMissing);
   });
 
-  test('administrador da própria organização pode consultar somente agregados',
-      () {
-    final decision = RhAuthorizationPolicy.decide(
-      request(operation: RhOperation.viewAggregateReport),
-    );
+  test(
+    'administrador da própria organização pode consultar somente agregados',
+    () {
+      final decision = RhAuthorizationPolicy.decide(
+        request(operation: RhOperation.viewAggregateReport),
+      );
 
-    expect(decision.allowed, isTrue);
-  });
+      expect(decision.allowed, isTrue);
+    },
+  );
 }

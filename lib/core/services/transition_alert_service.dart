@@ -96,30 +96,39 @@ class TransitionAlertService {
   /// ao criar o primeiro alerta), nunca silenciosamente ao abrir o
   /// app, para o responsável entender o motivo do pedido.
   Future<void> requestPermissions() async {
-    final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
+    final androidPlugin = _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
     if (androidPlugin != null) {
       await androidPlugin.requestNotificationsPermission();
       await androidPlugin.requestExactAlarmsPermission();
       await androidPlugin.requestFullScreenIntentPermission();
     }
-    final darwinPlugin = _plugin.resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>();
+    final darwinPlugin = _plugin
+        .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin
+        >();
     await darwinPlugin?.requestPermissions(
-        alert: true, badge: true, sound: true);
+      alert: true,
+      badge: true,
+      sound: true,
+    );
   }
 
   /// Verifica o status real das permissões no Android, para
   /// diagnóstico visível na tela (em vez de falhas silenciosas).
   Future<String> checkPermissionStatus() async {
-    final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
+    final androidPlugin = _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
     if (androidPlugin == null) {
       return 'Não foi possível verificar nesta plataforma.';
     }
     final notificationsEnabled = await androidPlugin.areNotificationsEnabled();
-    final exactAlarmsAllowed =
-        await androidPlugin.canScheduleExactNotifications();
+    final exactAlarmsAllowed = await androidPlugin
+        .canScheduleExactNotifications();
     return 'Notificações: ${notificationsEnabled == true ? "OK" : "BLOQUEADAS"} | '
         'Alarme exato: ${exactAlarmsAllowed == true ? "OK" : "BLOQUEADO"}';
   }
@@ -244,8 +253,8 @@ class TransitionAlertService {
   /// serve para isolar se o problema está no agendamento em si ou
   /// na lógica de repetição semanal.
   Future<void> testDelayed(int seconds) async {
-    final scheduledDate =
-        tz.TZDateTime.now(tz.local).add(Duration(seconds: seconds));
+    final scheduledDate = tz.TZDateTime.now(tz.local)
+        .add(Duration(seconds: seconds));
     await _plugin.zonedSchedule(
       999999,
       'Teste agendado',

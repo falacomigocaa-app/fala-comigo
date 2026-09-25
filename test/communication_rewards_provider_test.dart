@@ -10,7 +10,9 @@ void main() {
       'first_phrase',
       'category_choice',
     ]);
-    expect(communicationRewards.every((reward) => reward.message.isNotEmpty),
-        isTrue);
+    expect(
+      communicationRewards.every((reward) => reward.message.isNotEmpty),
+      isTrue,
+    );
   });
 }

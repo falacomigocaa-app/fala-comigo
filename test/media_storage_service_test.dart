@@ -14,13 +14,15 @@ void main() {
     );
   });
 
-  test('materialização de caminho ausente falha sem produzir arquivo',
-      () async {
-    expect(
-      () => MediaStorageService.materializeForReading(
-        '/tmp/fala_comigo_missing_media_9f4c.jpg.fcm',
-      ),
-      throwsA(isA<FileSystemException>()),
-    );
-  });
+  test(
+    'materialização de caminho ausente falha sem produzir arquivo',
+    () async {
+      expect(
+        () => MediaStorageService.materializeForReading(
+          '/tmp/fala_comigo_missing_media_9f4c.jpg.fcm',
+        ),
+        throwsA(isA<FileSystemException>()),
+      );
+    },
+  );
 }

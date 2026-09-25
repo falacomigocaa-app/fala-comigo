@@ -38,8 +38,8 @@ class _ParentRemindersScreenState extends State<ParentRemindersScreen> {
   Future<void> _requestPermissions() async {
     await TransitionAlertService.instance.requestPermissions();
     if (!mounted) return;
-    final status =
-        await TransitionAlertService.instance.checkPermissionStatus();
+    final status = await TransitionAlertService.instance
+        .checkPermissionStatus();
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(status)));
   }
@@ -56,8 +56,9 @@ class _ParentRemindersScreenState extends State<ParentRemindersScreen> {
       hour: result.time.hour,
       minute: result.time.minute,
       weekdays: result.weekdays,
-      notificationId:
-          DateTime.now().millisecondsSinceEpoch.remainder(1000000000),
+      notificationId: DateTime.now().millisecondsSinceEpoch.remainder(
+        1000000000,
+      ),
     );
     try {
       await TransitionAlertService.instance.scheduleParentReminder(
@@ -78,8 +79,9 @@ class _ParentRemindersScreenState extends State<ParentRemindersScreen> {
   }
 
   Future<void> _deleteReminder(ParentReminder reminder) async {
-    await TransitionAlertService.instance
-        .cancelParentReminder(reminder.notificationId);
+    await TransitionAlertService.instance.cancelParentReminder(
+      reminder.notificationId,
+    );
     setState(() => _reminders.removeWhere((item) => item.id == reminder.id));
     await _save();
   }
@@ -121,14 +123,20 @@ class _ParentRemindersScreenState extends State<ParentRemindersScreen> {
                   child: const Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.notifications_none_outlined,
-                          color: AppTheme.professionalAccent, size: 28),
+                      Icon(
+                        Icons.notifications_none_outlined,
+                        color: AppTheme.professionalAccent,
+                        size: 28,
+                      ),
                       SizedBox(width: 14),
                       Expanded(
                         child: Text(
                           'Lembretes locais para o responsável consultar a rotina. O texto da notificação é sempre genérico.',
                           style: TextStyle(
-                              color: Colors.white, height: 1.35, fontSize: 14),
+                            color: Colors.white,
+                            height: 1.35,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
                     ],
@@ -148,11 +156,15 @@ class _ParentRemindersScreenState extends State<ParentRemindersScreen> {
                     (reminder) => Card(
                       margin: const EdgeInsets.only(bottom: 10),
                       child: ListTile(
-                        leading: const Icon(Icons.alarm_outlined,
-                            color: AppTheme.primary, size: 30),
-                        title: Text(reminder.label,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.w800)),
+                        leading: const Icon(
+                          Icons.alarm_outlined,
+                          color: AppTheme.primary,
+                          size: 30,
+                        ),
+                        title: Text(
+                          reminder.label,
+                          style: const TextStyle(fontWeight: FontWeight.w800),
+                        ),
                         subtitle: Text(_summary(reminder)),
                         trailing: IconButton(
                           onPressed: () => _deleteReminder(reminder),
@@ -206,8 +218,9 @@ class _ReminderDialogState extends State<_ReminderDialog> {
             TextField(
               controller: _labelController,
               decoration: const InputDecoration(
-                  labelText: 'Nome no aplicativo',
-                  border: OutlineInputBorder()),
+                labelText: 'Nome no aplicativo',
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 12),
             OutlinedButton.icon(
@@ -222,22 +235,26 @@ class _ReminderDialogState extends State<_ReminderDialog> {
               label: Text('Horário: ${_time.format(context)}'),
             ),
             const SizedBox(height: 8),
-            const Text('Dias da semana',
-                style: TextStyle(fontWeight: FontWeight.w700)),
+            const Text(
+              'Dias da semana',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
             Wrap(
               spacing: 4,
               children: _weekdayLabels.entries
-                  .map((entry) => FilterChip(
-                        label: Text(entry.value),
-                        selected: _weekdays.contains(entry.key),
-                        onSelected: (selected) => setState(() {
-                          if (selected) {
-                            _weekdays.add(entry.key);
-                          } else {
-                            _weekdays.remove(entry.key);
-                          }
-                        }),
-                      ))
+                  .map(
+                    (entry) => FilterChip(
+                      label: Text(entry.value),
+                      selected: _weekdays.contains(entry.key),
+                      onSelected: (selected) => setState(() {
+                        if (selected) {
+                          _weekdays.add(entry.key);
+                        } else {
+                          _weekdays.remove(entry.key);
+                        }
+                      }),
+                    ),
+                  )
                   .toList(),
             ),
           ],
@@ -245,16 +262,19 @@ class _ReminderDialogState extends State<_ReminderDialog> {
       ),
       actions: [
         TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancelar')),
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancelar'),
+        ),
         FilledButton(
           onPressed: _weekdays.isEmpty || _labelController.text.trim().isEmpty
               ? null
-              : () => Navigator.of(context).pop(_ReminderDraft(
+              : () => Navigator.of(context).pop(
+                  _ReminderDraft(
                     _labelController.text.trim(),
                     _time,
                     _weekdays.toList()..sort(),
-                  )),
+                  ),
+                ),
           child: const Text('Agendar'),
         ),
       ],
@@ -276,17 +296,23 @@ class _EmptyReminders extends StatelessWidget {
       ),
       child: const Column(
         children: [
-          Icon(Icons.notifications_none_outlined,
-              size: 44, color: AppTheme.primary),
+          Icon(
+            Icons.notifications_none_outlined,
+            size: 44,
+            color: AppTheme.primary,
+          ),
           SizedBox(height: 10),
-          Text('Nenhum lembrete configurado.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+          Text(
+            'Nenhum lembrete configurado.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+          ),
           SizedBox(height: 5),
           Text(
-              'Os lembretes são opcionais e podem ser removidos a qualquer momento.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: AppTheme.mutedText)),
+            'Os lembretes são opcionais e podem ser removidos a qualquer momento.',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: AppTheme.mutedText),
+          ),
         ],
       ),
     );

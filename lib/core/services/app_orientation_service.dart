@@ -60,7 +60,8 @@ class ChildOrientationNotifier extends StateNotifier<ChildOrientation> {
 
 final childOrientationProvider =
     StateNotifierProvider<ChildOrientationNotifier, ChildOrientation>(
-        (ref) => ChildOrientationNotifier());
+      (ref) => ChildOrientationNotifier(),
+    );
 
 String childOrientationDescription(ChildOrientation orientation) {
   switch (orientation) {

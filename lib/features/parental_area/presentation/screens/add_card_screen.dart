@@ -105,12 +105,15 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
   Future<void> _pickImage(ImageSource source) async {
     try {
       await _saveDraft();
-      final XFile? picked =
-          await _picker.pickImage(source: source, imageQuality: 85);
+      final XFile? picked = await _picker.pickImage(
+        source: source,
+        imageQuality: 85,
+      );
       if (picked == null) return;
       try {
-        final permanentPath =
-            await MediaStorageService.persistFile(picked.path);
+        final permanentPath = await MediaStorageService.persistFile(
+          picked.path,
+        );
         if (mounted) {
           setState(() => _selectedImagePath = permanentPath);
           await Hive.box(_settingsBox).put(_draftImageKey, permanentPath);
@@ -119,8 +122,10 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(
-                  error.message ?? 'Mídia não disponível nesta plataforma.')),
+            content: Text(
+              error.message ?? 'Mídia não disponível nesta plataforma.',
+            ),
+          ),
         );
       }
     } catch (_) {
@@ -136,7 +141,8 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
     if (_selectedImagePath == null || _labelController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text('Escolha uma foto e digite um nome para o cartão.')),
+          content: Text('Escolha uma foto e digite um nome para o cartão.'),
+        ),
       );
       return;
     }
@@ -144,7 +150,9 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
     setState(() => _isSaving = true);
     try {
       if (_isEditing) {
-        await ref.read(cardsListProvider.notifier).updateCard(
+        await ref
+            .read(cardsListProvider.notifier)
+            .updateCard(
               id: widget.existingCard!.id,
               label: _labelController.text.trim(),
               imagePath: _selectedImagePath!,
@@ -152,7 +160,9 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
               category: _category,
             );
       } else {
-        await ref.read(cardsListProvider.notifier).addCard(
+        await ref
+            .read(cardsListProvider.notifier)
+            .addCard(
               label: _labelController.text.trim(),
               imagePath: _selectedImagePath!,
               isCustomImage: true,
@@ -186,114 +196,129 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              const ParentalInfoBanner(
-                icon: Icons.auto_awesome_outlined,
-                eyebrow: 'NOVO CARTÃO',
-                message:
-                    'Escolha uma imagem simples e um nome curto. O nome será falado quando o cartão for usado.',
-              ),
-              const SizedBox(height: 16),
-              Semantics(
-                button: true,
-                label: _selectedImagePath == null
-                    ? 'Selecionar imagem do cartão'
-                    : 'Trocar imagem do cartão',
-                hint: 'Abre opções de galeria ou câmera',
-                child: GestureDetector(
-                onTap: () => showModalBottomSheet(
-                  context: context,
-                  builder: (_) => SafeArea(
-                    child: Wrap(
-                      children: [
-                        ListTile(
-                          leading: const Icon(Icons.photo_library_outlined),
-                          title: const Text('Escolher da Galeria'),
-                          onTap: () {
-                            Navigator.pop(context);
-                            _pickImage(ImageSource.gallery);
-                          },
+            child: Column(
+              children: [
+                const ParentalInfoBanner(
+                  icon: Icons.auto_awesome_outlined,
+                  eyebrow: 'NOVO CARTÃO',
+                  message: 'Escolha uma imagem simples e um nome curto. O nome será falado quando o cartão for usado.',
+                ),
+                const SizedBox(height: 16),
+                Semantics(
+                  button: true,
+                  label: _selectedImagePath == null
+                      ? 'Selecionar imagem do cartão'
+                      : 'Trocar imagem do cartão',
+                  hint: 'Abre opções de galeria ou câmera',
+                  child: GestureDetector(
+                    onTap: () => showModalBottomSheet(
+                      context: context,
+                      builder: (_) => SafeArea(
+                        child: Wrap(
+                          children: [
+                            ListTile(
+                              leading: const Icon(Icons.photo_library_outlined),
+                              title: const Text('Escolher da Galeria'),
+                              onTap: () {
+                                Navigator.pop(context);
+                                _pickImage(ImageSource.gallery);
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.photo_camera_outlined),
+                              title: const Text('Tirar Foto'),
+                              onTap: () {
+                                Navigator.pop(context);
+                                _pickImage(ImageSource.camera);
+                              },
+                            ),
+                          ],
                         ),
-                        ListTile(
-                          leading: const Icon(Icons.photo_camera_outlined),
-                          title: const Text('Tirar Foto'),
-                          onTap: () {
-                            Navigator.pop(context);
-                            _pickImage(ImageSource.camera);
-                          },
+                      ),
+                    ),
+                    child: Container(
+                      height: 160,
+                      width: 160,
+                      decoration: BoxDecoration(
+                        color: AppTheme.surface,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: AppTheme.cardBorder,
+                          width: 1.5,
                         ),
-                      ],
+                      ),
+                      child: _selectedImagePath == null
+                          ? const Center(
+                              child: Icon(
+                                Icons.add_a_photo_outlined,
+                                size: 40,
+                                color: AppTheme.primary,
+                              ),
+                            )
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: SecureMediaImage(
+                                path: _selectedImagePath!,
+                              ),
+                            ),
                     ),
                   ),
                 ),
-                child: Container(
-                  height: 160,
-                  width: 160,
-                  decoration: BoxDecoration(
-                    color: AppTheme.surface,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppTheme.cardBorder, width: 1.5),
+                const SizedBox(height: 24),
+                TextField(
+                  controller: _labelController,
+                  decoration: parentalInputDecoration(
+                    labelText: 'Nome do cartão (o que será falado)',
+                    icon: Icons.record_voice_over_outlined,
                   ),
-                  child: _selectedImagePath == null
-                      ? const Center(
-                          child: Icon(Icons.add_a_photo_outlined,
-                              size: 40, color: AppTheme.primary),
-                        )
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: SecureMediaImage(path: _selectedImagePath!),
-                        ),
                 ),
-                ),
-              ),
-              const SizedBox(height: 24),
-              TextField(
-                controller: _labelController,
-                decoration: parentalInputDecoration(
-                  labelText: 'Nome do cartão (o que será falado)',
-                  icon: Icons.record_voice_over_outlined,
-                ),
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                initialValue: _category,
-                decoration: parentalInputDecoration(
-                    labelText: 'Categoria', icon: Icons.category_outlined),
-                items: AppConstants.categoryLabels.entries
-                    .map((e) =>
-                        DropdownMenuItem(value: e.key, child: Text(e.value)))
-                    .toList(),
-                onChanged: (v) =>
-                    setState(() => _category = v ?? 'personalizado'),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _isSaving ? null : _saveCard,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(0, 56),
-                    backgroundColor: AppTheme.accentGreen,
-                    foregroundColor: Colors.white,
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  initialValue: _category,
+                  decoration: parentalInputDecoration(
+                    labelText: 'Categoria',
+                    icon: Icons.category_outlined,
                   ),
-                  child: _isSaving
-                      ? const SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : Text(
-                          _isEditing ? 'Salvar alterações' : 'Salvar cartão',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700),
+                  items: AppConstants.categoryLabels.entries
+                      .map(
+                        (e) => DropdownMenuItem(
+                          value: e.key,
+                          child: Text(e.value),
                         ),
+                      )
+                      .toList(),
+                  onChanged: (v) =>
+                      setState(() => _category = v ?? 'personalizado'),
                 ),
-              ),
-            ],
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _isSaving ? null : _saveCard,
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(0, 56),
+                      backgroundColor: AppTheme.accentGreen,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: _isSaving
+                        ? const SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Text(
+                            _isEditing ? 'Salvar alterações' : 'Salvar cartão',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    ),
     );
   }
 }

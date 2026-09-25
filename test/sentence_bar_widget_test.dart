@@ -15,20 +15,17 @@ PictogramCard card(String id, String label) {
 }
 
 void main() {
-  testWidgets('remove um item pela ação acessível e limpa a frase',
-      (tester) async {
+  testWidgets('remove um item pela ação acessível e limpa a frase', (
+    tester,
+  ) async {
     final notifier = SentenceBarNotifier();
     notifier.addToSentence(card('comer', 'Comer'));
     notifier.addToSentence(card('ajuda', 'Ajuda'));
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          sentenceBarProvider.overrideWith((ref) => notifier),
-        ],
-        child: const MaterialApp(
-          home: Scaffold(body: SentenceBarWidget()),
-        ),
+        overrides: [sentenceBarProvider.overrideWith((ref) => notifier)],
+        child: const MaterialApp(home: Scaffold(body: SentenceBarWidget())),
       ),
     );
 
@@ -48,6 +45,8 @@ void main() {
 
     expect(notifier.state, isEmpty);
     expect(
-        find.text('Toque nos cartões para montar uma frase'), findsOneWidget);
+      find.text('Toque nos cartões para montar uma frase'),
+      findsOneWidget,
+    );
   });
 }

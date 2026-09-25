@@ -8,13 +8,7 @@ enum RhOperation {
   createCareAuthorization,
 }
 
-enum RhRole {
-  benefitAdministrator,
-  support,
-  family,
-  clinician,
-  school,
-}
+enum RhRole { benefitAdministrator, support, family, clinician, school }
 
 enum RhAuthorizationReason {
   allowed,
@@ -39,10 +33,10 @@ class RhAuthorizationDecision {
   const RhAuthorizationDecision._(this.allowed, this.reason);
 
   const RhAuthorizationDecision.allow()
-      : this._(true, RhAuthorizationReason.allowed);
+    : this._(true, RhAuthorizationReason.allowed);
 
   const RhAuthorizationDecision.deny(RhAuthorizationReason reason)
-      : this._(false, reason);
+    : this._(false, reason);
 }
 
 /// Pedido mínimo que o backend deve avaliar antes de executar uma operação.

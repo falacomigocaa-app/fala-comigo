@@ -21,18 +21,18 @@ class VisualRoutineItem {
   });
 
   VisualRoutineItem copyWith({bool? completed}) => VisualRoutineItem(
-        id: id,
-        title: title,
-        emoji: emoji,
-        completed: completed ?? this.completed,
-      );
+    id: id,
+    title: title,
+    emoji: emoji,
+    completed: completed ?? this.completed,
+  );
 
   Map<String, dynamic> toMap() => {
-        'id': id,
-        'title': title,
-        'emoji': emoji,
-        'completed': completed,
-      };
+    'id': id,
+    'title': title,
+    'emoji': emoji,
+    'completed': completed,
+  };
 
   factory VisualRoutineItem.fromMap(Map<dynamic, dynamic> map) {
     return VisualRoutineItem(

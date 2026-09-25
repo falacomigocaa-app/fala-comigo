@@ -35,10 +35,8 @@ class AccessGrant {
     required this.purpose,
   });
 
-  AccessGrant copyWith({
-    AccessGrantStatus? status,
-    DateTime? expiresAt,
-  }) => AccessGrant(
+  AccessGrant copyWith({AccessGrantStatus? status, DateTime? expiresAt}) =>
+      AccessGrant(
         id: id,
         organizationName: organizationName,
         organizationKind: organizationKind,
@@ -52,54 +50,53 @@ class AccessGrant {
       );
 
   Map<String, dynamic> toMap() => {
-        'id': id,
-        'organizationName': organizationName,
-        'organizationKind': organizationKind.name,
-        'personName': personName,
-        'role': role,
-        'scopes': scopes,
-        'status': status.name,
-        'startsAt': startsAt.toIso8601String(),
-        'expiresAt': expiresAt.toIso8601String(),
-        'purpose': purpose,
-      };
+    'id': id,
+    'organizationName': organizationName,
+    'organizationKind': organizationKind.name,
+    'personName': personName,
+    'role': role,
+    'scopes': scopes,
+    'status': status.name,
+    'startsAt': startsAt.toIso8601String(),
+    'expiresAt': expiresAt.toIso8601String(),
+    'purpose': purpose,
+  };
 
   factory AccessGrant.fromMap(Map<dynamic, dynamic> map) => AccessGrant(
-        id: '${map['id'] ?? ''}',
-        organizationName: '${map['organizationName'] ?? ''}',
-        organizationKind: OrganizationKind.values.firstWhere(
-          (value) => value.name == map['organizationKind'],
-          orElse: () => OrganizationKind.professional,
-        ),
-        personName: '${map['personName'] ?? ''}',
-        role: '${map['role'] ?? 'Colaborador'}',
-        scopes: (map['scopes'] as List?)
-                ?.map((value) => '$value')
-                .toList() ??
-            const [],
-        status: AccessGrantStatus.values.firstWhere(
-          (value) => value.name == map['status'],
-          orElse: () => AccessGrantStatus.pending,
-        ),
-        startsAt: DateTime.tryParse('${map['startsAt']}') ?? DateTime.now(),
-        expiresAt: DateTime.tryParse('${map['expiresAt']}') ??
-            DateTime.now().add(const Duration(days: 90)),
-        purpose: '${map['purpose'] ?? ''}',
-      );
+    id: '${map['id'] ?? ''}',
+    organizationName: '${map['organizationName'] ?? ''}',
+    organizationKind: OrganizationKind.values.firstWhere(
+      (value) => value.name == map['organizationKind'],
+      orElse: () => OrganizationKind.professional,
+    ),
+    personName: '${map['personName'] ?? ''}',
+    role: '${map['role'] ?? 'Colaborador'}',
+    scopes:
+        (map['scopes'] as List?)?.map((value) => '$value').toList() ?? const [],
+    status: AccessGrantStatus.values.firstWhere(
+      (value) => value.name == map['status'],
+      orElse: () => AccessGrantStatus.pending,
+    ),
+    startsAt: DateTime.tryParse('${map['startsAt']}') ?? DateTime.now(),
+    expiresAt:
+        DateTime.tryParse('${map['expiresAt']}') ??
+        DateTime.now().add(const Duration(days: 90)),
+    purpose: '${map['purpose'] ?? ''}',
+  );
 
   String get organizationKindLabel => switch (organizationKind) {
-        OrganizationKind.clinic => 'Clínica',
-        OrganizationKind.school => 'Escola',
-        OrganizationKind.company => 'Patrocinador',
-        OrganizationKind.professional => 'Profissional',
-      };
+    OrganizationKind.clinic => 'Clínica',
+    OrganizationKind.school => 'Escola',
+    OrganizationKind.company => 'Patrocinador',
+    OrganizationKind.professional => 'Profissional',
+  };
 
   String get statusLabel => switch (status) {
-        AccessGrantStatus.pending => 'Aguardando aceite',
-        AccessGrantStatus.active => 'Ativo',
-        AccessGrantStatus.revoked => 'Revogado',
-        AccessGrantStatus.expired => 'Expirado',
-      };
+    AccessGrantStatus.pending => 'Aguardando aceite',
+    AccessGrantStatus.active => 'Ativo',
+    AccessGrantStatus.revoked => 'Revogado',
+    AccessGrantStatus.expired => 'Expirado',
+  };
 
   bool get canRevoke =>
       status == AccessGrantStatus.pending || status == AccessGrantStatus.active;

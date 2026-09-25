@@ -16,7 +16,8 @@ class PrivacySettingsScreen extends StatelessWidget {
     if (!opened && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text('Não foi possível abrir a política agora.')),
+          content: Text('Não foi possível abrir a política agora.'),
+        ),
       );
     }
   }
@@ -37,15 +38,13 @@ class PrivacySettingsScreen extends StatelessWidget {
           const ParentalSectionHeading(
             eyebrow: 'CONTROLE DOS DADOS',
             title: 'Privacidade e dados',
-            description:
-                'Veja onde os dados ficam, quando podem sair do aparelho e como apagá-los.',
+            description: 'Veja onde os dados ficam, quando podem sair do aparelho e como apagá-los.',
           ),
           const SizedBox(height: 18),
           const ParentalInfoBanner(
             icon: Icons.lock_outline,
             eyebrow: 'PRIVACIDADE POR PADRÃO',
-            message:
-                'Você decide o que é registrado e quando algo é compartilhado. A comunicação básica continua funcionando sem internet.',
+            message: 'Você decide o que é registrado e quando algo é compartilhado. A comunicação básica continua funcionando sem internet.',
           ),
           const SizedBox(height: 16),
           const _PrivacyCard(
@@ -57,32 +56,27 @@ class PrivacySettingsScreen extends StatelessWidget {
           const _PrivacyCard(
             icon: Icons.enhanced_encryption_outlined,
             title: 'Proteção',
-            description:
-                'Caixas sensíveis usam armazenamento protegido. O PIN controla a entrada na Área Parental.',
+            description: 'Caixas sensíveis usam armazenamento protegido. O PIN controla a entrada na Área Parental.',
           ),
           const _PrivacyCard(
             icon: Icons.verified_user_outlined,
             title: 'Transparência de segurança',
-            description:
-                'O projeto usa o OWASP MASVS como referência. Achados de testes automatizados continuam em revisão e não representam certificação.',
+            description: 'O projeto usa o OWASP MASVS como referência. Achados de testes automatizados continuam em revisão e não representam certificação.',
           ),
           const _PrivacyCard(
             icon: Icons.share_outlined,
             title: 'Compartilhamento',
-            description:
-                'O aplicativo não envia dados automaticamente para clínicas, escolas ou patrocinadores.',
+            description: 'O aplicativo não envia dados automaticamente para clínicas, escolas ou patrocinadores.',
           ),
           const _PrivacyCard(
             icon: Icons.picture_as_pdf_outlined,
             title: 'Exportação',
-            description:
-                'Relatórios exportados podem sair do armazenamento protegido. Revise o destinatário antes de compartilhar.',
+            description: 'Relatórios exportados podem sair do armazenamento protegido. Revise o destinatário antes de compartilhar.',
           ),
           const _PrivacyCard(
             icon: Icons.delete_outline,
             title: 'Exclusão local',
-            description:
-                'Apagar os dados remove o conteúdo local e o PIN. Cópias já exportadas não são apagadas por essa ação.',
+            description: 'Apagar os dados remove o conteúdo local e o PIN. Cópias já exportadas não são apagadas por essa ação.',
           ),
           const SizedBox(height: 8),
           OutlinedButton.icon(
@@ -94,7 +88,8 @@ class PrivacySettingsScreen extends StatelessWidget {
               foregroundColor: AppTheme.primary,
               side: const BorderSide(color: AppTheme.cardBorder),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(13)),
+                borderRadius: BorderRadius.circular(13),
+              ),
             ),
           ),
         ],
@@ -141,13 +136,21 @@ class _PrivacyCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.w800)),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
                 const SizedBox(height: 3),
-                Text(description,
-                    style: const TextStyle(
-                        color: AppTheme.mutedText, height: 1.35)),
+                Text(
+                  description,
+                  style: const TextStyle(
+                    color: AppTheme.mutedText,
+                    height: 1.35,
+                  ),
+                ),
               ],
             ),
           ),

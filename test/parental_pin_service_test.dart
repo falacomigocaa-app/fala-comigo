@@ -13,29 +13,29 @@ void main() {
     fakeStorage.clear();
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (MethodCall call) async {
-      final args = call.arguments is Map
-          ? Map<String, dynamic>.from(call.arguments as Map)
-          : <String, dynamic>{};
-      switch (call.method) {
-        case 'write':
-          fakeStorage[args['key'] as String] = args['value'] as String;
-          return null;
-        case 'read':
-          return fakeStorage[args['key'] as String];
-        case 'delete':
-          fakeStorage.remove(args['key'] as String);
-          return null;
-        case 'deleteAll':
-          fakeStorage.clear();
-          return null;
-        case 'readAll':
-          return fakeStorage;
-        case 'containsKey':
-          return fakeStorage.containsKey(args['key'] as String);
-        default:
-          return null;
-      }
-    });
+          final args = call.arguments is Map
+              ? Map<String, dynamic>.from(call.arguments as Map)
+              : <String, dynamic>{};
+          switch (call.method) {
+            case 'write':
+              fakeStorage[args['key'] as String] = args['value'] as String;
+              return null;
+            case 'read':
+              return fakeStorage[args['key'] as String];
+            case 'delete':
+              fakeStorage.remove(args['key'] as String);
+              return null;
+            case 'deleteAll':
+              fakeStorage.clear();
+              return null;
+            case 'readAll':
+              return fakeStorage;
+            case 'containsKey':
+              return fakeStorage.containsKey(args['key'] as String);
+            default:
+              return null;
+          }
+        });
   });
 
   tearDown(() {
@@ -59,23 +59,33 @@ void main() {
 
     test('rejeita PIN padrão, repetido ou com formato inválido', () async {
       await expectLater(
-          ParentalPinService.setPin('1234'), throwsFormatException);
+        ParentalPinService.setPin('1234'),
+        throwsFormatException,
+      );
       await expectLater(
-          ParentalPinService.setPin('0000'), throwsFormatException);
+        ParentalPinService.setPin('0000'),
+        throwsFormatException,
+      );
       await expectLater(
-          ParentalPinService.setPin('1111'), throwsFormatException);
+        ParentalPinService.setPin('1111'),
+        throwsFormatException,
+      );
       await expectLater(
-          ParentalPinService.setPin('123'), throwsFormatException);
+        ParentalPinService.setPin('123'),
+        throwsFormatException,
+      );
     });
 
-    test('uma falha inicia bloqueio progressivo antes de nova tentativa',
-        () async {
-      await ParentalPinService.setPin('4826');
+    test(
+      'uma falha inicia bloqueio progressivo antes de nova tentativa',
+      () async {
+        await ParentalPinService.setPin('4826');
 
-      expect(await ParentalPinService.checkPin('9999'), isFalse);
-      expect(await ParentalPinService.remainingLockout(), isNotNull);
-      expect(await ParentalPinService.checkPin('4826'), isFalse);
-    });
+        expect(await ParentalPinService.checkPin('9999'), isFalse);
+        expect(await ParentalPinService.remainingLockout(), isNotNull);
+        expect(await ParentalPinService.checkPin('4826'), isFalse);
+      },
+    );
 
     test('trocar o PIN invalida o anterior', () async {
       await ParentalPinService.setPin('4826');
