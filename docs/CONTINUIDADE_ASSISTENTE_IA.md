@@ -577,3 +577,9 @@ Foi criada a branch `fix/app-settings-box-type` com o commit `078ebcd`. A corre�
 Validações locais da branch: formatter aprovado, análise sem erros fatais, suíte de testes aprovada e APK debug aprovado. SHA-256 do APK corrigido: `8217746f4846dd447406733c246e412ae81394ff6c7ca6ee1aa2da085fc4d168`.
 
 O APK corrigido ainda precisa ser instalado e testado no aparelho. O merge da PR 69 depende dos checks remotos e de confirmação do proprietário.
+
+## 32. Confirmação do APK corrigido — 25/09/2026
+
+O proprietário confirmou que o APK da branch `fix/app-settings-box-type` funcionou após a correção da tipagem Hive de `app_settings`. A PR 69 está aberta contra `main`, com `analyze-and-test` aprovado, estado `MERGEABLE` e sem conflito.
+
+A correção está pronta para merge técnico, mas o merge permanece pendente de confirmação explícita do proprietário conforme o manual de continuidade.

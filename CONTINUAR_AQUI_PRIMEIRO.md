@@ -16,6 +16,8 @@ Após cada demanda, o agente deve comparar o resultado com os agentes anteriores
 
 As PRs 30, 32, 33 e 66 foram confirmadas como ancestrais da `main` atual em `7aa12f5`; não mesclar novamente. O dashboard parental atual contém as rotas de rotina, diário, alertas, tendências, relatórios, perfil, privacidade, acesso familiar, tarefas compartilhadas e continuidade do cuidado. Um APK foi gerado diretamente da `main` para teste visual; SHA-256 `e5f626b361c16add29a8bf5993df57acbc141b9ef079b4313bb079cdf32b964c`. Ainda falta a comparação em aparelho/emulador real.
 
+O proprietário confirmou que o APK da correção `app_settings` funcionou. A PR 69 está aberta, com CI `analyze-and-test` aprovado e estado `MERGEABLE`; aguardar confirmação explícita antes de mesclar na `main`.
+
 O estado histórico abaixo explica a investigação original da tela branca; não deve ser interpretado como se a `main` ainda estivesse sem a correção.
 
 ## Estado histórico da tela branca — preservado para contexto
