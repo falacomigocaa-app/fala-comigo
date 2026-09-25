@@ -5,7 +5,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'core/services/transition_alert_service.dart';
 import 'core/services/secure_box_service.dart';
-import 'core/services/app_orientation_service.dart';
 import 'core/services/parental_session_service.dart';
 import 'core/services/tts_service.dart';
 import 'core/theme/app_theme.dart';
