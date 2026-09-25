@@ -41,6 +41,7 @@ class DataWipeService {
         // A caixa pode ainda não existir em uma instalação nova.
       }
     }
+    // A remoção da chave torna cópias residuais ilegíveis após o wipe.
     await MediaStorageService.clearAllMedia();
     await MediaStorageService.deleteEncryptionKey();
     await SecureBoxService.deleteEncryptionKey();
