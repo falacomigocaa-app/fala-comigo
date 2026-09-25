@@ -505,3 +505,16 @@ O handoff operacional detalhado está em `docs/HANDOFF_TELA_BRANCA_APK.md`. O pr
 Foi criado o arquivo `PROMPT_RETORNO_NOVO_AGENTE.md` na raiz do repositório. Ele contém uma instrução completa, pronta para copiar e colar em outra assistência por IA. O prompt obriga a leitura dos handoffs, preserva a `main`, identifica a PR #66, diferencia validação de CI de validação em aparelho, orienta a geração do APK e define o formato de atualização após cada etapa.
 
 O arquivo `CONTINUAR_AQUI_PRIMEIRO.md` aponta diretamente para esse prompt, e `README.md` também indica o aviso como primeira leitura. Qualquer agente futuro deve atualizar esses arquivos e `docs/HANDOFF_TELA_BRANCA_APK.md` ao concluir uma etapa.
+
+
+## 27. APK corrigido da PR 66 gerado com sucesso
+
+**Data:** 25 de setembro de 2026.
+**Branch:** `fix/main-startup-and-android-build`.
+**Commit do build:** `abe8633`.
+
+O workflow `Android test APK artifact` concluiu com sucesso no run [36109508895](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/36109508895). O Flutter foi configurado, as dependências foram instaladas, o APK foi construído, verificado com `apksigner` e publicado como artefato.
+
+O APK de teste `fala-comigo-test.apk` possui SHA-256 `63f3d897f07995baff7262b4f43d691733f0e7c80e25f97988a9bc818b373646`. Ele foi assinado com chave efêmera do GitHub Actions e não é um APK de produção nem uma execução do Codemagic.
+
+A evidência confirma o build e a integridade estrutural do APK. Ainda falta a validação física em celular ou tablet Android para confirmar a abertura da grade CAA, o funcionamento offline e a ausência da tela branca. Nenhuma alteração foi feita na `main`.

@@ -123,3 +123,17 @@ Este documento não contém credenciais, chaves, dados clínicos ou dados reais 
 [2]: https://github.com/falacomigocaa-app/fala-comigo/actions/runs/36096527894 "GitHub Actions — APK diagnóstico"
 [3]: https://github.com/falacomigocaa-app/fala-comigo/actions/runs/36096510331 "GitHub Actions — análise e testes diagnósticos"
 [4]: https://mas.owasp.org/MASVS/ "OWASP MASVS — Mobile Application Security Verification Standard"
+
+
+## Evidência do APK corrigido da PR 66
+
+Em 25 de setembro de 2026, o workflow `Android test APK artifact` foi executado no commit `abe8633` da branch `fix/main-startup-and-android-build`.
+
+- **Run:** [36109508895](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/36109508895)
+- **Resultado:** sucesso
+- **Etapas:** Flutter configurado, dependências instaladas, build release de teste concluído, APK verificado com `apksigner` e artefato publicado.
+- **APK:** `fala-comigo-test.apk`
+- **SHA-256:** `63f3d897f07995baff7262b4f43d691733f0e7c80e25f97988a9bc818b373646`
+- **Tipo:** APK de teste não produtivo, assinado com chave efêmera do GitHub Actions.
+
+Esse resultado comprova a geração e a integridade estrutural do APK da correção. Ainda não comprova a abertura da grade em celular ou tablet real. A próxima ação é instalar o APK em aparelho Android, preferencialmente após desinstalação limpa, e registrar o resultado de abertura, grade CAA, modo offline e acessibilidade.

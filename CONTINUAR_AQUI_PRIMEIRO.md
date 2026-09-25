@@ -73,3 +73,10 @@ gh pr list --repo falacomigocaa-app/fala-comigo --state open
 ## Resultado que ainda não pode ser afirmado
 
 Ainda não se pode afirmar que o APK corrigido abre em aparelho real, que o Codemagic passou, que a `main` foi corrigida ou que o aplicativo está pronto para publicação. Essas afirmações exigem evidência posterior e devem ser registradas neste arquivo.
+
+
+## Evidência mais recente do build
+
+O workflow `Android test APK artifact` da PR 66 terminou com sucesso no run [36109508895](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/36109508895), usando o commit `abe8633` da branch de correção. O APK foi gerado, verificado pelo `apksigner` e publicado como artefato de teste. SHA-256: `63f3d897f07995baff7262b4f43d691733f0e7c80e25f97988a9bc818b373646`.
+
+Esse resultado confirma somente o build e a integridade estrutural do APK. Ainda falta instalar e abrir o aplicativo em aparelho Android real para confirmar que a grade CAA não permanece branca.
