@@ -105,6 +105,10 @@ class MediaStorageService {
     _previewCache.clear();
   }
 
+  static Future<void> deleteEncryptionKey() async {
+    await _storage.delete(key: _keyStorageKey);
+  }
+
   static Future<File> _materialize(String path) async {
     final source = File(path);
     if (!await source.exists()) {

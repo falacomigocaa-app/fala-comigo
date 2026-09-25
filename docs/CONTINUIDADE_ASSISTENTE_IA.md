@@ -518,3 +518,14 @@ O workflow `Android test APK artifact` concluiu com sucesso no run [36109508895]
 O APK de teste `fala-comigo-test.apk` possui SHA-256 `63f3d897f07995baff7262b4f43d691733f0e7c80e25f97988a9bc818b373646`. Ele foi assinado com chave efêmera do GitHub Actions e não é um APK de produção nem uma execução do Codemagic.
 
 A evidência confirma o build e a integridade estrutural do APK. Ainda falta a validação física em celular ou tablet Android para confirmar a abertura da grade CAA, o funcionamento offline e a ausência da tela branca. Nenhuma alteração foi feita na `main`.
+
+
+## 18. Integração candidata — 25/09/2026
+
+Foi criada a branch local `integration/finalize-project` a partir de `origin/main` no commit `0d0b685`. A PR 66 foi integrada como base técnica, preservando a abertura tipada de `Box<PictogramCard>`, o plugin Kotlin Android e a guarda de assinatura de release. Em seguida, foi integrada a cabeça da PR 33, que já contém a ancestralidade das PRs 30 e 32, sem reaplicar essas PRs separadamente.
+
+Os conflitos foram resolvidos manualmente. A resolução preserva a correção Android e o bootstrap resiliente, inclui as caixas parentais no inventário de exclusão, preserva `visual_routine`, apaga a chave nativa de mídia durante o wipe, corrige o import da tela de continuidade parental e torna `hintText` compatível na decoração dos campos parentais. O bootstrap agora renderiza a árvore Flutter imediatamente, mostra carregamento e erro sanitizado com retry, e inicializa TTS/notificações somente após o primeiro frame.
+
+Ainda não foi criado commit ou push desta branch. Flutter, Dart e adb não estão disponíveis nesta sessão; portanto, format, análise, testes, build Web, APK e teste em aparelho continuam gates obrigatórios no CI e na validação humana. A `main` remota não foi alterada.
+
+Próximo passo: revisar o diff completo, executar `git diff --check`, registrar o commit da integração e enviar uma PR de integração para que o CI valide a combinação antes de qualquer decisão sobre a `main`.

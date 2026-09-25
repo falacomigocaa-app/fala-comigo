@@ -7,7 +7,6 @@
     <meta name="description" content="Fala Comigo: comunicação mais acessível, previsível e respeitosa para crianças, famílias e redes de apoio." />
     <title>Fala Comigo — Comunicação que respeita o seu tempo</title>
     <link rel="stylesheet" href="styles.css" />
-    <link rel="icon" href="favicon.png" type="image/png" />
   </head>
   <body>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
@@ -23,6 +22,7 @@
           <a href="#seguranca">Segurança</a>
           <a href="#instituicoes">Instituições</a>
           <a href="#rh">Empresas e RH</a>
+          <a href="portal.html">Portal piloto</a>
           <a href="#planos">Planos</a>
           <a class="nav-cta" href="#contato">Falar com a equipe</a>
         </nav>
@@ -91,21 +91,6 @@
         </aside>
       </section>
 
-      <section class="security-section" id="seguranca">
-        <div class="shell security-layout">
-          <div class="section-heading">
-            <p class="eyebrow">Segurança verificável</p>
-            <h2>Confiabilidade se constrói com evidência.</h2>
-            <p>O projeto usa o OWASP MASVS como referência para segurança móvel e já executou uma varredura automatizada com o MobSF em um APK release de teste, sem dados reais. Os achados estão em revisão e serão tratados antes de qualquer afirmação de aprovação.</p>
-          </div>
-          <div class="security-grid">
-            <article class="security-card security-primary"><span class="security-kicker">Referência</span><h3>OWASP MASVS</h3><p>Organizamos a revisão em armazenamento, criptografia, autenticação, rede, plataforma, código, resiliência e privacidade.</p><a href="https://mas.owasp.org/MASVS/" rel="noopener noreferrer">Conhecer o padrão <span aria-hidden="true">↗</span></a></article>
-            <article class="security-card security-secondary"><span class="security-kicker">Varredura concluída; achados em revisão</span><h3>MobSF</h3><p>A primeira análise estática foi executada em um APK release de teste. Ela não é certificação nem auditoria independente; os achados estão sendo revisados.</p><a href="https://github.com/MobSF/Mobile-Security-Framework-MobSF" rel="noopener noreferrer">Ver a ferramenta <span aria-hidden="true">↗</span></a></article>
-          </div>
-          <p class="security-note"><strong>Status atual:</strong> varredura MobSF concluída; achados em revisão. Isso não é certificação, auditoria independente nem promessa de segurança absoluta. <a href="https://github.com/falacomigocaa-app/fala-comigo/blob/main/security/reports/MOBSF_2026-09-24.md">Ler o relatório sanitizado →</a> <a href="https://github.com/falacomigocaa-app/fala-comigo/blob/main/docs/PLANO_SEGURANCA_OWASP_MASVS_MOBSF.md">Ler o plano técnico →</a></p>
-        </div>
-      </section>
-
       <section class="plans-section" id="planos">
         <div class="shell">
           <div class="section-heading centered">
@@ -131,25 +116,9 @@
           <div class="institution-grid">
             <article class="institution-card institution-clinic"><span class="institution-icon" aria-hidden="true">＋</span><h3>Clínicas e terapeutas</h3><p>Planejar objetivos, registrar evolução, enviar tarefas e compartilhar documentos selecionados com os responsáveis.</p><a href="#contato">Conhecer o piloto <span aria-hidden="true">→</span></a></article>
             <article class="institution-card institution-school"><span class="institution-icon" aria-hidden="true">□</span><h3>Escolas</h3><p>Organizar rotinas, adaptações, transições e estratégias de comunicação com a família e a equipe autorizada.</p><a href="#contato">Conhecer o piloto <span aria-hidden="true">→</span></a></article>
-            <article class="institution-card institution-sponsor"><span class="institution-icon" aria-hidden="true">♡</span><h3>Benefício patrocinado</h3><p>Apoiar famílias com licenças ou subsídios, sem receber diagnóstico, conteúdo, mídias ou frequência individual de uso.</p><a href="#rh">Entender a separação <span aria-hidden="true">→</span></a></article>
-            <article class="institution-card institution-rh"><span class="institution-icon" aria-hidden="true">▦</span><h3>Portal RH de benefícios</h3><p>Administrar programas, convites, validade e indicadores agregados sem acessar a conta familiar ou o conteúdo da criança.</p><a href="rh/index.html">Abrir protótipo RH <span aria-hidden="true">→</span></a></article>
+            <article class="institution-card institution-sponsor"><span class="institution-icon" aria-hidden="true">♡</span><h3>Empresas patrocinadoras</h3><p>Apoiar famílias com licenças e capacitação, acompanhando somente indicadores agregados, nunca dados clínicos individuais.</p><a href="#contato">Apoiar o projeto <span aria-hidden="true">→</span></a></article>
           </div>
-          <p class="institution-note"><strong>Portal conectado em desenvolvimento:</strong> o primeiro piloto usará dados sintéticos e autorizações controladas. A comunicação básica continua gratuita, local e offline.</p>
-        </div>
-      </section>
-
-      <section class="rh-section" id="rh">
-        <div class="shell rh-layout">
-          <div class="section-heading">
-            <p class="eyebrow">Para empresas e RH</p>
-            <h2>Financiar o benefício não dá acesso à vida da família.</h2>
-            <p>A empresa pode escolher somente o portal administrativo de benefícios ou contratar também licenças patrocinadas. São ofertas separadas, com finalidades e permissões diferentes.</p>
-          </div>
-          <div class="rh-boundaries">
-            <article class="boundary-card boundary-allowed"><span class="boundary-kicker">O portal RH pode</span><h3>Administrar o programa</h3><ul><li>Convites individuais e validade</li><li>Licenças e dados do contrato</li><li>Indicadores agregados com proteção contra reidentificação</li><li>Suporte administrativo auditável</li></ul></article>
-            <article class="boundary-card boundary-protected"><span class="boundary-kicker">O portal RH não pode</span><h3>Acessar o conteúdo familiar</h3><ul><li>Diagnóstico ou nível de suporte</li><li>Frases, cartões, fotos, vídeos ou áudios</li><li>Frequência individual ou uso da criança</li><li>Registros clínicos ou exportação individual</li></ul></article>
-          </div>
-          <p class="rh-note"><strong>Proteção de dados:</strong> aceitar ou recusar o benefício não deve revelar uma condição clínica ao empregador. Qualquer compartilhamento com clínica, escola ou profissional exige autorização separada, específica, com finalidade, prazo, escopo e revogação. <a href="rh/index.html">Ver o console RH em protótipo →</a></p>
+          <p class="institution-note"><strong>Portal conectado em desenvolvimento:</strong> o primeiro piloto usará dados sintéticos e autorizações controladas. A comunicação básica continua gratuita, local e offline. <a class="text-link" href="portal.html">Ver prévia do portal →</a></p>
         </div>
       </section>
 
@@ -172,10 +141,6 @@
             <details>
               <summary>Preciso pagar para usar a comunicação básica?</summary>
               <p>Não. O plano Essencial mantém a comunicação básica gratuita. Planos futuros poderão oferecer recursos opcionais, sem bloquear acessibilidade, controle parental ou uso offline.</p>
-            </details>
-            <details>
-              <summary>Uma empresa pode contratar somente o portal RH?</summary>
-              <p>Sim. O portal RH pode administrar um programa de benefícios sem criar uma licença familiar e sem acessar qualquer conteúdo da criança. Se a empresa também patrocinar licenças, a família continua controlando seus dados e o uso offline.</p>
             </details>
             <details>
               <summary>O aplicativo substitui terapia ou diagnóstico?</summary>
