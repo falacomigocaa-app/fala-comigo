@@ -497,3 +497,11 @@ O APK obtido na branch diagnóstica `diagnostics/show-startup-failure` não foi 
 O handoff operacional detalhado está em `docs/HANDOFF_TELA_BRANCA_APK.md`. O próximo gate é abrir uma PR baseada na `main` atual com a correção seletiva, aguardar análise/testes/build Android debug verdes e instalar o APK em aparelho real. A validação deve separar instalação, abertura da grade, navegação e execução offline. Nenhum resultado de aparelho deve ser inventado.
 
 **Regra para o próximo agente:** não mesclar a PR #29 diretamente; não apagar a PR #60; não reverter a linha de segurança/RH; comparar a `main` atual e reaplicar apenas correções comprovadas. Se a tela continuar branca após a correção Hive, usar a tela diagnóstica da PR #60 ou logs do aparelho para obter a exceção específica.
+
+## 26. Prompt mestre para novas retomadas
+
+**Data:** 25 de setembro de 2026.
+
+Foi criado o arquivo `PROMPT_RETORNO_NOVO_AGENTE.md` na raiz do repositório. Ele contém uma instrução completa, pronta para copiar e colar em outra assistência por IA. O prompt obriga a leitura dos handoffs, preserva a `main`, identifica a PR #66, diferencia validação de CI de validação em aparelho, orienta a geração do APK e define o formato de atualização após cada etapa.
+
+O arquivo `CONTINUAR_AQUI_PRIMEIRO.md` aponta diretamente para esse prompt, e `README.md` também indica o aviso como primeira leitura. Qualquer agente futuro deve atualizar esses arquivos e `docs/HANDOFF_TELA_BRANCA_APK.md` ao concluir uma etapa.

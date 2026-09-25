@@ -1,5 +1,7 @@
 # LEIA PRIMEIRO — Continuidade obrigatória do Fala Comigo
 
+O prompt completo para iniciar outro agente está em [`PROMPT_RETORNO_NOVO_AGENTE.md`](PROMPT_RETORNO_NOVO_AGENTE.md). Ele pode ser copiado integralmente para uma nova conversa.
+
 > **Não alterar a `main` diretamente.** Antes de executar qualquer correção, leia este arquivo, `AGENTS.md`, `PROJECT_HANDOFF.md` e `docs/HANDOFF_TELA_BRANCA_APK.md`.
 
 ## Estado imediato em 25/09/2026
@@ -56,6 +58,7 @@ Não registrar neste repositório credenciais, tokens, chaves privadas, PINs, fo
 - **25/09/2026:** `origin/main` confirmado em `0d0b685`; PR 29 continua aberta e `DIRTY`; PR 60 continua draft e verde; nenhuma alteração foi perdida.
 - **25/09/2026:** causa provável da tela branca identificada na tipagem da caixa Hive; correção seletiva preparada em `fix/main-startup-and-android-build`.
 - **25/09/2026:** APK diagnóstico anterior preservado fora do Git; ele foi gerado pelo GitHub Actions na branch de diagnóstico, não pelo Codemagic e não pela `main` atual.
+- **25/09/2026:** prompt mestre criado em `PROMPT_RETORNO_NOVO_AGENTE.md`, com leitura obrigatória, regras de preservação, comandos de diagnóstico, validação do APK e formato de atualização passo a passo.
 
 ## Comandos de retomada
 
