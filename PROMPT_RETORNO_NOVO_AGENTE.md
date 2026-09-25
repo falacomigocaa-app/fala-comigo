@@ -313,3 +313,9 @@ Antes de programar, apresente estas opções e aguarde escolha:
 - **C:** avaliar outro provedor independente escolhido pelo proprietário.
 
 Nunca criar uma falsa autenticação no JavaScript público. GitHub Pages não executa backend contínuo. Não remover o portal atual nem substituir o link `https://falacomigo-kyrh225w.manus.space/creator` até existir uma migração funcional, validada e publicada.
+
+### 13. Decisão já tomada — Opção A e URL oficial
+
+O proprietário já escolheu a **Opção A**: manter o site e a interface pública no GitHub Pages, iniciar backend e banco independentes em camadas gratuitas quando possível e migrar para planos pagos somente quando necessário. Não pedir novamente essa escolha; a próxima decisão técnica é comparar e definir a infraestrutura, sem contratar ou ativar cobrança sem autorização.
+
+A única URL pública oficial do projeto é `https://falacomigocaa-app.github.io/fala-comigo/`. Toda alteração pública deve ser feita em `site/`, revisada em PR, publicada pelo `site-pages.yml` e conferida nessa URL. Atualize sempre os arquivos de continuidade ao finalizar cada etapa.

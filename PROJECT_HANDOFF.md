@@ -8,8 +8,10 @@ O código oficial está no GitHub:
 
 - Repositório: https://github.com/falacomigocaa-app/fala-comigo
 - Branch principal: `main`
-- Branch de trabalho atual: `feat/parental-area-professional-v2`
-- Último commit registrado neste handoff: `5464914 — feat: add family care coordination foundation`
+- Endereço público oficial: https://falacomigocaa-app.github.io/fala-comigo/
+- Estado confirmado em 25/09/2026: `origin/main` em `b43e18b` (`Merge pull request #76 from falacomigocaa-app/docs/creator-no-manus`)
+- Branch de trabalho desta documentação: `docs/record-option-a-public-url`
+- Última decisão de produto: **Opção A — GitHub Pages institucional + portal independente**
 
 Não existem segredos, tokens, senhas ou chaves privadas neste documento. Nunca coloque credenciais no Git.
 
@@ -119,6 +121,21 @@ A sequência completa está em `docs/PLANO_SEQUENCIAL_ATE_BUILD.md`. A ordem res
 
 O catálogo, a tela de planos e a persistência local já foram implementados. O ciclo atual iniciou a continuidade do cuidado local e especificou o contrato remoto; o próximo trabalho deve implementar a fundação server-side somente após escolher a infraestrutura, sem começar cobrança real prematuramente.
 
+## Decisão de arquitetura vigente — Opção A
+
+Em 25/09/2026, o proprietário confirmou a Opção A para o Espaço do Criador:
+
+- o GitHub Pages permanece como site institucional público e ponto de encaminhamento;
+- o login e o portal autenticado ficarão em uma origem independente do GitHub Pages e do Manus;
+- o backend e o banco serão independentes do Manus;
+- o desenvolvimento inicial poderá usar camadas gratuitas, mas somente com fixtures e dados sintéticos;
+- a evolução para planos pagos ocorrerá apenas quando houver necessidade real de continuidade, e-mail, backup, suporte, limite ou volume;
+- nenhuma conta externa, contratação, cobrança, credencial ou dado real foi autorizado por esta decisão.
+
+O GitHub Pages não é um backend e não deve receber senhas, manter sessões ou exercer autorização server-side. A API será a autoridade de autorização do portal. O aplicativo CAA continuará local-first: comunicação básica, acessibilidade, modo offline e dados locais não dependerão do portal.
+
+O documento de decisão correspondente é [`docs/ADR-001-opcao-a-portal-independente.md`](docs/ADR-001-opcao-a-portal-independente.md). O plano mestre da equipe está em [`docs/equipe-mestra/00-plano-mestre-opcao-a.md`](docs/equipe-mestra/00-plano-mestre-opcao-a.md).
+
 ## Nova sequência full-stack até o piloto institucional
 
 A condução full-cycle foi ampliada para incluir o site institucional, o console do proprietário, o portal multi-organização, autorizações, documentos, licenças, pagamentos em sandbox e o piloto controlado com uma clínica e um colégio. A sequência detalhada está em `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`.
@@ -137,7 +154,10 @@ A regra é separar aplicativo local, site público, portal conectado e console a
 8. Executar `flutter build web --release`.
 9. Corrigir primeiro falhas do CI ou do núcleo CAA.
 10. Trabalhar em branch própria, adicionar teste, revisar diff, comitar e enviar ao GitHub.
-11. Seguir `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`, começando pela governança, site institucional e console do proprietário sem dados clínicos.
+11. Ler e seguir [`docs/ADR-001-opcao-a-portal-independente.md`](docs/ADR-001-opcao-a-portal-independente.md).
+12. Criar primeiro a especificação do MVP sintético, o modelo PostgreSQL, as migrations e os testes de autorização em ambiente local/CI descartável.
+13. Comparar provedores somente após a especificação; não criar contas nem ativar cobrança sem decisão específica.
+14. Seguir `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`, mantendo o portal sem dados reais até concluir os gates de segurança, privacidade, backup/restauração e operação.
 
 Comandos básicos:
 
@@ -184,7 +204,8 @@ Ainda não estão prontos para produção:
 - sincronização clínica;
 - cobrança real;
 - painel corporativo em produção;
-- site institucional público definitivo;
+- portal independente do Criador publicado e validado;
+- site institucional público já publicado no GitHub Pages oficial, mas sujeito a manutenção e novas PRs;
 - domínio final;
 - validação humana completa com famílias e profissionais;
 - build Android de release validado em dispositivo real.
@@ -215,6 +236,8 @@ Não tratar documentação conceitual como implementação existente. O portal e
 - `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`: sequência de programação até o piloto com clínica e colégio.
 - `docs/CONTRATO_PORTAL_CONECTADO.md`: entidades, estados, escopos e fila offline comuns ao app e web.
 - `docs/CONTRATO_API_CONTINUIDADE_CUIDADO.md`: endpoints, payloads, consentimentos e testes de negação do portal.
+- `docs/ADR-001-opcao-a-portal-independente.md`: decisão de arquitetura para o site público, portal, API, banco e gates da Opção A.
+- `docs/equipe-mestra/00-plano-mestre-opcao-a.md`: consolidação da auditoria multidisciplinar e plano mestre.
 - `docs/ESTUDO_PRECOS_PLANOS.md`: pesquisa de mercado e faixas de preço para validação.
 - `docs/MAPA_FUNCIONALIDADES_SAAS_CLINICAS.md`: recursos de SaaS clínico priorizados para ajudar famílias.
 - `privacy_policy.html`: política de privacidade alinhada ao armazenamento local.

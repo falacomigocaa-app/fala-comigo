@@ -116,3 +116,19 @@ GitHub Pages hospeda somente arquivos estáticos. Ele não executa backend cont�
 Aguardar o proprietário escolher A, B ou C. Se escolher A ou C, confirmar também onde o backend será hospedado e como o banco será provido. Não construir uma falsa autenticação no JavaScript do site. Não apagar o portal atual antes de existir migração funcional e validação.
 
 O link público atual ainda aponta para `https://falacomigo-kyrh225w.manus.space/creator` e isso é conhecido como estado provisório. Só trocar o link depois que o novo destino real estiver funcionando e publicado no GitHub Pages.
+
+## Decisão confirmada — Opção A e endereço oficial — 25/09/2026
+
+O proprietário confirmou a **Opção A**: manter o site e a interface pública no GitHub Pages, iniciar o backend e o banco em infraestrutura independente com camadas gratuitas quando possível e evoluir para planos pagos somente quando o crescimento justificar. A arquitetura deve permitir migração e expansão sem dependência obrigatória de um único provedor.
+
+O endereço público oficial confirmado é exatamente:
+
+`https://falacomigocaa-app.github.io/fala-comigo/`
+
+Toda alteração pública deve continuar sendo feita em `site/`, passar por branch e Pull Request contra `main`, ser publicada pelo workflow `site-pages.yml` e ser conferida nesse endereço. A lista de continuidade deve ser atualizada ao final de cada etapa para os próximos agentes de IA. O link do Manus Space permanece provisório até a nova solução estar funcional, validada e publicada.
+
+### Etapa 1 e 2 concluídas — handoff e ADR
+
+Em 25/09/2026, o `PROJECT_HANDOFF.md` foi atualizado para refletir o estado atual da `main`, a Opção A e a separação entre site institucional e portal autenticado. Foi criado o ADR [`docs/ADR-001-opcao-a-portal-independente.md`](docs/ADR-001-opcao-a-portal-independente.md), que formaliza a arquitetura, os limites do GitHub Pages, o MVP sintético e os gates antes de login, provedor, cobrança ou dados reais.
+
+Esta etapa foi somente documental. Não houve implementação de backend, criação de conta externa, contratação, cobrança, coleta de dados, troca do link do Criador ou alteração da `main`.
