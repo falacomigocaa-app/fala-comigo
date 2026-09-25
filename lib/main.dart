@@ -17,52 +17,53 @@ import 'features/transition_alerts/data/providers/transition_alerts_provider.dar
 import 'features/transition_alerts/domain/models/transition_alert.dart';
 import 'features/transition_alerts/presentation/screens/transition_alert_full_screen.dart';
 
-/// Chave global de navegação: permite abrir uma tela (como o alerta
-/// de transição em tela cheia) a partir de fora da árvore de widgets,
-/// por exemplo quando uma notificação é tocada.
 final navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  runApp(const ProviderScope(child: CaaApp()));
+  // A primeira tela não pode depender de plugins, armazenamento ou serviços
+  // opcionais. O bootstrap continua depois que o Flutter já desenhou a UI.
+  _bootstrap();
+}
 
-  // Trava a orientação em Paisagem (Landscape), recomendado para
-  // tablets e celulares usados como pranchas de comunicação.
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
+Future<void> _bootstrap() async {
+  try {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
 
-  // Persistência local dos cartões.
-  await Hive.initFlutter();
-  Hive.registerAdapter(PictogramCardAdapter());
-  final box = await SecureBoxService.openSecureBoxWithMigration(cardsBoxName);
-
-  // Caixa simples de configurações do app (ex: tema de hiperfoco
-  // escolhido pelos pais).
-  await SecureBoxService.openSecureBoxWithMigration('app_settings');
-
-  // Caixa dos Alertas de Transição de Atividade (configurações dos
-  // alertas: áudio, horário, checklist).
-  await SecureBoxService.openSecureBoxWithMigration(transitionAlertsBoxName);
-
-  // Primeiro uso: popula os pictogramas básicos que acompanham o app,
-  // para que a criança já tenha cartões disponíveis antes mesmo dos
-  // pais cadastrarem fotos personalizadas.
-  if (box.isEmpty) {
-    for (final card in SeedCards.defaultCards()) {
-      await box.put(card.id, card);
+    await Hive.initFlutter();
+    if (!Hive.isAdapterRegistered(PictogramCardAdapter().typeId)) {
+      Hive.registerAdapter(PictogramCardAdapter());
     }
+    final box = await SecureBoxService.openSecureBoxWithMigration(cardsBoxName);
+    await SecureBoxService.openSecureBoxWithMigration('app_settings');
+    await SecureBoxService.openSecureBoxWithMigration(transitionAlertsBoxName);
+
+    if (box.isEmpty) {
+      for (final card in SeedCards.defaultCards()) {
+        await box.put(card.id, card);
+      }
+    }
+  } catch (_) {
+    // O app continua disponível mesmo se a migração/armazenamento precisar
+    // de recuperação posterior. A falha não pode encerrar o processo nativo.
   }
 
-  // Pré-inicializa o TTS para reduzir latência na primeira fala.
-  await TtsService.instance.init();
+  try {
+    await TtsService.instance.init();
+  } catch (_) {
+    // TTS é opcional para a primeira abertura.
+  }
 
-  // Inicializa o serviço de notificações do Alerta de Transição.
-  await TransitionAlertService.instance.init();
+  try {
+    await TransitionAlertService.instance.init();
+  } catch (_) {
+    // Notificações são opcionais para a primeira abertura.
+  }
 
-  // Quando uma notificação de Alerta de Transição é tocada, abre a
-  // tela em tela cheia correspondente, buscando o alerta salvo pelo
-  // ID recebido no payload da notificação.
   TransitionAlertService.instance.onAlertTriggered = (alertId) {
     final ctx = navigatorKey.currentContext;
     try {
@@ -72,7 +73,8 @@ Future<void> main() async {
         final alert =
             TransitionAlert.fromMap(Map<String, dynamic>.from(rawMap as Map));
         navigatorKey.currentState?.push(
-          MaterialPageRoute(builder: (_) => TransitionAlertFullScreen(alert: alert)),
+          MaterialPageRoute(
+              builder: (_) => TransitionAlertFullScreen(alert: alert)),
         );
       } else if (ctx != null) {
         ScaffoldMessenger.of(ctx).showSnackBar(
@@ -87,8 +89,6 @@ Future<void> main() async {
       }
     }
   };
-
-  runApp(const ProviderScope(child: CaaApp()));
 }
 
 class CaaApp extends StatefulWidget {
