@@ -113,8 +113,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         actions: [
           IconButton.filledTonal(
             tooltip: 'Novo cartão',
-            onPressed: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => const AddCardScreen())),
+            onPressed: () => Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => const AddCardScreen())),
             icon: const Icon(Icons.add_a_photo_outlined),
           ),
           const SizedBox(width: 8),
@@ -601,8 +602,9 @@ class _OptionARoutineGrid extends StatelessWidget {
         title: 'Diário de vídeo',
         subtitle: 'Registrar momentos',
         color: const Color(0xFF7A5FC7),
-        onTap: () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => const VideoDiaryScreen())),
+        onTap: () => Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (_) => const VideoDiaryScreen())),
       ),
       _OptionAFeature(
         icon: Icons.alarm_on_outlined,
@@ -628,8 +630,9 @@ class _OptionARoutineGrid extends StatelessWidget {
         subtitle: 'Resumo, ABC ou rotina',
         color: const Color(0xFFBE123C),
         wide: true,
-        onTap: () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => const DataExportScreen())),
+        onTap: () => Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (_) => const DataExportScreen())),
       ),
     ];
     return LayoutBuilder(

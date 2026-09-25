@@ -165,13 +165,15 @@ class _SharedTasksScreenState extends State<SharedTasksScreen> {
                 const ParentalSectionHeading(
                   eyebrow: 'COORDENAÇÃO DO CUIDADO',
                   title: 'Tarefas que conectam',
-                  description: 'Família, escola e profissionais podem combinar o próximo passo sem perder o contexto.',
+                  description:
+                      'Família, escola e profissionais podem combinar o próximo passo sem perder o contexto.',
                 ),
                 const SizedBox(height: 18),
                 const ParentalInfoBanner(
                   icon: Icons.handshake_outlined,
                   eyebrow: 'RETORNO SEM CULPA',
-                  message: 'Não realizada, recusada e preciso de ajuda são respostas válidas. Elas orientam o próximo apoio e não penalizam a criança.',
+                  message:
+                      'Não realizada, recusada e preciso de ajuda são respostas válidas. Elas orientam o próximo apoio e não penalizam a criança.',
                 ),
                 const SizedBox(height: 18),
                 if (_tasks.isEmpty)
@@ -548,7 +550,8 @@ class _TaskFormState extends State<_TaskForm> {
             const ParentalSectionHeading(
               eyebrow: 'NOVA TAREFA',
               title: 'Combinar o próximo passo',
-              description: 'A tarefa pode ser ajustada, adiada ou respondida com um pedido de ajuda.',
+              description:
+                  'A tarefa pode ser ajustada, adiada ou respondida com um pedido de ajuda.',
             ),
             const SizedBox(height: 18),
             TextField(

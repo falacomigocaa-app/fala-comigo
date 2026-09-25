@@ -101,8 +101,9 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
       'consentAt': DateTime.now().toIso8601String(),
     });
     if (!mounted) return;
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Perfil salvo.')));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Perfil salvo.')));
   }
 
   @override
@@ -125,7 +126,8 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                   const ParentalInfoBanner(
                     icon: Icons.shield_outlined,
                     eyebrow: 'PERFIL LOCAL',
-                    message: 'Tudo é opcional. Preencha somente o necessário; os dados aparecem nos relatórios em PDF gerados pelo app.',
+                    message:
+                        'Tudo é opcional. Preencha somente o necessário; os dados aparecem nos relatórios em PDF gerados pelo app.',
                   ),
                   const SizedBox(height: 16),
                   ParentalSurface(

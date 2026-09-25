@@ -118,7 +118,8 @@ class _CommunicationProfileTabState extends State<_CommunicationProfileTab> {
             const ParentalInfoBanner(
               icon: Icons.record_voice_over_outlined,
               eyebrow: 'PERFIL CONTROLADO PELA FAMÍLIA',
-              message: 'Um resumo funcional para orientar escola e profissionais. Compartilhe somente a versão e a finalidade necessárias.',
+              message:
+                  'Um resumo funcional para orientar escola e profissionais. Compartilhe somente a versão e a finalidade necessárias.',
             ),
             const SizedBox(height: 14),
             ParentalSurface(
@@ -281,7 +282,8 @@ class _CommunicationPlanTabState extends State<_CommunicationPlanTab> {
       const ParentalInfoBanner(
         icon: Icons.track_changes_outlined,
         eyebrow: 'PLANO FUNCIONAL',
-        message: 'Um objetivo observável, uma estratégia simples e um próximo passo para casa e escola. Não substitui o prontuário profissional.',
+        message:
+            'Um objetivo observável, uma estratégia simples e um próximo passo para casa e escola. Não substitui o prontuário profissional.',
       ),
       const SizedBox(height: 14),
       ParentalSurface(
@@ -452,7 +454,8 @@ class _AgendaTabState extends State<_AgendaTab> {
             const ParentalInfoBanner(
               icon: Icons.calendar_month_outlined,
               eyebrow: 'AGENDA DE TRANSIÇÕES',
-              message: 'Prepare a próxima atividade com horário, pessoa, local e o que levar. A agenda local continua disponível sem internet.',
+              message:
+                  'Prepare a próxima atividade com horário, pessoa, local e o que levar. A agenda local continua disponível sem internet.',
             ),
             const SizedBox(height: 14),
             ParentalSurface(
@@ -498,7 +501,8 @@ class _AgendaTabState extends State<_AgendaTab> {
               const ParentalInfoBanner(
                 icon: Icons.event_available_outlined,
                 eyebrow: 'SEM COMPROMISSOS',
-                message: 'Adicione a próxima sessão, reunião ou transição para preparar a família.',
+                message:
+                    'Adicione a próxima sessão, reunião ou transição para preparar a família.',
               ),
             ..._appointments.map(_appointmentCard),
           ],

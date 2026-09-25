@@ -34,8 +34,9 @@ class ParentalPinService {
     final raw = await _storage.read(key: _lockoutUntilKey);
     final until = int.tryParse(raw ?? '');
     if (until == null) return null;
-    final remaining = DateTime.fromMillisecondsSinceEpoch(until)
-        .difference(DateTime.now());
+    final remaining = DateTime.fromMillisecondsSinceEpoch(
+      until,
+    ).difference(DateTime.now());
     if (remaining <= Duration.zero) {
       await _storage.delete(key: _lockoutUntilKey);
       return null;

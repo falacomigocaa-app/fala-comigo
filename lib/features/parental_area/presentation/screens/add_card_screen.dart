@@ -201,7 +201,8 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
                 const ParentalInfoBanner(
                   icon: Icons.auto_awesome_outlined,
                   eyebrow: 'NOVO CARTÃO',
-                  message: 'Escolha uma imagem simples e um nome curto. O nome será falado quando o cartão for usado.',
+                  message:
+                      'Escolha uma imagem simples e um nome curto. O nome será falado quando o cartão for usado.',
                 ),
                 const SizedBox(height: 16),
                 Semantics(

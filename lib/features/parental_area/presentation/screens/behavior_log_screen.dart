@@ -79,8 +79,9 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
     _notesController.clear();
     FocusScope.of(context).unfocus();
 
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Registro salvo.')));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Registro salvo.')));
   }
 
   void _deleteEntry(dynamic key) {

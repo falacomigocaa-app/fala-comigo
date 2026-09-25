@@ -82,8 +82,9 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
     FocusScope.of(context).unfocus();
 
     if (!mounted) return;
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Vídeo salvo.')));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Vídeo salvo.')));
   }
 
   void _deleteEntry(dynamic key, String? videoPath) {

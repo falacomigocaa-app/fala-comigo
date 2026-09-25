@@ -107,13 +107,15 @@ class _AccessManagementScreenState extends State<AccessManagementScreen> {
                 const ParentalSectionHeading(
                   eyebrow: 'CONTROLE DA FAMÍLIA',
                   title: 'Quem pode acessar?',
-                  description: 'A licença e a autorização são coisas diferentes. Você decide o que cada organização pode ver.',
+                  description:
+                      'A licença e a autorização são coisas diferentes. Você decide o que cada organização pode ver.',
                 ),
                 const SizedBox(height: 18),
                 const ParentalInfoBanner(
                   icon: Icons.verified_user_outlined,
                   eyebrow: 'PRIVACIDADE POR PADRÃO',
-                  message: 'Clínicas, escolas e profissionais não recebem acesso automático aos cartões, documentos ou registros da criança.',
+                  message:
+                      'Clínicas, escolas e profissionais não recebem acesso automático aos cartões, documentos ou registros da criança.',
                 ),
                 const SizedBox(height: 18),
                 if (_grants.isEmpty)
@@ -381,7 +383,8 @@ class _AddAccessSheetState extends State<_AddAccessSheet> {
               const ParentalSectionHeading(
                 eyebrow: 'NOVO VÍNCULO',
                 title: 'Convidar organização',
-                description: 'Este registro é local nesta primeira etapa. A sincronização e o aceite remoto virão no portal.',
+                description:
+                    'Este registro é local nesta primeira etapa. A sincronização e o aceite remoto virão no portal.',
               ),
               const SizedBox(height: 18),
               TextField(

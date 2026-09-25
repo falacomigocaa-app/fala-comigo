@@ -104,13 +104,15 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                   const ParentalSectionHeading(
                     eyebrow: 'SEGURANÇA LOCAL',
                     title: 'Atualizar acesso',
-                    description: 'Altere o código usado para abrir a Área Parental neste aparelho.',
+                    description:
+                        'Altere o código usado para abrir a Área Parental neste aparelho.',
                   ),
                   const SizedBox(height: 18),
                   const ParentalInfoBanner(
                     icon: Icons.lock_outline,
                     eyebrow: 'PROTEÇÃO DO APARELHO',
-                    message: 'O PIN permanece local. Escolha um código que o responsável consiga guardar com segurança.',
+                    message:
+                        'O PIN permanece local. Escolha um código que o responsável consiga guardar com segurança.',
                   ),
                   const SizedBox(height: 16),
                   ParentalSurface(

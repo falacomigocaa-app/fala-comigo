@@ -253,8 +253,9 @@ class TransitionAlertService {
   /// serve para isolar se o problema está no agendamento em si ou
   /// na lógica de repetição semanal.
   Future<void> testDelayed(int seconds) async {
-    final scheduledDate = tz.TZDateTime.now(tz.local)
-        .add(Duration(seconds: seconds));
+    final scheduledDate = tz.TZDateTime.now(
+      tz.local,
+    ).add(Duration(seconds: seconds));
     await _plugin.zonedSchedule(
       999999,
       'Teste agendado',

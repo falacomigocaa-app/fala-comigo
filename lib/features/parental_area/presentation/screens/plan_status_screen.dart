@@ -42,7 +42,8 @@ class _PlanStatusScreenState extends ConsumerState<PlanStatusScreen> {
           const ParentalSectionHeading(
             eyebrow: 'ACESSO E RECURSOS',
             title: 'Plano e recursos',
-            description: 'Consulte o que está disponível neste aparelho sem bloquear a comunicação básica.',
+            description:
+                'Consulte o que está disponível neste aparelho sem bloquear a comunicação básica.',
           ),
           const SizedBox(height: 18),
           _CurrentPlanCard(access: access),
