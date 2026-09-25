@@ -293,6 +293,7 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }
