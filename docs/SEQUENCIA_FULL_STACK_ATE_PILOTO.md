@@ -334,6 +334,8 @@ O Gate 1A foi concluído documentalmente em `docs/ESPECIFICACAO_MVP_PORTAL_SINTE
 
 A próxima atividade é o **Gate 2 — implementação local**: criar API modular, PostgreSQL descartável, migrations reproduzíveis, fixtures sintéticas e testes automatizados de isolamento e autorização. A comparação de provedores fica depois da validação local; a troca do link do Criador fica depois da publicação e validação do destino independente.
 
+O Gate 2 foi dividido para evitar mistura de responsabilidades. O **Gate 2A** criou a API local sintética, fixtures, autorização, auditoria, idempotência e testes sem dependências externas. O **Gate 2B** ainda está pendente e deverá executar a migration e os mesmos testes contra PostgreSQL descartável. A ausência de `psql`/Docker nesta sessão impede declarar o Gate 2 completo.
+
 ### Decisão de autenticação para etapa posterior
 
 Depois do Gate 2, a integração de identidade deverá priorizar autenticação sem senha: Google OAuth/OpenID Connect e link mágico por e-mail. O primeiro aceita contas Google; o segundo aceita endereços de qualquer provedor. Nenhuma dessas opções concede autorização automaticamente: convite, organização, papel, finalidade, escopo, prazo e revogação continuam sob decisão da API. A integração real será um gate separado, em ambiente de teste e sem dados reais.

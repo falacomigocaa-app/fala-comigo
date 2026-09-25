@@ -1,0 +1,14 @@
+{
+  "name": "fala-comigo-portal-api",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "API local sintética do portal Fala Comigo",
+  "scripts": {
+    "test": "node --test",
+    "start": "node src/server.js"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

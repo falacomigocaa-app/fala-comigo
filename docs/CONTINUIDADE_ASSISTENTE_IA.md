@@ -604,3 +604,11 @@ Esta etapa não implementou API, banco, login, provedor, interface autenticada o
 O proprietário aprovou seguir a alternativa mais simples e flexível para o primeiro acesso real: **Google OAuth/OpenID Connect** e **link mágico por e-mail**, permitindo endereços de qualquer provedor. A solução não armazenará senha própria e não ficará limitada ao Gmail.
 
 Essa é uma decisão de desenho, não uma integração executada. O Gate 2 continuará usando identidades sintéticas e autorização local. A integração real será um gate posterior, com provedor gerenciado, callback HTTPS, PKCE, sessão expirada/revogável, recuperação sem enumeração e auditoria. Google ou e-mail confirmam a identidade; a API continua autoridade para convite, organização, papel, finalidade, escopo, validade e revogação.
+
+## 46. Gate 2A — API local sintética — 25/09/2026
+
+Foi criada a implementação inicial em `portal-api/`: serviço Node.js local sem dependências externas, fixtures determinísticas, identidade sintética, autorização server-side, rotas `/v1`, idempotência, auditoria sem payload sensível e migration PostgreSQL portátil em `portal-api/migrations/001_initial.sql`.
+
+Validação executada: `npm test` passou com **12 testes**, cobrindo leitura autorizada, isolamento entre organizações, outsider, escopo insuficiente, convite, expiração, benefício sem conteúdo, autenticação ausente, revogação, idempotência e auditoria. Também foi validada uma chamada HTTP local a `/v1/me`.
+
+Limitação: `psql` e Docker não estão disponíveis nesta sessão; a migration ainda não foi executada contra PostgreSQL. A etapa concluída é somente Gate 2A. O próximo gate é Gate 2B, executar schema e testes contra PostgreSQL descartável. Não há login real, OAuth, link mágico, provedor, cobrança ou dados reais.

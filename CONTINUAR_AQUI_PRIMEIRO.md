@@ -138,3 +138,9 @@ Esta etapa foi somente documental. Não houve implementação de backend, criaç
 Foi criada a especificação [`docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md`](docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md). Ela delimita o MVP sem dados reais, define fixtures determinísticas, entidades mínimas, papéis, escopos, endpoints, auditoria, matriz de autorização e testes de negação.
 
 O Gate 1A não implementa login, API, banco remoto, provedor, cobrança ou interface autenticada. O próximo passo é o **Gate 2 — implementação local**, em branch separada, com PostgreSQL descartável, migrations, fixtures e testes automatizados. Não iniciar o Gate 2 antes de revisar esta especificação e manter a `main` protegida.
+
+### Gate 2A em andamento — API local sintética
+
+Foi criada a pasta `portal-api/` com uma API Node.js local, identidade sintética, fixtures determinísticas, autorização server-side, rotas `/v1`, idempotência, auditoria e 12 testes automatizados. Também foi criada a migration SQL PostgreSQL `portal-api/migrations/001_initial.sql`.
+
+Os testes locais passaram, mas PostgreSQL e Docker não estão disponíveis neste ambiente; portanto, a migration ainda não foi executada contra um banco real. O próximo passo é o **Gate 2B — validar migrations e testes contra PostgreSQL descartável**, sem provedor externo. O servidor sintético não pode ser publicado nem executado com `NODE_ENV=production`.

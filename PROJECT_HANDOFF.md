@@ -159,8 +159,9 @@ A regra é separar aplicativo local, site público, portal conectado e console a
 11. Ler e seguir [`docs/ADR-001-opcao-a-portal-independente.md`](docs/ADR-001-opcao-a-portal-independente.md).
 12. Revisar [`docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md`](docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md) como Gate 1A concluído.
 13. Executar o Gate 2 em branch separada: API local, PostgreSQL descartável, migrations, fixtures e testes de autorização.
-14. Só depois da validação local, abrir um gate específico para integrar Google OAuth e link mágico em ambiente de teste; comparar provedores e não ativar cobrança sem decisão específica.
-15. Seguir `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`, mantendo o portal sem dados reais até concluir os gates de segurança, privacidade, backup/restauração e operação.
+14. Concluir o Gate 2B executando a migration contra PostgreSQL descartável; a API sintética atual não é produção.
+15. Só depois da validação local, abrir um gate específico para integrar Google OAuth e link mágico em ambiente de teste; comparar provedores e não ativar cobrança sem decisão específica.
+16. Seguir `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`, mantendo o portal sem dados reais até concluir os gates de segurança, privacidade, backup/restauração e operação.
 
 Comandos básicos:
 
@@ -241,6 +242,7 @@ Não tratar documentação conceitual como implementação existente. O portal e
 - `docs/CONTRATO_API_CONTINUIDADE_CUIDADO.md`: endpoints, payloads, consentimentos e testes de negação do portal.
 - `docs/ADR-001-opcao-a-portal-independente.md`: decisão de arquitetura para o site público, portal, API, banco e gates da Opção A.
 - `docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md`: escopo, modelo mínimo, matriz de autorização e testes do Gate 1A.
+- `portal-api/README.md`: execução e limites da API local sintética do Gate 2A.
 - `docs/equipe-mestra/00-plano-mestre-opcao-a.md`: consolidação da auditoria multidisciplinar e plano mestre.
 - `docs/ESTUDO_PRECOS_PLANOS.md`: pesquisa de mercado e faixas de preço para validação.
 - `docs/MAPA_FUNCIONALIDADES_SAAS_CLINICAS.md`: recursos de SaaS clínico priorizados para ajudar famílias.
