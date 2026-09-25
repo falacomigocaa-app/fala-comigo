@@ -567,3 +567,13 @@ A `main` atual contém os arquivos do dashboard e os módulos parentais de rotin
 Nenhuma alteração de código foi feita nesta etapa; somente análise e geração de artefato. Foi gerado um APK diretamente da `origin/main` em `7aa12f5`, com sucesso. SHA-256: `e5f626b361c16add29a8bf5993df57acbc141b9ef079b4313bb079cdf32b964c`. O artefato foi salvo fora do repositório em `/home/ubuntu/fala-comigo-main-7aa12f5-layout-check.apk`.
 
 Conclusão: a hipótese mais forte é que o APK anteriormente testado (`abe8633`) era anterior à integração visual completa. O próximo passo é instalar o APK da main atual em aparelho/emulador e comparar visualmente. Só recuperar código antigo se uma tela realmente estiver ausente nessa versão.
+
+## 31. Correção do erro app_settings — 25/09/2026
+
+Ao testar o APK gerado da `main` atual, foi reproduzido o erro `HiveError: The box "app_settings" is already open and of type Box<PictogramCard>`. A causa foi localizada em `lib/main.dart`: o bootstrap abria `app_settings` com o tipo de `pictogram_cards`, embora a caixa de configurações armazene valores heterogêneos.
+
+Foi criada a branch `fix/app-settings-box-type` com o commit `078ebcd`. A correção troca somente a abertura de `app_settings` para `Box<dynamic>` e preserva `pictogram_cards` como `Box<PictogramCard>`. A PR 69 foi aberta para `main`.
+
+Validações locais da branch: formatter aprovado, análise sem erros fatais, suíte de testes aprovada e APK debug aprovado. SHA-256 do APK corrigido: `8217746f4846dd447406733c246e412ae81394ff6c7ca6ee1aa2da085fc4d168`.
+
+O APK corrigido ainda precisa ser instalado e testado no aparelho. O merge da PR 69 depende dos checks remotos e de confirmação do proprietário.
