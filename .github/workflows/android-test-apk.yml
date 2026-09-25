@@ -49,7 +49,10 @@ jobs:
         run: |
           test -s build/app/outputs/flutter-apk/app-release.apk
           sha256sum build/app/outputs/flutter-apk/app-release.apk | tee apk-sha256.txt
-          apksigner verify --verbose build/app/outputs/flutter-apk/app-release.apk
+          sdk_root="${ANDROID_HOME:-$ANDROID_SDK_ROOT}"
+          apksigner_path="$(find "$sdk_root/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          test -x "$apksigner_path"
+          "$apksigner_path" verify --verbose build/app/outputs/flutter-apk/app-release.apk
 
       - name: Publish installable test artifact
         uses: actions/upload-artifact@v4
