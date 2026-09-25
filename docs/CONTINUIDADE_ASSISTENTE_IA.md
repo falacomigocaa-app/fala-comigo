@@ -468,3 +468,53 @@ Os workflows pós-merge concluíram com sucesso para esse commit:
 A correção está integrada e validada pelo CI remoto. Os avisos do runner sobre Node.js 20 e futura migração do `ubuntu-latest` são avisos de infraestrutura do GitHub Actions, não falhas do projeto.
 
 Isso não altera os gates ainda pendentes: testes em celular/tablet reais, acessibilidade com tecnologia assistiva, revisão dinâmica MASVS/MobSF, decisão sobre CBC/Hive e `minSdk`, backend RH real, cobrança e validação humana. O projeto está em estado tecnicamente consistente para a próxima etapa de validação manual, não em lançamento amplo.
+
+
+## 25. Retomada da tela branca e reaplicação segura da correção Android
+
+**Data:** 25 de setembro de 2026.
+**Branch de correção:** `fix/main-startup-and-android-build`.
+**Base:** `origin/main` no commit `0d0b685`.
+
+A PR #29 (`fix/android-kotlin-plugin`) continua aberta e aparece como `DIRTY` porque foi criada sobre uma versão anterior da `main`. Ela contém duas correções importantes, mas não deve ser mesclada inteira sem revisão: aplicação explícita do plugin Kotlin no Gradle Android e tipagem de `pictogram_cards` como `Box<PictogramCard>`.
+
+A `main` atual ainda tinha `SecureBoxService.openSecureBoxWithMigration(cardsBoxName)` sem tipo explícito, enquanto `cardsBoxProvider` exige `Hive.box<PictogramCard>(cardsBoxName)`. Esse desacordo é compatível com o erro observado anteriormente no Android:
+
+`HiveError: The box "pictogram_cards" is already open and of type Box<dynamic>`
+
+Esse erro ocorre antes de `runApp` e pode aparecer ao usuário como uma tela branca. A PR #60 (`diagnostics/show-startup-failure`) adiciona uma tela de erro visível para diagnóstico, mas é draft e não foi integrada. A tentativa de merge foi recusada pelo GitHub exatamente porque a PR está marcada como draft. Nenhuma alteração foi perdida na `main`.
+
+Na branch de correção foram reaplicadas somente as mudanças necessárias:
+
+- `SecureBoxService` agora usa `openSecureBox<T>` e `openSecureBoxWithMigration<T>`;
+- todas as chamadas internas de abertura/migração preservam `Hive.openBox<T>`;
+- `lib/main.dart` abre `pictogram_cards` com `<PictogramCard>`;
+- `android/app/build.gradle.kts` aplica `org.jetbrains.kotlin.android`;
+- a keystore continua obrigatória para release e não é adicionada ao Git.
+
+O APK obtido na branch diagnóstica `diagnostics/show-startup-failure` não foi gerado pelo Codemagic nem pela `main`; foi gerado pelo GitHub Actions no run [36096527894](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/36096527894), com SHA-256 `86ba70c8868d4919fe7b00ccf262a25b774ad06b6a698b4e21ce6db77df0da06`. Ele é um artefato de diagnóstico, não uma prova de abertura correta da `main`.
+
+O handoff operacional detalhado está em `docs/HANDOFF_TELA_BRANCA_APK.md`. O próximo gate é abrir uma PR baseada na `main` atual com a correção seletiva, aguardar análise/testes/build Android debug verdes e instalar o APK em aparelho real. A validação deve separar instalação, abertura da grade, navegação e execução offline. Nenhum resultado de aparelho deve ser inventado.
+
+**Regra para o próximo agente:** não mesclar a PR #29 diretamente; não apagar a PR #60; não reverter a linha de segurança/RH; comparar a `main` atual e reaplicar apenas correções comprovadas. Se a tela continuar branca após a correção Hive, usar a tela diagnóstica da PR #60 ou logs do aparelho para obter a exceção específica.
+
+## 26. Prompt mestre para novas retomadas
+
+**Data:** 25 de setembro de 2026.
+
+Foi criado o arquivo `PROMPT_RETORNO_NOVO_AGENTE.md` na raiz do repositório. Ele contém uma instrução completa, pronta para copiar e colar em outra assistência por IA. O prompt obriga a leitura dos handoffs, preserva a `main`, identifica a PR #66, diferencia validação de CI de validação em aparelho, orienta a geração do APK e define o formato de atualização após cada etapa.
+
+O arquivo `CONTINUAR_AQUI_PRIMEIRO.md` aponta diretamente para esse prompt, e `README.md` também indica o aviso como primeira leitura. Qualquer agente futuro deve atualizar esses arquivos e `docs/HANDOFF_TELA_BRANCA_APK.md` ao concluir uma etapa.
+
+
+## 27. APK corrigido da PR 66 gerado com sucesso
+
+**Data:** 25 de setembro de 2026.
+**Branch:** `fix/main-startup-and-android-build`.
+**Commit do build:** `abe8633`.
+
+O workflow `Android test APK artifact` concluiu com sucesso no run [36109508895](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/36109508895). O Flutter foi configurado, as dependências foram instaladas, o APK foi construído, verificado com `apksigner` e publicado como artefato.
+
+O APK de teste `fala-comigo-test.apk` possui SHA-256 `63f3d897f07995baff7262b4f43d691733f0e7c80e25f97988a9bc818b373646`. Ele foi assinado com chave efêmera do GitHub Actions e não é um APK de produção nem uma execução do Codemagic.
+
+A evidência confirma o build e a integridade estrutural do APK. Ainda falta a validação física em celular ou tablet Android para confirmar a abertura da grade CAA, o funcionamento offline e a ausência da tela branca. Nenhuma alteração foi feita na `main`.
