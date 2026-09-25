@@ -6,6 +6,12 @@ O responsável pelo projeto autorizou o programador a continuar as próximas eta
 
 O programador deve escolher a próxima tarefa de maior valor técnico e de menor risco, implementar em branch de trabalho, adicionar ou atualizar testes, executar as validações disponíveis, revisar o diff, criar commit e enviar a branch ao GitHub.
 
+### Leitura obrigatória na retomada
+
+Antes de qualquer alteração, todo agente ou assistência por IA deve ler [`CONTINUAR_AQUI_PRIMEIRO.md`](CONTINUAR_AQUI_PRIMEIRO.md), este arquivo, `PROJECT_HANDOFF.md` e o handoff específico da etapa em `docs/`. O aviso de continuidade registra a causa atual da tela branca, as branches que não devem ser mescladas diretamente e a ordem segura de validação.
+
+Ao concluir cada etapa, o agente deve atualizar `CONTINUAR_AQUI_PRIMEIRO.md`, o handoff específico em `docs/` e `docs/CONTINUIDADE_ASSISTENTE_IA.md`, registrando branch, commit, comandos, resultado, limitações e próximo gate. Nenhuma etapa pode ser descrita como concluída sem evidência recente.
+
 ## Ordem de prioridade
 
 1. Corrigir falhas que possam interromper a comunicação da criança.

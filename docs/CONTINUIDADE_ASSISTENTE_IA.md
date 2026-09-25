@@ -468,3 +468,32 @@ Os workflows pós-merge concluíram com sucesso para esse commit:
 A correção está integrada e validada pelo CI remoto. Os avisos do runner sobre Node.js 20 e futura migração do `ubuntu-latest` são avisos de infraestrutura do GitHub Actions, não falhas do projeto.
 
 Isso não altera os gates ainda pendentes: testes em celular/tablet reais, acessibilidade com tecnologia assistiva, revisão dinâmica MASVS/MobSF, decisão sobre CBC/Hive e `minSdk`, backend RH real, cobrança e validação humana. O projeto está em estado tecnicamente consistente para a próxima etapa de validação manual, não em lançamento amplo.
+
+
+## 25. Retomada da tela branca e reaplicação segura da correção Android
+
+**Data:** 25 de setembro de 2026.
+**Branch de correção:** `fix/main-startup-and-android-build`.
+**Base:** `origin/main` no commit `0d0b685`.
+
+A PR #29 (`fix/android-kotlin-plugin`) continua aberta e aparece como `DIRTY` porque foi criada sobre uma versão anterior da `main`. Ela contém duas correções importantes, mas não deve ser mesclada inteira sem revisão: aplicação explícita do plugin Kotlin no Gradle Android e tipagem de `pictogram_cards` como `Box<PictogramCard>`.
+
+A `main` atual ainda tinha `SecureBoxService.openSecureBoxWithMigration(cardsBoxName)` sem tipo explícito, enquanto `cardsBoxProvider` exige `Hive.box<PictogramCard>(cardsBoxName)`. Esse desacordo é compatível com o erro observado anteriormente no Android:
+
+`HiveError: The box "pictogram_cards" is already open and of type Box<dynamic>`
+
+Esse erro ocorre antes de `runApp` e pode aparecer ao usuário como uma tela branca. A PR #60 (`diagnostics/show-startup-failure`) adiciona uma tela de erro visível para diagnóstico, mas é draft e não foi integrada. A tentativa de merge foi recusada pelo GitHub exatamente porque a PR está marcada como draft. Nenhuma alteração foi perdida na `main`.
+
+Na branch de correção foram reaplicadas somente as mudanças necessárias:
+
+- `SecureBoxService` agora usa `openSecureBox<T>` e `openSecureBoxWithMigration<T>`;
+- todas as chamadas internas de abertura/migração preservam `Hive.openBox<T>`;
+- `lib/main.dart` abre `pictogram_cards` com `<PictogramCard>`;
+- `android/app/build.gradle.kts` aplica `org.jetbrains.kotlin.android`;
+- a keystore continua obrigatória para release e não é adicionada ao Git.
+
+O APK obtido na branch diagnóstica `diagnostics/show-startup-failure` não foi gerado pelo Codemagic nem pela `main`; foi gerado pelo GitHub Actions no run [36096527894](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/36096527894), com SHA-256 `86ba70c8868d4919fe7b00ccf262a25b774ad06b6a698b4e21ce6db77df0da06`. Ele é um artefato de diagnóstico, não uma prova de abertura correta da `main`.
+
+O handoff operacional detalhado está em `docs/HANDOFF_TELA_BRANCA_APK.md`. O próximo gate é abrir uma PR baseada na `main` atual com a correção seletiva, aguardar análise/testes/build Android debug verdes e instalar o APK em aparelho real. A validação deve separar instalação, abertura da grade, navegação e execução offline. Nenhum resultado de aparelho deve ser inventado.
+
+**Regra para o próximo agente:** não mesclar a PR #29 diretamente; não apagar a PR #60; não reverter a linha de segurança/RH; comparar a `main` atual e reaplicar apenas correções comprovadas. Se a tela continuar branca após a correção Hive, usar a tela diagnóstica da PR #60 ou logs do aparelho para obter a exceção específica.
