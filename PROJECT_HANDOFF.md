@@ -8,8 +8,10 @@ O código oficial está no GitHub:
 
 - Repositório: https://github.com/falacomigocaa-app/fala-comigo
 - Branch principal: `main`
-- Branch de trabalho atual: `feat/affordable-plans-model`
-- Último commit registrado neste handoff: `8b0d7d7 — docs: add numbered plan to first build`
+- Branch de continuidade Android + Web: `recovery/pr29-with-current-web`
+- Commit da continuidade: `0d950ab`
+- Base Android validada: PR #29, `fix/android-kotlin-plugin`, commit `3c107f3`
+- Site publicado: `main`, em https://falacomigocaa-app.github.io/fala-comigo/
 
 Não existem segredos, tokens, senhas ou chaves privadas neste documento. Nunca coloque credenciais no Git.
 
