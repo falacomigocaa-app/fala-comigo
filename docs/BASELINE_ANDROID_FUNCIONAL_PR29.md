@@ -40,3 +40,8 @@ Funcionalidades e documentos adicionados depois do commit `3c107f3` não são au
 A próxima mudança recomendada é pequena e de baixo risco: reproduzir na baseline somente uma melhoria que seja necessária para o funcionamento atual, gerar um APK Debug e validar a abertura. Depois disso, as mudanças posteriores devem ser reincorporadas uma a uma, sempre com PR independente.
 
 O APK antigo enviado pelo usuário permanece a referência histórica. O APK reconstruído pela CI é a referência reproduzível. Os hashes podem ser diferentes entre builds Debug sem indicar corrupção, pois o empacotamento e os metadados podem variar.
+
+
+## Base unificada Android + Web
+
+A branch `recovery/pr29-with-current-web` mantém o código Android da baseline PR29 e incorpora os arquivos `site/` atuais da `main`. Ela inclui a página institucional reformulada, privacidade, favicon e o protótipo RH publicados no GitHub Pages. A publicação oficial continua ocorrendo pela `main`; esta branch é a linha segura para futuras alterações coordenadas entre Android e Web.
