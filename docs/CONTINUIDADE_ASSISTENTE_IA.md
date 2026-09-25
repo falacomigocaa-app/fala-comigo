@@ -452,3 +452,19 @@ Foram encontrados e corrigidos nesta branch os seguintes problemas de alto impac
 **Limitação atual:** Flutter, Dart e `adb` não estão instalados nesta sessão. Portanto, a validação local de análise, testes, build e dispositivos ainda não foi executada. A branch precisa passar pelo GitHub Actions antes de qualquer merge. A auditoria também confirmou que validação em celular/tablet, acessibilidade com tecnologia assistiva, revisão dinâmica MASVS/MobSF, decisão sobre `minSdk`, revisão do CBC/Hive e backend RH continuam fora do que pode ser declarado pronto.
 
 **Próximo gate:** revisar o diff, fazer commit e abrir uma PR; aguardar CI verde e revisar a saída antes de integrar. Não iniciar cobrança, backend RH real, sincronização clínica, domínio ou publicação ampla.
+
+
+## 24. Fechamento da correção crítica
+
+**Data:** 24 de setembro de 2026.
+
+A PR #54 (`Fix: preservar comunicação em recuperação local e fortalecer CI`) foi integrada na `main` com o commit `df32256`. A `main` local foi sincronizada com `origin/main` e permaneceu limpa.
+
+Os workflows pós-merge concluíram com sucesso para esse commit:
+
+- Flutter quality checks — run [36089138936](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/36089138936): formatação estrita, análise estática, política de assinatura, testes e build Web release;
+- Publicar site institucional — run [36089138902](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/36089138902): publicação do diretório `site/` no GitHub Pages.
+
+A correção está integrada e validada pelo CI remoto. Os avisos do runner sobre Node.js 20 e futura migração do `ubuntu-latest` são avisos de infraestrutura do GitHub Actions, não falhas do projeto.
+
+Isso não altera os gates ainda pendentes: testes em celular/tablet reais, acessibilidade com tecnologia assistiva, revisão dinâmica MASVS/MobSF, decisão sobre CBC/Hive e `minSdk`, backend RH real, cobrança e validação humana. O projeto está em estado tecnicamente consistente para a próxima etapa de validação manual, não em lançamento amplo.
