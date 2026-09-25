@@ -529,3 +529,9 @@ Os conflitos foram resolvidos manualmente. A resolução preserva a correção A
 Ainda não foi criado commit ou push desta branch. Flutter, Dart e adb não estão disponíveis nesta sessão; portanto, format, análise, testes, build Web, APK e teste em aparelho continuam gates obrigatórios no CI e na validação humana. A `main` remota não foi alterada.
 
 Próximo passo: revisar o diff completo, executar `git diff --check`, registrar o commit da integração e enviar uma PR de integração para que o CI valide a combinação antes de qualquer decisão sobre a `main`.
+
+## 37. Site público atualizado no GitHub Pages — 25/09/2026
+
+Foi identificado que as alterações anteriores estavam somente na branch de integração e, por isso, não apareciam em `https://falacomigocaa-app.github.io/fala-comigo/`. Foi criada e mesclada a PR 70 com somente `site/index.html`, preservando o aplicativo e o portal separados.
+
+O workflow `site-pages.yml` concluiu com sucesso. A página pública agora exibe `falacomigocaa@gmail.com`, WhatsApp `67 99163-32279` e a entrada discreta do Espaço do Criador. O conteúdo foi conferido no endereço público após o deploy.
