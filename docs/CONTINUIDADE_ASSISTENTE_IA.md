@@ -535,3 +535,7 @@ Próximo passo: revisar o diff completo, executar `git diff --check`, registrar 
 Foi identificado que as alterações anteriores estavam somente na branch de integração e, por isso, não apareciam em `https://falacomigocaa-app.github.io/fala-comigo/`. Foi criada e mesclada a PR 70 com somente `site/index.html`, preservando o aplicativo e o portal separados.
 
 O workflow `site-pages.yml` concluiu com sucesso. A página pública agora exibe `falacomigocaa@gmail.com`, WhatsApp `67 99163-32279` e a entrada discreta do Espaço do Criador. O conteúdo foi conferido no endereço público após o deploy.
+
+## 38. Correção do WhatsApp oficial — 25/09/2026
+
+O proprietário corrigiu o telefone oficial para **67 99163-2279**. A URL de compartilhamento deve usar `https://wa.me/5567991632279`. O site público foi ajustado e o portal real também foi ajustado para exibir o mesmo número.
