@@ -589,3 +589,9 @@ A correção está pronta para merge técnico, mas o merge permanece pendente de
 Após confirmação explícita do proprietário, a PR 69 foi mesclada na `main`. O commit resultante é `9e97da0` (`Fix app_settings Hive box type`). A correção testada no APK agora está oficial na linha principal.
 
 O workflow pós-merge `Flutter quality checks` foi disparado para o commit `9e97da0` e estava `in_progress` no momento deste registro. O resultado final deve ser verificado antes de declarar a etapa totalmente encerrada.
+
+## 34. Escopo profissional de organizações, convites e assinantes — 25/09/2026
+
+A auditoria confirmou que o app atual possui `AccessGrant` e permissões locais, mas não envia convite remoto nem cria autorização server-side. O `site/portal.html` é uma prévia estática com dados sintéticos; seus botões não autenticam, não persistem dados e não processam assinaturas.
+
+Foi criado `docs/ESCOPO_PORTAL_ORGANIZACOES_ASSINANTES.md`, com o fluxo de convite individual e expirável, consentimento separado de benefício, matriz de papéis e escopos, arquitetura Web full-stack, planos de assinantes, fases, testes de negação e decisões necessárias. Não foi ativada cobrança, backend real ou compartilhamento de dados.
