@@ -10,6 +10,8 @@ A integração foi mesclada na `main` pela PR 67, com commit `7aa12f5`. O CI pó
 
 Para uma nova demanda, o agente deve analisar primeiro e pedir confirmação somente antes de merge, publicação, release, cobrança, alteração de acesso ou outra ação irreversível. Decisões técnicas locais e reversíveis podem ser executadas dentro do escopo autorizado.
 
+Após cada demanda, o agente deve comparar o resultado com os agentes anteriores, classificar o estado como resolvido, parcial, pendente, falha conhecida ou novo trabalho, e atualizar este arquivo, `PROJECT_HANDOFF.md` e `docs/CONTINUIDADE_ASSISTENTE_IA.md`. Nenhuma etapa deve ser declarada concluída sem evidência.
+
 O estado histórico abaixo explica a investigação original da tela branca; não deve ser interpretado como se a `main` ainda estivesse sem a correção.
 
 ## Estado histórico da tela branca — preservado para contexto

@@ -310,7 +310,34 @@ Não afirmar “está pronto para produção” apenas porque compilou. Separar 
 
 A frase correta quando algo não foi testado é: **“não executado neste ambiente”**.
 
-## 12. Encerramento de cada sessão
+## 12. Protocolo obrigatório de continuidade entre agentes
+
+Toda demanda concluída, mesmo quando não houver alteração de código, deve deixar um registro para o próximo agente. O registro deve dizer o que foi pedido, o que já existia antes, o que foi analisado, o que foi alterado, quais evidências foram obtidas e qual é o próximo passo. Isso permite comparar o trabalho de agentes diferentes e evita que uma solução já validada seja desfeita.
+
+Antes de começar uma nova demanda, o agente deve comparar a solicitação com os registros anteriores e classificar o caso como **já resolvido**, **parcialmente resolvido**, **não executado**, **falha conhecida** ou **nova demanda**. Se houver conflito entre uma anotação antiga e o estado real do Git, o estado real do GitHub e os testes recentes têm prioridade; a anotação antiga deve ser corrigida, não ignorada.
+
+Ao terminar, atualizar obrigatoriamente `CONTINUAR_AQUI_PRIMEIRO.md` com o estado imediato, `PROJECT_HANDOFF.md` quando o estado técnico mudar e `docs/CONTINUIDADE_ASSISTENTE_IA.md` com um registro histórico datado. Atualizar este manual somente quando uma regra de operação ou confirmação mudar. Quando houver PR, atualizar também sua descrição ou comentário com comandos, resultados, commit e próximo gate.
+
+O registro mínimo de cada demanda deve usar este modelo:
+
+```text
+## Demanda — data
+Pedido do proprietário:
+Estado encontrado:
+Comparação com trabalho anterior:
+Arquivos/PRs/commits envolvidos:
+Decisão técnica:
+Alterações executadas:
+Validações e evidências:
+Resultado:
+Limitações ou riscos:
+Próximo passo:
+Confirmação pendente:
+```
+
+Se não houver alteração, registrar explicitamente: **“nenhuma alteração feita; somente análise”**. Se o trabalho ainda estiver em andamento, registrar **“pendente”** e não declarar a etapa concluída.
+
+## 13. Encerramento de cada sessão
 
 Antes de parar:
 

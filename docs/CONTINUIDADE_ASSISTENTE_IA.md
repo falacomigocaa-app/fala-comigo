@@ -550,3 +550,10 @@ Evidências finais registradas na sessão:
 O APK debug não é uma release de produção. A publicação Android de produção continua dependente de keystore de release, validação em aparelho real e demais gates do checklist. O backend conectado, sincronização clínica, cobrança real e domínio definitivo continuam fora do escopo implementado.
 
 A partir desta data, qualquer agente deve tratar a descrição histórica anterior deste documento como histórico, consultar a `main` real e seguir o manual mestre antes de agir. Para ações externas de alto impacto, o agente deve apresentar o payload e aguardar confirmação explícita do proprietário.
+
+
+## 29. Regra reforçada de continuidade entre agentes — 25/09/2026
+
+O proprietário confirmou que a continuidade deve ser atualizada em toda demanda para que outros agentes entendam imediatamente o que já foi feito. O manual mestre agora exige comparação com o trabalho anterior, classificação do estado como resolvido, parcial, pendente, falha conhecida ou novo trabalho, registro das evidências e indicação explícita do próximo gate.
+
+Nenhuma alteração de código foi feita nesta etapa; somente a documentação de continuidade foi reforçada. A regra passa a valer para todas as retomadas futuras.
