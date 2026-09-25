@@ -221,3 +221,54 @@ Somente depois de revisão jurídica, fiscal, de privacidade, retenção, suport
 5. Qual provedor comercial será avaliado quando chegar a fase de cobrança sandbox?
 
 Até essas decisões, a entrega segura é atualizar o protótipo e o contrato, sem ativar convite real, armazenamento clínico ou cobrança.
+
+## 10. Experiência de convite iniciada pelo aplicativo
+
+O aplicativo será o caminho mais simples para a família iniciar um convite, mesmo quando a autorização real for concluída no portal.
+
+### Fluxo no app
+
+1. Área Parental → Pessoas e organizações → **Convidar**.
+2. Escolher clínica, escola, profissional ou organização patrocinadora.
+3. Informar o destinatário e a função, sem exigir que a família conheça IDs técnicos.
+4. Escolher uma finalidade pronta, por exemplo:
+   - tarefas de comunicação;
+   - perfil funcional para escola;
+   - rotina compartilhada;
+   - benefício patrocinado sem acesso ao conteúdo.
+5. Selecionar permissões em linguagem simples, com uma visualização técnica opcional:
+   - pode visualizar;
+   - pode criar tarefa;
+   - pode responder;
+   - pode editar rascunho;
+   - pode exportar resumo;
+   - não pode acessar mídias ou documentos clínicos.
+6. Definir prazo e revisar a tela **O que será compartilhado**.
+7. O app solicita ao backend um convite individual e recebe um link curto, expirável e revogável.
+8. O app abre o compartilhamento nativo do Android/iOS para encaminhar por WhatsApp, e-mail, SMS ou outro aplicativo instalado.
+9. O responsável pode copiar o link, visualizar o prazo, reenviar ou cancelar o convite.
+10. O app mostra o estado: criado, compartilhado, aberto, aceito, recusado, expirado ou revogado.
+
+### Regras de segurança do compartilhamento
+
+- O texto compartilhado não contém diagnóstico, nome completo da criança, fotos, vídeos, cartões ou permissões em formato sensível.
+- O link não concede acesso por si só; exige autenticação e confirmação do convite.
+- O link pode ser encaminhado por terceiros, mas somente o destinatário autenticado e compatível poderá aceitá-lo.
+- Reenviar cria novo token e invalida o anterior.
+- O compartilhamento do link pelo sistema operacional é diferente de exportar dados; o app deve deixar essa diferença clara.
+- Se não houver internet, o app salva o rascunho localmente e oferece **Tentar quando conectar**; nunca finge que o convite foi enviado.
+- O app mantém a comunicação básica mesmo se o portal ou o serviço de convite estiver indisponível.
+
+### Facilidades adicionais
+
+- modelos prontos por finalidade;
+- contatos recentes somente se o usuário escolher salvar localmente;
+- botão de copiar link e botão de compartilhar;
+- lembrete local para revisar convite pendente;
+- QR Code opcional para uso presencial, sempre apontando para o mesmo convite expirável;
+- leitura acessível do resumo de permissões;
+- confirmação por PIN/biometria antes de criar ou revogar um convite;
+- histórico local do convite até a sincronização remota;
+- mensagens específicas para link expirado, destinatário incompatível e convite já utilizado.
+
+A tela atual de `AccessGrant` continua útil como base visual, mas o botão **Registrar convite** deverá evoluir para chamar a API real quando o portal for implementado. Até lá, qualquer link demonstrativo deve permanecer identificado como prévia e não pode ser apresentado como autorização real.
