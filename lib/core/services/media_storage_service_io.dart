@@ -119,8 +119,7 @@ class MediaStorageService {
     }
 
     final bytes = await source.readAsBytes();
-    final isEncrypted =
-        bytes.length >= _fileMagic.length &&
+    final isEncrypted = bytes.length >= _fileMagic.length &&
         utf8.decode(
               bytes.take(_fileMagic.length).toList(),
               allowMalformed: true,

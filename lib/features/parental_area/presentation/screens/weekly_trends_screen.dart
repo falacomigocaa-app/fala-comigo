@@ -25,11 +25,11 @@ class _WeeklyTrendsScreenState extends State<WeeklyTrendsScreen> {
     final behaviorBox = await SecureBoxService.openSecureBox('behavior_logs');
     final videoBox = await SecureBoxService.openSecureBox('video_diary');
     final behaviorTimestamps = behaviorBox.values.whereType<Map>().map(
-      (entry) => entry['timestamp'],
-    );
+          (entry) => entry['timestamp'],
+        );
     final videoTimestamps = videoBox.values.whereType<Map>().map(
-      (entry) => entry['timestamp'],
-    );
+          (entry) => entry['timestamp'],
+        );
     final points = buildWeeklyTrends(
       behaviorTimestamps: behaviorTimestamps,
       videoTimestamps: videoTimestamps,

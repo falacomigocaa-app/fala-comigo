@@ -108,5 +108,5 @@ class HyperfocusThemeNotifier extends StateNotifier<HyperfocusTheme> {
 
 final hyperfocusThemeProvider =
     StateNotifierProvider<HyperfocusThemeNotifier, HyperfocusTheme>(
-      (ref) => HyperfocusThemeNotifier(),
-    );
+  (ref) => HyperfocusThemeNotifier(),
+);

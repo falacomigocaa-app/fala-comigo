@@ -35,8 +35,8 @@ class TransitionAlert {
     this.scheduledMinute,
     List<int>? scheduledWeekdays,
     required this.notificationId,
-  }) : checklistItems = checklistItems ?? [],
-       scheduledWeekdays = scheduledWeekdays ?? [];
+  })  : checklistItems = checklistItems ?? [],
+        scheduledWeekdays = scheduledWeekdays ?? [];
 
   Map<String, dynamic> toMap() {
     return {
@@ -65,13 +65,13 @@ class TransitionAlert {
       countdownSeconds: map['countdownSeconds'] as int? ?? 60,
       checklistItems:
           (map['checklistItems'] as List?)?.map((e) => e.toString()).toList() ??
-          [],
+              [],
       isScheduled: map['isScheduled'] as bool? ?? false,
       scheduledHour: map['scheduledHour'] as int?,
       scheduledMinute: map['scheduledMinute'] as int?,
       scheduledWeekdays:
           (map['scheduledWeekdays'] as List?)?.map((e) => e as int).toList() ??
-          [],
+              [],
       notificationId: map['notificationId'] as int? ?? 0,
     );
   }

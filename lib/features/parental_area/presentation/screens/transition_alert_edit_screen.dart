@@ -316,9 +316,8 @@ class _TransitionAlertEditScreenState
                   icon: Icon(_isRecording ? Icons.stop : Icons.mic),
                   label: Text(_isRecording ? 'Parar' : 'Gravar'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _isRecording
-                        ? Colors.redAccent
-                        : AppTheme.primary,
+                    backgroundColor:
+                        _isRecording ? Colors.redAccent : AppTheme.primary,
                     foregroundColor: Colors.white,
                   ),
                 ),

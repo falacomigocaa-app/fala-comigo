@@ -32,8 +32,8 @@ class PlanAccessNotifier extends StateNotifier<PlanAccessController> {
 
 final planAccessProvider =
     StateNotifierProvider<PlanAccessNotifier, PlanAccessController>(
-      (ref) => PlanAccessNotifier(),
-    );
+  (ref) => PlanAccessNotifier(),
+);
 
 /// Atalho para telas que precisam esconder ou explicar um recurso remoto.
 final hasRemoteBackupProvider = Provider<bool>((ref) {

@@ -258,9 +258,7 @@ class _ProgressReportScreenState extends State<ProgressReportScreen> {
                 if (_behaviorEntries.isEmpty)
                   const _EmptyReportState()
                 else
-                  ..._behaviorEntries
-                      .take(5)
-                      .map(
+                  ..._behaviorEntries.take(5).map(
                         (entry) => _RecentEntryCard(
                           date: _formatDate(entry['timestamp']),
                           behavior: '${entry['behavior'] ?? ''}',

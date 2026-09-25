@@ -42,9 +42,8 @@ class _SharedTasksScreenState extends State<SharedTasksScreen> {
     await SharedTaskStore.save(task);
     if (!mounted) return;
     setState(
-      () =>
-          _tasks = [..._tasks, task]
-            ..sort((a, b) => a.dueAt.compareTo(b.dueAt)),
+      () => _tasks = [..._tasks, task]
+        ..sort((a, b) => a.dueAt.compareTo(b.dueAt)),
     );
   }
 
@@ -73,9 +72,8 @@ class _SharedTasksScreenState extends State<SharedTasksScreen> {
     await SharedTaskStore.save(updated);
     if (!mounted) return;
     setState(
-      () => _tasks = _tasks
-          .map((item) => item.id == task.id ? updated : item)
-          .toList(),
+      () => _tasks =
+          _tasks.map((item) => item.id == task.id ? updated : item).toList(),
     );
   }
 
@@ -99,9 +97,8 @@ class _SharedTasksScreenState extends State<SharedTasksScreen> {
     await SharedTaskStore.save(updated);
     if (!mounted) return;
     setState(
-      () => _tasks = _tasks
-          .map((item) => item.id == task.id ? updated : item)
-          .toList(),
+      () => _tasks =
+          _tasks.map((item) => item.id == task.id ? updated : item).toList(),
     );
   }
 
@@ -369,21 +366,21 @@ class _TaskCard extends StatelessWidget {
   }
 
   static Color _statusColor(SharedTaskStatus status) => switch (status) {
-    SharedTaskStatus.completed => AppTheme.accentGreen,
-    SharedTaskStatus.needsHelp => Colors.orange.shade800,
-    SharedTaskStatus.declined => Colors.redAccent,
-    SharedTaskStatus.cancelled => AppTheme.mutedText,
-    _ => AppTheme.primary,
-  };
+        SharedTaskStatus.completed => AppTheme.accentGreen,
+        SharedTaskStatus.needsHelp => Colors.orange.shade800,
+        SharedTaskStatus.declined => Colors.redAccent,
+        SharedTaskStatus.cancelled => AppTheme.mutedText,
+        _ => AppTheme.primary,
+      };
 
   static String _label(SharedTaskStatus status) => switch (status) {
-    SharedTaskStatus.inProgress => 'Em andamento',
-    SharedTaskStatus.completed => 'Concluída',
-    SharedTaskStatus.partiallyCompleted => 'Concluída parcialmente',
-    SharedTaskStatus.needsHelp => 'Preciso de ajuda',
-    SharedTaskStatus.declined => 'Não realizada',
-    _ => 'Atualizar',
-  };
+        SharedTaskStatus.inProgress => 'Em andamento',
+        SharedTaskStatus.completed => 'Concluída',
+        SharedTaskStatus.partiallyCompleted => 'Concluída parcialmente',
+        SharedTaskStatus.needsHelp => 'Preciso de ajuda',
+        SharedTaskStatus.declined => 'Não realizada',
+        _ => 'Atualizar',
+      };
 
   void _showEvents(BuildContext context) {
     showModalBottomSheet<void>(
@@ -435,11 +432,11 @@ class _MetaChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Chip(
-    avatar: Icon(icon, size: 16, color: AppTheme.mutedText),
-    label: Text(label),
-    visualDensity: VisualDensity.compact,
-    side: const BorderSide(color: AppTheme.cardBorder),
-  );
+        avatar: Icon(icon, size: 16, color: AppTheme.mutedText),
+        label: Text(label),
+        visualDensity: VisualDensity.compact,
+        side: const BorderSide(color: AppTheme.cardBorder),
+      );
 }
 
 class _TaskForm extends StatefulWidget {
@@ -510,9 +507,8 @@ class _TaskFormState extends State<_TaskForm> {
         recipientRole: _organization.text.trim().isEmpty
             ? 'Família'
             : 'Organização convidada',
-        contextLabel: _context.text.trim().isEmpty
-            ? 'Rotina'
-            : _context.text.trim(),
+        contextLabel:
+            _context.text.trim().isEmpty ? 'Rotina' : _context.text.trim(),
         dueAt: _dueAt,
         reminderEnabled: _reminder,
         status: SharedTaskStatus.pending,
@@ -536,98 +532,98 @@ class _TaskFormState extends State<_TaskForm> {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: EdgeInsets.only(
-      left: 20,
-      right: 20,
-      top: 22,
-      bottom: MediaQuery.viewInsetsOf(context).bottom + 24,
-    ),
-    child: SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const ParentalSectionHeading(
-              eyebrow: 'NOVA TAREFA',
-              title: 'Combinar o próximo passo',
-              description:
-                  'A tarefa pode ser ajustada, adiada ou respondida com um pedido de ajuda.',
-            ),
-            const SizedBox(height: 18),
-            TextField(
-              controller: _title,
-              autofocus: true,
-              decoration: parentalInputDecoration(
-                labelText: 'Título curto',
-                icon: Icons.title_outlined,
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _description,
-              maxLines: 3,
-              decoration: parentalInputDecoration(
-                labelText: 'Instrução ou materiais (opcional)',
-                icon: Icons.notes_outlined,
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _assignedTo,
-              decoration: parentalInputDecoration(
-                labelText: 'Para quem?',
-                icon: Icons.person_outline,
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _organization,
-              decoration: parentalInputDecoration(
-                labelText: 'Organização (opcional)',
-                icon: Icons.apartment_outlined,
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _context,
-              decoration: parentalInputDecoration(
-                labelText: 'Contexto',
-                icon: Icons.category_outlined,
-              ),
-            ),
-            const SizedBox(height: 12),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.event_outlined),
-              title: const Text('Prazo'),
-              subtitle: Text(
-                '${_dueAt.day.toString().padLeft(2, '0')}/${_dueAt.month.toString().padLeft(2, '0')}/${_dueAt.year}',
-              ),
-              onTap: _pickDate,
-            ),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Lembrar no aparelho'),
-              subtitle: const Text(
-                'O agendamento será conectado na próxima etapa.',
-              ),
-              value: _reminder,
-              onChanged: (value) => setState(() => _reminder = value),
-            ),
-            const SizedBox(height: 12),
-            FilledButton.icon(
-              onPressed: _submit,
-              icon: const Icon(Icons.check_outlined),
-              label: const Text('Criar tarefa'),
-              style: FilledButton.styleFrom(
-                minimumSize: const Size.fromHeight(52),
-                backgroundColor: AppTheme.professionalBackground,
-                foregroundColor: Colors.white,
-              ),
-            ),
-          ],
+        padding: EdgeInsets.only(
+          left: 20,
+          right: 20,
+          top: 22,
+          bottom: MediaQuery.viewInsetsOf(context).bottom + 24,
         ),
-      ),
-    ),
-  );
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const ParentalSectionHeading(
+                  eyebrow: 'NOVA TAREFA',
+                  title: 'Combinar o próximo passo',
+                  description:
+                      'A tarefa pode ser ajustada, adiada ou respondida com um pedido de ajuda.',
+                ),
+                const SizedBox(height: 18),
+                TextField(
+                  controller: _title,
+                  autofocus: true,
+                  decoration: parentalInputDecoration(
+                    labelText: 'Título curto',
+                    icon: Icons.title_outlined,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _description,
+                  maxLines: 3,
+                  decoration: parentalInputDecoration(
+                    labelText: 'Instrução ou materiais (opcional)',
+                    icon: Icons.notes_outlined,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _assignedTo,
+                  decoration: parentalInputDecoration(
+                    labelText: 'Para quem?',
+                    icon: Icons.person_outline,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _organization,
+                  decoration: parentalInputDecoration(
+                    labelText: 'Organização (opcional)',
+                    icon: Icons.apartment_outlined,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _context,
+                  decoration: parentalInputDecoration(
+                    labelText: 'Contexto',
+                    icon: Icons.category_outlined,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.event_outlined),
+                  title: const Text('Prazo'),
+                  subtitle: Text(
+                    '${_dueAt.day.toString().padLeft(2, '0')}/${_dueAt.month.toString().padLeft(2, '0')}/${_dueAt.year}',
+                  ),
+                  onTap: _pickDate,
+                ),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('Lembrar no aparelho'),
+                  subtitle: const Text(
+                    'O agendamento será conectado na próxima etapa.',
+                  ),
+                  value: _reminder,
+                  onChanged: (value) => setState(() => _reminder = value),
+                ),
+                const SizedBox(height: 12),
+                FilledButton.icon(
+                  onPressed: _submit,
+                  icon: const Icon(Icons.check_outlined),
+                  label: const Text('Criar tarefa'),
+                  style: FilledButton.styleFrom(
+                    minimumSize: const Size.fromHeight(52),
+                    backgroundColor: AppTheme.professionalBackground,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
 }

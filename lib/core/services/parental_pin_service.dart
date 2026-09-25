@@ -112,9 +112,8 @@ class ParentalPinService {
     await _storage.write(key: _failedAttemptsKey, value: '$failures');
 
     final seconds = failures >= 5 ? 30 : min(1 << (failures - 1), 8);
-    final until = DateTime.now()
-        .add(Duration(seconds: seconds))
-        .millisecondsSinceEpoch;
+    final until =
+        DateTime.now().add(Duration(seconds: seconds)).millisecondsSinceEpoch;
     await _storage.write(key: _lockoutUntilKey, value: '$until');
   }
 

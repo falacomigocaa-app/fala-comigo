@@ -178,13 +178,13 @@ class _CurrentPlanCard extends StatelessWidget {
   }
 
   String _statusLabel(LicenseStatus status) => switch (status) {
-    LicenseStatus.invited => 'Convite pendente',
-    LicenseStatus.active => 'Ativo',
-    LicenseStatus.grace => 'Período de transição',
-    LicenseStatus.suspended => 'Suspenso — uso local preservado',
-    LicenseStatus.expired => 'Expirado — uso local preservado',
-    LicenseStatus.revoked => 'Revogado — uso local preservado',
-  };
+        LicenseStatus.invited => 'Convite pendente',
+        LicenseStatus.active => 'Ativo',
+        LicenseStatus.grace => 'Período de transição',
+        LicenseStatus.suspended => 'Suspenso — uso local preservado',
+        LicenseStatus.expired => 'Expirado — uso local preservado',
+        LicenseStatus.revoked => 'Revogado — uso local preservado',
+      };
 }
 
 class _FeatureTile extends StatelessWidget {
@@ -242,8 +242,8 @@ class _PlanCard extends StatelessWidget {
     final price = plan.isFree
         ? 'Gratuito'
         : plan.pricePending
-        ? 'Preço a definir'
-        : 'R\$ ${(plan.monthlyPriceCents! / 100).toStringAsFixed(2)} / mês';
+            ? 'Preço a definir'
+            : 'R\$ ${(plan.monthlyPriceCents! / 100).toStringAsFixed(2)} / mês';
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(

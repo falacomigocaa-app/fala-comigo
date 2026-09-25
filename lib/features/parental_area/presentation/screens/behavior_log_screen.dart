@@ -158,7 +158,7 @@ class _BehaviorLogScreenState extends State<BehaviorLogScreen> {
         .toList();
     final profileData = includeProfileData
         ? (await SecureBoxService.openSecureBox('patient_profile')).get('data')
-              as Map?
+            as Map?
         : null;
     final patientName = profileData?['name'] ?? '';
     final birthDate = profileData?['birthDate'] ?? '';

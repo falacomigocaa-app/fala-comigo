@@ -297,11 +297,11 @@ class _AccessGrantCard extends StatelessWidget {
   }
 
   static IconData _iconFor(OrganizationKind kind) => switch (kind) {
-    OrganizationKind.clinic => Icons.local_hospital_outlined,
-    OrganizationKind.school => Icons.school_outlined,
-    OrganizationKind.company => Icons.business_outlined,
-    OrganizationKind.professional => Icons.badge_outlined,
-  };
+        OrganizationKind.clinic => Icons.local_hospital_outlined,
+        OrganizationKind.school => Icons.school_outlined,
+        OrganizationKind.company => Icons.business_outlined,
+        OrganizationKind.professional => Icons.badge_outlined,
+      };
 
   static String _date(DateTime date) =>
       '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
@@ -463,9 +463,9 @@ class _AddAccessSheetState extends State<_AddAccessSheet> {
   }
 
   static String _kindLabel(OrganizationKind value) => switch (value) {
-    OrganizationKind.clinic => 'Clínica',
-    OrganizationKind.school => 'Escola',
-    OrganizationKind.company => 'Empresa patrocinadora',
-    OrganizationKind.professional => 'Profissional independente',
-  };
+        OrganizationKind.clinic => 'Clínica',
+        OrganizationKind.school => 'Escola',
+        OrganizationKind.company => 'Empresa patrocinadora',
+        OrganizationKind.professional => 'Profissional independente',
+      };
 }

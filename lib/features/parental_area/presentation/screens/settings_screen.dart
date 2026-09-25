@@ -232,12 +232,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           .setTheme(theme),
                       selectedColor: theme.primaryColor.withValues(alpha: 0.2),
                       labelStyle: TextStyle(
-                        color: selected
-                            ? theme.primaryColor
-                            : AppTheme.textDark,
-                        fontWeight: selected
-                            ? FontWeight.w700
-                            : FontWeight.w500,
+                        color:
+                            selected ? theme.primaryColor : AppTheme.textDark,
+                        fontWeight:
+                            selected ? FontWeight.w700 : FontWeight.w500,
                       ),
                     );
                   }).toList(),

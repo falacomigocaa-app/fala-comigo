@@ -24,22 +24,22 @@ class ParentReminder {
   });
 
   Map<String, dynamic> toMap() => {
-    'id': id,
-    'label': label,
-    'hour': hour,
-    'minute': minute,
-    'weekdays': weekdays,
-    'notificationId': notificationId,
-  };
+        'id': id,
+        'label': label,
+        'hour': hour,
+        'minute': minute,
+        'weekdays': weekdays,
+        'notificationId': notificationId,
+      };
 
   factory ParentReminder.fromMap(Map<dynamic, dynamic> map) => ParentReminder(
-    id: '${map['id'] ?? ''}',
-    label: '${map['label'] ?? 'Lembrete da rotina'}',
-    hour: (map['hour'] as int?) ?? 8,
-    minute: (map['minute'] as int?) ?? 0,
-    weekdays: (map['weekdays'] as List?)?.whereType<int>().toList() ?? [],
-    notificationId: (map['notificationId'] as int?) ?? 0,
-  );
+        id: '${map['id'] ?? ''}',
+        label: '${map['label'] ?? 'Lembrete da rotina'}',
+        hour: (map['hour'] as int?) ?? 8,
+        minute: (map['minute'] as int?) ?? 0,
+        weekdays: (map['weekdays'] as List?)?.whereType<int>().toList() ?? [],
+        notificationId: (map['notificationId'] as int?) ?? 0,
+      );
 }
 
 class ParentReminderStore {

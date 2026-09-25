@@ -118,15 +118,15 @@ class _VisualRoutineScreenState extends State<VisualRoutineScreen> {
                   const _EmptyRoutine()
                 else
                   ..._items.asMap().entries.map(
-                    (entry) => _RoutineItemTile(
-                      item: entry.value,
-                      readOnly: widget.readOnly,
-                      onTap: () => _toggle(entry.key),
-                      onDelete: widget.readOnly
-                          ? null
-                          : () => _removeItem(entry.key),
-                    ),
-                  ),
+                        (entry) => _RoutineItemTile(
+                          item: entry.value,
+                          readOnly: widget.readOnly,
+                          onTap: () => _toggle(entry.key),
+                          onDelete: widget.readOnly
+                              ? null
+                              : () => _removeItem(entry.key),
+                        ),
+                      ),
                 if (!widget.readOnly) ...[
                   const SizedBox(height: 18),
                   _AddRoutineItem(

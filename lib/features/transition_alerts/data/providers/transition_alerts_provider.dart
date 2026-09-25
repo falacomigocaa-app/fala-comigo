@@ -13,11 +13,11 @@ final transitionAlertsBoxProvider = Provider<Box>((ref) {
 
 final transitionAlertsListProvider =
     StateNotifierProvider<TransitionAlertsNotifier, List<TransitionAlert>>((
-      ref,
-    ) {
-      final box = ref.watch(transitionAlertsBoxProvider);
-      return TransitionAlertsNotifier(box);
-    });
+  ref,
+) {
+  final box = ref.watch(transitionAlertsBoxProvider);
+  return TransitionAlertsNotifier(box);
+});
 
 class TransitionAlertsNotifier extends StateNotifier<List<TransitionAlert>> {
   final Box _box;

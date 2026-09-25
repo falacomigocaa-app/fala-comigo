@@ -15,10 +15,10 @@ class RhLicenseTransitionDecision {
   const RhLicenseTransitionDecision._(this.allowed, this.reason);
 
   const RhLicenseTransitionDecision.allow()
-    : this._(true, RhLicenseTransitionReason.allowed);
+      : this._(true, RhLicenseTransitionReason.allowed);
 
   const RhLicenseTransitionDecision.deny(RhLicenseTransitionReason reason)
-    : this._(false, reason);
+      : this._(false, reason);
 }
 
 class RhLicenseStateMachine {

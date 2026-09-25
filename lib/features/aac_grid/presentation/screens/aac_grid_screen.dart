@@ -219,9 +219,8 @@ class AACGridScreen extends ConsumerWidget {
                             // Colunas responsivas: mais colunas em telas largas
                             // (tablets em paisagem), menos em celulares.
                             final width = constraints.maxWidth;
-                            final crossAxisCount = (width / (110 * scale))
-                                .floor()
-                                .clamp(3, 8);
+                            final crossAxisCount =
+                                (width / (110 * scale)).floor().clamp(3, 8);
 
                             return GridView.builder(
                               padding: const EdgeInsets.all(
@@ -229,11 +228,11 @@ class AACGridScreen extends ConsumerWidget {
                               ),
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: crossAxisCount,
-                                    crossAxisSpacing: AppConstants.gridSpacing,
-                                    mainAxisSpacing: AppConstants.gridSpacing,
-                                    childAspectRatio: 0.85,
-                                  ),
+                                crossAxisCount: crossAxisCount,
+                                crossAxisSpacing: AppConstants.gridSpacing,
+                                mainAxisSpacing: AppConstants.gridSpacing,
+                                childAspectRatio: 0.85,
+                              ),
                               itemCount: visibleCards.length,
                               itemBuilder: (context, index) {
                                 final card = visibleCards[index];

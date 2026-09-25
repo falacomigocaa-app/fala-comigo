@@ -38,8 +38,8 @@ class _ParentRemindersScreenState extends State<ParentRemindersScreen> {
   Future<void> _requestPermissions() async {
     await TransitionAlertService.instance.requestPermissions();
     if (!mounted) return;
-    final status = await TransitionAlertService.instance
-        .checkPermissionStatus();
+    final status =
+        await TransitionAlertService.instance.checkPermissionStatus();
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(status)));
   }
@@ -57,8 +57,8 @@ class _ParentRemindersScreenState extends State<ParentRemindersScreen> {
       minute: result.time.minute,
       weekdays: result.weekdays,
       notificationId: DateTime.now().millisecondsSinceEpoch.remainder(
-        1000000000,
-      ),
+            1000000000,
+          ),
     );
     try {
       await TransitionAlertService.instance.scheduleParentReminder(
@@ -269,12 +269,12 @@ class _ReminderDialogState extends State<_ReminderDialog> {
           onPressed: _weekdays.isEmpty || _labelController.text.trim().isEmpty
               ? null
               : () => Navigator.of(context).pop(
-                  _ReminderDraft(
-                    _labelController.text.trim(),
-                    _time,
-                    _weekdays.toList()..sort(),
+                    _ReminderDraft(
+                      _labelController.text.trim(),
+                      _time,
+                      _weekdays.toList()..sort(),
+                    ),
                   ),
-                ),
           child: const Text('Agendar'),
         ),
       ],

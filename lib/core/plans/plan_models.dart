@@ -17,12 +17,13 @@ enum PlanFeature {
 extension PlanFeatureMetadata on PlanFeature {
   /// Recursos básicos que nunca dependem de pagamento ou conexão.
   bool get isOfflineCore => switch (this) {
-    PlanFeature.offlineCommunication ||
-    PlanFeature.parentalControls ||
-    PlanFeature.accessibility ||
-    PlanFeature.localStorage => true,
-    _ => false,
-  };
+        PlanFeature.offlineCommunication ||
+        PlanFeature.parentalControls ||
+        PlanFeature.accessibility ||
+        PlanFeature.localStorage =>
+          true,
+        _ => false,
+      };
 
   String get key => name;
 }

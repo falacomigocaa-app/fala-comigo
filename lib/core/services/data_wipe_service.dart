@@ -51,8 +51,8 @@ class DataWipeService {
     // utilizável sem exigir uma reinicialização do processo Flutter.
     final cardsBox =
         await SecureBoxService.openSecureBoxWithMigration<PictogramCard>(
-          'pictogram_cards',
-        );
+      'pictogram_cards',
+    );
     for (final card in SeedCards.defaultCards()) {
       await cardsBox.put(card.id, card);
     }

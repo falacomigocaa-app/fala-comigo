@@ -150,9 +150,7 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
     setState(() => _isSaving = true);
     try {
       if (_isEditing) {
-        await ref
-            .read(cardsListProvider.notifier)
-            .updateCard(
+        await ref.read(cardsListProvider.notifier).updateCard(
               id: widget.existingCard!.id,
               label: _labelController.text.trim(),
               imagePath: _selectedImagePath!,
@@ -160,9 +158,7 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
               category: _category,
             );
       } else {
-        await ref
-            .read(cardsListProvider.notifier)
-            .addCard(
+        await ref.read(cardsListProvider.notifier).addCard(
               label: _labelController.text.trim(),
               imagePath: _selectedImagePath!,
               isCustomImage: true,

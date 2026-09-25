@@ -68,10 +68,10 @@ class _DataExportScreenState extends State<DataExportScreen> {
   }
 
   String _periodLabel() => switch (_period) {
-    ExportPeriod.sevenDays => 'últimos 7 dias',
-    ExportPeriod.thirtyDays => 'últimos 30 dias',
-    ExportPeriod.all => 'todo o período disponível',
-  };
+        ExportPeriod.sevenDays => 'últimos 7 dias',
+        ExportPeriod.thirtyDays => 'últimos 30 dias',
+        ExportPeriod.all => 'todo o período disponível',
+      };
 
   String _formatDate(dynamic value) {
     final date = DateTime.tryParse('$value');
@@ -115,9 +115,9 @@ class _DataExportScreenState extends State<DataExportScreen> {
   }
 
   pw.Widget _footerNote() => pw.Text(
-    'Dados exportados do aparelho por escolha do responsável. Este documento não é diagnóstico, avaliação clínica ou previsão de evolução.',
-    style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700),
-  );
+        'Dados exportados do aparelho por escolha do responsável. Este documento não é diagnóstico, avaliação clínica ou previsão de evolução.',
+        style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey700),
+      );
 
   Future<void> _share(pw.Document document, String filename) async {
     await Printing.sharePdf(bytes: await document.save(), filename: filename);
@@ -147,9 +147,7 @@ class _DataExportScreenState extends State<DataExportScreen> {
             style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
           ),
           if (_entries.isEmpty) pw.Text('Nenhum registro ABC no período.'),
-          ..._entries
-              .take(10)
-              .map(
+          ..._entries.take(10).map(
                 (entry) => pw.Container(
                   margin: const pw.EdgeInsets.only(top: 8),
                   child: pw.Text(
@@ -217,17 +215,17 @@ class _DataExportScreenState extends State<DataExportScreen> {
           ..._profileSection(),
           if (_routine.isEmpty) pw.Text('Nenhum passo configurado.'),
           ..._routine.asMap().entries.map(
-            (entry) => pw.Container(
-              margin: const pw.EdgeInsets.only(bottom: 8),
-              padding: const pw.EdgeInsets.all(8),
-              decoration: pw.BoxDecoration(
-                border: pw.Border.all(color: PdfColors.grey400),
+                (entry) => pw.Container(
+                  margin: const pw.EdgeInsets.only(bottom: 8),
+                  padding: const pw.EdgeInsets.all(8),
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(color: PdfColors.grey400),
+                  ),
+                  child: pw.Text(
+                    '${entry.key + 1}. ${entry.value.emoji} ${entry.value.title} — ${entry.value.completed ? 'concluído por agora' : 'não marcado'}',
+                  ),
+                ),
               ),
-              child: pw.Text(
-                '${entry.key + 1}. ${entry.value.emoji} ${entry.value.title} — ${entry.value.completed ? 'concluído por agora' : 'não marcado'}',
-              ),
-            ),
-          ),
           pw.SizedBox(height: 8),
           _footerNote(),
         ],

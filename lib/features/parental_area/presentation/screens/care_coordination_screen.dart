@@ -9,30 +9,30 @@ class CareCoordinationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DefaultTabController(
-    length: 3,
-    child: Scaffold(
-      backgroundColor: AppTheme.background,
-      appBar: AppBar(
-        title: const Text('Continuidade do cuidado'),
-        backgroundColor: AppTheme.professionalBackground,
-        foregroundColor: Colors.white,
-        bottom: const TabBar(
-          tabs: [
-            Tab(text: 'Perfil'),
-            Tab(text: 'Plano'),
-            Tab(text: 'Agenda'),
-          ],
+        length: 3,
+        child: Scaffold(
+          backgroundColor: AppTheme.background,
+          appBar: AppBar(
+            title: const Text('Continuidade do cuidado'),
+            backgroundColor: AppTheme.professionalBackground,
+            foregroundColor: Colors.white,
+            bottom: const TabBar(
+              tabs: [
+                Tab(text: 'Perfil'),
+                Tab(text: 'Plano'),
+                Tab(text: 'Agenda'),
+              ],
+            ),
+          ),
+          body: const TabBarView(
+            children: [
+              _CommunicationProfileTab(),
+              _CommunicationPlanTab(),
+              _AgendaTab(),
+            ],
+          ),
         ),
-      ),
-      body: const TabBarView(
-        children: [
-          _CommunicationProfileTab(),
-          _CommunicationPlanTab(),
-          _AgendaTab(),
-        ],
-      ),
-    ),
-  );
+      );
 }
 
 class _CommunicationProfileTab extends StatefulWidget {
@@ -175,8 +175,7 @@ class _CommunicationProfileTabState extends State<_CommunicationProfileTab> {
                         context: context,
                         firstDate: DateTime.now(),
                         lastDate: DateTime.now().add(const Duration(days: 730)),
-                        initialDate:
-                            _reviewAt ??
+                        initialDate: _reviewAt ??
                             DateTime.now().add(const Duration(days: 30)),
                       );
                       if (date != null) setState(() => _reviewAt = date);
@@ -195,18 +194,19 @@ class _CommunicationProfileTabState extends State<_CommunicationProfileTab> {
     String label,
     IconData icon,
     String hint,
-  ) => Padding(
-    padding: const EdgeInsets.only(bottom: 12),
-    child: TextField(
-      controller: controller,
-      maxLines: 3,
-      decoration: parentalInputDecoration(
-        labelText: label,
-        hintText: hint,
-        icon: icon,
-      ),
-    ),
-  );
+  ) =>
+      Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: TextField(
+          controller: controller,
+          maxLines: 3,
+          decoration: parentalInputDecoration(
+            labelText: label,
+            hintText: hint,
+            icon: icon,
+          ),
+        ),
+      );
 }
 
 class _CommunicationPlanTab extends StatefulWidget {
@@ -277,95 +277,100 @@ class _CommunicationPlanTabState extends State<_CommunicationPlanTab> {
 
   @override
   Widget build(BuildContext context) => ListView(
-    padding: const EdgeInsets.all(16),
-    children: [
-      const ParentalInfoBanner(
-        icon: Icons.track_changes_outlined,
-        eyebrow: 'PLANO FUNCIONAL',
-        message:
-            'Um objetivo observável, uma estratégia simples e um próximo passo para casa e escola. Não substitui o prontuário profissional.',
-      ),
-      const SizedBox(height: 14),
-      ParentalSurface(
-        child: Column(
-          children: [
-            _field(_title, 'Título do plano', Icons.title_outlined),
-            _field(_context, 'Contexto', Icons.place_outlined),
-            _field(_goal, 'Objetivo funcional', Icons.flag_outlined),
-            _field(_strategy, 'Estratégia combinada', Icons.lightbulb_outline),
-            _field(
-              _family,
-              'Próximo passo para a família',
-              Icons.home_outlined,
+        padding: const EdgeInsets.all(16),
+        children: [
+          const ParentalInfoBanner(
+            icon: Icons.track_changes_outlined,
+            eyebrow: 'PLANO FUNCIONAL',
+            message:
+                'Um objetivo observável, uma estratégia simples e um próximo passo para casa e escola. Não substitui o prontuário profissional.',
+          ),
+          const SizedBox(height: 14),
+          ParentalSurface(
+            child: Column(
+              children: [
+                _field(_title, 'Título do plano', Icons.title_outlined),
+                _field(_context, 'Contexto', Icons.place_outlined),
+                _field(_goal, 'Objetivo funcional', Icons.flag_outlined),
+                _field(
+                    _strategy, 'Estratégia combinada', Icons.lightbulb_outline),
+                _field(
+                  _family,
+                  'Próximo passo para a família',
+                  Icons.home_outlined,
+                ),
+                _field(
+                  _school,
+                  'Próximo passo para escola ou clínica',
+                  Icons.school_outlined,
+                ),
+                DropdownButtonFormField<CarePlanStatus>(
+                  initialValue: _status,
+                  decoration: parentalInputDecoration(
+                    labelText: 'Estado',
+                    icon: Icons.published_with_changes_outlined,
+                  ),
+                  items: CarePlanStatus.values
+                      .map(
+                        (value) => DropdownMenuItem(
+                          value: value,
+                          child: Text(_statusLabel(value)),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) =>
+                      setState(() => _status = value ?? CarePlanStatus.draft),
+                ),
+                const SizedBox(height: 12),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.event_repeat_outlined),
+                  title: const Text('Revisar em'),
+                  subtitle: Text(
+                    _reviewAt == null
+                        ? 'Ainda não definido'
+                        : _date(_reviewAt!),
+                  ),
+                  onTap: () async {
+                    final date = await showDatePicker(
+                      context: context,
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime.now().add(const Duration(days: 730)),
+                      initialDate: _reviewAt ??
+                          DateTime.now().add(const Duration(days: 30)),
+                    );
+                    if (date != null) setState(() => _reviewAt = date);
+                  },
+                ),
+                const SizedBox(height: 10),
+                _saveButton(
+                    _saving ? null : _save, 'Salvar plano de comunicação'),
+              ],
             ),
-            _field(
-              _school,
-              'Próximo passo para escola ou clínica',
-              Icons.school_outlined,
-            ),
-            DropdownButtonFormField<CarePlanStatus>(
-              initialValue: _status,
-              decoration: parentalInputDecoration(
-                labelText: 'Estado',
-                icon: Icons.published_with_changes_outlined,
-              ),
-              items: CarePlanStatus.values
-                  .map(
-                    (value) => DropdownMenuItem(
-                      value: value,
-                      child: Text(_statusLabel(value)),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value) =>
-                  setState(() => _status = value ?? CarePlanStatus.draft),
-            ),
-            const SizedBox(height: 12),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.event_repeat_outlined),
-              title: const Text('Revisar em'),
-              subtitle: Text(
-                _reviewAt == null ? 'Ainda não definido' : _date(_reviewAt!),
-              ),
-              onTap: () async {
-                final date = await showDatePicker(
-                  context: context,
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime.now().add(const Duration(days: 730)),
-                  initialDate:
-                      _reviewAt ?? DateTime.now().add(const Duration(days: 30)),
-                );
-                if (date != null) setState(() => _reviewAt = date);
-              },
-            ),
-            const SizedBox(height: 10),
-            _saveButton(_saving ? null : _save, 'Salvar plano de comunicação'),
-          ],
-        ),
-      ),
-    ],
-  );
+          ),
+        ],
+      );
 
   Widget _field(
     TextEditingController controller,
     String label,
     IconData icon,
-  ) => Padding(
-    padding: const EdgeInsets.only(bottom: 12),
-    child: TextField(
-      controller: controller,
-      maxLines: 3,
-      decoration: parentalInputDecoration(labelText: label, icon: icon),
-    ),
-  );
+  ) =>
+      Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: TextField(
+          controller: controller,
+          maxLines: 3,
+          decoration: parentalInputDecoration(labelText: label, icon: icon),
+        ),
+      );
 
   String _statusLabel(CarePlanStatus status) => switch (status) {
-    CarePlanStatus.draft => 'Rascunho',
-    CarePlanStatus.active => 'Ativo',
-    CarePlanStatus.needsReview => 'Precisa de revisão',
-    CarePlanStatus.archived => 'Arquivado',
-  };
+        CarePlanStatus.draft => 'Rascunho',
+        CarePlanStatus.active => 'Ativo',
+        CarePlanStatus.needsReview => 'Precisa de revisão',
+        CarePlanStatus.archived => 'Arquivado',
+      };
 }
 
 class _AgendaTab extends StatefulWidget {
@@ -533,51 +538,52 @@ class _AgendaTabState extends State<_AgendaTab> {
   }
 
   Widget _appointmentCard(Appointment appointment) => Padding(
-    padding: const EdgeInsets.only(bottom: 10),
-    child: ParentalSurface(
-      child: ListTile(
-        contentPadding: EdgeInsets.zero,
-        leading: const CircleAvatar(child: Icon(Icons.event_outlined)),
-        title: Text(
-          appointment.title,
-          style: const TextStyle(fontWeight: FontWeight.w800),
+        padding: const EdgeInsets.only(bottom: 10),
+        child: ParentalSurface(
+          child: ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const CircleAvatar(child: Icon(Icons.event_outlined)),
+            title: Text(
+              appointment.title,
+              style: const TextStyle(fontWeight: FontWeight.w800),
+            ),
+            subtitle: Text(
+              '${appointment.organization}\n${appointment.professional} · ${_date(appointment.startsAt)}',
+            ),
+            isThreeLine: true,
+            trailing: Chip(label: Text(appointment.statusLabel)),
+          ),
         ),
-        subtitle: Text(
-          '${appointment.organization}\n${appointment.professional} · ${_date(appointment.startsAt)}',
-        ),
-        isThreeLine: true,
-        trailing: Chip(label: Text(appointment.statusLabel)),
-      ),
-    ),
-  );
+      );
 
   Widget _field(
     TextEditingController controller,
     String label,
     IconData icon,
-  ) => Padding(
-    padding: const EdgeInsets.only(bottom: 12),
-    child: TextField(
-      controller: controller,
-      maxLines: 2,
-      decoration: parentalInputDecoration(labelText: label, icon: icon),
-    ),
-  );
+  ) =>
+      Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: TextField(
+          controller: controller,
+          maxLines: 2,
+          decoration: parentalInputDecoration(labelText: label, icon: icon),
+        ),
+      );
 }
 
 Widget _saveButton(VoidCallback? onPressed, String label) => SizedBox(
-  width: double.infinity,
-  child: FilledButton.icon(
-    onPressed: onPressed,
-    icon: const Icon(Icons.save_outlined),
-    label: Text(label),
-    style: FilledButton.styleFrom(
-      minimumSize: const Size.fromHeight(52),
-      backgroundColor: AppTheme.professionalBackground,
-      foregroundColor: Colors.white,
-    ),
-  ),
-);
+      width: double.infinity,
+      child: FilledButton.icon(
+        onPressed: onPressed,
+        icon: const Icon(Icons.save_outlined),
+        label: Text(label),
+        style: FilledButton.styleFrom(
+          minimumSize: const Size.fromHeight(52),
+          backgroundColor: AppTheme.professionalBackground,
+          foregroundColor: Colors.white,
+        ),
+      ),
+    );
 
 String _date(DateTime date) =>
     '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';

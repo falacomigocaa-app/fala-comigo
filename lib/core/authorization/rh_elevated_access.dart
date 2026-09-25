@@ -24,10 +24,10 @@ class RhElevatedAccessDecision {
   const RhElevatedAccessDecision._(this.allowed, this.reason);
 
   const RhElevatedAccessDecision.allow()
-    : this._(true, RhElevatedAccessReason.allowed);
+      : this._(true, RhElevatedAccessReason.allowed);
 
   const RhElevatedAccessDecision.deny(RhElevatedAccessReason reason)
-    : this._(false, reason);
+      : this._(false, reason);
 }
 
 class RhElevatedAccessPolicy {
