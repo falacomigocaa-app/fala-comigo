@@ -195,7 +195,13 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
                     'Escolha uma imagem simples e um nome curto. O nome será falado quando o cartão for usado.',
               ),
               const SizedBox(height: 16),
-              GestureDetector(
+              Semantics(
+                button: true,
+                label: _selectedImagePath == null
+                    ? 'Selecionar imagem do cartão'
+                    : 'Trocar imagem do cartão',
+                hint: 'Abre opções de galeria ou câmera',
+                child: GestureDetector(
                 onTap: () => showModalBottomSheet(
                   context: context,
                   builder: (_) => SafeArea(
@@ -238,6 +244,7 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
                           borderRadius: BorderRadius.circular(16),
                           child: SecureMediaImage(path: _selectedImagePath!),
                         ),
+                ),
                 ),
               ),
               const SizedBox(height: 24),
