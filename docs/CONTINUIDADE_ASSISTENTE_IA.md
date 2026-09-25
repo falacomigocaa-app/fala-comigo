@@ -557,3 +557,22 @@ As mudanças públicas confirmadas na main são os contatos, a entrada discreta 
 Não existe uma chave do criador versionada no Git. O acesso é protegido no servidor por Manus OAuth e `adminProcedure`, que exige uma conta autenticada com `users.role = admin`. O usuário deve entrar com a conta administrativa do proprietário pelo link Espaço do Criador; não deve procurar `JWT_SECRET`, tokens, cookies ou qualquer segredo no Git. `JWT_SECRET` é segredo de sessão do backend, não é uma senha de criador e nunca deve ser commitado.
 
 Regra operacional: GitHub Pages é o destino oficial da interface pública; Manus Space só pode hospedar o backend/portal seguro quando necessário. O link para o portal não significa que a página pública foi transferida para Manus Space.
+
+
+## 41. Decisão: retirar completamente o Manus Space do Criador — 25/09/2026
+
+O proprietário esclareceu que não quer o Espaço do Criador vinculado ao Manus nem ao Manus Space. O e-mail escolhido para o futuro acesso próprio é `falacomigocaa@gmail.com`.
+
+Durante a análise foi iniciada uma implementação de login próprio com usuário e senha, mas ela foi interrompida quando o requisito de hospedagem foi esclarecido. Todos os arquivos da implementação parcial foram removidos e as alterações parciais foram revertidas. Nenhum commit ou checkpoint foi criado para essa tentativa. O portal não deve ser considerado migrado.
+
+Foi explicado que o GitHub Pages é hospedagem estática e não executa banco, backend contínuo, sessões, convites ou permissões server-side. Por isso, um portal real não pode ficar somente no GitHub Pages sem uma infraestrutura de backend independente.
+
+Opções para a próxima etapa:
+
+- **A — recomendada:** manter site e interface pública no GitHub Pages, mover backend/banco para infraestrutura independente do Manus e criar login próprio por e-mail `falacomigocaa@gmail.com` + senha.
+- **B:** manter somente uma interface estática no GitHub Pages, sem autenticação/banco reais; não atende ao portal institucional real.
+- **C:** escolher e avaliar outra infraestrutura independente antes da implementação.
+
+Gate: aguardar a escolha A, B ou C. Se A/C, definir provedor do backend e banco. Não trocar o link público atual nem apagar o portal existente antes de haver substituto funcional. O endereço atual do Criador continua provisoriamente em `https://falacomigo-kyrh225w.manus.space/creator`, e isso deve ser explicitamente comunicado até a migração.
+
+Estado da main: nenhuma mudança de código foi feita por esta tentativa. O manual `CONTINUAR_AQUI_PRIMEIRO.md` foi atualizado com o mesmo ponto de parada.

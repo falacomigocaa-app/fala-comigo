@@ -93,3 +93,26 @@ Ainda não se pode afirmar que o APK corrigido abre em aparelho real, que o Code
 O workflow `Android test APK artifact` da PR 66 terminou com sucesso no run [36109508895](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/36109508895), usando o commit `abe8633` da branch de correção. O APK foi gerado, verificado pelo `apksigner` e publicado como artefato de teste. SHA-256: `63f3d897f07995baff7262b4f43d691733f0e7c80e25f97988a9bc818b373646`.
 
 Esse resultado confirma somente o build e a integridade estrutural do APK. Ainda falta instalar e abrir o aplicativo em aparelho Android real para confirmar que a grade CAA não permanece branca.
+
+
+## Ponto de parada — Espaço do Criador sem Manus Space — 25/09/2026
+
+O proprietário decidiu que não quer vincular o Espaço do Criador ao Manus nem usar o Manus Space. O e-mail desejado para o acesso próprio é `falacomigocaa@gmail.com`. Nenhuma senha deve ser registrada neste repositório ou enviada em texto no chat.
+
+A implementação de login próprio foi apenas iniciada durante a análise e foi totalmente desfeita antes de qualquer commit/checkpoint, para não deixar o portal inconsistente. Não afirmar que o login próprio já existe.
+
+### Limitação técnica que o próximo agente deve explicar
+
+GitHub Pages hospeda somente arquivos estáticos. Ele não executa backend contínuo, banco de dados, sessões seguras, convites, permissões server-side ou assinaturas reais. Portanto, não é tecnicamente possível manter um portal real inteiro somente no GitHub Pages.
+
+### Opções apresentadas ao proprietário
+
+1. **Opção A — recomendada:** site público e interface do Criador no GitHub Pages, com backend e banco em infraestrutura independente do Manus (por exemplo Render, Railway, Fly.io, Cloudflare Workers/D1 ou VPS). O login será próprio com `falacomigocaa@gmail.com` + senha. Nenhum link ou dependência do Manus Space.
+2. **Opção B:** somente GitHub Pages, com uma tela estática. Não haverá autenticação ou banco reais; não serve para administrar organizações, planos e convites.
+3. **Opção C:** avaliar outra infraestrutura independente escolhida pelo proprietário antes de implementar.
+
+### Gate obrigatório antes de programar
+
+Aguardar o proprietário escolher A, B ou C. Se escolher A ou C, confirmar também onde o backend será hospedado e como o banco será provido. Não construir uma falsa autenticação no JavaScript do site. Não apagar o portal atual antes de existir migração funcional e validação.
+
+O link público atual ainda aponta para `https://falacomigo-kyrh225w.manus.space/creator` e isso é conhecido como estado provisório. Só trocar o link depois que o novo destino real estiver funcionando e publicado no GitHub Pages.
