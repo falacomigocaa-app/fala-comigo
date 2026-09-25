@@ -429,3 +429,26 @@ Antes de integrar uma nova função, o agente deve:
 7. repetir o MobSF em marcos relevantes, principalmente antes de piloto ou quando houver mudança de criptografia, permissões, armazenamento ou dependências Android.
 
 Se o novo agente encontrar um conflito entre aumentar a pontuação e preservar uma função importante, deve manter a função e propor uma solução de implementação segura, documentando a decisão para revisão humana.
+
+
+## 23. Retomada segura — auditoria e correções críticas
+
+**Data:** 24 de setembro de 2026.
+**Branch:** `fix/critical-regressions-and-ci`.
+**Base:** `main` no commit `ee07118`.
+
+Foi realizada uma auditoria independente em quatro frentes: núcleo Flutter/CAA, site publicado, segurança OWASP/MobSF e QA/CI. A `main` estava limpa e alinhada com `origin/main`; a auditoria não alterou a `main`.
+
+Foram encontrados e corrigidos nesta branch os seguintes problemas de alto impacto:
+
+- o apagamento local agora inclui a caixa `visual_routine` e repopula os cartões padrão imediatamente, evitando uma grade vazia após o wipe sem reiniciar o processo;
+- a edição de cartão persiste explicitamente `isCustomImage` e aguarda a gravação, evitando que uma foto privada seja renderizada como asset público;
+- TTS e notificações foram retirados do caminho crítico do bootstrap, para que falha de plugin opcional não impeça a abertura da grade CAA;
+- o CI passou a verificar formatação com `dart format --output=none --set-exit-if-changed lib test`;
+- o smoke check do GitHub Pages passou a validar também o protótipo RH;
+- o site alinhou o status MobSF para “varredura concluída; achados em revisão”, melhorou contraste e navegação estreita, marcou o convite RH como indisponível no protótipo e incluiu favicon;
+- foi adicionado teste de regressão para edição de imagem personalizada.
+
+**Limitação atual:** Flutter, Dart e `adb` não estão instalados nesta sessão. Portanto, a validação local de análise, testes, build e dispositivos ainda não foi executada. A branch precisa passar pelo GitHub Actions antes de qualquer merge. A auditoria também confirmou que validação em celular/tablet, acessibilidade com tecnologia assistiva, revisão dinâmica MASVS/MobSF, decisão sobre `minSdk`, revisão do CBC/Hive e backend RH continuam fora do que pode ser declarado pronto.
+
+**Próximo gate:** revisar o diff, fazer commit e abrir uma PR; aguardar CI verde e revisar a saída antes de integrar. Não iniciar cobrança, backend RH real, sincronização clínica, domínio ou publicação ampla.

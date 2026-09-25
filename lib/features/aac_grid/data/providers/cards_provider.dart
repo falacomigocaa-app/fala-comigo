@@ -69,6 +69,7 @@ class CardsNotifier extends StateNotifier<List<PictogramCard>> {
     required String id,
     String? label,
     String? imagePath,
+    bool? isCustomImage,
     String? category,
   }) async {
     final card = _box.get(id);
@@ -77,6 +78,7 @@ class CardsNotifier extends StateNotifier<List<PictogramCard>> {
     final previousWasCustom = card.isCustomImage;
     if (label != null) card.label = label;
     if (imagePath != null) card.imagePath = imagePath;
+    if (isCustomImage != null) card.isCustomImage = isCustomImage;
     if (category != null) card.category = category;
     await card.save();
     if (imagePath != null &&

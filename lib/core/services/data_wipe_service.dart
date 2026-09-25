@@ -5,6 +5,7 @@ import 'parental_pin_service.dart';
 import 'parental_session_service.dart';
 import 'secure_box_service.dart';
 import '../plans/plan_license_store.dart';
+import '../../features/aac_grid/data/providers/seed_cards.dart';
 
 /// Remove os dados criados pelo Fala Comigo neste dispositivo.
 class DataWipeService {
@@ -17,6 +18,7 @@ class DataWipeService {
     'patient_profile',
     'behavior_logs',
     'video_diary',
+    'visual_routine',
     planLicenseBoxName,
   ];
 
@@ -38,12 +40,18 @@ class DataWipeService {
 
     // Recria caixas vazias com uma nova chave para que o app continue
     // utilizável sem exigir uma reinicialização do processo Flutter.
-    await SecureBoxService.openSecureBoxWithMigration('pictogram_cards');
+    final cardsBox = await SecureBoxService.openSecureBoxWithMigration(
+      'pictogram_cards',
+    );
+    for (final card in SeedCards.defaultCards()) {
+      await cardsBox.put(card.id, card);
+    }
     await SecureBoxService.openSecureBoxWithMigration('app_settings');
     await SecureBoxService.openSecureBoxWithMigration('transition_alerts');
     await SecureBoxService.openSecureBox('patient_profile');
     await SecureBoxService.openSecureBox('behavior_logs');
     await SecureBoxService.openSecureBox('video_diary');
+    await SecureBoxService.openSecureBox('visual_routine');
     await SecureBoxService.openSecureBox(planLicenseBoxName);
   }
 }
