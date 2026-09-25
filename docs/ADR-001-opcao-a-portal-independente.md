@@ -125,6 +125,19 @@ PostgreSQL deverá usar grants mínimos e poderá usar Row-Level Security como d
 
 A implementação de produção deverá usar um provedor de identidade gerenciado ou um componente auditado, escolhido em etapa própria. Não criar autenticação artesanal no JavaScript público.
 
+### Decisão de autenticação inicial
+
+Para reduzir complexidade e evitar armazenamento de senhas, o portal adotará como direção de autenticação sem senha:
+
+1. **Google OAuth/OpenID Connect** como opção de entrada rápida para o proprietário e administradores que utilizarem uma conta Google;
+2. **link mágico por e-mail** como alternativa para endereços de qualquer provedor, sem exigir Gmail;
+3. um adaptador de identidade no backend, para que a aplicação não fique presa ao Google ou a um único fornecedor de e-mail;
+4. criação ou ativação de acesso somente após o backend validar convite, organização, papel, finalidade, escopos, validade e revogação.
+
+Google ou o provedor de e-mail confirmam a identidade, mas não concedem autorização de negócio. O backend continua sendo a autoridade final. O primeiro acesso administrativo não será liberado somente porque o e-mail corresponde a um texto conhecido no cliente; ele deverá passar por uma regra de bootstrap protegida no servidor e por MFA do provedor quando disponível.
+
+Essa decisão é de desenho e não habilita OAuth real nesta etapa. O Gate 2 usará identidades sintéticas; a integração real será um gate separado, com ambiente de teste, callback HTTPS, PKCE, tokens nunca persistidos em Git e testes de revogação e sessão.
+
 Antes de qualquer piloto real, a solução deverá definir e testar:
 
 - MFA para contas privilegiadas;
@@ -265,3 +278,4 @@ Este ADR será considerado corretamente aplicado quando:
 ## 12. Histórico de revisão
 
 - **25/09/2026:** Opção A aceita pelo proprietário. ADR criado para separar site institucional, portal autenticado, API e banco; implementação, contratação, cobrança e coleta real continuam pendentes.
+- **25/09/2026:** autenticação sem senha escolhida como direção: Google OAuth/OIDC e link mágico por e-mail, com autorização sempre no backend e integração real adiada para gate próprio.

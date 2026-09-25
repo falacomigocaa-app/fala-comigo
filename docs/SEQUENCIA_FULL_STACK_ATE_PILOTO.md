@@ -325,3 +325,15 @@ A implementação pode avançar sem decisão para tarefas reversíveis. Será ne
 - definir preço final e política de reembolso.
 
 Até essas decisões, o sistema deve permanecer em modo gratuito, local-first, sandbox ou piloto controlado.
+
+## 8. Checkpoint de execução — 25/09/2026
+
+A Opção A foi confirmada e o ADR de arquitetura foi criado. O site institucional oficial permanece no GitHub Pages em <https://falacomigocaa-app.github.io/fala-comigo/>; o login e o portal futuro serão independentes do Pages e do Manus.
+
+O Gate 1A foi concluído documentalmente em `docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md`. Ele define o MVP sintético, as entidades mínimas, papéis, escopos, endpoints, fixtures, auditoria e testes de negação. Nenhum backend, login, banco remoto, provedor, cobrança ou dado real foi criado.
+
+A próxima atividade é o **Gate 2 — implementação local**: criar API modular, PostgreSQL descartável, migrations reproduzíveis, fixtures sintéticas e testes automatizados de isolamento e autorização. A comparação de provedores fica depois da validação local; a troca do link do Criador fica depois da publicação e validação do destino independente.
+
+### Decisão de autenticação para etapa posterior
+
+Depois do Gate 2, a integração de identidade deverá priorizar autenticação sem senha: Google OAuth/OpenID Connect e link mágico por e-mail. O primeiro aceita contas Google; o segundo aceita endereços de qualquer provedor. Nenhuma dessas opções concede autorização automaticamente: convite, organização, papel, finalidade, escopo, prazo e revogação continuam sob decisão da API. A integração real será um gate separado, em ambiente de teste e sem dados reais.

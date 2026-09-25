@@ -592,3 +592,15 @@ Foram concluídos os passos documentais iniciais após a escolha da Opção A. O
 Foi criado `docs/ADR-001-opcao-a-portal-independente.md`, formalizando que o GitHub Pages hospeda somente o site institucional e o encaminhamento, enquanto login, portal, API e banco ficam em origem independente. O ADR define PostgreSQL como modelo relacional inicial, desenvolvimento local/CI com fixtures sintéticas, autorização server-side, portabilidade, critérios de escolha de provedor e gates de segurança, operação, custo e migração.
 
 Esta etapa não implementou backend, login ou banco remoto, não criou contas ou credenciais, não ativou cobrança, não coletou dados reais, não alterou o link do Criador e não alterou a `main`. O próximo passo seguro é especificar o MVP sintético, o modelo PostgreSQL, as migrations e a matriz de autorização em branch própria.
+
+## 44. Gate 1A — especificação do MVP sintético — 25/09/2026
+
+Foi criada a especificação `docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md`. O documento delimita o primeiro recorte sem dados reais, define fixtures determinísticas, entidades mínimas, papéis, escopos, endpoints, auditoria, códigos de erro e uma matriz de casos permitidos/negados entre duas organizações fictícias.
+
+Esta etapa não implementou API, banco, login, provedor, interface autenticada ou cobrança. O Gate 1A está documentado para revisão; o próximo gate é o Gate 2, com implementação local e CI usando PostgreSQL descartável, migrations, fixtures e testes de autorização. A `main` continua sem alteração.
+
+## 45. Direção de autenticação sem senha — 25/09/2026
+
+O proprietário aprovou seguir a alternativa mais simples e flexível para o primeiro acesso real: **Google OAuth/OpenID Connect** e **link mágico por e-mail**, permitindo endereços de qualquer provedor. A solução não armazenará senha própria e não ficará limitada ao Gmail.
+
+Essa é uma decisão de desenho, não uma integração executada. O Gate 2 continuará usando identidades sintéticas e autorização local. A integração real será um gate posterior, com provedor gerenciado, callback HTTPS, PKCE, sessão expirada/revogável, recuperação sem enumeração e auditoria. Google ou e-mail confirmam a identidade; a API continua autoridade para convite, organização, papel, finalidade, escopo, validade e revogação.

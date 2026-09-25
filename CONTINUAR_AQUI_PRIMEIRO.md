@@ -113,7 +113,7 @@ GitHub Pages hospeda somente arquivos estáticos. Ele não executa backend cont�
 
 ### Gate obrigatório antes de programar
 
-Aguardar o proprietário escolher A, B ou C. Se escolher A ou C, confirmar também onde o backend será hospedado e como o banco será provido. Não construir uma falsa autenticação no JavaScript do site. Não apagar o portal atual antes de existir migração funcional e validação.
+A escolha macro A/B/C foi concluída: o proprietário escolheu a **Opção A**. Permanecem como gates separados a especificação, a escolha do provedor, a criação de contas, as credenciais, os custos, a privacidade, a validação e a migração. Não construir uma falsa autenticação no JavaScript do site. Não apagar o portal atual antes de existir migração funcional e validação.
 
 O link público atual ainda aponta para `https://falacomigo-kyrh225w.manus.space/creator` e isso é conhecido como estado provisório. Só trocar o link depois que o novo destino real estiver funcionando e publicado no GitHub Pages.
 
@@ -132,3 +132,9 @@ Toda alteração pública deve continuar sendo feita em `site/`, passar por bran
 Em 25/09/2026, o `PROJECT_HANDOFF.md` foi atualizado para refletir o estado atual da `main`, a Opção A e a separação entre site institucional e portal autenticado. Foi criado o ADR [`docs/ADR-001-opcao-a-portal-independente.md`](docs/ADR-001-opcao-a-portal-independente.md), que formaliza a arquitetura, os limites do GitHub Pages, o MVP sintético e os gates antes de login, provedor, cobrança ou dados reais.
 
 Esta etapa foi somente documental. Não houve implementação de backend, criação de conta externa, contratação, cobrança, coleta de dados, troca do link do Criador ou alteração da `main`.
+
+### Gate 1A concluído — especificação do MVP sintético
+
+Foi criada a especificação [`docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md`](docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md). Ela delimita o MVP sem dados reais, define fixtures determinísticas, entidades mínimas, papéis, escopos, endpoints, auditoria, matriz de autorização e testes de negação.
+
+O Gate 1A não implementa login, API, banco remoto, provedor, cobrança ou interface autenticada. O próximo passo é o **Gate 2 — implementação local**, em branch separada, com PostgreSQL descartável, migrations, fixtures e testes automatizados. Não iniciar o Gate 2 antes de revisar esta especificação e manter a `main` protegida.

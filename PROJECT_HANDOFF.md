@@ -134,6 +134,8 @@ Em 25/09/2026, o proprietário confirmou a Opção A para o Espaço do Criador:
 
 O GitHub Pages não é um backend e não deve receber senhas, manter sessões ou exercer autorização server-side. A API será a autoridade de autorização do portal. O aplicativo CAA continuará local-first: comunicação básica, acessibilidade, modo offline e dados locais não dependerão do portal.
 
+A direção aprovada para o primeiro login real é autenticação sem senha com **Google OAuth/OpenID Connect** e **link mágico por e-mail**, aceitando endereços de qualquer provedor. Essa integração não será feita no Gate 1A nem antes da autorização local estar testada. O provedor confirma a identidade; a API decide convite, organização, papel, finalidade, escopo, validade e revogação.
+
 O documento de decisão correspondente é [`docs/ADR-001-opcao-a-portal-independente.md`](docs/ADR-001-opcao-a-portal-independente.md). O plano mestre da equipe está em [`docs/equipe-mestra/00-plano-mestre-opcao-a.md`](docs/equipe-mestra/00-plano-mestre-opcao-a.md).
 
 ## Nova sequência full-stack até o piloto institucional
@@ -155,9 +157,10 @@ A regra é separar aplicativo local, site público, portal conectado e console a
 9. Corrigir primeiro falhas do CI ou do núcleo CAA.
 10. Trabalhar em branch própria, adicionar teste, revisar diff, comitar e enviar ao GitHub.
 11. Ler e seguir [`docs/ADR-001-opcao-a-portal-independente.md`](docs/ADR-001-opcao-a-portal-independente.md).
-12. Criar primeiro a especificação do MVP sintético, o modelo PostgreSQL, as migrations e os testes de autorização em ambiente local/CI descartável.
-13. Comparar provedores somente após a especificação; não criar contas nem ativar cobrança sem decisão específica.
-14. Seguir `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`, mantendo o portal sem dados reais até concluir os gates de segurança, privacidade, backup/restauração e operação.
+12. Revisar [`docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md`](docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md) como Gate 1A concluído.
+13. Executar o Gate 2 em branch separada: API local, PostgreSQL descartável, migrations, fixtures e testes de autorização.
+14. Só depois da validação local, abrir um gate específico para integrar Google OAuth e link mágico em ambiente de teste; comparar provedores e não ativar cobrança sem decisão específica.
+15. Seguir `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`, mantendo o portal sem dados reais até concluir os gates de segurança, privacidade, backup/restauração e operação.
 
 Comandos básicos:
 
@@ -237,6 +240,7 @@ Não tratar documentação conceitual como implementação existente. O portal e
 - `docs/CONTRATO_PORTAL_CONECTADO.md`: entidades, estados, escopos e fila offline comuns ao app e web.
 - `docs/CONTRATO_API_CONTINUIDADE_CUIDADO.md`: endpoints, payloads, consentimentos e testes de negação do portal.
 - `docs/ADR-001-opcao-a-portal-independente.md`: decisão de arquitetura para o site público, portal, API, banco e gates da Opção A.
+- `docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md`: escopo, modelo mínimo, matriz de autorização e testes do Gate 1A.
 - `docs/equipe-mestra/00-plano-mestre-opcao-a.md`: consolidação da auditoria multidisciplinar e plano mestre.
 - `docs/ESTUDO_PRECOS_PLANOS.md`: pesquisa de mercado e faixas de preço para validação.
 - `docs/MAPA_FUNCIONALIDADES_SAAS_CLINICAS.md`: recursos de SaaS clínico priorizados para ajudar famílias.
