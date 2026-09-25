@@ -539,3 +539,11 @@ O workflow `site-pages.yml` concluiu com sucesso. A página pública agora exibe
 ## 38. Correção do WhatsApp oficial — 25/09/2026
 
 O proprietário corrigiu o telefone oficial para **67 99163-2279**. A URL de compartilhamento deve usar `https://wa.me/5567991632279`. O site público foi ajustado e o portal real também foi ajustado para exibir o mesmo número.
+
+## 39. Regra oficial de destino Web — GitHub Pages — 25/09/2026
+
+O proprietário determinou que o endereço público oficial é `https://falacomigocaa-app.github.io/fala-comigo/`. Toda atualização pública de conteúdo, layout, contato, navegação ou função compatível com o site deve ser feita em `site/`, mesclada na `main` e confirmada pelo workflow `site-pages.yml` e pelo endereço público.
+
+O Manus Space não deve substituir o GitHub Pages nem ser apresentado como a página pública oficial. Pode existir somente como ambiente técnico separado para backend autenticado, banco, testes ou preview, quando necessário. Autenticação, permissões server-side e assinaturas reais não devem ser simuladas ou protegidas apenas no GitHub Pages; nesse caso a interface pública permanece no Pages e o backend seguro fica separado, com a separação documentada.
+
+A lista de continuidade deve ser atualizada após cada etapa, com branch, PR, commit, workflow, resultado e próximo gate. Uma tarefa Web só será considerada concluída quando o destino correto tiver sido publicado e conferido.
