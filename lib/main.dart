@@ -42,7 +42,7 @@ Future<void> _bootstrap() async {
   final box = await SecureBoxService.openSecureBoxWithMigration<PictogramCard>(
     cardsBoxName,
   );
-  await SecureBoxService.openSecureBoxWithMigration<PictogramCard>(
+  await SecureBoxService.openSecureBoxWithMigration<dynamic>(
     'app_settings',
   );
   await SecureBoxService.openSecureBoxWithMigration(transitionAlertsBoxName);
