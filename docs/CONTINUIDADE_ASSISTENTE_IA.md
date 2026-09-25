@@ -363,3 +363,8 @@ A alteração move a inicialização de Hive, armazenamento seguro, migrações 
 **Arquivos alterados:** `lib/main.dart`.
 
 **Gate desta etapa:** validar formatação, CI e geração de APK Debug; instalar no aparelho e confirmar que a primeira tela aparece. Nenhuma funcionalidade posterior deve ser reincorporada antes desse gate.
+
+
+### Resultado do primeiro gate
+
+A PR #65 passou no workflow `Flutter quality checks`, run `36105349247`: formatação, análise estática, política de assinatura, testes e build Web concluídos com sucesso. O CI não substitui o teste de abertura no aparelho; o próximo gate é gerar APK da branch `fix/bootstrap-after-runapp` no Codemagic e confirmar a primeira tela.
