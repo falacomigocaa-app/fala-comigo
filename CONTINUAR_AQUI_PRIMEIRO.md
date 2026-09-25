@@ -1,10 +1,26 @@
 # LEIA PRIMEIRO — Continuidade obrigatória do Fala Comigo
 
-O prompt completo para iniciar outro agente está em [`PROMPT_RETORNO_NOVO_AGENTE.md`](PROMPT_RETORNO_NOVO_AGENTE.md). Ele pode ser copiado integralmente para uma nova conversa.
+O manual completo para iniciar outro agente está em [`MANUAL_CONTINUIDADE_MESTRE.md`](MANUAL_CONTINUIDADE_MESTRE.md). Ele pode ser copiado integralmente para uma nova conversa. O prompt histórico [`PROMPT_RETORNO_NOVO_AGENTE.md`](PROMPT_RETORNO_NOVO_AGENTE.md) continua preservado para consulta.
 
 > **Não alterar a `main` diretamente.** Antes de executar qualquer correção, leia este arquivo, `AGENTS.md`, `PROJECT_HANDOFF.md` e `docs/HANDOFF_TELA_BRANCA_APK.md`.
 
-## Estado imediato em 25/09/2026
+## Estado imediato em 25/09/2026 — integração concluída
+
+A integração foi mesclada na `main` pela PR 67, com commit `7aa12f5`. O CI pós-merge e o deploy do GitHub Pages terminaram com sucesso. Foram aprovados 92 testes Flutter locais, o build Web release e o APK debug local. A branch `integration/finalize-project` foi preservada para auditoria.
+
+Para uma nova demanda, o agente deve analisar primeiro e pedir confirmação somente antes de merge, publicação, release, cobrança, alteração de acesso ou outra ação irreversível. Decisões técnicas locais e reversíveis podem ser executadas dentro do escopo autorizado.
+
+Após cada demanda, o agente deve comparar o resultado com os agentes anteriores, classificar o estado como resolvido, parcial, pendente, falha conhecida ou novo trabalho, e atualizar este arquivo, `PROJECT_HANDOFF.md` e `docs/CONTINUIDADE_ASSISTENTE_IA.md`. Nenhuma etapa deve ser declarada concluída sem evidência.
+
+### Verificação de layouts — 25/09/2026
+
+As PRs 30, 32, 33 e 66 foram confirmadas como ancestrais da `main` atual em `7aa12f5`; não mesclar novamente. O dashboard parental atual contém as rotas de rotina, diário, alertas, tendências, relatórios, perfil, privacidade, acesso familiar, tarefas compartilhadas e continuidade do cuidado. Um APK foi gerado diretamente da `main` para teste visual; SHA-256 `e5f626b361c16add29a8bf5993df57acbc141b9ef079b4313bb079cdf32b964c`. Ainda falta a comparação em aparelho/emulador real.
+
+O proprietário confirmou que o APK da correção `app_settings` funcionou. A PR 69 está aberta, com CI `analyze-and-test` aprovado e estado `MERGEABLE`; aguardar confirmação explícita antes de mesclar na `main`.
+
+O estado histórico abaixo explica a investigação original da tela branca; não deve ser interpretado como se a `main` ainda estivesse sem a correção.
+
+## Estado histórico da tela branca — preservado para contexto
 
 O projeto está em uma branch de correção chamada `fix/main-startup-and-android-build`, baseada na `origin/main` no commit `0d0b685`. A `main` remota não foi alterada nesta retomada.
 

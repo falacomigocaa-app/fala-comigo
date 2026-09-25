@@ -529,3 +529,85 @@ Os conflitos foram resolvidos manualmente. A resolução preserva a correção A
 Ainda não foi criado commit ou push desta branch. Flutter, Dart e adb não estão disponíveis nesta sessão; portanto, format, análise, testes, build Web, APK e teste em aparelho continuam gates obrigatórios no CI e na validação humana. A `main` remota não foi alterada.
 
 Próximo passo: revisar o diff completo, executar `git diff --check`, registrar o commit da integração e enviar uma PR de integração para que o CI valide a combinação antes de qualquer decisão sobre a `main`.
+
+
+## 28. Manual mestre e estado final da integração — 25/09/2026
+
+Foi criado o manual operacional [`MANUAL_CONTINUIDADE_MESTRE.md`](../MANUAL_CONTINUIDADE_MESTRE.md). Ele define a ordem de leitura, o contexto do projeto, o estado real da `main`, a atuação como equipe técnica, exemplos de comandos do proprietário, formato de atualização e os momentos em que o agente deve pedir confirmação.
+
+A integração da PR 67 foi concluída na `main` com o commit `7aa12f5` (`Merge integration: Android startup fix and parental area`). A branch `integration/finalize-project` foi preservada para auditoria.
+
+Evidências finais registradas na sessão:
+
+- CI da PR e CI pós-merge: sucesso;
+- deploy do site institucional no GitHub Pages: sucesso;
+- 92 testes Flutter locais: aprovados;
+- análise estática sem erros fatais;
+- formatter Flutter 3.38.0: aprovado;
+- build Web release local: aprovado;
+- APK debug local: aprovado, aproximadamente 153 MB.
+
+O APK debug não é uma release de produção. A publicação Android de produção continua dependente de keystore de release, validação em aparelho real e demais gates do checklist. O backend conectado, sincronização clínica, cobrança real e domínio definitivo continuam fora do escopo implementado.
+
+A partir desta data, qualquer agente deve tratar a descrição histórica anterior deste documento como histórico, consultar a `main` real e seguir o manual mestre antes de agir. Para ações externas de alto impacto, o agente deve apresentar o payload e aguardar confirmação explícita do proprietário.
+
+
+## 29. Regra reforçada de continuidade entre agentes — 25/09/2026
+
+O proprietário confirmou que a continuidade deve ser atualizada em toda demanda para que outros agentes entendam imediatamente o que já foi feito. O manual mestre agora exige comparação com o trabalho anterior, classificação do estado como resolvido, parcial, pendente, falha conhecida ou novo trabalho, registro das evidências e indicação explícita do próximo gate.
+
+Nenhuma alteração de código foi feita nesta etapa; somente a documentação de continuidade foi reforçada. A regra passa a valer para todas as retomadas futuras.
+
+## 30. Verificação dos layouts parentais na main — 25/09/2026
+
+Foi analisado o contexto `CONTEXTO_RECUPERACAO_LAYOUTS_AGENTE(1).txt` enviado pelo proprietário. A comparação confirmou que as PRs 30, 32, 33 e 66 são ancestrais da `origin/main` no commit `7aa12f5`; não devem ser mescladas novamente.
+
+A `main` atual contém os arquivos do dashboard e os módulos parentais de rotina, diário, alertas, tendências, relatórios, perfil, privacidade, acesso familiar, tarefas compartilhadas e continuidade do cuidado. A leitura de `settings_screen.dart` confirmou que esses módulos possuem rotas acessíveis pelo dashboard atual.
+
+Nenhuma alteração de código foi feita nesta etapa; somente análise e geração de artefato. Foi gerado um APK diretamente da `origin/main` em `7aa12f5`, com sucesso. SHA-256: `e5f626b361c16add29a8bf5993df57acbc141b9ef079b4313bb079cdf32b964c`. O artefato foi salvo fora do repositório em `/home/ubuntu/fala-comigo-main-7aa12f5-layout-check.apk`.
+
+Conclusão: a hipótese mais forte é que o APK anteriormente testado (`abe8633`) era anterior à integração visual completa. O próximo passo é instalar o APK da main atual em aparelho/emulador e comparar visualmente. Só recuperar código antigo se uma tela realmente estiver ausente nessa versão.
+
+## 31. Correção do erro app_settings — 25/09/2026
+
+Ao testar o APK gerado da `main` atual, foi reproduzido o erro `HiveError: The box "app_settings" is already open and of type Box<PictogramCard>`. A causa foi localizada em `lib/main.dart`: o bootstrap abria `app_settings` com o tipo de `pictogram_cards`, embora a caixa de configurações armazene valores heterogêneos.
+
+Foi criada a branch `fix/app-settings-box-type` com o commit `078ebcd`. A correção troca somente a abertura de `app_settings` para `Box<dynamic>` e preserva `pictogram_cards` como `Box<PictogramCard>`. A PR 69 foi aberta para `main`.
+
+Validações locais da branch: formatter aprovado, análise sem erros fatais, suíte de testes aprovada e APK debug aprovado. SHA-256 do APK corrigido: `8217746f4846dd447406733c246e412ae81394ff6c7ca6ee1aa2da085fc4d168`.
+
+O APK corrigido ainda precisa ser instalado e testado no aparelho. O merge da PR 69 depende dos checks remotos e de confirmação do proprietário.
+
+## 32. Confirmação do APK corrigido — 25/09/2026
+
+O proprietário confirmou que o APK da branch `fix/app-settings-box-type` funcionou após a correção da tipagem Hive de `app_settings`. A PR 69 está aberta contra `main`, com `analyze-and-test` aprovado, estado `MERGEABLE` e sem conflito.
+
+A correção está pronta para merge técnico, mas o merge permanece pendente de confirmação explícita do proprietário conforme o manual de continuidade.
+
+## 33. PR 69 mesclada na main — 25/09/2026
+
+Após confirmação explícita do proprietário, a PR 69 foi mesclada na `main`. O commit resultante é `9e97da0` (`Fix app_settings Hive box type`). A correção testada no APK agora está oficial na linha principal.
+
+O workflow pós-merge `Flutter quality checks` foi disparado para o commit `9e97da0` e estava `in_progress` no momento deste registro. O resultado final deve ser verificado antes de declarar a etapa totalmente encerrada.
+
+## 34. Escopo profissional de organizações, convites e assinantes — 25/09/2026
+
+A auditoria confirmou que o app atual possui `AccessGrant` e permissões locais, mas não envia convite remoto nem cria autorização server-side. O `site/portal.html` é uma prévia estática com dados sintéticos; seus botões não autenticam, não persistem dados e não processam assinaturas.
+
+Foi criado `docs/ESCOPO_PORTAL_ORGANIZACOES_ASSINANTES.md`, com o fluxo de convite individual e expirável, consentimento separado de benefício, matriz de papéis e escopos, arquitetura Web full-stack, planos de assinantes, fases, testes de negação e decisões necessárias. Não foi ativada cobrança, backend real ou compartilhamento de dados.
+
+## 35. Portal real e contatos públicos — 25/09/2026
+
+O proprietário confirmou que não deseja somente protótipo e já possui escola e clínica ABA para teste controlado. Foi inicializado o projeto Web full-stack real `/home/ubuntu/fala-comigo-portal`, com autenticação Manus, banco MySQL/TiDB, API tRPC e armazenamento preparado.
+
+Primeiro corte implementado: organizações, membros, convites individuais com token hash, expiração, aceite autenticado, auditoria mínima e limite server-side. A regra inicial de piloto foi aplicada: organização começa com `seatLimit = 1`; ao atingir o limite, adicionar pessoa exige ativação do plano Organização. Benefício patrocinado e permissão de dados continuam separados.
+
+O portal tem dashboard autenticado, criação de organização, preparação de convite, cópia/compartilhamento do link, página `/invite/:token` e aceite com visualização de finalidade, escopos e prazo. O fluxo real ainda está em validação automatizada antes do checkpoint/publicação.
+
+O site institucional foi atualizado para contato por `falacomigocaa@gmail.com` e WhatsApp `+55 67 99163-32279`. O portal está separado do site público; `site/portal.html` continua identificado como prévia estática até o portal real ser publicado.
+
+## 36. Espaço do Criador protegido — 25/09/2026
+
+Foi solicitado um espaço reservado para o criador entrar pela página pública e administrar planos. A solução adotada é segura: o site público tem apenas um link discreto no rodapé para o portal; o servidor protege `/creator` com `adminProcedure` e a conta administrativa do proprietário.
+
+O Espaço do Criador permite consultar organizações e alterar plano/limite de pessoas, registrando a ação na auditoria. O piloto começa com uma pessoa e pode ser ampliado somente pelo administrador após confirmação comercial. Não foi colocada uma chave secreta no JavaScript público; uma chave exposta seria copiável e não protegeria o sistema. Se for necessária uma segunda camada, ela deverá ser configurada como segredo de servidor, nunca como texto no site.
