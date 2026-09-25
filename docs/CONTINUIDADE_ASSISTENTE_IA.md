@@ -529,3 +529,24 @@ Os conflitos foram resolvidos manualmente. A resolução preserva a correção A
 Ainda não foi criado commit ou push desta branch. Flutter, Dart e adb não estão disponíveis nesta sessão; portanto, format, análise, testes, build Web, APK e teste em aparelho continuam gates obrigatórios no CI e na validação humana. A `main` remota não foi alterada.
 
 Próximo passo: revisar o diff completo, executar `git diff --check`, registrar o commit da integração e enviar uma PR de integração para que o CI valide a combinação antes de qualquer decisão sobre a `main`.
+
+
+## 28. Manual mestre e estado final da integração — 25/09/2026
+
+Foi criado o manual operacional [`MANUAL_CONTINUIDADE_MESTRE.md`](../MANUAL_CONTINUIDADE_MESTRE.md). Ele define a ordem de leitura, o contexto do projeto, o estado real da `main`, a atuação como equipe técnica, exemplos de comandos do proprietário, formato de atualização e os momentos em que o agente deve pedir confirmação.
+
+A integração da PR 67 foi concluída na `main` com o commit `7aa12f5` (`Merge integration: Android startup fix and parental area`). A branch `integration/finalize-project` foi preservada para auditoria.
+
+Evidências finais registradas na sessão:
+
+- CI da PR e CI pós-merge: sucesso;
+- deploy do site institucional no GitHub Pages: sucesso;
+- 92 testes Flutter locais: aprovados;
+- análise estática sem erros fatais;
+- formatter Flutter 3.38.0: aprovado;
+- build Web release local: aprovado;
+- APK debug local: aprovado, aproximadamente 153 MB.
+
+O APK debug não é uma release de produção. A publicação Android de produção continua dependente de keystore de release, validação em aparelho real e demais gates do checklist. O backend conectado, sincronização clínica, cobrança real e domínio definitivo continuam fora do escopo implementado.
+
+A partir desta data, qualquer agente deve tratar a descrição histórica anterior deste documento como histórico, consultar a `main` real e seguir o manual mestre antes de agir. Para ações externas de alto impacto, o agente deve apresentar o payload e aguardar confirmação explícita do proprietário.

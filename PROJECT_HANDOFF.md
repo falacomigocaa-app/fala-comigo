@@ -4,12 +4,15 @@
 
 Este documento existe para permitir que outra pessoa, agente ou IA entenda o projeto sem depender do histórico desta conversa. Leia primeiro este arquivo, depois `AGENTS.md`, `README.md`, `docs/PLANO_SEQUENCIAL_ATE_BUILD.md` e `docs/CHECKLIST_PRE_LANCAMENTO.md`.
 
+Para continuidade operacional, leia também [`MANUAL_CONTINUIDADE_MESTRE.md`](MANUAL_CONTINUIDADE_MESTRE.md), que explica como outro agente deve analisar, pedir confirmação e executar novas demandas sem bagunçar o processo.
+
 O código oficial está no GitHub:
 
 - Repositório: https://github.com/falacomigocaa-app/fala-comigo
 - Branch principal: `main`
-- Branch de trabalho atual: `feat/parental-area-professional-v2`
-- Último commit registrado neste handoff: `5464914 — feat: add family care coordination foundation`
+- Branch de trabalho histórica: `integration/finalize-project`
+- Estado atual: integração concluída na `main`
+- Último commit confirmado na `main`: `7aa12f5 — Merge integration: Android startup fix and parental area`
 
 Não existem segredos, tokens, senhas ou chaves privadas neste documento. Nunca coloque credenciais no Git.
 

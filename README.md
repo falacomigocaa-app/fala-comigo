@@ -1,6 +1,6 @@
 # Fala Comigo — Comunicação Alternativa e Aumentativa (CAA)
 
-> **Retomada obrigatória:** antes de alterar o projeto, leia [`CONTINUAR_AQUI_PRIMEIRO.md`](CONTINUAR_AQUI_PRIMEIRO.md). Ele registra o estado atual, a investigação da tela branca do APK, as PRs que não devem ser mescladas diretamente e a sequência de validação. Depois leia `AGENTS.md`, `PROJECT_HANDOFF.md` e o handoff específico em `docs/`.
+> **Retomada obrigatória:** antes de alterar o projeto, leia [`CONTINUAR_AQUI_PRIMEIRO.md`](CONTINUAR_AQUI_PRIMEIRO.md) e [`MANUAL_CONTINUIDADE_MESTRE.md`](MANUAL_CONTINUIDADE_MESTRE.md). Eles registram o estado final, o modo de atuação da equipe de IA, os momentos de confirmação e a sequência de validação. Depois leia `AGENTS.md`, `PROJECT_HANDOFF.md` e o handoff específico em `docs/`.
 
 App Flutter de Comunicação Alternativa (CAA/PECS) para autismo, com
 grade de pictogramas, construtor de frases por voz (TTS pt-BR) e
