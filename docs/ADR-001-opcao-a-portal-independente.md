@@ -29,13 +29,15 @@ Adotar a **Opção A**:
 
 ### Regra crítica de experiência e acesso
 
-O login descrito neste ADR pertence **somente ao portal institucional/administrativo**. Ele não será exigido para abrir ou usar a Área da Criança e do Adolescente no aplicativo Flutter.
+O login descrito neste ADR pertence **ao controle de usuários do portal e, quando desejado, à vinculação opcional do responsável ao aplicativo**. Ele não será exigido para abrir ou usar a Área da Criança e do Adolescente no aplicativo Flutter. O objetivo do login é identificar contas, responsáveis, organizações, dispositivos ou usuários autorizados — não criar uma barreira para a comunicação.
 
 - o aplicativo deve abrir rapidamente e funcionar localmente, inclusive sem Internet;
 - a criança ou adolescente não deve ver uma tela de login para acessar comunicação básica, cartões, frases, acessibilidade ou conteúdo local;
 - expiração, revogação ou falha da sessão do portal não pode bloquear nem deslogar o núcleo local do aplicativo;
 - atualização, sincronização ou colaboração conectada serão opcionais e separadas do fluxo principal;
 - eventual sessão parental/PIN local é controle de privacidade do dispositivo, não login remoto e não pode transformar o uso básico em dependente de conta.
+
+O responsável poderá vincular uma conta ao aplicativo para recursos administrativos futuros, como gerenciar usuários autorizados, recuperar configurações, acompanhar o estado da conta ou sincronizar dados escolhidos. Essa vinculação deve ser lembrada no dispositivo e não pode gerar pedidos repetidos de login à criança/adolescente. O controle de usuários deve limitar administração, portal, sincronização e dados conectados; não deve restringir cartões, frases, acessibilidade ou comunicação básica local.
 
 Qualquer futura integração entre aplicativo e portal deve ser opt-in, compatível com modo offline e incapaz de impedir a comunicação básica. Esse requisito tem prioridade sobre conveniência de autenticação, assinatura ou sincronização.
 

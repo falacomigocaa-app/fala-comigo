@@ -18,6 +18,8 @@ A comunicação básica nunca dependerá do portal, de pagamentos, de conexão o
 
 **Regra de não bloqueio:** o login do portal institucional não é login do aplicativo da criança/adolescente. O app deve abrir rápido e manter comunicação básica, acessibilidade e uso offline sem conta ou Internet. Logout, expiração ou falha do portal não pode deslogar, apagar ou restringir o núcleo local.
 
+O login poderá ser usado para controlar e administrar usuários, responsáveis, organizações, dispositivos e recursos conectados. Essa governança não é uma restrição de uso: a vinculação opcional do responsável pode persistir no dispositivo, enquanto cartões, frases, acessibilidade e comunicação básica permanecem disponíveis.
+
 ## 2. Fluxo do proprietário do aplicativo
 
 O proprietário terá uma área administrativa separada da Área do Responsável. Ela não deve ser colocada dentro do aplicativo da criança.
