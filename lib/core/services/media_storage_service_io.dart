@@ -39,7 +39,10 @@ class MediaStorageService {
 
   /// Copia [sourcePath] para a área privada e grava somente a versão cifrada.
   /// O caminho retornado é o identificador persistente a ser salvo no Hive.
-  static Future<String> persistFile(String sourcePath) async {
+  static Future<String> persistFile(
+    String sourcePath, {
+    String? extensionHint,
+  }) async {
     final source = File(sourcePath);
     if (!await source.exists()) {
       throw FileSystemException('Mídia de origem não encontrada', sourcePath);
@@ -50,7 +53,7 @@ class MediaStorageService {
     }
 
     final mediaDir = await _mediaDirectory();
-    final extension = _safeExtension(sourcePath);
+    final extension = _safeExtension(sourcePath, fallback: extensionHint ?? '');
     if (!_allowedExtensions.contains(extension)) {
       throw const FormatException('Formato de mídia não permitido.');
     }

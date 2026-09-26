@@ -16,6 +16,10 @@ O produto será dividido em quatro superfícies relacionadas, mas independentes:
 
 A comunicação básica nunca dependerá do portal, de pagamentos, de conexão ou de aprovação de uma instituição. O portal será uma extensão opcional para colaboração autorizada.
 
+**Regra de não bloqueio:** o login do portal institucional não é login do aplicativo da criança/adolescente. O app deve abrir rápido e manter comunicação básica, acessibilidade e uso offline sem conta ou Internet. Logout, expiração ou falha do portal não pode deslogar, apagar ou restringir o núcleo local.
+
+O login poderá ser usado para controlar e administrar usuários, responsáveis, organizações, dispositivos e recursos conectados. Essa governança não é uma restrição de uso: a vinculação opcional do responsável pode persistir no dispositivo, enquanto cartões, frases, acessibilidade e comunicação básica permanecem disponíveis.
+
 ## 2. Fluxo do proprietário do aplicativo
 
 O proprietário terá uma área administrativa separada da Área do Responsável. Ela não deve ser colocada dentro do aplicativo da criança.
@@ -161,6 +165,8 @@ Até lá, serão usados catálogo, licenças fictícias e ambiente de teste. Nen
 
 **Pronto quando:** toda autorização é decidida no servidor e não apenas escondida na interface.
 
+**Gate 3A concluído em 26/09/2026:** a API sintética agora testa sujeito infantil, consentimento, convite ligado ao consentimento, grant por pessoa+sujeito+organização e revogação. O próximo Gate 3B deve integrar identidade real, banco persistente e portal web mínimo, ainda com dados sintéticos.
+
 ### Sequência 04 — Convites e autorização do responsável
 
 **Entrega:** fluxo para responsável autorizar clínica ou escola.
@@ -170,6 +176,10 @@ Até lá, serão usados catálogo, licenças fictícias e ambiente de teste. Nen
 **Exemplo:** o responsável compartilha somente “tarefas de comunicação e relatório do período” com uma clínica até uma data definida.
 
 **Pronto quando:** revogar o acesso impede novas leituras e downloads imediatamente, respeitando registros de auditoria e obrigações de retenção.
+
+**Fluxo obrigatório antes da implementação real:** o responsável usa o site autenticado; cadastra `FamilySpace` e `ChildSubject`; escolhe organização verificada e pessoa nominal; seleciona finalidade, categorias de dados, ações e prazo; confirma consentimento; envia convite por e-mail ou link de resgate. Escola, clínica, cuidadora, professor e terapeuta acessam pelo site com contas individuais. O app CAA infantil não é necessário para o portal e nunca pode ser bloqueado por login, sessão ou revogação remota.
+
+**Não está pronto:** a API local usa identidade sintética e memória/fixtures; ainda não há e-mail, token de convite real, consentimento versionado, verificação de organização, sujeito infantil conectado a grants, sessão real ou revogação de conteúdo em produção.
 
 ### Sequência 05 — Modelos locais no aplicativo
 
@@ -325,3 +335,23 @@ A implementação pode avançar sem decisão para tarefas reversíveis. Será ne
 - definir preço final e política de reembolso.
 
 Até essas decisões, o sistema deve permanecer em modo gratuito, local-first, sandbox ou piloto controlado.
+
+## 8. Checkpoint de execução — 25/09/2026
+
+A Opção A foi confirmada e o ADR de arquitetura foi criado. O site institucional oficial permanece no GitHub Pages em <https://falacomigocaa-app.github.io/fala-comigo/>; o login e o portal futuro serão independentes do Pages e do Manus.
+
+O Gate 1A foi concluído documentalmente em `docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md`. Ele define o MVP sintético, as entidades mínimas, papéis, escopos, endpoints, fixtures, auditoria e testes de negação. Nenhum backend, login, banco remoto, provedor, cobrança ou dado real foi criado.
+
+A próxima atividade é o **Gate 2 — implementação local**: criar API modular, PostgreSQL descartável, migrations reproduzíveis, fixtures sintéticas e testes automatizados de isolamento e autorização. A comparação de provedores fica depois da validação local; a troca do link do Criador fica depois da publicação e validação do destino independente.
+
+O Gate 2 foi dividido para evitar mistura de responsabilidades. O **Gate 2A** criou a API local sintética, fixtures, autorização, auditoria, idempotência e testes sem dependências externas. O **Gate 2B** foi concluído com migration e teste de integração contra PostgreSQL 16.15 descartável; a instância foi encerrada e removida. O próximo passo é o **Gate 3 — segurança e operação**, antes de qualquer identidade real ou provedor externo.
+
+### Pesquisa comparativa de CAA — 26/09/2026
+
+Foi consolidada a comparação de Proloquo, TD Snap, Grid for iPad, TouchChat HD, CoughDrop, Cboard, Avaz AAC e Fala Comigo. O documento `docs/AVALIACAO_COMPARATIVA_CAA_E_FILA_MELHORIAS.md` é a fonte da fila de aperfeiçoamento. A conclusão não é um ranking clínico: os concorrentes estão à frente em distribuição e maturidade operacional, enquanto o Fala Comigo tem diferenciação potencial em português brasileiro, privacidade local, custo do núcleo essencial e independência de conta/portal.
+
+Antes de qualquer portal ou login real, executar os bloqueadores **P0** e a validação **P1**: aparelho Android real, abertura/offline, TTS pt-BR, acessibilidade, armazenamento seguro, identidade de distribuição, política coerente e testes participativos. O controle de usuários permanece separado da comunicação infantil e não pode transformar melhorias conectadas em restrição do app.
+
+### Decisão de autenticação para etapa posterior
+
+Depois do Gate 2, a integração de identidade deverá priorizar autenticação sem senha: Google OAuth/OpenID Connect e link mágico por e-mail. O primeiro aceita contas Google; o segundo aceita endereços de qualquer provedor. Nenhuma dessas opções concede autorização automaticamente: convite, organização, papel, finalidade, escopo, prazo e revogação continuam sob decisão da API. A integração real será um gate separado, em ambiente de teste e sem dados reais.

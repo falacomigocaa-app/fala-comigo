@@ -113,6 +113,82 @@ GitHub Pages hospeda somente arquivos estáticos. Ele não executa backend cont�
 
 ### Gate obrigatório antes de programar
 
-Aguardar o proprietário escolher A, B ou C. Se escolher A ou C, confirmar também onde o backend será hospedado e como o banco será provido. Não construir uma falsa autenticação no JavaScript do site. Não apagar o portal atual antes de existir migração funcional e validação.
+A escolha macro A/B/C foi concluída: o proprietário escolheu a **Opção A**. Permanecem como gates separados a especificação, a escolha do provedor, a criação de contas, as credenciais, os custos, a privacidade, a validação e a migração. Não construir uma falsa autenticação no JavaScript do site. Não apagar o portal atual antes de existir migração funcional e validação.
 
 O link público atual ainda aponta para `https://falacomigo-kyrh225w.manus.space/creator` e isso é conhecido como estado provisório. Só trocar o link depois que o novo destino real estiver funcionando e publicado no GitHub Pages.
+
+## Decisão confirmada — Opção A e endereço oficial — 25/09/2026
+
+O proprietário confirmou a **Opção A**: manter o site e a interface pública no GitHub Pages, iniciar o backend e o banco em infraestrutura independente com camadas gratuitas quando possível e evoluir para planos pagos somente quando o crescimento justificar. A arquitetura deve permitir migração e expansão sem dependência obrigatória de um único provedor.
+
+O endereço público oficial confirmado é exatamente:
+
+`https://falacomigocaa-app.github.io/fala-comigo/`
+
+Toda alteração pública deve continuar sendo feita em `site/`, passar por branch e Pull Request contra `main`, ser publicada pelo workflow `site-pages.yml` e ser conferida nesse endereço. A lista de continuidade deve ser atualizada ao final de cada etapa para os próximos agentes de IA. O link do Manus Space permanece provisório até a nova solução estar funcional, validada e publicada.
+
+### Etapa 1 e 2 concluídas — handoff e ADR
+
+Em 25/09/2026, o `PROJECT_HANDOFF.md` foi atualizado para refletir o estado atual da `main`, a Opção A e a separação entre site institucional e portal autenticado. Foi criado o ADR [`docs/ADR-001-opcao-a-portal-independente.md`](docs/ADR-001-opcao-a-portal-independente.md), que formaliza a arquitetura, os limites do GitHub Pages, o MVP sintético e os gates antes de login, provedor, cobrança ou dados reais.
+
+Esta etapa foi somente documental. Não houve implementação de backend, criação de conta externa, contratação, cobrança, coleta de dados, troca do link do Criador ou alteração da `main`.
+
+### Gate 1A concluído — especificação do MVP sintético
+
+Foi criada a especificação [`docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md`](docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md). Ela delimita o MVP sem dados reais, define fixtures determinísticas, entidades mínimas, papéis, escopos, endpoints, auditoria, matriz de autorização e testes de negação.
+
+O Gate 1A não implementa login, API, banco remoto, provedor, cobrança ou interface autenticada. O próximo passo é o **Gate 2 — implementação local**, em branch separada, com PostgreSQL descartável, migrations, fixtures e testes automatizados. Não iniciar o Gate 2 antes de revisar esta especificação e manter a `main` protegida.
+
+### Gate 2A concluído — API local sintética
+
+Foi criada a pasta `portal-api/` com uma API Node.js local, identidade sintética, fixtures determinísticas, autorização server-side, rotas `/v1`, idempotência, auditoria e 12 testes automatizados. Também foi criada a migration SQL PostgreSQL `portal-api/migrations/001_initial.sql`.
+
+Os testes locais passaram e a API sintética não pode ser publicada nem executada com `NODE_ENV=production`.
+
+### Gate 2B concluído — PostgreSQL descartável
+
+Foi instalada a ferramenta PostgreSQL local somente para validação do sandbox. Uma instância temporária foi criada em `/tmp`, a migration foi aplicada com `psql -v ON_ERROR_STOP=1`, as sete tabelas foram verificadas e `npm test` passou com **13 testes**, incluindo o teste de integração PostgreSQL. A instância foi desligada e removida ao final; nenhum serviço permanente, conta externa ou dado real foi criado.
+
+O próximo passo é revisar/mesclar a PR desta etapa e depois planejar o Gate 3 de segurança e operação. Google OAuth e link mágico continuam adiados para um gate específico posterior.
+
+### Avaliação comparativa de CAA concluída — fila de aperfeiçoamento
+
+Foi consolidada a pesquisa dos oito produtos: Proloquo, TD Snap, Grid for iPad, TouchChat HD, CoughDrop, Cboard, Avaz AAC e Fala Comigo. O relatório [`docs/AVALIACAO_COMPARATIVA_CAA_E_FILA_MELHORIAS.md`](docs/AVALIACAO_COMPARATIVA_CAA_E_FILA_MELHORIAS.md) separa fatos documentais, alegações de fornecedores, incertezas e notas qualitativas.
+
+Conclusão: o Fala Comigo ainda não é superior em maturidade operacional, distribuição ou evidência em aparelhos reais. Sua vantagem potencial é a combinação brasileira de comunicação local-first, controle familiar, núcleo essencial sem conta obrigatória e sem restrição por portal/assinatura. Isso continua sendo proposta a comprovar, não promessa pronta.
+
+Fila atual: **P0** fechar abertura em aparelho real, armazenamento/migração/criptografia, identidade de distribuição e limites de dados; **P1** testar TTS pt-BR, acessibilidade, usabilidade participativa, conteúdo brasileiro e privacidade/recuperação; **P2** backup/restauração local, alternativa imprimível, acessos alternativos e release sustentável; **P3** portal opcional do responsável, somente após os gates anteriores. Não iniciar o P3 nem login real por causa desta pesquisa.
+
+Para executar sem perder etapas, seguir [`docs/PLANO_EXECUCAO_MELHORIAS_CAA.md`](docs/PLANO_EXECUCAO_MELHORIAS_CAA.md): primeiro comprovar o estado atual em aparelhos reais, depois aplicar melhorias básicas de baixo risco em PRs pequenas. A fila P1–P3 continua preservada.
+
+### Evidência de teste real — Realme C71
+
+O proprietário informou que já testou o APK em um **Realme C71 Android**: abriu normalmente, sem tela branca ou travamentos; cartões e montagem de frases funcionaram; o app funcionou sem Internet e em modo avião; os textos não ficaram cortados no celular pequeno. O modo paisagem ficou mais difícil porque mostra poucas opções de cartões. TalkBack ainda não foi testado.
+
+Problemas observados no uso real: ao criar um cartão próprio, tirar uma foto e tentar salvar, a foto não é salva e é perdida; selecionar uma imagem da galeria funciona. Também aparece uma mensagem visual `right overflowed` na **tela parental**.
+
+Próxima correção prioritária: investigar o fluxo de câmera/salvamento sem alterar cartões existentes; depois localizar e eliminar o overflow com teste em retrato e paisagem. Não afirmar que tablet, TalkBack ou iOS foram testados.
+
+### Correção em andamento — câmera e overflow parental
+
+Na branch `fix/parental-camera-and-overflow`, foram implementadas duas correções pequenas: a foto da câmera recebe extensão segura quando o aparelho retorna caminho sem extensão e a mídia cifrada é materializada/verificada antes de liberar o salvamento; o cabeçalho de localização e o seletor de orientação da tela parental foram reorganizados para não exceder a largura estreita. O Flutter não está instalado neste sandbox, portanto ainda faltam CI e novo APK para validação no Realme C71.
+
+### Correção em andamento — despertador real
+
+O botão e o método temporários de teste de 30 segundos foram removidos. Eles serviam apenas ao diagnóstico e não fazem parte do produto. O fluxo correto é: o responsável configura dias/horário, autoriza notificações, alarme exato e tela cheia, salva o alerta e, no horário, o Android deve abrir o modo despertador com voz gravada ou TTS. Essa implementação ainda aguarda CI e teste no aparelho.
+
+O **Lembrete do Responsável** também foi auditado: ele continua sendo uma notificação normal para o adulto, não o despertador em tela cheia da criança. A criação agora solicita as permissões automaticamente e agenda cada dia com `exactAllowWhileIdle`; exclusão cancela os sete IDs. A validação no aparelho ainda é necessária para confirmar horário, dias, reinício e modo de economia de bateria.
+
+### Auditoria dos fluxos de autorização — concluída documentalmente
+
+O relatório [`docs/AVALIACAO_FLUXOS_AUTORIZACAO_PORTAL.md`](docs/AVALIACAO_FLUXOS_AUTORIZACAO_PORTAL.md) esclarece o fluxo futuro: o responsável cria conta adulta no site, cria `FamilySpace` e `ChildSubject`, escolhe organização verificada, pessoa nominal, finalidade, dados, ações e prazo, registra consentimento e envia convite individual. Escola, clínica, cuidadora, professor e terapeuta acessam pelo site com conta própria; o aplicativo da criança não é necessário. Link é apenas resgate temporário, não autorização ampla.
+
+Lacunas confirmadas: a API ainda é sintética/local; não há login real, e-mail, token de convite, organização verificada, portal autenticado ou revogação remota de conteúdo. Portanto, não cadastrar dados reais nem apresentar o portal como funcional. **Próximo gate:** implementar identidade, organizações, convites, consentimento, grants, papéis e revogação sintéticos antes de escolher/integrar provedor real.
+
+### Gate 3A concluído — permissões sintéticas executáveis
+
+Na branch `feat/gate-3a-synthetic-permissions`, a API recebeu `ChildSubject`, consentimento com finalidade/escopo/versão/validade, convite ligado a consentimento, relação de cuidado, grant de acesso por sujeito e revogação server-side. O proprietário cria consentimento, envia convite sintético; o destinatário aceita; o grant permite leitura mínima do sujeito; a revogação bloqueia a leitura imediatamente.
+
+Validação executada em 26/09/2026: `npm test` passou com **18 testes**, incluindo migration e isolamento em PostgreSQL descartável. Nenhum serviço ficou ativo e nenhum dado real foi usado.
+
+Ainda não é portal real: identidade usa `x-synthetic-user-id`, armazenamento da API em memória, e-mail/link não são reais, não há sessão, MFA, organização verificada ou UI conectada. **Próximo Gate 3B:** integrar autenticação real, banco persistente e portal web mínimo para adultos, mantendo dados sintéticos e sem exigir login no app infantil.

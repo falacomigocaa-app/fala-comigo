@@ -63,6 +63,16 @@ O aplicativo local deve continuar com caixas e chaves próprias do dispositivo. 
 
 Antes de liberar a sincronização, serão necessários testes de autorização negativa. Esses testes devem comprovar que um terapeuta não consegue consultar outra organização, que um professor não consegue exportar mídia, que um acesso revogado falha imediatamente e que uma URL expirada não permite download.
 
+## Fluxo operacional obrigatório do portal
+
+O portal deve ser acessível pelo **site autenticado**. Escola, clínica, cuidadora, professor e terapeuta não devem ser obrigados a instalar o aplicativo CAA da criança para aceitar convite ou consultar o escopo autorizado. Um aplicativo complementar pode existir depois para notificações e acessibilidade, mas não é a autoridade de acesso.
+
+O fluxo mínimo é: responsável adulto cria sua conta e um `FamilySpace`; cadastra cada criança como `ChildSubject`; pesquisa uma organização verificada ou solicita o cadastro de uma escola/clínica; identifica uma pessoa adulta nominal; escolhe finalidade, categorias de dados, ações e prazo; registra consentimento; gera convite individual; o destinatário entra/cria sua própria conta no site; revisa e aceita ou recusa; o servidor cria o vínculo e o `AccessGrant` somente depois de revalidar identidade, organização, relação, consentimento, escopo e validade.
+
+O link é somente um **resgate de convite**, nunca uma autorização ampla. Deve ser HTTPS, individual, de uso único, com expiração, token aleatório armazenado apenas como hash, sem nome ou dado sensível na URL. O portal deve exigir conta própria do destinatário e confirmação explícita. O responsável pode revogar convite, consentimento, grant e vínculo organizacional separadamente. A revogação bloqueia novas leituras e downloads no servidor; cópias já baixadas precisam ser tratadas pela política de retenção e pela organização.
+
+Para o primeiro piloto, permitir somente `communication_profile.read` minimizado e `tasks.read/create/update` conforme finalidade. Escola recebe contexto pedagógico autorizado; clínica recebe contexto funcional autorizado; cuidadora recebe rotina/tarefas delegadas. Nenhum desses papéis recebe prontuário integral, diagnóstico, mídia ou exportação por padrão. Administrador da organização gerencia membros da própria organização, mas não vê crianças automaticamente.
+
 ## Referências
 
 [1]: ../RELATORIO_AUDITORIA_SEGURANCA_PROFUNDA.md "Relatório de auditoria de segurança profunda"

@@ -113,7 +113,9 @@ class _AddCardScreenState extends ConsumerState<AddCardScreen> {
       try {
         final permanentPath = await MediaStorageService.persistFile(
           picked.path,
+          extensionHint: source == ImageSource.camera ? '.jpg' : null,
         );
+        await MediaStorageService.materializeForReading(permanentPath);
         if (mounted) {
           setState(() => _selectedImagePath = permanentPath);
           await Hive.box(_settingsBox).put(_draftImageKey, permanentPath);

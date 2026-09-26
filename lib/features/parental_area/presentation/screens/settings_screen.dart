@@ -251,20 +251,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   style: TextStyle(fontSize: 13, color: AppTheme.mutedText),
                 ),
                 const SizedBox(height: 8),
-                SegmentedButton<ChildOrientation>(
-                  segments: ChildOrientation.values
-                      .map(
-                        (orientation) => ButtonSegment<ChildOrientation>(
-                          value: orientation,
-                          icon: Text(childOrientationIcon(orientation)),
-                          label: Text(childOrientationLabel(orientation)),
-                        ),
-                      )
-                      .toList(),
-                  selected: {ref.watch(childOrientationProvider)},
-                  onSelectionChanged: (selection) => ref
-                      .read(childOrientationProvider.notifier)
-                      .setOrientation(selection.first),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: SegmentedButton<ChildOrientation>(
+                    segments: ChildOrientation.values
+                        .map(
+                          (orientation) => ButtonSegment<ChildOrientation>(
+                            value: orientation,
+                            icon: Text(childOrientationIcon(orientation)),
+                            label: Text(childOrientationLabel(orientation)),
+                          ),
+                        )
+                        .toList(),
+                    selected: {ref.watch(childOrientationProvider)},
+                    onSelectionChanged: (selection) => ref
+                        .read(childOrientationProvider.notifier)
+                        .setOrientation(selection.first),
+                  ),
                 ),
               ],
             ),
@@ -768,6 +771,7 @@ class _LocationHeroCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const _IconBubble(
                 icon: Icons.location_on_rounded,
@@ -793,22 +797,26 @@ class _LocationHeroCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Text(
-                  'OFFLINE',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w800,
-                    color: AppTheme.mutedText,
-                  ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Text(
+                'OFFLINE',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w800,
+                  color: AppTheme.mutedText,
                 ),
               ),
-            ],
+            ),
           ),
           const SizedBox(height: 16),
           Container(
