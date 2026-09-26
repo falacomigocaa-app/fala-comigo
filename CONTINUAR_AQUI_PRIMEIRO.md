@@ -150,3 +150,11 @@ Os testes locais passaram e a API sintética não pode ser publicada nem executa
 Foi instalada a ferramenta PostgreSQL local somente para validação do sandbox. Uma instância temporária foi criada em `/tmp`, a migration foi aplicada com `psql -v ON_ERROR_STOP=1`, as sete tabelas foram verificadas e `npm test` passou com **13 testes**, incluindo o teste de integração PostgreSQL. A instância foi desligada e removida ao final; nenhum serviço permanente, conta externa ou dado real foi criado.
 
 O próximo passo é revisar/mesclar a PR desta etapa e depois planejar o Gate 3 de segurança e operação. Google OAuth e link mágico continuam adiados para um gate específico posterior.
+
+### Avaliação comparativa de CAA concluída — fila de aperfeiçoamento
+
+Foi consolidada a pesquisa dos oito produtos: Proloquo, TD Snap, Grid for iPad, TouchChat HD, CoughDrop, Cboard, Avaz AAC e Fala Comigo. O relatório [`docs/AVALIACAO_COMPARATIVA_CAA_E_FILA_MELHORIAS.md`](docs/AVALIACAO_COMPARATIVA_CAA_E_FILA_MELHORIAS.md) separa fatos documentais, alegações de fornecedores, incertezas e notas qualitativas.
+
+Conclusão: o Fala Comigo ainda não é superior em maturidade operacional, distribuição ou evidência em aparelhos reais. Sua vantagem potencial é a combinação brasileira de comunicação local-first, controle familiar, núcleo essencial sem conta obrigatória e sem restrição por portal/assinatura. Isso continua sendo proposta a comprovar, não promessa pronta.
+
+Fila atual: **P0** fechar abertura em aparelho real, armazenamento/migração/criptografia, identidade de distribuição e limites de dados; **P1** testar TTS pt-BR, acessibilidade, usabilidade participativa, conteúdo brasileiro e privacidade/recuperação; **P2** backup/restauração local, alternativa imprimível, acessos alternativos e release sustentável; **P3** portal opcional do responsável, somente após os gates anteriores. Não iniciar o P3 nem login real por causa desta pesquisa.

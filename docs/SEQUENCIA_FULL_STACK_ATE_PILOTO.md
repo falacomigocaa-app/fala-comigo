@@ -340,6 +340,12 @@ A próxima atividade é o **Gate 2 — implementação local**: criar API modula
 
 O Gate 2 foi dividido para evitar mistura de responsabilidades. O **Gate 2A** criou a API local sintética, fixtures, autorização, auditoria, idempotência e testes sem dependências externas. O **Gate 2B** foi concluído com migration e teste de integração contra PostgreSQL 16.15 descartável; a instância foi encerrada e removida. O próximo passo é o **Gate 3 — segurança e operação**, antes de qualquer identidade real ou provedor externo.
 
+### Pesquisa comparativa de CAA — 26/09/2026
+
+Foi consolidada a comparação de Proloquo, TD Snap, Grid for iPad, TouchChat HD, CoughDrop, Cboard, Avaz AAC e Fala Comigo. O documento `docs/AVALIACAO_COMPARATIVA_CAA_E_FILA_MELHORIAS.md` é a fonte da fila de aperfeiçoamento. A conclusão não é um ranking clínico: os concorrentes estão à frente em distribuição e maturidade operacional, enquanto o Fala Comigo tem diferenciação potencial em português brasileiro, privacidade local, custo do núcleo essencial e independência de conta/portal.
+
+Antes de qualquer portal ou login real, executar os bloqueadores **P0** e a validação **P1**: aparelho Android real, abertura/offline, TTS pt-BR, acessibilidade, armazenamento seguro, identidade de distribuição, política coerente e testes participativos. O controle de usuários permanece separado da comunicação infantil e não pode transformar melhorias conectadas em restrição do app.
+
 ### Decisão de autenticação para etapa posterior
 
 Depois do Gate 2, a integração de identidade deverá priorizar autenticação sem senha: Google OAuth/OpenID Connect e link mágico por e-mail. O primeiro aceita contas Google; o segundo aceita endereços de qualquer provedor. Nenhuma dessas opções concede autorização automaticamente: convite, organização, papel, finalidade, escopo, prazo e revogação continuam sob decisão da API. A integração real será um gate separado, em ambiente de teste e sem dados reais.
