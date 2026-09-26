@@ -31,6 +31,10 @@ O proprietário testou o APK em um **Realme C71 Android**. O app abriu sem tela 
 
 Foram observados dois problemas reais para priorização: falha ao salvar uma foto capturada pela câmera ao criar um cartão próprio (imagem da galeria funciona) e mensagem visual `right overflowed` na **tela parental**. Esses problemas devem ser corrigidos antes de ampliar o teste.
 
+#### Implementação em andamento
+
+Na branch `fix/parental-camera-and-overflow`, foi aplicada uma correção defensiva para persistência/verificação de fotos da câmera e uma reorganização responsiva do cabeçalho de localização e do seletor de orientação na tela parental. Ainda não é “passou”: o Flutter não está disponível localmente; a validação depende de CI, novo APK e repetição no Realme C71.
+
 ### Etapa 1 — melhorias básicas de baixo risco
 
 Implementar em PRs pequenas e independentes:

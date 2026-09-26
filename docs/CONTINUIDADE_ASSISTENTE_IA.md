@@ -654,3 +654,9 @@ O proprietário esclareceu que já instalou e testou o APK em um **Realme C71 An
 Defeitos observados: ao criar cartão próprio, tirar uma foto e salvar, a imagem não é persistida e é perdida; escolher imagem da galeria funciona. Também aparece uma mensagem visual `right overflowed` na **tela parental**.
 
 Correção de registro: a avaliação estética externa não tinha acesso a Flutter, emulador ou dispositivo nesta sessão; isso não significa que o proprietário não tenha feito teste real. A evidência do Realme C71 passa a ser a baseline manual atual, sem extrapolar para aparelhos, orientações ou leitores de tela não testados.
+
+## 52. Correções de câmera e overflow parental iniciadas — 26/09/2026
+
+A pedido do proprietário, deixou de ser somente anotação e começou a implementação na branch `fix/parental-camera-and-overflow`. O fluxo de cartão próprio agora aceita uma extensão segura como fallback para caminhos de câmera sem extensão e verifica a materialização da mídia cifrada antes de exibir a imagem como pronta para salvar. Na tela parental, o selo `OFFLINE` foi retirado da linha estreita do cabeçalho de localização e o seletor de orientação foi colocado em rolagem horizontal para evitar overflow.
+
+Estado: **implementação feita, validação pendente**. Não há Flutter instalado no sandbox; ainda é necessário executar CI, gerar novo APK, instalar no Realme C71 e repetir câmera, salvamento, tela parental retrato/paisagem e demais fluxos. Não declarar correção concluída antes dessa evidência.

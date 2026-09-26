@@ -168,3 +168,7 @@ O proprietário informou que já testou o APK em um **Realme C71 Android**: abri
 Problemas observados no uso real: ao criar um cartão próprio, tirar uma foto e tentar salvar, a foto não é salva e é perdida; selecionar uma imagem da galeria funciona. Também aparece uma mensagem visual `right overflowed` na **tela parental**.
 
 Próxima correção prioritária: investigar o fluxo de câmera/salvamento sem alterar cartões existentes; depois localizar e eliminar o overflow com teste em retrato e paisagem. Não afirmar que tablet, TalkBack ou iOS foram testados.
+
+### Correção em andamento — câmera e overflow parental
+
+Na branch `fix/parental-camera-and-overflow`, foram implementadas duas correções pequenas: a foto da câmera recebe extensão segura quando o aparelho retorna caminho sem extensão e a mídia cifrada é materializada/verificada antes de liberar o salvamento; o cabeçalho de localização e o seletor de orientação da tela parental foram reorganizados para não exceder a largura estreita. O Flutter não está instalado neste sandbox, portanto ainda faltam CI e novo APK para validação no Realme C71.
