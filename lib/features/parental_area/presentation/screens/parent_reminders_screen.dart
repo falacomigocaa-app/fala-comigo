@@ -61,6 +61,7 @@ class _ParentRemindersScreenState extends State<ParentRemindersScreen> {
           ),
     );
     try {
+      await TransitionAlertService.instance.requestPermissions();
       await TransitionAlertService.instance.scheduleParentReminder(
         notificationId: reminder.notificationId,
         hour: reminder.hour,

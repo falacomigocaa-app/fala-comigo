@@ -662,3 +662,9 @@ A pedido do proprietário, deixou de ser somente anotação e começou a impleme
 Estado: **implementação feita, validação pendente**. Não há Flutter instalado no sandbox; ainda é necessário executar CI, gerar novo APK, instalar no Realme C71 e repetir câmera, salvamento, tela parental retrato/paisagem e demais fluxos. Não declarar correção concluída antes dessa evidência.
 
 Após esclarecimento do proprietário, o teste diagnóstico de 30 segundos foi retirado da tela e do serviço. Ele não é uma funcionalidade do produto. O requisito é o despertador real por dias/horário, com permissões do Android, entrada em modo tela cheia no horário e reprodução de áudio gravado ou TTS. A validação dessa etapa continua pendente de novo APK e aparelho real.
+
+## 53. Auditoria do Lembrete do Responsável — 26/09/2026
+
+O lembrete do responsável usa o mesmo serviço local de notificações, mas tem finalidade diferente do despertador infantil: deve ser uma notificação normal para o adulto, sem abrir tela cheia nem reproduzir a voz da criança. A auditoria encontrou que a criação dependia de o usuário abrir a tela de permissões separadamente e usava `inexactAllowWhileIdle`. A correção passou a inicializar o serviço, solicitar permissões automaticamente e usar `exactAllowWhileIdle` para cada dia selecionado. O cancelamento já percorre os sete IDs derivados do lembrete.
+
+Estado: implementação pendente de CI e validação no Realme C71. Testar criação, persistência após sair/voltar, horário, dias múltiplos, exclusão e comportamento após reiniciar o aparelho. Não declarar funcionamento comprovado sem esse teste.

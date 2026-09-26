@@ -100,6 +100,7 @@ class TransitionAlertService {
   /// ao criar o primeiro alerta), nunca silenciosamente ao abrir o
   /// app, para o responsável entender o motivo do pedido.
   Future<void> requestPermissions() async {
+    await init();
     final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
     if (androidPlugin != null) {
@@ -174,6 +175,7 @@ class TransitionAlertService {
     required int minute,
     required List<int> weekdays,
   }) async {
+    await init();
     await cancelParentReminder(notificationId);
     for (final weekday in weekdays) {
       final scheduledDate = _nextInstanceOfWeekdayTime(weekday, hour, minute);
@@ -183,7 +185,7 @@ class TransitionAlertService {
         'Confira a rotina do Fala Comigo.',
         scheduledDate,
         _buildParentReminderDetails(),
-        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
       );
     }
@@ -197,6 +199,7 @@ class TransitionAlertService {
 
   /// Dispara o alerta imediatamente (modo manual).
   Future<void> triggerNow(TransitionAlert alert) async {
+    await init();
     await _plugin.show(
       alert.notificationId,
       'Lembrete do Fala Comigo',
@@ -211,6 +214,7 @@ class TransitionAlertService {
   /// de notificação (base + número do dia) para poder ser cancelado
   /// individualmente depois.
   Future<void> scheduleRecurring(TransitionAlert alert) async {
+    await init();
     await cancelSchedule(alert);
     if (!alert.isScheduled ||
         alert.scheduledHour == null ||

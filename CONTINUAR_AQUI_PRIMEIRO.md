@@ -176,3 +176,5 @@ Na branch `fix/parental-camera-and-overflow`, foram implementadas duas correçõ
 ### Correção em andamento — despertador real
 
 O botão e o método temporários de teste de 30 segundos foram removidos. Eles serviam apenas ao diagnóstico e não fazem parte do produto. O fluxo correto é: o responsável configura dias/horário, autoriza notificações, alarme exato e tela cheia, salva o alerta e, no horário, o Android deve abrir o modo despertador com voz gravada ou TTS. Essa implementação ainda aguarda CI e teste no aparelho.
+
+O **Lembrete do Responsável** também foi auditado: ele continua sendo uma notificação normal para o adulto, não o despertador em tela cheia da criança. A criação agora solicita as permissões automaticamente e agenda cada dia com `exactAllowWhileIdle`; exclusão cancela os sete IDs. A validação no aparelho ainda é necessária para confirmar horário, dias, reinício e modo de economia de bateria.

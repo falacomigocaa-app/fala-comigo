@@ -37,6 +37,8 @@ Na branch `fix/parental-camera-and-overflow`, foi aplicada uma correção defens
 
 O diagnóstico temporário de 30 segundos foi removido do produto. O despertador deve ser validado somente pelo fluxo real de horário configurado, com entrada em tela cheia e reprodução da voz gravada ou TTS.
 
+O lembrete recorrente do responsável foi incluído na mesma auditoria: a criação solicita permissões e usa `exactAllowWhileIdle`; ele permanece uma notificação normal do adulto, separada do modo despertador da criança. Validar no aparelho com um dia selecionado, múltiplos dias, exclusão e reinício.
+
 ### Etapa 1 — melhorias básicas de baixo risco
 
 Implementar em PRs pequenas e independentes:
