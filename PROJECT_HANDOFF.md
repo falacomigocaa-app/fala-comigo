@@ -164,7 +164,8 @@ A regra é separar aplicativo local, site público, portal conectado e console a
 14. Gate 2B concluído: migration aplicada e 13 testes aprovados contra PostgreSQL descartável; a API sintética atual não é produção.
 15. Planejar o Gate 3 de segurança e operação antes de integrar Google OAuth e link mágico; não comparar/contratar provedor nem ativar cobrança sem decisão específica.
 16. Ler `docs/AVALIACAO_COMPARATIVA_CAA_E_FILA_MELHORIAS.md` e executar a fila P0/P1 antes de buscar superioridade competitiva ou anunciar maturidade.
-17. Seguir `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`, mantendo o portal sem dados reais até concluir os gates de segurança, privacidade, backup/restauração e operação.
+17. Seguir `docs/PLANO_EXECUCAO_MELHORIAS_CAA.md` para fazer primeiro as melhorias básicas em etapas pequenas, sem descartar a fila posterior.
+18. Seguir `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`, mantendo o portal sem dados reais até concluir os gates de segurança, privacidade, backup/restauração e operação.
 
 Comandos básicos:
 

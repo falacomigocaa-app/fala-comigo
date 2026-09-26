@@ -640,3 +640,9 @@ Conclusão: o Fala Comigo não é superior hoje em maturidade operacional, distr
 Foi criado `docs/AVALIACAO_COMPARATIVA_CAA_E_FILA_MELHORIAS.md` com comparação curta, limitações, referências e critérios de aceite. A fila aprovada para continuidade é: **P0** abertura em aparelhos reais, armazenamento/migração/criptografia, identidade de distribuição e limites de dados; **P1** TTS pt-BR, acessibilidade, usabilidade participativa, revisão brasileira de conteúdo e privacidade/recuperação; **P2** backup/restauração local, prancha imprimível, acessos alternativos e release sustentável; **P3** portal opcional do responsável, após os gates anteriores.
 
 Nenhuma melhoria competitiva foi programada automaticamente. Login real, portal de produção, dados clínicos, cobrança e publicação ampla continuam fora do escopo até os gates correspondentes. A pesquisa não altera a regra de que controle de usuários não pode restringir a comunicação da criança/adolescente.
+
+## 50. Execução incremental das melhorias básicas — 26/09/2026
+
+Foi criado `docs/PLANO_EXECUCAO_MELHORIAS_CAA.md` para transformar a fila comparativa em etapas pequenas. A ordem aprovada é: comprovar o estado atual em celular e tablet reais; implementar melhorias básicas de baixo risco; revisar conteúdo brasileiro e contingência; fechar recuperação, acessibilidade e segurança; preparar release; só então considerar recursos conectados opcionais.
+
+O plano preserva todas as melhorias de médio e longo prazo. Nenhuma funcionalidade foi implementada automaticamente nesta etapa. Cada mudança futura deverá ter branch própria, teste ou evidência manual, reversão possível, funcionamento offline preservado, nenhum login obrigatório da criança e nenhum dado clínico real.
