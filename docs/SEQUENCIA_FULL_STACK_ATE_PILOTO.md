@@ -16,6 +16,8 @@ O produto será dividido em quatro superfícies relacionadas, mas independentes:
 
 A comunicação básica nunca dependerá do portal, de pagamentos, de conexão ou de aprovação de uma instituição. O portal será uma extensão opcional para colaboração autorizada.
 
+**Regra de não bloqueio:** o login do portal institucional não é login do aplicativo da criança/adolescente. O app deve abrir rápido e manter comunicação básica, acessibilidade e uso offline sem conta ou Internet. Logout, expiração ou falha do portal não pode deslogar, apagar ou restringir o núcleo local.
+
 ## 2. Fluxo do proprietário do aplicativo
 
 O proprietário terá uma área administrativa separada da Área do Responsável. Ela não deve ser colocada dentro do aplicativo da criança.

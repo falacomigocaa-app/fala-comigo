@@ -27,6 +27,18 @@ Adotar a **Opção A**:
 6. A arquitetura deverá usar contratos versionados, migrations reproduzíveis e adaptadores para reduzir dependência de um provedor específico.
 7. O aplicativo CAA continuará independente: comunicação básica, acessibilidade, modo offline e dados locais não dependerão de conta, Internet, assinatura, API ou portal.
 
+### Regra crítica de experiência e acesso
+
+O login descrito neste ADR pertence **somente ao portal institucional/administrativo**. Ele não será exigido para abrir ou usar a Área da Criança e do Adolescente no aplicativo Flutter.
+
+- o aplicativo deve abrir rapidamente e funcionar localmente, inclusive sem Internet;
+- a criança ou adolescente não deve ver uma tela de login para acessar comunicação básica, cartões, frases, acessibilidade ou conteúdo local;
+- expiração, revogação ou falha da sessão do portal não pode bloquear nem deslogar o núcleo local do aplicativo;
+- atualização, sincronização ou colaboração conectada serão opcionais e separadas do fluxo principal;
+- eventual sessão parental/PIN local é controle de privacidade do dispositivo, não login remoto e não pode transformar o uso básico em dependente de conta.
+
+Qualquer futura integração entre aplicativo e portal deve ser opt-in, compatível com modo offline e incapaz de impedir a comunicação básica. Esse requisito tem prioridade sobre conveniência de autenticação, assinatura ou sincronização.
+
 ### Fronteira obrigatória entre Pages e portal
 
 O GitHub Pages é hospedagem estática. Portanto, ele **não** será usado para:

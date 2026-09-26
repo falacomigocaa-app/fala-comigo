@@ -620,3 +620,11 @@ O Gate 2B foi concluído. A migration `portal-api/migrations/001_initial.sql` fo
 Validação final: `cd portal-api && PGTEST_URL=... npm test` passou com **13 testes**, sendo 12 testes de autorização em memória e 1 teste de integração PostgreSQL, incluindo a verificação de isolamento entre organizações. Não houve dados reais, login real, OAuth, link mágico, provedor externo, cobrança ou publicação. A instância temporária foi encerrada e seu diretório removido.
 
 O próximo gate recomendado é o **Gate 3 — segurança e operação**: revisão de threat model, sessão/revogação planejadas, limites, logs, restauração e CI reproduzível antes de qualquer integração de identidade real.
+
+## 48. Regra crítica: login só no portal, nunca bloqueio do app — 25/09/2026
+
+O proprietário esclareceu um requisito essencial de produto: o login Google/e-mail será somente do portal institucional e do console administrativo. A criança ou adolescente não deve ser deslogada, interrompida ou obrigada a fazer login para abrir e usar o aplicativo.
+
+O aplicativo Flutter deve continuar local-first, abrir rapidamente e funcionar sem Internet, conta, assinatura, sessão do portal ou sincronização. Cartões, frases, acessibilidade, comunicação básica e conteúdo local não podem depender do portal. Logout, expiração, revogação, falha de rede ou indisponibilidade do portal nunca pode bloquear nem apagar o núcleo local. Uma futura integração será opcional, explícita, tolerante a falhas e não poderá interromper a comunicação.
+
+Esta regra foi registrada no ADR, no contrato do portal, no handoff e no prompt de retomada. Qualquer proposta futura de login obrigatório no app deve ser considerada conflito arquitetural e não deve ser implementada sem revisão explícita desta decisão.

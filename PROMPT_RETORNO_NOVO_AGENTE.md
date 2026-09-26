@@ -308,7 +308,7 @@ O proprietário não quer vínculo com Manus ou Manus Space no Espaço do Criado
 
 Antes de programar, apresente estas opções e aguarde escolha:
 
-- **A (recomendada):** GitHub Pages para site/interface + backend e banco em provedor independente do Manus, com login próprio por e-mail e senha.
+- **A (recomendada):** GitHub Pages para site/interface + backend e banco em provedor independente do Manus, com login do portal sem senha por Google e link mágico por e-mail. O aplicativo infantil permanece local-first e sem login remoto obrigatório.
 - **B:** somente GitHub Pages, aceitando que haverá apenas interface estática sem autenticação, banco, convites ou permissões reais.
 - **C:** avaliar outro provedor independente escolhido pelo proprietário.
 
@@ -323,3 +323,5 @@ A única URL pública oficial do projeto é `https://falacomigocaa-app.github.io
 ### 14. Direção de login sem senha
 
 A direção aprovada para o primeiro login real é oferecer **Google OAuth/OpenID Connect** e **link mágico por e-mail**, aceitando endereços de qualquer provedor. Isso não será implementado no Gate 1A. Primeiro devem existir identidades sintéticas, autorização server-side e testes locais; a integração real será um gate separado. O provedor confirma a identidade, mas somente a API decide convite, organização, papel, finalidade, escopo, validade e revogação. Nunca armazenar senhas, tokens ou segredos no Git, no Pages ou no cliente.
+
+O login é exclusivo do portal institucional/console. Não exigir login remoto para a criança ou adolescente abrir o aplicativo; não deslogar nem bloquear o núcleo local por expiração, logout, falha de rede ou indisponibilidade do portal. A comunicação básica, acessibilidade e modo offline têm prioridade.

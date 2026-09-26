@@ -134,6 +134,8 @@ Em 25/09/2026, o proprietário confirmou a Opção A para o Espaço do Criador:
 
 O GitHub Pages não é um backend e não deve receber senhas, manter sessões ou exercer autorização server-side. A API será a autoridade de autorização do portal. O aplicativo CAA continuará local-first: comunicação básica, acessibilidade, modo offline e dados locais não dependerão do portal.
 
+**Regra crítica:** o login Google/e-mail será somente do portal institucional e do console administrativo. A criança ou adolescente não fará login remoto para abrir ou usar o aplicativo. O app deve iniciar rápido e continuar funcionando sem Internet, conta, assinatura, sessão do portal ou sincronização. Logout, expiração, revogação ou indisponibilidade do portal não pode bloquear nem deslogar o núcleo local. Uma eventual conexão futura será opt-in e não poderá interromper a comunicação básica.
+
 A direção aprovada para o primeiro login real é autenticação sem senha com **Google OAuth/OpenID Connect** e **link mágico por e-mail**, aceitando endereços de qualquer provedor. Essa integração não será feita no Gate 1A nem antes da autorização local estar testada. O provedor confirma a identidade; a API decide convite, organização, papel, finalidade, escopo, validade e revogação.
 
 O documento de decisão correspondente é [`docs/ADR-001-opcao-a-portal-independente.md`](docs/ADR-001-opcao-a-portal-independente.md). O plano mestre da equipe está em [`docs/equipe-mestra/00-plano-mestre-opcao-a.md`](docs/equipe-mestra/00-plano-mestre-opcao-a.md).
