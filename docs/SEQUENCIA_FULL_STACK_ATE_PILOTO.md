@@ -165,6 +165,8 @@ Até lá, serão usados catálogo, licenças fictícias e ambiente de teste. Nen
 
 **Pronto quando:** toda autorização é decidida no servidor e não apenas escondida na interface.
 
+**Gate 3A concluído em 26/09/2026:** a API sintética agora testa sujeito infantil, consentimento, convite ligado ao consentimento, grant por pessoa+sujeito+organização e revogação. O próximo Gate 3B deve integrar identidade real, banco persistente e portal web mínimo, ainda com dados sintéticos.
+
 ### Sequência 04 — Convites e autorização do responsável
 
 **Entrega:** fluxo para responsável autorizar clínica ou escola.

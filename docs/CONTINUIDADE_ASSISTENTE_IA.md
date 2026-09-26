@@ -694,3 +694,12 @@ Criança/adolescente usa comunicação local; responsável autorizado administra
 A API é somente sintética/local, com `x-synthetic-user-id`, fixtures e armazenamento em memória; não há login real, sessão, MFA, e-mail transacional, token de convite real, organização verificada, consentimento versionado, `ChildSubject` ligado a grant, tarefas/conteúdo protegidos ou revogação remota efetiva. `site/portal.html` é mock estático. A implementação de produção só deve começar após a matriz de fluxos e testes negativos; não liberar dados reais.
 
 **Próximo gate:** especificar e testar o fluxo de identidade, organização, convite, consentimento, grant e revogação sintéticos com a matriz de papéis; depois escolher/integrar provedor real. Manter a lista de continuidade e não afirmar que o portal já funciona.
+
+
+## 55. Gate 3A — permissões sintéticas executáveis — 26/09/2026
+
+Na branch `feat/gate-3a-synthetic-permissions`, a API local recebeu `ChildSubject`, consentimento com finalidade, escopos, versão do aviso e validade, convite ligado a consentimento, `CareRelationship`, `AccessGrant`, leitura mínima do sujeito e revogação server-side. O fluxo comprovado é: proprietário cria consentimento → envia convite sintético → destinatário aceita → servidor cria membership/relação/grant → convidado lê somente com escopo vigente → proprietário revoga e a leitura é bloqueada.
+
+Validação: `npm test` passou com **18 testes**, incluindo migration e isolamento em PostgreSQL descartável. O cluster temporário foi encerrado e removido. Não houve login real, e-mail real, portal web conectado, dados de crianças ou dados clínicos.
+
+Lacunas do Gate 3B: trocar `x-synthetic-user-id` por autenticação real, usar banco persistente na API, criar e-mails/links reais, implementar organização verificada, portal web autenticado e testes com usuários de teste. O aplicativo infantil continua sem login obrigatório.

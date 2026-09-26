@@ -183,4 +183,12 @@ O **Lembrete do Responsável** também foi auditado: ele continua sendo uma noti
 
 O relatório [`docs/AVALIACAO_FLUXOS_AUTORIZACAO_PORTAL.md`](docs/AVALIACAO_FLUXOS_AUTORIZACAO_PORTAL.md) esclarece o fluxo futuro: o responsável cria conta adulta no site, cria `FamilySpace` e `ChildSubject`, escolhe organização verificada, pessoa nominal, finalidade, dados, ações e prazo, registra consentimento e envia convite individual. Escola, clínica, cuidadora, professor e terapeuta acessam pelo site com conta própria; o aplicativo da criança não é necessário. Link é apenas resgate temporário, não autorização ampla.
 
-Lacunas confirmadas: a API ainda é sintética/local; não há login real, e-mail, token de convite, organização verificada, consentimento versionado, sujeito ligado a grant, portal autenticado ou revogação remota de conteúdo. Portanto, não cadastrar dados reais nem apresentar o portal como funcional. **Próximo gate:** especificar e testar identidade, organizações, convites, consentimento, grants, papéis e revogação com dados sintéticos antes de escolher/integrar provedor real.
+Lacunas confirmadas: a API ainda é sintética/local; não há login real, e-mail, token de convite, organização verificada, portal autenticado ou revogação remota de conteúdo. Portanto, não cadastrar dados reais nem apresentar o portal como funcional. **Próximo gate:** implementar identidade, organizações, convites, consentimento, grants, papéis e revogação sintéticos antes de escolher/integrar provedor real.
+
+### Gate 3A concluído — permissões sintéticas executáveis
+
+Na branch `feat/gate-3a-synthetic-permissions`, a API recebeu `ChildSubject`, consentimento com finalidade/escopo/versão/validade, convite ligado a consentimento, relação de cuidado, grant de acesso por sujeito e revogação server-side. O proprietário cria consentimento, envia convite sintético; o destinatário aceita; o grant permite leitura mínima do sujeito; a revogação bloqueia a leitura imediatamente.
+
+Validação executada em 26/09/2026: `npm test` passou com **18 testes**, incluindo migration e isolamento em PostgreSQL descartável. Nenhum serviço ficou ativo e nenhum dado real foi usado.
+
+Ainda não é portal real: identidade usa `x-synthetic-user-id`, armazenamento da API em memória, e-mail/link não são reais, não há sessão, MFA, organização verificada ou UI conectada. **Próximo Gate 3B:** integrar autenticação real, banco persistente e portal web mínimo para adultos, mantendo dados sintéticos e sem exigir login no app infantil.

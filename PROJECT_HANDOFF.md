@@ -173,6 +173,8 @@ As lacunas ainda abertas são materiais: a `portal-api` é sintética/local, nã
 17. Seguir `docs/PLANO_EXECUCAO_MELHORIAS_CAA.md` para fazer primeiro as melhorias básicas em etapas pequenas, sem descartar a fila posterior.
 18. Seguir `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`, mantendo o portal sem dados reais até concluir os gates de segurança, privacidade, backup/restauração e operação.
 19. Considerar a validação manual já informada no **Realme C71 Android** como evidência de baseline, não como substituta de matriz completa: câmera ao salvar cartão próprio e mensagem `right overflowed` na **tela parental** são os próximos defeitos a corrigir; tablet, TalkBack e iOS permanecem não testados.
+20. Gate 3A implementado na branch `feat/gate-3a-synthetic-permissions`: sujeito infantil, consentimento, convite ligado a consentimento, grant, leitura mínima e revogação. Validado com 18 testes, incluindo PostgreSQL descartável; ainda não é produção.
+21. Próximo Gate 3B: integrar autenticação real, banco persistente e portal web mínimo para adultos, mantendo dados sintéticos e sem exigir login no app infantil.
 
 Comandos básicos:
 

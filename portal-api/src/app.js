@@ -1,4 +1,4 @@
-import { AuthorizationError, audit, authenticate, requireScope, stableError } from './authorization.js';
+import { AuthorizationError, audit, authenticate, membershipFor, requireScope, stableError } from './authorization.js';
 import { createStore } from './store.js';
 
 const jsonHeaders = { 'content-type': 'application/json; charset=utf-8' };
@@ -29,6 +29,28 @@ function idempotent(store, requestId, handler) {
   const result = handler();
   store.idempotency.set(requestId, result);
   return result;
+}
+
+function subjectForOwner(store, subjectId, userId) {
+  const subject = store.subjects.find((item) => item.id === subjectId && item.status === 'active');
+  if (!subject || subject.ownerUserId !== userId) throw new AuthorizationError('RELATIONSHIP_REQUIRED');
+  return subject;
+}
+
+function activeConsent(store, consentId, now) {
+  const consent = store.consents.find((item) => item.id === consentId);
+  if (!consent) throw new AuthorizationError('CONSENT_REQUIRED');
+  if (consent.status === 'revoked') throw new AuthorizationError('REVOKED');
+  if (consent.status !== 'active' || new Date(consent.validUntil) <= now) throw new AuthorizationError('EXPIRED');
+  return consent;
+}
+
+function grantFor(store, userId, subjectId, scope, now) {
+  const grant = store.grants.find((item) => item.userId === userId && item.subjectId === subjectId && item.status === 'active' && item.scopes.includes(scope));
+  if (!grant) throw new AuthorizationError('GRANT_REQUIRED');
+  if (new Date(grant.validUntil) <= now) throw new AuthorizationError('EXPIRED');
+  const consent = activeConsent(store, grant.consentId, now);
+  return { grant, consent };
 }
 
 export function createApp({ store = createStore(), now = () => new Date('2026-09-25T12:00:00.000Z') } = {}) {
@@ -65,6 +87,56 @@ export function createApp({ store = createStore(), now = () => new Date('2026-09
         return response(200, { memberships });
       }
 
+      if (method === 'POST' && path[1] === 'subjects' && path[2] && path[3] === 'consents') {
+        const subject = subjectForOwner(store, path[2], context.user.id);
+        const organizationId = body?.organizationId;
+        const organization = store.organizations.find((item) => item.id === organizationId && item.status === 'active');
+        if (!organization) throw new AuthorizationError('RELATIONSHIP_REQUIRED');
+        const scopes = Array.isArray(body?.scopes) ? [...new Set(body.scopes)] : [];
+        if (scopes.length === 0 || !body?.purpose || !body?.recipientUserId) throw new AuthorizationError('INVALID_CONSENT', 400);
+        const validUntil = body.validUntil ?? '2099-01-01T00:00:00.000Z';
+        if (new Date(validUntil) <= clock) throw new AuthorizationError('EXPIRED');
+        const consent = {
+          id: `consent-${store.consents.length + 1}`,
+          subjectId: subject.id,
+          organizationId,
+          grantedByUserId: context.user.id,
+          recipientUserId: body.recipientUserId,
+          purpose: body.purpose,
+          scopes,
+          noticeVersion: body.noticeVersion ?? 'synthetic-v1',
+          status: 'active',
+          validUntil,
+          createdAt: clock.toISOString(),
+          revokedAt: null
+        };
+        store.consents.push(consent);
+        sendAudit(store, context, 'consent.create', 'allowed');
+        return response(201, consent);
+      }
+
+      if (method === 'GET' && path[1] === 'subjects' && path[2] && path[3] === undefined) {
+        const subject = store.subjects.find((item) => item.id === path[2]);
+        if (!subject) throw new AuthorizationError('RELATIONSHIP_REQUIRED');
+        if (subject.ownerUserId === context.user.id) {
+          sendAudit(store, context, 'subject.read', 'allowed');
+          return response(200, subject);
+        }
+        const { grant } = grantFor(store, context.user.id, subject.id, 'communication_profile.read', clock);
+        context.organizationId = grant.organizationId;
+        sendAudit(store, context, 'subject.read', 'allowed');
+        return response(200, { id: subject.id, displayName: subject.displayName, status: subject.status });
+      }
+
+      if (method === 'GET' && path[1] === 'subjects' && path[2] && path[3] === 'grants') {
+        const subject = store.subjects.find((item) => item.id === path[2]);
+        if (!subject) throw new AuthorizationError('RELATIONSHIP_REQUIRED');
+        if (subject.ownerUserId !== context.user.id) throw new AuthorizationError('RELATIONSHIP_REQUIRED');
+        const grants = store.grants.filter((item) => item.subjectId === subject.id);
+        sendAudit(store, context, 'grant.read', 'allowed');
+        return response(200, { grants });
+      }
+
       if (method === 'POST' && path[1] === 'organizations' && path[3] === 'invitations') {
         context.organizationId = path[2];
         requireScope(store, context.user.id, context.organizationId, 'access.invite', clock);
@@ -73,10 +145,19 @@ export function createApp({ store = createStore(), now = () => new Date('2026-09
             id: `invite-created-${store.invitations.length + 1}`,
             organizationId: context.organizationId,
             inviteeUserId: body?.inviteeUserId ?? 'user-invitee-alpha',
+            subjectId: body?.subjectId ?? null,
+            consentId: body?.consentId ?? null,
+            purpose: body?.purpose ?? null,
+            scopes: Array.isArray(body?.scopes) ? [...new Set(body.scopes)] : [],
             role: body?.role ?? 'professional',
             status: 'pending',
             expiresAt: body?.expiresAt ?? '2099-01-01T00:00:00.000Z'
           };
+          if (invitation.subjectId || invitation.consentId) {
+            if (!invitation.subjectId || !invitation.consentId) throw new AuthorizationError('CONSENT_REQUIRED', 400);
+            const consent = activeConsent(store, invitation.consentId, clock);
+            if (consent.subjectId !== invitation.subjectId || consent.organizationId !== invitation.organizationId || consent.recipientUserId !== invitation.inviteeUserId) throw new AuthorizationError('CONSENT_MISMATCH', 400);
+          }
           store.invitations.push(invitation);
           sendAudit(store, context, 'invitation.create', 'allowed');
           return response(201, invitation);
@@ -101,6 +182,11 @@ export function createApp({ store = createStore(), now = () => new Date('2026-09
           sendAudit(store, context, 'invitation.decline', 'allowed');
           return response(200, invitation);
         }
+        let consent = null;
+        if (invitation.subjectId || invitation.consentId) {
+          consent = activeConsent(store, invitation.consentId, clock);
+          if (consent.recipientUserId !== context.user.id || consent.subjectId !== invitation.subjectId) throw new AuthorizationError('CONSENT_MISMATCH');
+        }
         invitation.status = 'accepted';
         const membership = {
           id: `membership-${invitation.id}`,
@@ -110,9 +196,49 @@ export function createApp({ store = createStore(), now = () => new Date('2026-09
           status: 'active',
           validUntil: invitation.expiresAt
         };
-        store.memberships.push(membership);
+        if (!store.memberships.some((item) => item.userId === membership.userId && item.organizationId === membership.organizationId)) store.memberships.push(membership);
+        let grant = null;
+        if (consent) {
+          const relationship = {
+            id: `relationship-${invitation.id}`,
+            userId: context.user.id,
+            subjectId: invitation.subjectId,
+            organizationId: invitation.organizationId,
+            role: invitation.role,
+            status: 'active',
+            validUntil: consent.validUntil
+          };
+          store.relationships.push(relationship);
+          grant = {
+            id: `grant-${invitation.id}`,
+            userId: context.user.id,
+            subjectId: invitation.subjectId,
+            organizationId: invitation.organizationId,
+            consentId: consent.id,
+            purpose: consent.purpose,
+            scopes: consent.scopes,
+            status: 'active',
+            validUntil: consent.validUntil
+          };
+          store.grants.push(grant);
+        }
         sendAudit(store, context, 'invitation.accept', 'allowed');
-        return response(200, { invitation, membership });
+        return response(200, { invitation, membership, grant });
+      }
+
+      if (method === 'POST' && path[1] === 'subjects' && path[2] && path[3] === 'grants' && path[4] && path[5] === 'revoke') {
+        const subject = subjectForOwner(store, path[2], context.user.id);
+        const grant = store.grants.find((item) => item.id === path[4] && item.subjectId === subject.id);
+        if (!grant) throw new AuthorizationError('RELATIONSHIP_REQUIRED');
+        grant.status = 'revoked';
+        const consent = store.consents.find((item) => item.id === grant.consentId);
+        if (consent) {
+          consent.status = 'revoked';
+          consent.revokedAt = clock.toISOString();
+        }
+        for (const relationship of store.relationships.filter((item) => item.subjectId === subject.id && item.userId === grant.userId)) relationship.status = 'revoked';
+        sendAudit(store, context, 'grant.revoke', 'allowed');
+        return response(200, { grant, consent });
       }
 
       if (method === 'GET' && path[1] === 'organizations' && path[3] === 'benefits') {

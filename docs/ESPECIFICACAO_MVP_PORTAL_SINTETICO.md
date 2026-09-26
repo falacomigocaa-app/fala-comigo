@@ -1,6 +1,6 @@
 # Especificação do MVP do portal sintético — Gate 1A
 
-- **Status:** especificação para revisão; não implementado
+- **Status:** Gate 3A sintético implementado; autenticação e operação real ainda não implementadas
 - **Data:** 25/09/2026
 - **Decisão relacionada:** [`ADR-001-opcao-a-portal-independente.md`](ADR-001-opcao-a-portal-independente.md)
 - **Superfície:** portal independente do Criador, separado do GitHub Pages
@@ -10,7 +10,7 @@
 
 Definir o menor recorte funcional que permita implementar e testar a base do portal sem escolher provedor, criar contas externas, receber senhas reais ou armazenar qualquer dado de criança, família ou saúde.
 
-O MVP não é um portal de produção. Ele deve comprovar somente que organizações fictícias, usuários fictícios, papéis, convites, vínculos, licenças administrativas e auditoria podem ser isolados e autorizados no servidor.
+O MVP não é um portal de produção. A implementação sintética comprova que organizações fictícias, usuários fictícios, um sujeito infantil, papéis, consentimentos, convites, vínculos, grants, revogação, licenças administrativas e auditoria podem ser isolados e autorizados no servidor.
 
 ## 2. Limites do MVP
 
@@ -58,7 +58,7 @@ O primeiro schema implementará somente o necessário para autorização e audit
 | `benefit_entitlements` | `id`, organização, licença, estado, validade | nunca libera conteúdo familiar |
 | `audit_events` | `id`, ator, organização, ação, resultado, request id, timestamp | sem payload sensível |
 
-As entidades de sujeito, perfil funcional, plano, tarefa, agenda e documento permanecem previstas nos contratos gerais, mas não entram no schema do MVP até a matriz de autorização básica passar.
+As entidades de perfil funcional, plano, tarefa, agenda e documento permanecem previstas nos contratos gerais. `child_subjects`, `consents` e `care_relationships` entraram no schema do Gate 3A; conteúdo funcional continua fora até a matriz de autorização passar.
 
 ## 4.1 Direção de autenticação futura
 
@@ -91,7 +91,7 @@ O recorte inicial usa apenas escopos necessários para o console sintético:
 - `benefit.read`
 - `audit.read`
 
-Os escopos de conteúdo (`communication_profile.*`, `communication_plan.*`, `appointments.*`, `tasks.*`) ficam fora do MVP e só serão habilitados em uma etapa posterior, com finalidade e consentimento próprios.
+O Gate 3A habilita somente `communication_profile.read` sintético por grant; os demais escopos de conteúdo (`communication_profile.*`, `communication_plan.*`, `appointments.*`, `tasks.*`) continuam exigindo implementação e testes próprios, com finalidade e consentimento separados.
 
 ## 6. Contexto obrigatório da requisição
 

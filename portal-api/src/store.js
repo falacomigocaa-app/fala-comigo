@@ -7,14 +7,15 @@ const baseUsers = [
 ];
 
 const baseOrganizations = [
-  { id: 'org-demo-alpha', name: 'Clínica Aurora Demo', status: 'active' },
-  { id: 'org-demo-beta', name: 'Escola Horizonte Demo', status: 'active' }
+  { id: 'org-demo-alpha', name: 'Clínica Aurora Demo', status: 'active', type: 'clinic' },
+  { id: 'org-demo-beta', name: 'Escola Horizonte Demo', status: 'active', type: 'school' }
 ];
 
 const roleScopes = {
   owner: ['organization.read', 'membership.read', 'access.invite', 'access.read', 'access.revoke', 'benefit.read', 'audit.read'],
   org_admin: ['organization.read', 'membership.read', 'access.invite', 'access.read', 'benefit.read'],
   professional: ['organization.read', 'access.read'],
+  caregiver: ['organization.read', 'access.read'],
   outsider: []
 };
 
@@ -22,6 +23,10 @@ const baseMemberships = [
   { id: 'membership-admin-alpha', userId: 'user-admin-alpha', organizationId: 'org-demo-alpha', role: 'owner', status: 'active', validUntil: '2099-01-01T00:00:00.000Z' },
   { id: 'membership-professional-alpha', userId: 'user-professional-alpha', organizationId: 'org-demo-alpha', role: 'professional', status: 'active', validUntil: '2099-01-01T00:00:00.000Z' },
   { id: 'membership-admin-beta', userId: 'user-admin-beta', organizationId: 'org-demo-beta', role: 'owner', status: 'active', validUntil: '2099-01-01T00:00:00.000Z' }
+];
+
+const baseSubjects = [
+  { id: 'subject-demo-child', familySpaceId: 'family-demo-alpha', ownerUserId: 'user-admin-alpha', displayName: 'Criança Demo', status: 'active' }
 ];
 
 const baseInvitations = [
@@ -38,9 +43,12 @@ export function createStore() {
     users: structuredClone(baseUsers),
     organizations: structuredClone(baseOrganizations),
     memberships: structuredClone(baseMemberships),
+    subjects: structuredClone(baseSubjects),
+    relationships: [],
+    consents: [],
     invitations: structuredClone(baseInvitations),
-    benefits: structuredClone(baseBenefits),
     grants: [],
+    benefits: structuredClone(baseBenefits),
     auditEvents: [],
     idempotency: new Map()
   };
