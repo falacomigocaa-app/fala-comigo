@@ -8,8 +8,10 @@ O código oficial está no GitHub:
 
 - Repositório: https://github.com/falacomigocaa-app/fala-comigo
 - Branch principal: `main`
-- Branch de trabalho atual: `feat/parental-area-professional-v2`
-- Último commit registrado neste handoff: `5464914 — feat: add family care coordination foundation`
+- Endereço público oficial: https://falacomigocaa-app.github.io/fala-comigo/
+- Estado confirmado em 25/09/2026: `origin/main` em `b43e18b` (`Merge pull request #76 from falacomigocaa-app/docs/creator-no-manus`)
+- Branch de trabalho desta documentação: `docs/record-option-a-public-url`
+- Última decisão de produto: **Opção A — GitHub Pages institucional + portal independente**
 
 Não existem segredos, tokens, senhas ou chaves privadas neste documento. Nunca coloque credenciais no Git.
 
@@ -119,6 +121,25 @@ A sequência completa está em `docs/PLANO_SEQUENCIAL_ATE_BUILD.md`. A ordem res
 
 O catálogo, a tela de planos e a persistência local já foram implementados. O ciclo atual iniciou a continuidade do cuidado local e especificou o contrato remoto; o próximo trabalho deve implementar a fundação server-side somente após escolher a infraestrutura, sem começar cobrança real prematuramente.
 
+## Decisão de arquitetura vigente — Opção A
+
+Em 25/09/2026, o proprietário confirmou a Opção A para o Espaço do Criador:
+
+- o GitHub Pages permanece como site institucional público e ponto de encaminhamento;
+- o login e o portal autenticado ficarão em uma origem independente do GitHub Pages e do Manus;
+- o backend e o banco serão independentes do Manus;
+- o desenvolvimento inicial poderá usar camadas gratuitas, mas somente com fixtures e dados sintéticos;
+- a evolução para planos pagos ocorrerá apenas quando houver necessidade real de continuidade, e-mail, backup, suporte, limite ou volume;
+- nenhuma conta externa, contratação, cobrança, credencial ou dado real foi autorizado por esta decisão.
+
+O GitHub Pages não é um backend e não deve receber senhas, manter sessões ou exercer autorização server-side. A API será a autoridade de autorização do portal. O aplicativo CAA continuará local-first: comunicação básica, acessibilidade, modo offline e dados locais não dependerão do portal.
+
+**Regra crítica:** o login Google/e-mail serve para controle de usuários, responsáveis, organizações, dispositivos e recursos conectados — não para restringir o uso básico. A vinculação do responsável ao app pode ser opcional e persistente, mas a criança ou adolescente não fará login remoto para abrir ou usar o aplicativo. O app deve iniciar rápido e continuar funcionando sem Internet, conta, assinatura, sessão do portal ou sincronização. Logout, expiração, revogação ou indisponibilidade do portal não pode bloquear nem deslogar o núcleo local. Uma eventual conexão futura será opt-in e não poderá interromper a comunicação básica.
+
+A direção aprovada para o primeiro login real é autenticação sem senha com **Google OAuth/OpenID Connect** e **link mágico por e-mail**, aceitando endereços de qualquer provedor. Essa integração não será feita no Gate 1A nem antes da autorização local estar testada. O provedor confirma a identidade; a API decide convite, organização, papel, finalidade, escopo, validade e revogação.
+
+O documento de decisão correspondente é [`docs/ADR-001-opcao-a-portal-independente.md`](docs/ADR-001-opcao-a-portal-independente.md). O plano mestre da equipe está em [`docs/equipe-mestra/00-plano-mestre-opcao-a.md`](docs/equipe-mestra/00-plano-mestre-opcao-a.md).
+
 ## Nova sequência full-stack até o piloto institucional
 
 A condução full-cycle foi ampliada para incluir o site institucional, o console do proprietário, o portal multi-organização, autorizações, documentos, licenças, pagamentos em sandbox e o piloto controlado com uma clínica e um colégio. A sequência detalhada está em `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`.
@@ -137,7 +158,15 @@ A regra é separar aplicativo local, site público, portal conectado e console a
 8. Executar `flutter build web --release`.
 9. Corrigir primeiro falhas do CI ou do núcleo CAA.
 10. Trabalhar em branch própria, adicionar teste, revisar diff, comitar e enviar ao GitHub.
-11. Seguir `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`, começando pela governança, site institucional e console do proprietário sem dados clínicos.
+11. Ler e seguir [`docs/ADR-001-opcao-a-portal-independente.md`](docs/ADR-001-opcao-a-portal-independente.md).
+12. Revisar [`docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md`](docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md) como Gate 1A concluído.
+13. Executar o Gate 2 em branch separada: API local, PostgreSQL descartável, migrations, fixtures e testes de autorização.
+14. Gate 2B concluído: migration aplicada e 13 testes aprovados contra PostgreSQL descartável; a API sintética atual não é produção.
+15. Planejar o Gate 3 de segurança e operação antes de integrar Google OAuth e link mágico; não comparar/contratar provedor nem ativar cobrança sem decisão específica.
+16. Ler `docs/AVALIACAO_COMPARATIVA_CAA_E_FILA_MELHORIAS.md` e executar a fila P0/P1 antes de buscar superioridade competitiva ou anunciar maturidade.
+17. Seguir `docs/PLANO_EXECUCAO_MELHORIAS_CAA.md` para fazer primeiro as melhorias básicas em etapas pequenas, sem descartar a fila posterior.
+18. Seguir `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`, mantendo o portal sem dados reais até concluir os gates de segurança, privacidade, backup/restauração e operação.
+19. Considerar a validação manual já informada no **Realme C71 Android** como evidência de baseline, não como substituta de matriz completa: câmera ao salvar cartão próprio e mensagem `right overflowed` na **tela parental** são os próximos defeitos a corrigir; tablet, TalkBack e iOS permanecem não testados.
 
 Comandos básicos:
 
@@ -184,7 +213,8 @@ Ainda não estão prontos para produção:
 - sincronização clínica;
 - cobrança real;
 - painel corporativo em produção;
-- site institucional público definitivo;
+- portal independente do Criador publicado e validado;
+- site institucional público já publicado no GitHub Pages oficial, mas sujeito a manutenção e novas PRs;
 - domínio final;
 - validação humana completa com famílias e profissionais;
 - build Android de release validado em dispositivo real.
@@ -215,6 +245,10 @@ Não tratar documentação conceitual como implementação existente. O portal e
 - `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`: sequência de programação até o piloto com clínica e colégio.
 - `docs/CONTRATO_PORTAL_CONECTADO.md`: entidades, estados, escopos e fila offline comuns ao app e web.
 - `docs/CONTRATO_API_CONTINUIDADE_CUIDADO.md`: endpoints, payloads, consentimentos e testes de negação do portal.
+- `docs/ADR-001-opcao-a-portal-independente.md`: decisão de arquitetura para o site público, portal, API, banco e gates da Opção A.
+- `docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md`: escopo, modelo mínimo, matriz de autorização e testes do Gate 1A.
+- `portal-api/README.md`: execução e limites da API local sintética do Gate 2A.
+- `docs/equipe-mestra/00-plano-mestre-opcao-a.md`: consolidação da auditoria multidisciplinar e plano mestre.
 - `docs/ESTUDO_PRECOS_PLANOS.md`: pesquisa de mercado e faixas de preço para validação.
 - `docs/MAPA_FUNCIONALIDADES_SAAS_CLINICAS.md`: recursos de SaaS clínico priorizados para ajudar famílias.
 - `privacy_policy.html`: política de privacidade alinhada ao armazenamento local.

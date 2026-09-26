@@ -141,6 +141,10 @@ Toda gravação conectável gera uma operação local com `taskId`, `operation`,
 
 A família continua dona do espaço familiar. O patrocinador administra benefício, não conteúdo. O profissional acessa somente pessoas e recursos vinculados. Escola recebe resumo funcional necessário, não prontuário integral. Empresa recebe apenas informações administrativas agregadas. A comunicação básica não depende de internet ou aceite remoto.
 
+### Regra de não bloqueio do aplicativo
+
+A autenticação Google/e-mail serve para identificar e administrar usuários, responsáveis, organizações, dispositivos e recursos conectados. Ela pertence ao portal institucional e, se o responsável escolher, à vinculação opcional do app; não é uma barreira para a criança/adolescente. A Área da Criança e do Adolescente deve abrir sem login remoto e continuar funcionando sem Internet, conta, assinatura, sessão válida ou autorização do portal. Logout, expiração, revogação, indisponibilidade ou falha de sincronização do portal nunca pode deslogar, apagar ou bloquear cartões, frases, acessibilidade e comunicação básica locais. Qualquer conexão futura entre app e portal será opcional, persistente quando autorizada, explícita e tolerante a falhas.
+
 A implementação web do primeiro piloto deve usar dados sintéticos e declarar visualmente que é uma prévia. O backend real só deve ser conectado depois de implementar autorização server-side, consentimento versionado, auditoria e testes de negação.
 
 ## Critério para considerar alinhado
