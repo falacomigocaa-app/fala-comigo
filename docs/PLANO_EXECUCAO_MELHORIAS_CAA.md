@@ -25,6 +25,12 @@ Antes de alterar código:
 
 **Critério:** não alterar recursos que ainda não foram observados em um aparelho real sem antes registrar o comportamento atual.
 
+#### Baseline já observado
+
+O proprietário testou o APK em um **Realme C71 Android**. O app abriu sem tela branca ou travamentos, cartões e montagem de frases funcionaram, o uso sem Internet/modo avião funcionou e os textos não ficaram cortados no celular pequeno. O modo paisagem ficou menos confortável porque mostra poucas opções de cartões. TalkBack, tablet e iOS ainda não foram testados.
+
+Foram observados dois problemas reais para priorização: falha ao salvar uma foto capturada pela câmera ao criar um cartão próprio (imagem da galeria funciona) e mensagem visual `right overflowed` em algum fluxo ainda não localizado. Esses problemas devem ser corrigidos antes de ampliar o teste.
+
 ### Etapa 1 — melhorias básicas de baixo risco
 
 Implementar em PRs pequenas e independentes:

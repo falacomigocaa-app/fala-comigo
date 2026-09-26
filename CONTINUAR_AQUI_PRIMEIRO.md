@@ -160,3 +160,11 @@ Conclusão: o Fala Comigo ainda não é superior em maturidade operacional, dist
 Fila atual: **P0** fechar abertura em aparelho real, armazenamento/migração/criptografia, identidade de distribuição e limites de dados; **P1** testar TTS pt-BR, acessibilidade, usabilidade participativa, conteúdo brasileiro e privacidade/recuperação; **P2** backup/restauração local, alternativa imprimível, acessos alternativos e release sustentável; **P3** portal opcional do responsável, somente após os gates anteriores. Não iniciar o P3 nem login real por causa desta pesquisa.
 
 Para executar sem perder etapas, seguir [`docs/PLANO_EXECUCAO_MELHORIAS_CAA.md`](docs/PLANO_EXECUCAO_MELHORIAS_CAA.md): primeiro comprovar o estado atual em aparelhos reais, depois aplicar melhorias básicas de baixo risco em PRs pequenas. A fila P1–P3 continua preservada.
+
+### Evidência de teste real — Realme C71
+
+O proprietário informou que já testou o APK em um **Realme C71 Android**: abriu normalmente, sem tela branca ou travamentos; cartões e montagem de frases funcionaram; o app funcionou sem Internet e em modo avião; os textos não ficaram cortados no celular pequeno. O modo paisagem ficou mais difícil porque mostra poucas opções de cartões. TalkBack ainda não foi testado.
+
+Problemas observados no uso real: ao criar um cartão próprio, tirar uma foto e tentar salvar, a foto não é salva e é perdida; selecionar uma imagem da galeria funciona. Também aparece uma mensagem visual `right overflowed`, ainda sem localização exata registrada.
+
+Próxima correção prioritária: investigar o fluxo de câmera/salvamento sem alterar cartões existentes; depois localizar e eliminar o overflow com teste em retrato e paisagem. Não afirmar que tablet, TalkBack ou iOS foram testados.

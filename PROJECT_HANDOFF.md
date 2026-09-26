@@ -166,6 +166,7 @@ A regra é separar aplicativo local, site público, portal conectado e console a
 16. Ler `docs/AVALIACAO_COMPARATIVA_CAA_E_FILA_MELHORIAS.md` e executar a fila P0/P1 antes de buscar superioridade competitiva ou anunciar maturidade.
 17. Seguir `docs/PLANO_EXECUCAO_MELHORIAS_CAA.md` para fazer primeiro as melhorias básicas em etapas pequenas, sem descartar a fila posterior.
 18. Seguir `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`, mantendo o portal sem dados reais até concluir os gates de segurança, privacidade, backup/restauração e operação.
+19. Considerar a validação manual já informada no **Realme C71 Android** como evidência de baseline, não como substituta de matriz completa: câmera ao salvar cartão próprio e mensagem `right overflowed` são os próximos defeitos a investigar; tablet, TalkBack e iOS permanecem não testados.
 
 Comandos básicos:
 

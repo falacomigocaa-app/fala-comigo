@@ -646,3 +646,11 @@ Nenhuma melhoria competitiva foi programada automaticamente. Login real, portal 
 Foi criado `docs/PLANO_EXECUCAO_MELHORIAS_CAA.md` para transformar a fila comparativa em etapas pequenas. A ordem aprovada é: comprovar o estado atual em celular e tablet reais; implementar melhorias básicas de baixo risco; revisar conteúdo brasileiro e contingência; fechar recuperação, acessibilidade e segurança; preparar release; só então considerar recursos conectados opcionais.
 
 O plano preserva todas as melhorias de médio e longo prazo. Nenhuma funcionalidade foi implementada automaticamente nesta etapa. Cada mudança futura deverá ter branch própria, teste ou evidência manual, reversão possível, funcionamento offline preservado, nenhum login obrigatório da criança e nenhum dado clínico real.
+
+## 51. Resultado de teste manual no aparelho real — Realme C71 Android — 26/09/2026
+
+O proprietário esclareceu que já instalou e testou o APK em um **Realme C71 Android**. Resultado informado: abertura normal, sem tela branca ou travamento; cartões e montagem de frases funcionando; uso sem Internet e em modo avião funcionando; textos não cortados no celular pequeno. O modo paisagem é menos confortável porque mostra poucas opções de cartões. TalkBack não foi testado; tablet e iOS também não foram testados.
+
+Defeitos observados: ao criar cartão próprio, tirar uma foto e salvar, a imagem não é persistida e é perdida; escolher imagem da galeria funciona. Também aparece uma mensagem visual `right overflowed`, ainda sem fluxo/localização identificados.
+
+Correção de registro: a avaliação estética externa não tinha acesso a Flutter, emulador ou dispositivo nesta sessão; isso não significa que o proprietário não tenha feito teste real. A evidência do Realme C71 passa a ser a baseline manual atual, sem extrapolar para aparelhos, orientações ou leitores de tela não testados.
