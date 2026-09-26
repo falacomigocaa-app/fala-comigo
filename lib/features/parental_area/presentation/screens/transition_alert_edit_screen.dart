@@ -214,6 +214,9 @@ class _TransitionAlertEditScreenState
     }
     var scheduleFailed = false;
     try {
+      if (alert.isScheduled) {
+        await TransitionAlertService.instance.requestPermissions();
+      }
       await TransitionAlertService.instance.scheduleRecurring(alert);
     } catch (_) {
       scheduleFailed = true;

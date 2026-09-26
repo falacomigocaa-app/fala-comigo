@@ -53,6 +53,14 @@ Future<void> _bootstrap() async {
     }
   }
 
+  // O Android pode abrir o processo diretamente por uma notificação de
+  // tela cheia. Inicializar antes do handler evita perder o payload enquanto
+  // a tela principal ainda está sendo montada.
+  try {
+    await TransitionAlertService.instance.init();
+  } catch (_) {
+    // A comunicação local não pode deixar de abrir por falha de alarme.
+  }
   _configureAlertHandler();
 }
 
@@ -91,11 +99,6 @@ Future<void> _initializeOptionalServices() async {
     await TtsService.instance.init();
   } catch (_) {
     // O serviço tenta inicializar novamente quando for usado.
-  }
-  try {
-    await TransitionAlertService.instance.init();
-  } catch (_) {
-    // Alertas permanecem indisponíveis nesta plataforma/configuração.
   }
 }
 

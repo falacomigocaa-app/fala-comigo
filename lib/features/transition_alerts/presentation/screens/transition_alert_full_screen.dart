@@ -10,8 +10,8 @@ import '../../../../core/theme/hyperfocus_theme.dart';
 import '../../domain/models/transition_alert.dart';
 import 'transition_checklist_screen.dart';
 
-/// Tela de alerta em tela cheia: abre ao tocar na notificação (ou
-/// automaticamente, se o celular estiver desbloqueado). Toca a
+/// Tela de alerta em tela cheia: abre automaticamente quando o alarme
+/// dispara (ou ao tocar na notificação, conforme a política do Android). Toca a
 /// mensagem de áudio, mostra uma contagem visual, e termina com um
 /// botão grande levando ao checklist gamificado.
 class TransitionAlertFullScreen extends ConsumerStatefulWidget {
@@ -61,9 +61,10 @@ class _TransitionAlertFullScreenState
       // o alerta. O texto do alerta continua sendo uma alternativa segura.
     }
 
-    if (widget.alert.ttsText != null && widget.alert.ttsText!.isNotEmpty) {
-      await TtsService.instance.speak(widget.alert.ttsText!);
-    }
+    final text = widget.alert.ttsText?.trim().isNotEmpty == true
+        ? widget.alert.ttsText!.trim()
+        : widget.alert.title.trim();
+    if (text.isNotEmpty) await TtsService.instance.speak(text);
   }
 
   @override
