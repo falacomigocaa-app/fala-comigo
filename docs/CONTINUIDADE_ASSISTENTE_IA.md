@@ -592,3 +592,65 @@ Foram concluídos os passos documentais iniciais após a escolha da Opção A. O
 Foi criado `docs/ADR-001-opcao-a-portal-independente.md`, formalizando que o GitHub Pages hospeda somente o site institucional e o encaminhamento, enquanto login, portal, API e banco ficam em origem independente. O ADR define PostgreSQL como modelo relacional inicial, desenvolvimento local/CI com fixtures sintéticas, autorização server-side, portabilidade, critérios de escolha de provedor e gates de segurança, operação, custo e migração.
 
 Esta etapa não implementou backend, login ou banco remoto, não criou contas ou credenciais, não ativou cobrança, não coletou dados reais, não alterou o link do Criador e não alterou a `main`. O próximo passo seguro é especificar o MVP sintético, o modelo PostgreSQL, as migrations e a matriz de autorização em branch própria.
+
+## 44. Gate 1A — especificação do MVP sintético — 25/09/2026
+
+Foi criada a especificação `docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md`. O documento delimita o primeiro recorte sem dados reais, define fixtures determinísticas, entidades mínimas, papéis, escopos, endpoints, auditoria, códigos de erro e uma matriz de casos permitidos/negados entre duas organizações fictícias.
+
+Esta etapa não implementou API, banco, login, provedor, interface autenticada ou cobrança. O Gate 1A está documentado para revisão; o próximo gate é o Gate 2, com implementação local e CI usando PostgreSQL descartável, migrations, fixtures e testes de autorização. A `main` continua sem alteração.
+
+## 45. Direção de autenticação sem senha — 25/09/2026
+
+O proprietário aprovou seguir a alternativa mais simples e flexível para o primeiro acesso real: **Google OAuth/OpenID Connect** e **link mágico por e-mail**, permitindo endereços de qualquer provedor. A solução não armazenará senha própria e não ficará limitada ao Gmail.
+
+Essa é uma decisão de desenho, não uma integração executada. O Gate 2 continuará usando identidades sintéticas e autorização local. A integração real será um gate posterior, com provedor gerenciado, callback HTTPS, PKCE, sessão expirada/revogável, recuperação sem enumeração e auditoria. Google ou e-mail confirmam a identidade; a API continua autoridade para convite, organização, papel, finalidade, escopo, validade e revogação.
+
+## 46. Gate 2A — API local sintética — 25/09/2026
+
+Foi criada a implementação inicial em `portal-api/`: serviço Node.js local sem dependências externas, fixtures determinísticas, identidade sintética, autorização server-side, rotas `/v1`, idempotência, auditoria sem payload sensível e migration PostgreSQL portátil em `portal-api/migrations/001_initial.sql`.
+
+Validação executada: `npm test` passou com **12 testes**, cobrindo leitura autorizada, isolamento entre organizações, outsider, escopo insuficiente, convite, expiração, benefício sem conteúdo, autenticação ausente, revogação, idempotência e auditoria. Também foi validada uma chamada HTTP local a `/v1/me`.
+
+Limitação inicial: `psql` e Docker não estavam disponíveis no início desta etapa. Depois, PostgreSQL 16 foi instalado apenas como ferramenta local de validação. Uma instância descartável foi criada em `/tmp`, a migration foi aplicada com `ON_ERROR_STOP`, as sete tabelas foram verificadas e o teste de integração PostgreSQL passou. A instância foi desligada e removida.
+
+## 47. Gate 2B — migration e testes PostgreSQL descartável — 25/09/2026
+
+O Gate 2B foi concluído. A migration `portal-api/migrations/001_initial.sql` foi executada com sucesso contra PostgreSQL 16.15 em uma instância temporária. Foram verificadas as tabelas `access_grants`, `audit_events`, `benefit_entitlements`, `invitations`, `memberships`, `organizations` e `users`.
+
+Validação final: `cd portal-api && PGTEST_URL=... npm test` passou com **13 testes**, sendo 12 testes de autorização em memória e 1 teste de integração PostgreSQL, incluindo a verificação de isolamento entre organizações. Não houve dados reais, login real, OAuth, link mágico, provedor externo, cobrança ou publicação. A instância temporária foi encerrada e seu diretório removido.
+
+O próximo gate recomendado é o **Gate 3 — segurança e operação**: revisão de threat model, sessão/revogação planejadas, limites, logs, restauração e CI reproduzível antes de qualquer integração de identidade real.
+
+## 48. Regra crítica: login só no portal, nunca bloqueio do app — 25/09/2026
+
+O proprietário esclareceu um requisito essencial de produto: o login Google/e-mail será somente do portal institucional e do console administrativo. A criança ou adolescente não deve ser deslogada, interrompida ou obrigada a fazer login para abrir e usar o aplicativo.
+
+O aplicativo Flutter deve continuar local-first, abrir rapidamente e funcionar sem Internet, conta, assinatura, sessão do portal ou sincronização. Cartões, frases, acessibilidade, comunicação básica e conteúdo local não podem depender do portal. Logout, expiração, revogação, falha de rede ou indisponibilidade do portal nunca pode bloquear nem apagar o núcleo local. Uma futura integração será opcional, explícita, tolerante a falhas e não poderá interromper a comunicação.
+
+Esta regra foi registrada no ADR, no contrato do portal, no handoff e no prompt de retomada. O proprietário esclareceu que o login existe para **controle e administração de usuários que usufruem dos recursos conectados**, não para restringir a criança/adolescente. A conta do responsável poderá ser vinculada opcionalmente ao app para gerenciar usuários, dispositivos, sincronização e configurações autorizadas; a comunicação básica local continua livre e disponível.
+
+Qualquer proposta futura de login obrigatório, pedido repetitivo de login ou bloqueio do núcleo local deve ser considerada conflito arquitetural. O controle deve atuar sobre administração, portal, sincronização e dados conectados, nunca sobre cartões, frases, acessibilidade ou comunicação básica.
+
+## 49. Pesquisa comparativa internacional de CAA e fila de melhorias — 26/09/2026
+
+Foi recebida e auditada uma comparação entre Proloquo, TD Snap, Grid for iPad, TouchChat HD, CoughDrop, Cboard, Avaz AAC e Fala Comigo. O trabalho verificou fontes originais de fabricantes, lojas, políticas, documentação e materiais do repositório, separando fato documental, alegação de fornecedor/projeto, incerteza e nota qualitativa. Não é avaliação clínica, indicação individual, certificação de segurança ou prova de eficácia.
+
+Conclusão: o Fala Comigo não é superior hoje em maturidade operacional, distribuição, suporte ou validação em aparelhos reais. Pode diferenciar-se pela comunicação local-first em português brasileiro, controle familiar, núcleo essencial sem login obrigatório da criança e separação entre comunicação e portal, mas esses atributos ainda precisam de comprovação operacional. Os produtos concorrentes não são automaticamente adequados para toda pessoa; idioma, custo, aparelho, acesso e privacidade precisam ser testados no contexto real.
+
+Foi criado `docs/AVALIACAO_COMPARATIVA_CAA_E_FILA_MELHORIAS.md` com comparação curta, limitações, referências e critérios de aceite. A fila aprovada para continuidade é: **P0** abertura em aparelhos reais, armazenamento/migração/criptografia, identidade de distribuição e limites de dados; **P1** TTS pt-BR, acessibilidade, usabilidade participativa, revisão brasileira de conteúdo e privacidade/recuperação; **P2** backup/restauração local, prancha imprimível, acessos alternativos e release sustentável; **P3** portal opcional do responsável, após os gates anteriores.
+
+Nenhuma melhoria competitiva foi programada automaticamente. Login real, portal de produção, dados clínicos, cobrança e publicação ampla continuam fora do escopo até os gates correspondentes. A pesquisa não altera a regra de que controle de usuários não pode restringir a comunicação da criança/adolescente.
+
+## 50. Execução incremental das melhorias básicas — 26/09/2026
+
+Foi criado `docs/PLANO_EXECUCAO_MELHORIAS_CAA.md` para transformar a fila comparativa em etapas pequenas. A ordem aprovada é: comprovar o estado atual em celular e tablet reais; implementar melhorias básicas de baixo risco; revisar conteúdo brasileiro e contingência; fechar recuperação, acessibilidade e segurança; preparar release; só então considerar recursos conectados opcionais.
+
+O plano preserva todas as melhorias de médio e longo prazo. Nenhuma funcionalidade foi implementada automaticamente nesta etapa. Cada mudança futura deverá ter branch própria, teste ou evidência manual, reversão possível, funcionamento offline preservado, nenhum login obrigatório da criança e nenhum dado clínico real.
+
+## 51. Resultado de teste manual no aparelho real — Realme C71 Android — 26/09/2026
+
+O proprietário esclareceu que já instalou e testou o APK em um **Realme C71 Android**. Resultado informado: abertura normal, sem tela branca ou travamento; cartões e montagem de frases funcionando; uso sem Internet e em modo avião funcionando; textos não cortados no celular pequeno. O modo paisagem é menos confortável porque mostra poucas opções de cartões. TalkBack não foi testado; tablet e iOS também não foram testados.
+
+Defeitos observados: ao criar cartão próprio, tirar uma foto e salvar, a imagem não é persistida e é perdida; escolher imagem da galeria funciona. Também aparece uma mensagem visual `right overflowed` na **tela parental**.
+
+Correção de registro: a avaliação estética externa não tinha acesso a Flutter, emulador ou dispositivo nesta sessão; isso não significa que o proprietário não tenha feito teste real. A evidência do Realme C71 passa a ser a baseline manual atual, sem extrapolar para aparelhos, orientações ou leitores de tela não testados.

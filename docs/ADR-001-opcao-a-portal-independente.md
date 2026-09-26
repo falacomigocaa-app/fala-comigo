@@ -27,6 +27,20 @@ Adotar a **Opção A**:
 6. A arquitetura deverá usar contratos versionados, migrations reproduzíveis e adaptadores para reduzir dependência de um provedor específico.
 7. O aplicativo CAA continuará independente: comunicação básica, acessibilidade, modo offline e dados locais não dependerão de conta, Internet, assinatura, API ou portal.
 
+### Regra crítica de experiência e acesso
+
+O login descrito neste ADR pertence **ao controle de usuários do portal e, quando desejado, à vinculação opcional do responsável ao aplicativo**. Ele não será exigido para abrir ou usar a Área da Criança e do Adolescente no aplicativo Flutter. O objetivo do login é identificar contas, responsáveis, organizações, dispositivos ou usuários autorizados — não criar uma barreira para a comunicação.
+
+- o aplicativo deve abrir rapidamente e funcionar localmente, inclusive sem Internet;
+- a criança ou adolescente não deve ver uma tela de login para acessar comunicação básica, cartões, frases, acessibilidade ou conteúdo local;
+- expiração, revogação ou falha da sessão do portal não pode bloquear nem deslogar o núcleo local do aplicativo;
+- atualização, sincronização ou colaboração conectada serão opcionais e separadas do fluxo principal;
+- eventual sessão parental/PIN local é controle de privacidade do dispositivo, não login remoto e não pode transformar o uso básico em dependente de conta.
+
+O responsável poderá vincular uma conta ao aplicativo para recursos administrativos futuros, como gerenciar usuários autorizados, recuperar configurações, acompanhar o estado da conta ou sincronizar dados escolhidos. Essa vinculação deve ser lembrada no dispositivo e não pode gerar pedidos repetidos de login à criança/adolescente. O controle de usuários deve limitar administração, portal, sincronização e dados conectados; não deve restringir cartões, frases, acessibilidade ou comunicação básica local.
+
+Qualquer futura integração entre aplicativo e portal deve ser opt-in, compatível com modo offline e incapaz de impedir a comunicação básica. Esse requisito tem prioridade sobre conveniência de autenticação, assinatura ou sincronização.
+
 ### Fronteira obrigatória entre Pages e portal
 
 O GitHub Pages é hospedagem estática. Portanto, ele **não** será usado para:
@@ -124,6 +138,19 @@ PostgreSQL deverá usar grants mínimos e poderá usar Row-Level Security como d
 ## 6. Identidade, sessão e segredos
 
 A implementação de produção deverá usar um provedor de identidade gerenciado ou um componente auditado, escolhido em etapa própria. Não criar autenticação artesanal no JavaScript público.
+
+### Decisão de autenticação inicial
+
+Para reduzir complexidade e evitar armazenamento de senhas, o portal adotará como direção de autenticação sem senha:
+
+1. **Google OAuth/OpenID Connect** como opção de entrada rápida para o proprietário e administradores que utilizarem uma conta Google;
+2. **link mágico por e-mail** como alternativa para endereços de qualquer provedor, sem exigir Gmail;
+3. um adaptador de identidade no backend, para que a aplicação não fique presa ao Google ou a um único fornecedor de e-mail;
+4. criação ou ativação de acesso somente após o backend validar convite, organização, papel, finalidade, escopos, validade e revogação.
+
+Google ou o provedor de e-mail confirmam a identidade, mas não concedem autorização de negócio. O backend continua sendo a autoridade final. O primeiro acesso administrativo não será liberado somente porque o e-mail corresponde a um texto conhecido no cliente; ele deverá passar por uma regra de bootstrap protegida no servidor e por MFA do provedor quando disponível.
+
+Essa decisão é de desenho e não habilita OAuth real nesta etapa. O Gate 2 usará identidades sintéticas; a integração real será um gate separado, com ambiente de teste, callback HTTPS, PKCE, tokens nunca persistidos em Git e testes de revogação e sessão.
 
 Antes de qualquer piloto real, a solução deverá definir e testar:
 
@@ -265,3 +292,4 @@ Este ADR será considerado corretamente aplicado quando:
 ## 12. Histórico de revisão
 
 - **25/09/2026:** Opção A aceita pelo proprietário. ADR criado para separar site institucional, portal autenticado, API e banco; implementação, contratação, cobrança e coleta real continuam pendentes.
+- **25/09/2026:** autenticação sem senha escolhida como direção: Google OAuth/OIDC e link mágico por e-mail, com autorização sempre no backend e integração real adiada para gate próprio.

@@ -308,14 +308,20 @@ O proprietário não quer vínculo com Manus ou Manus Space no Espaço do Criado
 
 Antes de programar, apresente estas opções e aguarde escolha:
 
-- **A (recomendada):** GitHub Pages para site/interface + backend e banco em provedor independente do Manus, com login próprio por e-mail e senha.
+- **A (recomendada):** GitHub Pages para site/interface + backend e banco em provedor independente do Manus, com login do portal sem senha por Google e link mágico por e-mail. O aplicativo infantil permanece local-first e sem login remoto obrigatório.
 - **B:** somente GitHub Pages, aceitando que haverá apenas interface estática sem autenticação, banco, convites ou permissões reais.
 - **C:** avaliar outro provedor independente escolhido pelo proprietário.
 
-Nunca criar uma falsa autenticação no JavaScript público. GitHub Pages não executa backend contínuo. Não remover o portal atual nem substituir o link `https://falacomigo-kyrh225w.manus.space/creator` até existir uma migração funcional, validada e publicada.
+Nunca criar uma falsa autenticação no JavaScript público. GitHub Pages não executa backend contínuo. A escolha macro A/B/C já foi concluída como Opção A; não perguntar novamente. Não remover o portal atual nem substituir o link `https://falacomigo-kyrh225w.manus.space/creator` até existir uma migração funcional, validada e publicada.
 
 ### 13. Decisão já tomada — Opção A e URL oficial
 
 O proprietário já escolheu a **Opção A**: manter o site e a interface pública no GitHub Pages, iniciar backend e banco independentes em camadas gratuitas quando possível e migrar para planos pagos somente quando necessário. Não pedir novamente essa escolha; a próxima decisão técnica é comparar e definir a infraestrutura, sem contratar ou ativar cobrança sem autorização.
 
 A única URL pública oficial do projeto é `https://falacomigocaa-app.github.io/fala-comigo/`. Toda alteração pública deve ser feita em `site/`, revisada em PR, publicada pelo `site-pages.yml` e conferida nessa URL. Atualize sempre os arquivos de continuidade ao finalizar cada etapa.
+
+### 14. Direção de login sem senha
+
+A direção aprovada para o primeiro login real é oferecer **Google OAuth/OpenID Connect** e **link mágico por e-mail**, aceitando endereços de qualquer provedor. Isso não será implementado no Gate 1A. Primeiro devem existir identidades sintéticas, autorização server-side e testes locais; a integração real será um gate separado. O provedor confirma a identidade, mas somente a API decide convite, organização, papel, finalidade, escopo, validade e revogação. Nunca armazenar senhas, tokens ou segredos no Git, no Pages ou no cliente.
+
+O login serve para controle e administração de usuários, responsáveis, organizações, dispositivos e recursos conectados. A vinculação do responsável ao app pode ser opcional e persistente, mas não exigir login remoto para a criança ou adolescente abrir o aplicativo; não deslogar nem bloquear o núcleo local por expiração, logout, falha de rede ou indisponibilidade do portal. A comunicação básica, acessibilidade e modo offline têm prioridade.
