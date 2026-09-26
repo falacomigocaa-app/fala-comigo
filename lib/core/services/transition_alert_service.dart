@@ -8,7 +8,8 @@ import '../../features/transition_alerts/domain/models/transition_alert.dart';
 /// Atividade — precisa de alta prioridade e "tela cheia" para
 /// acordar o aparelho e chamar a atenção, do mesmo jeito que um
 /// despertador ou uma ligação.
-const String _channelId = 'transition_alert_channel';
+// ID novo para não herdar uma importância antiga já gravada pelo Android.
+const String _channelId = 'transition_alert_alarm_v2';
 const String _channelName = 'Alertas de Transição';
 const String _channelDescription =
     'Avisos de transição de atividade com contagem visual e checklist';
@@ -37,6 +38,7 @@ class TransitionAlertService {
   /// quando a tela de alerta existir.
   void Function(String alertId)? onAlertTriggered;
   String? _pendingAlertId;
+  bool _initialized = false;
 
   void setAlertHandler(void Function(String alertId) handler) {
     onAlertTriggered = handler;
@@ -46,6 +48,7 @@ class TransitionAlertService {
   }
 
   Future<void> init() async {
+    if (_initialized) return;
     // Fuso horário fixo em horário de Brasília, para simplificar
     // (o app é voltado ao público brasileiro).
     tz.initializeTimeZones();
@@ -69,6 +72,7 @@ class TransitionAlertService {
         _handlePayload(response.payload);
       },
     );
+    _initialized = true;
 
     // Caso o app tenha sido aberto justamente por causa de um alerta
     // (estava fechado quando o alerta disparou).
@@ -240,24 +244,6 @@ class TransitionAlertService {
     for (var weekday = 1; weekday <= 7; weekday++) {
       await _plugin.cancel(alert.notificationId + weekday);
     }
-  }
-
-  /// Método de diagnóstico: agenda uma notificação única e simples
-  /// para daqui a alguns segundos, sem a lógica de dia da semana —
-  /// serve para isolar se o problema está no agendamento em si ou
-  /// na lógica de repetição semanal.
-  Future<void> testDelayed(int seconds) async {
-    final scheduledDate = tz.TZDateTime.now(
-      tz.local,
-    ).add(Duration(seconds: seconds));
-    await _plugin.zonedSchedule(
-      999999,
-      'Teste agendado',
-      'Se você está vendo isso, o agendamento simples funciona!',
-      scheduledDate,
-      _buildDetails(),
-      androidScheduleMode: AndroidScheduleMode.alarmClock,
-    );
   }
 
   /// Calcula a próxima ocorrência de um dia da semana (1=domingo ...

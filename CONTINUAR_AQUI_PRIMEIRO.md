@@ -172,3 +172,7 @@ Próxima correção prioritária: investigar o fluxo de câmera/salvamento sem a
 ### Correção em andamento — câmera e overflow parental
 
 Na branch `fix/parental-camera-and-overflow`, foram implementadas duas correções pequenas: a foto da câmera recebe extensão segura quando o aparelho retorna caminho sem extensão e a mídia cifrada é materializada/verificada antes de liberar o salvamento; o cabeçalho de localização e o seletor de orientação da tela parental foram reorganizados para não exceder a largura estreita. O Flutter não está instalado neste sandbox, portanto ainda faltam CI e novo APK para validação no Realme C71.
+
+### Correção em andamento — despertador real
+
+O botão e o método temporários de teste de 30 segundos foram removidos. Eles serviam apenas ao diagnóstico e não fazem parte do produto. O fluxo correto é: o responsável configura dias/horário, autoriza notificações, alarme exato e tela cheia, salva o alerta e, no horário, o Android deve abrir o modo despertador com voz gravada ou TTS. Essa implementação ainda aguarda CI e teste no aparelho.

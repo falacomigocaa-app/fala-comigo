@@ -94,23 +94,6 @@ class TransitionAlertsListScreen extends ConsumerWidget {
               ),
             ),
           ),
-          const SizedBox(height: 8),
-          OutlinedButton.icon(
-            onPressed: () async {
-              await TransitionAlertService.instance.testDelayed(30);
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'Teste agendado para daqui 30 segundos. Bloqueie a tela agora.',
-                    ),
-                  ),
-                );
-              }
-            },
-            icon: const Icon(Icons.science_outlined),
-            label: const Text('Testar em 30s (diagnóstico)'),
-          ),
           const SizedBox(height: 16),
           if (alerts.isEmpty)
             const Padding(
