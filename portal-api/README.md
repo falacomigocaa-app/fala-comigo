@@ -29,9 +29,10 @@ Esse header e o servidor atual são somente para desenvolvimento local. Não há
 - `src/server.js`: adaptador HTTP local;
 - `migrations/001_initial.sql`: schema PostgreSQL portátil para a próxima integração;
 - `test/authorization.test.js`: casos permitidos e negados do Gate 1A.
+- `test/postgres.integration.test.js`: verificação do schema e isolamento contra PostgreSQL quando `PGTEST_URL` está definido.
 
 ## Limites
 
-O armazenamento em memória é descartado ao reiniciar. O SQL ainda não foi executado contra PostgreSQL neste ambiente porque `psql` e Docker não estão disponíveis. Isso é uma limitação registrada, não uma aprovação de banco.
+O armazenamento em memória é descartado ao reiniciar. A migration foi validada contra uma instância PostgreSQL 16.15 descartável. Para repetir a integração, inicie um PostgreSQL temporário, aplique `migrations/001_initial.sql` e execute `PGTEST_URL=postgresql://... npm test`. Sem `PGTEST_URL`, o teste PostgreSQL é marcado como ignorado e os testes locais continuam executáveis.
 
 Não adicionar senhas, tokens, nomes reais, dados de crianças, conteúdo clínico, fotos, vídeos, áudios ou credenciais a esta pasta.

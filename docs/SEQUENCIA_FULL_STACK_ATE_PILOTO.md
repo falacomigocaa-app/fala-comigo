@@ -334,7 +334,7 @@ O Gate 1A foi concluído documentalmente em `docs/ESPECIFICACAO_MVP_PORTAL_SINTE
 
 A próxima atividade é o **Gate 2 — implementação local**: criar API modular, PostgreSQL descartável, migrations reproduzíveis, fixtures sintéticas e testes automatizados de isolamento e autorização. A comparação de provedores fica depois da validação local; a troca do link do Criador fica depois da publicação e validação do destino independente.
 
-O Gate 2 foi dividido para evitar mistura de responsabilidades. O **Gate 2A** criou a API local sintética, fixtures, autorização, auditoria, idempotência e testes sem dependências externas. O **Gate 2B** ainda está pendente e deverá executar a migration e os mesmos testes contra PostgreSQL descartável. A ausência de `psql`/Docker nesta sessão impede declarar o Gate 2 completo.
+O Gate 2 foi dividido para evitar mistura de responsabilidades. O **Gate 2A** criou a API local sintética, fixtures, autorização, auditoria, idempotência e testes sem dependências externas. O **Gate 2B** foi concluído com migration e teste de integração contra PostgreSQL 16.15 descartável; a instância foi encerrada e removida. O próximo passo é o **Gate 3 — segurança e operação**, antes de qualquer identidade real ou provedor externo.
 
 ### Decisão de autenticação para etapa posterior
 

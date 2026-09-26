@@ -611,4 +611,12 @@ Foi criada a implementação inicial em `portal-api/`: serviço Node.js local se
 
 Validação executada: `npm test` passou com **12 testes**, cobrindo leitura autorizada, isolamento entre organizações, outsider, escopo insuficiente, convite, expiração, benefício sem conteúdo, autenticação ausente, revogação, idempotência e auditoria. Também foi validada uma chamada HTTP local a `/v1/me`.
 
-Limitação: `psql` e Docker não estão disponíveis nesta sessão; a migration ainda não foi executada contra PostgreSQL. A etapa concluída é somente Gate 2A. O próximo gate é Gate 2B, executar schema e testes contra PostgreSQL descartável. Não há login real, OAuth, link mágico, provedor, cobrança ou dados reais.
+Limitação inicial: `psql` e Docker não estavam disponíveis no início desta etapa. Depois, PostgreSQL 16 foi instalado apenas como ferramenta local de validação. Uma instância descartável foi criada em `/tmp`, a migration foi aplicada com `ON_ERROR_STOP`, as sete tabelas foram verificadas e o teste de integração PostgreSQL passou. A instância foi desligada e removida.
+
+## 47. Gate 2B — migration e testes PostgreSQL descartável — 25/09/2026
+
+O Gate 2B foi concluído. A migration `portal-api/migrations/001_initial.sql` foi executada com sucesso contra PostgreSQL 16.15 em uma instância temporária. Foram verificadas as tabelas `access_grants`, `audit_events`, `benefit_entitlements`, `invitations`, `memberships`, `organizations` e `users`.
+
+Validação final: `cd portal-api && PGTEST_URL=... npm test` passou com **13 testes**, sendo 12 testes de autorização em memória e 1 teste de integração PostgreSQL, incluindo a verificação de isolamento entre organizações. Não houve dados reais, login real, OAuth, link mágico, provedor externo, cobrança ou publicação. A instância temporária foi encerrada e seu diretório removido.
+
+O próximo gate recomendado é o **Gate 3 — segurança e operação**: revisão de threat model, sessão/revogação planejadas, limites, logs, restauração e CI reproduzível antes de qualquer integração de identidade real.

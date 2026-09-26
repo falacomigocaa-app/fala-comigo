@@ -159,8 +159,8 @@ A regra é separar aplicativo local, site público, portal conectado e console a
 11. Ler e seguir [`docs/ADR-001-opcao-a-portal-independente.md`](docs/ADR-001-opcao-a-portal-independente.md).
 12. Revisar [`docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md`](docs/ESPECIFICACAO_MVP_PORTAL_SINTETICO.md) como Gate 1A concluído.
 13. Executar o Gate 2 em branch separada: API local, PostgreSQL descartável, migrations, fixtures e testes de autorização.
-14. Concluir o Gate 2B executando a migration contra PostgreSQL descartável; a API sintética atual não é produção.
-15. Só depois da validação local, abrir um gate específico para integrar Google OAuth e link mágico em ambiente de teste; comparar provedores e não ativar cobrança sem decisão específica.
+14. Gate 2B concluído: migration aplicada e 13 testes aprovados contra PostgreSQL descartável; a API sintética atual não é produção.
+15. Planejar o Gate 3 de segurança e operação antes de integrar Google OAuth e link mágico; não comparar/contratar provedor nem ativar cobrança sem decisão específica.
 16. Seguir `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`, mantendo o portal sem dados reais até concluir os gates de segurança, privacidade, backup/restauração e operação.
 
 Comandos básicos:
