@@ -651,6 +651,6 @@ O plano preserva todas as melhorias de médio e longo prazo. Nenhuma funcionalid
 
 O proprietário esclareceu que já instalou e testou o APK em um **Realme C71 Android**. Resultado informado: abertura normal, sem tela branca ou travamento; cartões e montagem de frases funcionando; uso sem Internet e em modo avião funcionando; textos não cortados no celular pequeno. O modo paisagem é menos confortável porque mostra poucas opções de cartões. TalkBack não foi testado; tablet e iOS também não foram testados.
 
-Defeitos observados: ao criar cartão próprio, tirar uma foto e salvar, a imagem não é persistida e é perdida; escolher imagem da galeria funciona. Também aparece uma mensagem visual `right overflowed`, ainda sem fluxo/localização identificados.
+Defeitos observados: ao criar cartão próprio, tirar uma foto e salvar, a imagem não é persistida e é perdida; escolher imagem da galeria funciona. Também aparece uma mensagem visual `right overflowed` na **tela parental**.
 
 Correção de registro: a avaliação estética externa não tinha acesso a Flutter, emulador ou dispositivo nesta sessão; isso não significa que o proprietário não tenha feito teste real. A evidência do Realme C71 passa a ser a baseline manual atual, sem extrapolar para aparelhos, orientações ou leitores de tela não testados.

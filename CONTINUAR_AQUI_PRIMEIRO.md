@@ -165,6 +165,6 @@ Para executar sem perder etapas, seguir [`docs/PLANO_EXECUCAO_MELHORIAS_CAA.md`]
 
 O proprietário informou que já testou o APK em um **Realme C71 Android**: abriu normalmente, sem tela branca ou travamentos; cartões e montagem de frases funcionaram; o app funcionou sem Internet e em modo avião; os textos não ficaram cortados no celular pequeno. O modo paisagem ficou mais difícil porque mostra poucas opções de cartões. TalkBack ainda não foi testado.
 
-Problemas observados no uso real: ao criar um cartão próprio, tirar uma foto e tentar salvar, a foto não é salva e é perdida; selecionar uma imagem da galeria funciona. Também aparece uma mensagem visual `right overflowed`, ainda sem localização exata registrada.
+Problemas observados no uso real: ao criar um cartão próprio, tirar uma foto e tentar salvar, a foto não é salva e é perdida; selecionar uma imagem da galeria funciona. Também aparece uma mensagem visual `right overflowed` na **tela parental**.
 
 Próxima correção prioritária: investigar o fluxo de câmera/salvamento sem alterar cartões existentes; depois localizar e eliminar o overflow com teste em retrato e paisagem. Não afirmar que tablet, TalkBack ou iOS foram testados.
