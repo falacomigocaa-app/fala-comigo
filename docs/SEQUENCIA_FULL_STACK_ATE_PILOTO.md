@@ -175,6 +175,10 @@ Até lá, serão usados catálogo, licenças fictícias e ambiente de teste. Nen
 
 **Pronto quando:** revogar o acesso impede novas leituras e downloads imediatamente, respeitando registros de auditoria e obrigações de retenção.
 
+**Fluxo obrigatório antes da implementação real:** o responsável usa o site autenticado; cadastra `FamilySpace` e `ChildSubject`; escolhe organização verificada e pessoa nominal; seleciona finalidade, categorias de dados, ações e prazo; confirma consentimento; envia convite por e-mail ou link de resgate. Escola, clínica, cuidadora, professor e terapeuta acessam pelo site com contas individuais. O app CAA infantil não é necessário para o portal e nunca pode ser bloqueado por login, sessão ou revogação remota.
+
+**Não está pronto:** a API local usa identidade sintética e memória/fixtures; ainda não há e-mail, token de convite real, consentimento versionado, verificação de organização, sujeito infantil conectado a grants, sessão real ou revogação de conteúdo em produção.
+
 ### Sequência 05 — Modelos locais no aplicativo
 
 **Entrega:** base local preparada para futura colaboração, sem sincronização automática.

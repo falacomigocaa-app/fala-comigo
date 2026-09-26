@@ -146,6 +146,12 @@ A condução full-cycle foi ampliada para incluir o site institucional, o consol
 
 A regra é separar aplicativo local, site público, portal conectado e console administrativo. Pagamento real, domínio, publicação ampla e sincronização de dados clínicos permanecem bloqueados até validação e confirmação explícita. O plano Essencial e a comunicação básica nunca dependem de assinatura.
 
+### Auditoria recente dos fluxos de acesso
+
+O relatório [`docs/AVALIACAO_FLUXOS_AUTORIZACAO_PORTAL.md`](docs/AVALIACAO_FLUXOS_AUTORIZACAO_PORTAL.md) consolidou padrões de portais de pacientes, clínicas de terapia e comunicação escola–família. A decisão operacional é: o responsável cria conta adulta e `FamilySpace`, cadastra cada criança como `ChildSubject`, escolhe organização, pessoa, finalidade, dados, ações e prazo, e envia convite individual. O convidado acessa pelo site responsivo com conta própria; o app CAA da criança não é obrigatório. Link é apenas resgate temporário e não concede acesso sozinho.
+
+As lacunas ainda abertas são materiais: a `portal-api` é sintética/local, não envia e-mail real, não possui autenticação real, organização verificada, consentimento versionado, `ChildSubject` conectado a grants, convite por token, sessões reais ou revogação de conteúdo em produção. O portal HTML é mock. Não apresentar escola, clínica, cuidadora, professor ou terapeuta como usuários operacionais até concluir a sequência de identidade, convites, consentimento e autorização server-side.
+
 ## Próxima retomada recomendada
 
 1. Confirmar a branch e o estado limpo do Git.
@@ -241,6 +247,7 @@ Não tratar documentação conceitual como implementação existente. O portal e
 - `docs/ROADMAP_FULL_CYCLE.md`: roadmap de produto e engenharia.
 - `docs/CHECKLIST_PRE_LANCAMENTO.md`: gates funcionais, acessibilidade, segurança e publicação.
 - `docs/MODELO_AUTORIZACAO_CLINICAS_ESCOLAS.md`: modelo de autorização futura.
+- `docs/AVALIACAO_FLUXOS_AUTORIZACAO_PORTAL.md`: pesquisa comparativa e fluxo operacional de convites, consentimento e acesso.
 - `docs/MODELO_CUSTOS_E_PLANOS.md`: estratégia de baixo custo e planos.
 - `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`: sequência de programação até o piloto com clínica e colégio.
 - `docs/CONTRATO_PORTAL_CONECTADO.md`: entidades, estados, escopos e fila offline comuns ao app e web.

@@ -178,3 +178,9 @@ Na branch `fix/parental-camera-and-overflow`, foram implementadas duas correçõ
 O botão e o método temporários de teste de 30 segundos foram removidos. Eles serviam apenas ao diagnóstico e não fazem parte do produto. O fluxo correto é: o responsável configura dias/horário, autoriza notificações, alarme exato e tela cheia, salva o alerta e, no horário, o Android deve abrir o modo despertador com voz gravada ou TTS. Essa implementação ainda aguarda CI e teste no aparelho.
 
 O **Lembrete do Responsável** também foi auditado: ele continua sendo uma notificação normal para o adulto, não o despertador em tela cheia da criança. A criação agora solicita as permissões automaticamente e agenda cada dia com `exactAllowWhileIdle`; exclusão cancela os sete IDs. A validação no aparelho ainda é necessária para confirmar horário, dias, reinício e modo de economia de bateria.
+
+### Auditoria dos fluxos de autorização — concluída documentalmente
+
+O relatório [`docs/AVALIACAO_FLUXOS_AUTORIZACAO_PORTAL.md`](docs/AVALIACAO_FLUXOS_AUTORIZACAO_PORTAL.md) esclarece o fluxo futuro: o responsável cria conta adulta no site, cria `FamilySpace` e `ChildSubject`, escolhe organização verificada, pessoa nominal, finalidade, dados, ações e prazo, registra consentimento e envia convite individual. Escola, clínica, cuidadora, professor e terapeuta acessam pelo site com conta própria; o aplicativo da criança não é necessário. Link é apenas resgate temporário, não autorização ampla.
+
+Lacunas confirmadas: a API ainda é sintética/local; não há login real, e-mail, token de convite, organização verificada, consentimento versionado, sujeito ligado a grant, portal autenticado ou revogação remota de conteúdo. Portanto, não cadastrar dados reais nem apresentar o portal como funcional. **Próximo gate:** especificar e testar identidade, organizações, convites, consentimento, grants, papéis e revogação com dados sintéticos antes de escolher/integrar provedor real.

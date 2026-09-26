@@ -668,3 +668,29 @@ Após esclarecimento do proprietário, o teste diagnóstico de 30 segundos foi r
 O lembrete do responsável usa o mesmo serviço local de notificações, mas tem finalidade diferente do despertador infantil: deve ser uma notificação normal para o adulto, sem abrir tela cheia nem reproduzir a voz da criança. A auditoria encontrou que a criação dependia de o usuário abrir a tela de permissões separadamente e usava `inexactAllowWhileIdle`. A correção passou a inicializar o serviço, solicitar permissões automaticamente e usar `exactAllowWhileIdle` para cada dia selecionado. O cancelamento já percorre os sete IDs derivados do lembrete.
 
 Estado: implementação pendente de CI e validação no Realme C71. Testar criação, persistência após sair/voltar, horário, dias múltiplos, exclusão e comportamento após reiniciar o aparelho. Não declarar funcionamento comprovado sem esse teste.
+
+
+## 54. Auditoria dos fluxos de autorização e compartilhamento — 26/09/2026
+
+Foi realizada pesquisa comparativa de portais de pacientes/proxy, clínicas de terapia e comunicação escola–família, com fontes oficiais de MyChart/Cleveland Clinic, NHS, SimplePractice, TherapyNotes, Google Classroom, ParentSquare, Seesaw, OWASP, NIST e LGPD. O relatório consolidado está em [`docs/AVALIACAO_FLUXOS_AUTORIZACAO_PORTAL.md`](AVALIACAO_FLUXOS_AUTORIZACAO_PORTAL.md).
+
+### Decisão de produto esclarecida
+
+- O responsável adulto cria conta própria no **site/portal**, não dentro do fluxo infantil.
+- Ele cria um `FamilySpace` e cadastra cada criança como `ChildSubject`, sem exigir login da criança.
+- Escola, clínica e família são organizações/contextos separados.
+- O responsável escolhe pessoa nominal, organização, finalidade, dados, ações e prazo antes de compartilhar.
+- O destinatário recebe convite por e-mail ou link HTTPS de resgate, entra/cria sua própria conta e aceita ou recusa pelo site.
+- O aplicativo CAA da criança não precisa ser instalado pela escola, clínica, cuidadora, professor ou terapeuta.
+- Acesso institucional não nasce apenas de nome de organização, convite, link, parentesco, benefício ou membership.
+- Revogar convite, consentimento, grant e vínculo organizacional são ações distintas; novas leituras/downloads devem ser bloqueados pelo servidor.
+
+### Papéis mínimos recomendados
+
+Criança/adolescente usa comunicação local; responsável autorizado administra sujeitos e concessões; segundo responsável/cuidador recebe delegação individual; administrador da escola/clínica administra a própria equipe, sem acessar crianças automaticamente; professor recebe contexto pedagógico; terapeuta recebe contexto funcional/clínico autorizado; patrocinador vê somente licença/agregados.
+
+### Lacunas confirmadas
+
+A API é somente sintética/local, com `x-synthetic-user-id`, fixtures e armazenamento em memória; não há login real, sessão, MFA, e-mail transacional, token de convite real, organização verificada, consentimento versionado, `ChildSubject` ligado a grant, tarefas/conteúdo protegidos ou revogação remota efetiva. `site/portal.html` é mock estático. A implementação de produção só deve começar após a matriz de fluxos e testes negativos; não liberar dados reais.
+
+**Próximo gate:** especificar e testar o fluxo de identidade, organização, convite, consentimento, grant e revogação sintéticos com a matriz de papéis; depois escolher/integrar provedor real. Manter a lista de continuidade e não afirmar que o portal já funciona.
