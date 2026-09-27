@@ -25,7 +25,7 @@ O projeto antigo `Fala comigo CAA` em `us-east-1` continua intocado. O staging n
 
 ## Limites atuais do plano Free
 
-A página oficial atual informa até 2 projetos gratuitos ativos, 500 MB de banco por projeto, até 50.000 MAU, 1 GB de file storage e 5 GB de egress. As cotas e bases variam; a página de cobrança explica como uso agregado ou excedentes podem funcionar. Projetos Free podem ser pausados depois de 7 dias de atividade de banco baixa. A documentação oficial não oferece backups automáticos para download no Free; não tratar isso como ambiente de produção ou cópia de segurança. A estimativa de US$ 0/mês é o valor recebido no momento da criação, não garantia de preço permanente.
+A página oficial atual informa até 2 projetos gratuitos ativos, 500 MB de banco por projeto, até 50.000 MAU, 1 GB de file storage e 5 GB de egress. As cotas e bases variam; a página de cobrança explica como uso agregado ou excedentes podem funcionar. Projetos Free podem ser pausados depois de 7 dias de atividade de banco baixa. No Free não há backups diários automáticos incluídos, e a documentação informa que backups do banco não podem ser baixados; não tratar isso como ambiente de produção ou cópia de segurança. A estimativa de US$ 0/mês é o valor recebido no momento da criação, não garantia de preço permanente.
 
 - [Preços Supabase](https://supabase.com/pricing)
 - [Cobrança e cotas](https://supabase.com/docs/guides/platform/billing-on-supabase)

@@ -28,7 +28,7 @@ A página oficial do Supabase lista para o plano Free: até **dois projetos ativ
 Dois pontos importantes para um projeto gratuito:
 
 - Se ficar com pouca atividade no banco por sete dias, o projeto pode ser pausado automaticamente. Nesse caso, o responsável precisa reativá-lo pelo painel do Supabase. Um staging parado não é uma hospedagem com disponibilidade garantida.
-- O plano Free não inclui backups automáticos do banco para download. Por isso, não vamos colocar dados importantes nem dados reais de crianças nesse ambiente.
+- O plano Free não inclui backups diários automáticos do banco; a documentação informa que backups do banco não podem ser baixados. Por isso, não vamos colocar dados importantes nem dados reais de crianças nesse ambiente.
 
 Também não devemos ativar complementos, mudar de plano, criar projetos adicionais nem habilitar algo que possa gerar cobrança sem explicar o custo e obter autorização antes.
 
