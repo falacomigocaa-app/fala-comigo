@@ -1,0 +1,28 @@
+name: Validar site estático
+
+on:
+  pull_request:
+    paths:
+      - "site/**"
+      - "tools/check_static_site.py"
+      - ".github/workflows/static-site-validation.yml"
+      - ".github/workflows/site-pages.yml"
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - "tools/check_static_site.py"
+      - ".github/workflows/static-site-validation.yml"
+      - ".github/workflows/site-pages.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validar links, âncoras e contraste
+        run: python3 tools/check_static_site.py

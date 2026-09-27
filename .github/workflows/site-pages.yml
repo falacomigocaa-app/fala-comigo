@@ -24,6 +24,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validar links, âncoras e contraste do site
+        run: python3 tools/check_static_site.py
+
       - name: Preparar site
         run: |
           test -s site/index.html
