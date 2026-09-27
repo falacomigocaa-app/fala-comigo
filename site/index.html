@@ -16,20 +16,23 @@
           <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
           <span>Fala Comigo</span>
         </a>
-        <nav aria-label="Navegação principal">
-          <a href="#como-funciona">Como funciona</a>
-          <a href="#privacidade">Privacidade</a>
-          <a href="#seguranca">Segurança</a>
-          <a href="#instituicoes">Instituições</a>
-          <a href="#rh">Empresas e RH</a>
-          <a href="portal.html">Portal piloto</a>
-          <a href="#planos">Planos</a>
-          <a class="nav-cta" href="#contato">Falar com a equipe</a>
-        </nav>
+        <details class="site-menu" open>
+          <summary class="menu-toggle"><span class="menu-lines" aria-hidden="true"></span><span>Menu</span></summary>
+          <nav aria-label="Navegação principal">
+            <a href="#como-funciona">Como funciona</a>
+            <a href="privacy.html">Privacidade e segurança</a>
+            <a href="#instituicoes">Instituições</a>
+            <a href="rh/index.html">Empresas e RH</a>
+            <a href="portal.html">Portal piloto</a>
+            <a href="#planos">Planos</a>
+            <a href="#faq">Perguntas frequentes</a>
+            <a class="nav-cta" href="#contato">Contato</a>
+          </nav>
+        </details>
       </div>
     </header>
 
-    <main id="conteudo">
+    <main id="conteudo" tabindex="-1">
       <section class="hero shell" id="inicio">
         <div class="hero-copy">
           <p class="eyebrow">Comunicação para o dia a dia</p>
@@ -161,5 +164,21 @@
     </main>
 
     <footer class="site-footer"><div class="shell footer-wrap"><div><a class="brand" href="#inicio"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>Fala Comigo</span></a><p>Comunicação mais acessível, previsível e respeitosa.</p></div><div class="footer-links"><a href="privacy.html">Privacidade</a><a href="https://github.com/falacomigocaa-app/fala-comigo">GitHub</a><a href="#contato">Contato</a><a href="https://falacomigo-kyrh225w.manus.space/creator" rel="noreferrer">Espaço do Criador</a></div><p class="copyright">© 2026 Fala Comigo</p></div></footer>
+    <script>
+      (() => {
+        const menu = document.querySelector('.site-menu');
+        const mobile = window.matchMedia('(max-width: 1100px)');
+        if (!menu) return;
+
+        const syncMenu = () => { menu.open = !mobile.matches; };
+        syncMenu();
+        mobile.addEventListener('change', syncMenu);
+        menu.querySelectorAll('nav a').forEach((link) => {
+          link.addEventListener('click', () => {
+            if (mobile.matches) menu.open = false;
+          });
+        });
+      })();
+    </script>
   </body>
 </html>

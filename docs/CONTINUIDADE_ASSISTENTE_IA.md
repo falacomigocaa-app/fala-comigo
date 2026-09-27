@@ -589,3 +589,19 @@ Estado da main: nenhuma mudança de código foi feita por esta tentativa. O manu
 - **Validação:** inspeção do erro remoto e das duas assinaturas concluída; revisão do diff e `git diff --check` passaram. Flutter, Dart e adb não estão disponíveis localmente. CI da PR #82 e APK ainda pendentes. Não houve teste em aparelho, com usuários ou em produção.
 - **Estado:** `pendente`; branch enviada e commit `0aae627` publicado na [PR #82](https://github.com/falacomigocaa-app/fala-comigo/pull/82); `main` não alterada; nenhum segredo ou dado real foi adicionado.
 - **Próximo passo:** conferir CI da PR #82. Depois, se verde, gerar APK de teste e solicitar instalação/validação do proprietário no Realme C71. Não declarar a câmera/overflow validados por esta correção de compilação.
+
+
+## 43. Fase Web: navegação, contraste e minimização de dados — 27/09/2026
+
+**Objetivo:** avançar em uma etapa pública de baixo risco e responsiva, com revisão independente de estética/acessibilidade e privacidade, mantendo a `main` protegida.
+
+- Confirmado `origin/main` em `1281c39`, após merge squash da PR #82 com check remoto verde. O ajuste só alinha a assinatura da API de mídia Web; o stub continua rejeitando persistência, e não houve teste Android em aparelho.
+- Criada branch `site/visual-a11y-phase1`; commit base `0f52447a47c2b6fcbfe71676657c9f4a377c512c`; PR [#83](https://github.com/falacomigocaa-app/fala-comigo/pull/83).
+- Pareceres da equipe identificaram links sem destino, contraste insuficiente em cartões e insuficiência de navegação mobile. Revisores verificaram a implementação e pediram rolagem interna em viewport baixo, foco programático do skip link e maior clareza de que dados sensíveis não devem ser enviados por e-mail; os três pontos foram incorporados.
+- Mudanças: navegação com destino para páginas existentes, link para FAQ, menu `<details>/<summary>` recolhível abaixo de 1100 px; rolagem e limite de altura; `--muted`/eyebrows mais escuros; skip links focáveis; contato da política sem issues públicas e com aviso para não enviar dados sensíveis; retirada de link para documentação não publicada da prévia do portal.
+- Novo `tools/check_static_site.py` valida arquivos/âncoras e as combinações de contraste escolhidas. Integrado ao workflow de PR `static-site-validation.yml` e ao gate anterior ao artefato Pages.
+- **Validação local:** script estático aprovado; Playwright/Chromium passou em 320×800, 390×844, 768×1024, 1024×900 e 1440×1000 sem overflow; menu fechou após navegar. Em 390×320, a rolagem interna tornou o último link alcançável. Teste de teclado confirmou foco no `<main>` após skip link. `git diff --check` passou. Revisão humana de navegador/leitor de tela completa não executada.
+- **CI da PR #83 no instante da atualização:** check de site aprovado; check `Flutter quality checks` pendente; PR permanece aberta. Sem merge e sem publicação em Pages.
+- **Limites:** esta não é revisão jurídica formal; não houve validação por pessoas usuárias, TalkBack ou outros motores de browser. App, API e Supabase não foram modificados.
+- Foi encontrado um projeto Supabase ativo `Fala comigo CAA` em `us-east-1`, que não corresponde ao ambiente documentado `fala-comigo-staging` em São Paulo. Não se inspecionaram tabelas, não se criaram credenciais e nenhuma mudança de banco/login foi feita. Necessário confirmar ref e finalidade antes de continuar essa trilha.
+- **Próximo gate:** aguardar CI/review da PR #83 e pedir autorização antes do merge, pois ele acionará publicação pública; prosseguir em paralelo com validação isolada das PRs Android #79–#81 e testes no Realme C71, quando houver APK/evidência.
