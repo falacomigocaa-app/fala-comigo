@@ -230,3 +230,6 @@ O Free está sendo usado para desenvolvimento com dados sintéticos. O preço e 
 
 
 A documentação do staging foi enviada pela branch `docs/supabase-staging-created`, commit `0234cd90a7693c5c3c7c0a864e8119c5ab70058f`, na PR [#84](https://github.com/falacomigocaa-app/fala-comigo/pull/84). Ela não modifica o banco, o Auth ou o site público.
+
+
+Atualização: a branch `docs/supabase-staging-created` avançou até `08e5b1fad32d823a1dd4f9a5e21d85fe6d96dfac`; a PR #84 permanece aberta e sem merge.

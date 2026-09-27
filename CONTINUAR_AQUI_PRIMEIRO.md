@@ -144,3 +144,8 @@ O link público atual ainda aponta para `https://falacomigo-kyrh225w.manus.space
 ### Registro de entrega documental — PR #84
 
 A documentação do staging foi commitada como `0234cd90a7693c5c3c7c0a864e8119c5ab70058f` na branch `docs/supabase-staging-created`; PR [#84](https://github.com/falacomigocaa-app/fala-comigo/pull/84) aberta contra `main`, ainda sem merge. O diff da documentação passou `git diff --check` antes do commit. O banco permanece vazio e não conectado ao código.
+
+
+### Cabeça atual da PR #84
+
+O commit final da branch de documentação é `08e5b1fad32d823a1dd4f9a5e21d85fe6d96dfac` (inclui ajuste da redação de backups do Free); PR [#84](https://github.com/falacomigocaa-app/fala-comigo/pull/84) continua aberta e sem merge. Worktree local deve permanecer limpa após este registro.

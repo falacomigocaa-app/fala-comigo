@@ -610,3 +610,8 @@ Estado da main: nenhuma mudança de código foi feita por esta tentativa. O manu
 ### Atualização da seção 44 — entrega documental
 
 Os guias da etapa foram commitados na branch `docs/supabase-staging-created` em `0234cd90a7693c5c3c7c0a864e8119c5ab70058f`. PR [#84](https://github.com/falacomigocaa-app/fala-comigo/pull/84) aberta contra `main`; sem merge. O diff passou `git diff --check`; o projeto Supabase permanece vazio e separado do app.
+
+
+### Head final da PR #84
+
+A redação dos backups Free foi revisada e enviada no commit `08e5b1fad32d823a1dd4f9a5e21d85fe6d96dfac`, atualmente no head da branch `docs/supabase-staging-created`. PR #84 segue aberta, sem merge; nenhuma mudança de banco ocorreu.
