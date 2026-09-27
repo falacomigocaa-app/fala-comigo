@@ -620,3 +620,21 @@ A redação dos backups Free foi revisada e enviada no commit `08e5b1fad32d823a1
 ### Fechamento da PR #84
 
 Após checks verdes, a PR de documentação #84 foi squash-merged na `main`, commit `49ee1a3`. O merge foi restrito aos documentos; nenhuma alteração no banco, Auth ou publicação Pages. O staging continua vazio e a PR #83 continua aberta sem autorização de merge público.
+
+
+## 45. Escopo do Espaço do Criador — planos/licenças sem contas individuais
+
+O responsável quer gerenciar preços/valores de planos e emitir licenças particulares, para clínicas/escolas e para vendas corporativas/patrocinadas. Em seguida especificou de forma enfática que não quer saber de dados sensíveis, de clientes, nem de usuários. Interpretação vinculante para o desenho: nada de CRM/diretório, nome/e-mail, busca individual, perfil, conta de cliente, beneficiário, relação entre licença e pessoa, resgate individual, conteúdo de comunicação, clínico ou uso individual. O proprietário poderá precisar de identidade administrativa própria para fazer login, distinta das contas de clientes; o console não fornece acesso às outras contas. Pagamentos fora do MVP.
+
+Três revisões independentes (produto, segurança/privacidade e UX) recomendaram catálogo versionado com rascunho/publicação, preço público separado de referência interna, emissão de códigos opacos em lotes, validade/revogação por lote, apenas contagens agregadas com supressão de grupos pequenos e histórico administrativo sem códigos ou conteúdo. Recomendam também autenticação forte, MFA, RLS deny-by-default e nenhuma `service_role` no browser. Licença não é autorização clínica, e não pode bloquear Essencial/offline.
+
+A distinção técnica a confirmar é se o servidor pode guardar HMAC/hash opaco e estado/datas mínimos por código, sem identidade e invisível ao console. Isso permite uso único e contagem de resgates, sem dizer quem resgatou. Se o requisito for proibir qualquer estado por código, não se pode garantir uso único nem contagem confiável; somente revogação em bloco. A proposta documenta a decisão pendente.
+
+Criado em branch documental `docs/creator-console-license-scope` o arquivo `docs/PROPOSTA_CONSOLE_CRIADOR_PLANOS_LICENCAS.md`. Ainda não há implementação visual, Auth, migration ou conexão. Próximo passo sugerido: confirmar a opção sobre registro técnico por código e as regras comerciais; então criar protótipo estático com dados fictícios e oferecer prévia temporária antes de banco/login. Publicação do site continua exigindo autorização separada.
+
+
+### Clarificação do responsável sobre o limite de dados — 27/09/2026
+
+O responsável esclareceu que o que não quer ver são dados clínicos e informações sensíveis desse tipo. Corrigir a leitura mais ampla da seção 45: não concluir que nomes comerciais de clínica/empresa ou metadados de licença são proibidos; podem ser escolhas úteis, ainda por decidir. Limite absoluto: o console não exibe conteúdo clínico, diagnósticos, prontuários, comunicação, mídias nem indicadores clínicos. A proposta foi ajustada para separar dados comerciais e administrativos dos dados clínicos.
+
+Foi produzido `site/console-preview.html`, uma prévia estática com dados inventados e sem integração, login, persistência ou requisições externas. O layout foi validado em 1440, 768, 390, 360 e 320 px; a simulação é local e não cria licenças. O arquivo permanece em branch, sem merge/publicação. O proprietário recebeu URL temporária para visualizar a prévia.

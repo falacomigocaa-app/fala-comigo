@@ -154,3 +154,17 @@ O commit final da branch de documentação é `08e5b1fad32d823a1dd4f9a5e21d85fe6
 ### Atualização — PR #84 mesclada
 
 A PR documental #84 foi squash-merged com CI verde; `origin/main` está em `49ee1a3` (`docs(supabase): document free São Paulo staging (#84)`). Isso integrou somente os handoffs; não executou migrations, não configurou Auth e não publicou o site. Staging segue vazio. A PR pública #83 permanece aberta e não publicada, pendente de autorização do responsável para o merge.
+
+
+## Atualização — Espaço do Criador: gestão de planos/licenças, sem dados de usuários
+
+Em 27/09/2026, o responsável definiu que ao entrar no Espaço do Criador deseja gerir valores dos planos e gerar licenças para modalidades particular, clínicas/escolas e vendas corporativas/patrocínio. Explicitou que **não quer saber nem ver dados sensíveis, dados de clientes ou mesmo dados/contas de usuários**. Tratar isso como limite do produto, não apenas como preferência visual: sem CRM, diretório de contas, busca individual, perfis, histórico individual de resgate ou métricas individualizadas no console. Sem pagamentos no MVP.
+
+Parecer independente de produto, privacidade e UX recomendou catálogo com versões, licenças opacas em lote, validade/revogação de lote e contagens agregadas. Há uma escolha ainda pendente: aceitar que o servidor guarde hash/estado técnico por código (sem identidade) para impedir uso repetido, enquanto o console vê somente agregados, ou proibir até esse estado individual e aceitar menos funcionalidades. A proposta completa está em `docs/PROPOSTA_CONSOLE_CRIADOR_PLANOS_LICENCAS.md`.
+
+**Nenhuma tabela, migration, Auth, chave ou integração foi criada para esse painel.** Próximo passo: confirmar as decisões comerciais e esse limite técnico; então fazer um protótipo estático com dados inventados e mostrar prévia temporária antes de qualquer persistência. Não publicar automaticamente.
+
+
+### Clarificação posterior do limite de dados — 27/09/2026
+
+O responsável esclareceu que o que não quer ver são **dados clínicos e informações sensíveis desse tipo**. Corrigir a interpretação anterior: isso não significa automaticamente que nomes comerciais de clínicas/empresas ou metadados de licença estejam proibidos. Esses itens continuam a ser decisões de produto; não inventar cadastro/diretório de usuários. O princípio absoluto é não expor conteúdo clínico, diagnósticos, prontuários, comunicação, imagens/documentos ou indicadores clínicos. A proposta foi corrigida para refletir essa distinção. Existe agora uma prévia estática do console em `site/console-preview.html`; contém apenas dados fictícios, não chama serviços externos e não tem login ou persistência. Verifique-a na URL temporária compartilhada na conversa; não é publicação oficial.

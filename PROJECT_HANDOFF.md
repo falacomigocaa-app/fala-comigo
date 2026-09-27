@@ -217,6 +217,7 @@ Não tratar documentação conceitual como implementação existente. O portal e
 - `docs/CONTRATO_API_CONTINUIDADE_CUIDADO.md`: endpoints, payloads, consentimentos e testes de negação do portal.
 - `docs/SUPABASE_STAGING_INICIANTE.md`: explicação simples do staging Supabase e dos próximos gates, sem expor segredos.
 - `docs/HANDOFF_SUPABASE_STAGING.md`: identidade, estado verificado e limites do projeto Supabase de teste.
+- `docs/PROPOSTA_CONSOLE_CRIADOR_PLANOS_LICENCAS.md`: proposta do painel de planos e licenças sem dados de clientes ou usuários.
 - `docs/ESTUDO_PRECOS_PLANOS.md`: pesquisa de mercado e faixas de preço para validação.
 - `docs/MAPA_FUNCIONALIDADES_SAAS_CLINICAS.md`: recursos de SaaS clínico priorizados para ajudar famílias.
 - `privacy_policy.html`: política de privacidade alinhada ao armazenamento local.
