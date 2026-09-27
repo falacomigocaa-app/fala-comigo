@@ -149,3 +149,8 @@ A documentação do staging foi commitada como `0234cd90a7693c5c3c7c0a864e8119c5
 ### Cabeça atual da PR #84
 
 O commit final da branch de documentação é `08e5b1fad32d823a1dd4f9a5e21d85fe6d96dfac` (inclui ajuste da redação de backups do Free); PR [#84](https://github.com/falacomigocaa-app/fala-comigo/pull/84) continua aberta e sem merge. Worktree local deve permanecer limpa após este registro.
+
+
+### Atualização — PR #84 mesclada
+
+A PR documental #84 foi squash-merged com CI verde; `origin/main` está em `49ee1a3` (`docs(supabase): document free São Paulo staging (#84)`). Isso integrou somente os handoffs; não executou migrations, não configurou Auth e não publicou o site. Staging segue vazio. A PR pública #83 permanece aberta e não publicada, pendente de autorização do responsável para o merge.
