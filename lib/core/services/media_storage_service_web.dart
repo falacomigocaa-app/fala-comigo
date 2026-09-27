@@ -13,7 +13,10 @@ class WebMediaFile {
 class MediaStorageService {
   MediaStorageService._();
 
-  static Future<String> persistFile(String _sourcePath) async {
+  static Future<String> persistFile(
+    String _sourcePath, {
+    String? extensionHint,
+  }) async {
     throw UnsupportedError(
       'Mídias personalizadas exigem armazenamento local cifrado e ainda não '
       'estão disponíveis na versão Web.',

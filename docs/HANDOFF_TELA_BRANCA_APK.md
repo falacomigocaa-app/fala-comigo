@@ -137,3 +137,14 @@ Em 25 de setembro de 2026, o workflow `Android test APK artifact` foi executado 
 - **Tipo:** APK de teste não produtivo, assinado com chave efêmera do GitHub Actions.
 
 Esse resultado comprova a geração e a integridade estrutural do APK da correção. Ainda não comprova a abertura da grade em celular ou tablet real. A próxima ação é instalar o APK em aparelho Android, preferencialmente após desinstalação limpa, e registrar o resultado de abertura, grade CAA, modo offline e acessibilidade.
+
+
+## Atualização — 27/09/2026 — falha de compilação Web em PRs com a correção de câmera
+
+A revisão dos checks remotos das PRs #79, #80 e #81 identificou uma incompatibilidade entre plataformas: a implementação nativa `media_storage_service_io.dart` recebe `extensionHint`, mas o stub Web não aceitava o parâmetro nomeado usado por `add_card_screen.dart`. O compilador Web interrompeu as checks com `No named parameter with the name 'extensionHint'`.
+
+Foi aplicada em branch separada `fix/web-media-api-parity`, baseada na `origin/main` atual (`b43e18b`), uma alteração somente de contrato em `media_storage_service_web.dart`: aceitar o parâmetro `String? extensionHint`. O método continua lançando `UnsupportedError`, de modo que nenhuma persistência de mídia personalizada foi habilitada na Web.
+
+O commit `0aae627` foi publicado na branch e a [PR #82](https://github.com/falacomigocaa-app/fala-comigo/pull/82) foi aberta contra `main`.
+
+**Estado:** pendente de CI. A revisão do diff e `git diff --check` passaram. Esta sessão não tem Flutter/Dart nem adb disponíveis. Não há validação de APK nem em aparelho nesta etapa; os resultados previamente registrados para o Realme C71 permanecem limitados aos fluxos e à versão já testados pelo proprietário. A `main` não foi alterada. Próximo passo: confirmar checks verdes antes de gerar um novo APK de teste para a repetição dos fluxos no Realme C71.

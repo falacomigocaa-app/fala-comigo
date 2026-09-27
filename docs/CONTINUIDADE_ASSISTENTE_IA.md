@@ -576,3 +576,16 @@ Opções para a próxima etapa:
 Gate: aguardar a escolha A, B ou C. Se A/C, definir provedor do backend e banco. Não trocar o link público atual nem apagar o portal existente antes de haver substituto funcional. O endereço atual do Criador continua provisoriamente em `https://falacomigo-kyrh225w.manus.space/creator`, e isso deve ser explicitamente comunicado até a migração.
 
 Estado da main: nenhuma mudança de código foi feita por esta tentativa. O manual `CONTINUAR_AQUI_PRIMEIRO.md` foi atualizado com o mesmo ponto de parada.
+
+
+## 42. Compatibilidade da API de mídia Web — 27/09/2026
+
+**Objetivo:** investigar o CI vermelho da correção da câmera e corrigir a incompatibilidade de interface por plataforma, sem alterar `main`.
+
+- `origin/main` foi conferida em `b43e18b`; worktree limpa antes do trabalho.
+- Checks das PRs #79, #80 e #81 apontaram falha de compilação Web: `No named parameter with the name 'extensionHint'` na chamada de `MediaStorageService.persistFile` em `add_card_screen.dart`.
+- Criada a branch local `fix/web-media-api-parity` a partir de `origin/main`.
+- `lib/core/services/media_storage_service_web.dart`: o stub agora aceita o mesmo parâmetro nomeado opcional `extensionHint` que a implementação nativa. Ele continua lançando `UnsupportedError`; mídia personalizada continua sem suporte na Web.
+- **Validação:** inspeção do erro remoto e das duas assinaturas concluída; revisão do diff e `git diff --check` passaram. Flutter, Dart e adb não estão disponíveis localmente. CI da PR #82 e APK ainda pendentes. Não houve teste em aparelho, com usuários ou em produção.
+- **Estado:** `pendente`; branch enviada e commit `0aae627` publicado na [PR #82](https://github.com/falacomigocaa-app/fala-comigo/pull/82); `main` não alterada; nenhum segredo ou dado real foi adicionado.
+- **Próximo passo:** conferir CI da PR #82. Depois, se verde, gerar APK de teste e solicitar instalação/validação do proprietário no Realme C71. Não declarar a câmera/overflow validados por esta correção de compilação.
