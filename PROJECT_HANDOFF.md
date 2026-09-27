@@ -215,6 +215,21 @@ Não tratar documentação conceitual como implementação existente. O portal e
 - `docs/SEQUENCIA_FULL_STACK_ATE_PILOTO.md`: sequência de programação até o piloto com clínica e colégio.
 - `docs/CONTRATO_PORTAL_CONECTADO.md`: entidades, estados, escopos e fila offline comuns ao app e web.
 - `docs/CONTRATO_API_CONTINUIDADE_CUIDADO.md`: endpoints, payloads, consentimentos e testes de negação do portal.
+- `docs/SUPABASE_STAGING_INICIANTE.md`: explicação simples do staging Supabase e dos próximos gates, sem expor segredos.
+- `docs/HANDOFF_SUPABASE_STAGING.md`: identidade, estado verificado e limites do projeto Supabase de teste.
 - `docs/ESTUDO_PRECOS_PLANOS.md`: pesquisa de mercado e faixas de preço para validação.
 - `docs/MAPA_FUNCIONALIDADES_SAAS_CLINICAS.md`: recursos de SaaS clínico priorizados para ajudar famílias.
 - `privacy_policy.html`: política de privacidade alinhada ao armazenamento local.
+
+
+## Atualização — 27/09/2026 — Supabase de staging
+
+O responsável aprovou projeto novo Supabase na região de São Paulo depois de a conta exibir o valor estimado de **US$ 0/mês**. O projeto `Fala Comigo Staging` (`gojqeaontgshikdqlpfn`) está `ACTIVE_HEALTHY` na organização `falacomigocaa-app's Org`, região `sa-east-1`. O projeto existente em `us-east-1` não foi alterado. Após a criação, verificações somente de leitura confirmaram schema `public` vazio, sem migrations nem branches, e Security Advisor sem lints. Não foram consultados registros, criados usuários, configurado Auth, adicionadas tabelas/chaves ou enviados dados.
+
+O Free está sendo usado para desenvolvimento com dados sintéticos. O preço e os limites podem mudar; o plano tem limites de uso e projetos inativos podem ser pausados. Não tratar como produção ou backup. Antes de mudança paga, de criar a conta do proprietário, alterar o banco ou usar dados reais, obter aprovação correspondente. Manter o CAA básico offline e sem login. A autenticação não concede por si só autorização clínica; revisar RLS, autorização server-side, consentimento, revogação, auditoria e testes negativos antes de qualquer piloto real. Ver `docs/SUPABASE_STAGING_INICIANTE.md` e `docs/HANDOFF_SUPABASE_STAGING.md`.
+
+
+A documentação do staging foi enviada pela branch `docs/supabase-staging-created`, commit `0234cd90a7693c5c3c7c0a864e8119c5ab70058f`, na PR [#84](https://github.com/falacomigocaa-app/fala-comigo/pull/84). Ela não modifica o banco, o Auth ou o site público.
+
+
+Atualização: a branch `docs/supabase-staging-created` avançou até `08e5b1fad32d823a1dd4f9a5e21d85fe6d96dfac`; a PR #84 permanece aberta e sem merge.

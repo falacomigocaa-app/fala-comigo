@@ -589,3 +589,29 @@ Estado da main: nenhuma mudança de código foi feita por esta tentativa. O manu
 - **Validação:** inspeção do erro remoto e das duas assinaturas concluída; revisão do diff e `git diff --check` passaram. Flutter, Dart e adb não estão disponíveis localmente. CI da PR #82 e APK ainda pendentes. Não houve teste em aparelho, com usuários ou em produção.
 - **Estado:** `pendente`; branch enviada e commit `0aae627` publicado na [PR #82](https://github.com/falacomigocaa-app/fala-comigo/pull/82); `main` não alterada; nenhum segredo ou dado real foi adicionado.
 - **Próximo passo:** conferir CI da PR #82. Depois, se verde, gerar APK de teste e solicitar instalação/validação do proprietário no Realme C71. Não declarar a câmera/overflow validados por esta correção de compilação.
+
+
+## 44. Staging Supabase gratuito em São Paulo — 27/09/2026
+
+**Objetivo:** recuperar o ambiente de staging solicitado pelo proprietário sem alterar o projeto ativo anterior ou introduzir login/dados antes de definir o escopo.
+
+- Revisão de continuidade confirmou: usuário não quer Manus Space; quer infraestrutura própria; app CAA deve manter comunicação básica local/offline e não exigir conta; portal proprietário é superfície separada do futuro portal clínico.
+- Conector Supabase já estava habilitado. Único projeto anterior listado: `Fala comigo CAA`, ref `nwtrszfhtrtucdoifukg`, região `us-east-1`, `ACTIVE_HEALTHY`. Metadados consultados somente para distinguir destinos. Seu banco não foi examinado nem alterado nesta etapa.
+- Única organização listada: `falacomigocaa-app's Org`. A ferramenta de custo retornou estimativa `US$ 0/mês` para novo projeto nessa organização. O usuário disse que quer permanecer no plano gratuito, escolheu projeto novo em São Paulo e aprovou explicitamente o payload `Fala Comigo Staging`, região `sa-east-1`, custo informado de US$ 0/mês. O Supabase registrou confirmação de custo e criou o projeto.
+- Projeto novo: ref `gojqeaontgshikdqlpfn`, `ACTIVE_HEALTHY`, região São Paulo, versão PostgreSQL 17.6.1.166. O usuário ocupa duas vagas ativas Free no conjunto observado após a criação. Alteração foi somente de criação de projeto, aprovada pelo proprietário.
+- Pós-criação, apenas chamadas read-only: `list_tables` no schema `public` retornou vazio; `list_migrations` vazio; `list_branches` vazio; Security Advisor `lints: []`. Não se leram linhas. Não houve usuário Auth, login, tabela, migration, chave ou policy criada. Nenhum segredo foi exibido ou copiado.
+- Fontes oficiais consultadas: [preços](https://supabase.com/pricing), [cobrança e cotas](https://supabase.com/docs/guides/platform/billing-on-supabase) e [pausa Free por inatividade](https://supabase.com/docs/guides/platform/free-project-pausing). Atualmente: até dois projetos ativos gratuitos, 500 MB DB/projeto, 50k MAU, 1 GB storage, 5 GB egress; quotas podem agregar e mudar. Baixa atividade por 7 dias pode pausar o projeto. Free não deve ser tratado como disponibilidade de produção ou backup.
+- Revisões independentes de arquitetura e segurança recomendam Auth restrito sem signup público, autorização/RLS deny-by-default, teste de anônimo e usuário sem papel, dados sintéticos e nada de `service_role` no cliente. Auth isolado não dá acesso clínico; isso requer vínculo, finalidade, consentimento, escopos, prazo, revogação e testes negativos. Nenhuma implementação foi feita em resposta a estes pareceres.
+- Criados `docs/SUPABASE_STAGING_INICIANTE.md` e `docs/HANDOFF_SUPABASE_STAGING.md`. Branch atual `docs/supabase-staging-created` parte da `main` `1281c39`; esta etapa aguarda validação do diff, commit e PR.
+- Estado paralelo do site: PR #83 com checks `Flutter quality checks` e `Validar site estático` aprovados; continua aberta sem merge/publicação. Merge exige autorização explícita por alterar o GitHub Pages.
+- **Próximo passo:** definir funções mínimas do Espaço do Criador; depois apresentar plano de login de proprietário e RLS antes de criar Auth, tabela ou migration. Obter aprovação separada antes de conta/configuração remota, piloto real, uso pago ou publicação pública. Nunca pedir senha em chat nem registrá-la em Git.
+
+
+### Atualização da seção 44 — entrega documental
+
+Os guias da etapa foram commitados na branch `docs/supabase-staging-created` em `0234cd90a7693c5c3c7c0a864e8119c5ab70058f`. PR [#84](https://github.com/falacomigocaa-app/fala-comigo/pull/84) aberta contra `main`; sem merge. O diff passou `git diff --check`; o projeto Supabase permanece vazio e separado do app.
+
+
+### Head final da PR #84
+
+A redação dos backups Free foi revisada e enviada no commit `08e5b1fad32d823a1dd4f9a5e21d85fe6d96dfac`, atualmente no head da branch `docs/supabase-staging-created`. PR #84 segue aberta, sem merge; nenhuma mudança de banco ocorreu.

@@ -127,3 +127,25 @@ O link público atual ainda aponta para `https://falacomigo-kyrh225w.manus.space
 - **Commit/PR:** commit `0aae627` publicado; PR [#82](https://github.com/falacomigocaa-app/fala-comigo/pull/82) aberta contra `main`.
 - **Validação local:** revisão do diff e `git diff --check` passaram. Flutter/adb ausentes, portanto testes Flutter, build APK e aparelho não executados.
 - **Próximo gate:** verificar CI da PR #82; se os checks passarem, gerar APK de teste e solicitar validação no Realme C71. Não classificar como validado-em-aparelho sem evidência do proprietário.
+
+
+## Atualização — 27/09/2026 — staging Supabase de São Paulo criado
+
+- O proprietário escolheu criar um projeto novo em São Paulo e confirmou custo antes da criação. O `get_cost` retornou US$ 0/mês na organização disponível; o projeto foi criado após confirmação explícita e está `ACTIVE_HEALTHY`.
+- Projeto `Fala Comigo Staging`; ref `gojqeaontgshikdqlpfn`; organização `falacomigocaa-app's Org`; região `sa-east-1` (São Paulo). O projeto antigo `Fala comigo CAA` (`nwtrszfhtrtucdoifukg`, `us-east-1`) ficou intocado.
+- Verificações somente de leitura após criação: schema `public` sem tabelas; migrations e branches vazias; Security Advisor sem lints reportados. Nenhuma linha de dado foi consultada; nenhuma conta de Auth, login, tabela, chave ou segredo foi criado/configurado.
+- Repositório: branch `docs/supabase-staging-created`, baseada na `main` `1281c39`, para registrar esta etapa. Novo guia simples em `docs/SUPABASE_STAGING_INICIANTE.md` e handoff técnico em `docs/HANDOFF_SUPABASE_STAGING.md`.
+- Limites oficiais Free consultados: até 2 projetos ativos, 500 MB DB por projeto, 50.000 MAU, 1 GB storage, 5 GB egress; cota pode depender de agregação. Projetos com baixa atividade por 7 dias podem pausar. Free não deve ser tratado como produção, backup nem disponibilidade garantida; rever limites oficiais antes de crescer.
+- **Produto:** app CAA básico permanece offline/local e sem conta; login inicial pretendido é apenas do proprietário no Espaço do Criador. Auth não é autorização clínica; backend real requer RLS e testes de negação. Nunca expor `service_role` ou senha no app/site/Git/chat.
+- **Próximo gate:** definir em linguagem simples as funções mínimas do Espaço do Criador; mostrar desenho e regras de segurança antes de criar conta, tabelas ou migrations. Usar somente dados sintéticos. Qualquer plano/add-on com custo, conta de proprietário, publicação ou uso real exige gate próprio.
+- PR #83 está com ambos os checks verdes, mas segue aberta e não publicada; merge do site requer autorização explícita porque altera o GitHub Pages público.
+
+
+### Registro de entrega documental — PR #84
+
+A documentação do staging foi commitada como `0234cd90a7693c5c3c7c0a864e8119c5ab70058f` na branch `docs/supabase-staging-created`; PR [#84](https://github.com/falacomigocaa-app/fala-comigo/pull/84) aberta contra `main`, ainda sem merge. O diff da documentação passou `git diff --check` antes do commit. O banco permanece vazio e não conectado ao código.
+
+
+### Cabeça atual da PR #84
+
+O commit final da branch de documentação é `08e5b1fad32d823a1dd4f9a5e21d85fe6d96dfac` (inclui ajuste da redação de backups do Free); PR [#84](https://github.com/falacomigocaa-app/fala-comigo/pull/84) continua aberta e sem merge. Worktree local deve permanecer limpa após este registro.
