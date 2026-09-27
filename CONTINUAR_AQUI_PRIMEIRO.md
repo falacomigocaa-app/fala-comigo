@@ -139,3 +139,8 @@ O link público atual ainda aponta para `https://falacomigo-kyrh225w.manus.space
 - **Produto:** app CAA básico permanece offline/local e sem conta; login inicial pretendido é apenas do proprietário no Espaço do Criador. Auth não é autorização clínica; backend real requer RLS e testes de negação. Nunca expor `service_role` ou senha no app/site/Git/chat.
 - **Próximo gate:** definir em linguagem simples as funções mínimas do Espaço do Criador; mostrar desenho e regras de segurança antes de criar conta, tabelas ou migrations. Usar somente dados sintéticos. Qualquer plano/add-on com custo, conta de proprietário, publicação ou uso real exige gate próprio.
 - PR #83 está com ambos os checks verdes, mas segue aberta e não publicada; merge do site requer autorização explícita porque altera o GitHub Pages público.
+
+
+### Registro de entrega documental — PR #84
+
+A documentação do staging foi commitada como `0234cd90a7693c5c3c7c0a864e8119c5ab70058f` na branch `docs/supabase-staging-created`; PR [#84](https://github.com/falacomigocaa-app/fala-comigo/pull/84) aberta contra `main`, ainda sem merge. O diff da documentação passou `git diff --check` antes do commit. O banco permanece vazio e não conectado ao código.

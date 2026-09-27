@@ -605,3 +605,8 @@ Estado da main: nenhuma mudança de código foi feita por esta tentativa. O manu
 - Criados `docs/SUPABASE_STAGING_INICIANTE.md` e `docs/HANDOFF_SUPABASE_STAGING.md`. Branch atual `docs/supabase-staging-created` parte da `main` `1281c39`; esta etapa aguarda validação do diff, commit e PR.
 - Estado paralelo do site: PR #83 com checks `Flutter quality checks` e `Validar site estático` aprovados; continua aberta sem merge/publicação. Merge exige autorização explícita por alterar o GitHub Pages.
 - **Próximo passo:** definir funções mínimas do Espaço do Criador; depois apresentar plano de login de proprietário e RLS antes de criar Auth, tabela ou migration. Obter aprovação separada antes de conta/configuração remota, piloto real, uso pago ou publicação pública. Nunca pedir senha em chat nem registrá-la em Git.
+
+
+### Atualização da seção 44 — entrega documental
+
+Os guias da etapa foram commitados na branch `docs/supabase-staging-created` em `0234cd90a7693c5c3c7c0a864e8119c5ab70058f`. PR [#84](https://github.com/falacomigocaa-app/fala-comigo/pull/84) aberta contra `main`; sem merge. O diff passou `git diff --check`; o projeto Supabase permanece vazio e separado do app.

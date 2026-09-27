@@ -46,3 +46,8 @@ A criação do projeto **não** foi aprovação para criar contas, tabelas, migr
 ## Situação das outras frentes
 
 A PR pública do site [#83](https://github.com/falacomigocaa-app/fala-comigo/pull/83) tem os dois checks verdes, mas segue aberta e não foi mesclada. Seu merge altera o GitHub Pages público e depende de autorização separada. As PRs Android #79–#81 ainda exigem revalidação, APK identificado por commit e teste em dispositivo; PR #82 apenas corrigiu a assinatura de mídia Web e não valida Android em aparelho.
+
+
+## Registro da documentação no GitHub
+
+O estado acima foi documentado na branch `docs/supabase-staging-created`, commit `0234cd90a7693c5c3c7c0a864e8119c5ab70058f`; PR [#84](https://github.com/falacomigocaa-app/fala-comigo/pull/84) aberta contra `main`, aguardando os checks/review, sem merge. O projeto remoto continua no estado vazio verificado.
