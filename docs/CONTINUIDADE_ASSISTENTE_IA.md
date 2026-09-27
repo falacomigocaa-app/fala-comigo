@@ -638,3 +638,8 @@ Criado em branch documental `docs/creator-console-license-scope` o arquivo `docs
 O responsável esclareceu que o que não quer ver são dados clínicos e informações sensíveis desse tipo. Corrigir a leitura mais ampla da seção 45: não concluir que nomes comerciais de clínica/empresa ou metadados de licença são proibidos; podem ser escolhas úteis, ainda por decidir. Limite absoluto: o console não exibe conteúdo clínico, diagnósticos, prontuários, comunicação, mídias nem indicadores clínicos. A proposta foi ajustada para separar dados comerciais e administrativos dos dados clínicos.
 
 Foi produzido `site/console-preview.html`, uma prévia estática com dados inventados e sem integração, login, persistência ou requisições externas. O layout foi validado em 1440, 768, 390, 360 e 320 px; a simulação é local e não cria licenças. O arquivo permanece em branch, sem merge/publicação. O proprietário recebeu URL temporária para visualizar a prévia.
+
+
+### Entrega inicial da prévia do Espaço do Criador
+
+A proposta e o protótipo estático foram enviados na PR #86, commit `06f77db87473426b12a06f2a1651ce663caf5db9`; o check Flutter ainda estava pendente na última consulta. PR continua aberta, sem merge; nenhuma publicação ao Pages. URL temporária testada: `https://4174-iqpj1o8qmwmk8nx17twm5-3af4165c.us1.manus.computer/console-preview.html`.

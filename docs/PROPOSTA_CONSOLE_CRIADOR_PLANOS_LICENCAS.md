@@ -108,3 +108,8 @@ A implementação visual e os dados do protótipo não devem ser tratados como l
 O primeiro protótipo estático está em `site/console-preview.html`. A URL de prévia temporária é `https://4174-iqpj1o8qmwmk8nx17twm5-3af4165c.us1.manus.computer/console-preview.html`. A página usa valores DEMO inventados, não acessa Supabase, não usa login, não cria licenças, não envia códigos e não faz pagamentos. O botão apenas demonstra uma mensagem local. Foi verificada em larguras 1440, 768, 390, 360 e 320 px, sem rolagem horizontal ou erros JavaScript. Essa prévia não está publicada no site oficial e a URL temporária pode expirar.
 
 Os dados comerciais de organizações (nome/contato de clínica, escola ou empresa) continuam uma decisão separada; a prévia atual omite esses campos. O veto absoluto confirmado pelo responsável é a exposição de dados clínicos e conteúdo sensível.
+
+
+### Estado no Git
+
+Esta proposta e o protótipo estão na PR [#86](https://github.com/falacomigocaa-app/fala-comigo/pull/86), branch `docs/creator-console-license-scope`. PR aberta, sem merge; o check Flutter estava pendente na última consulta. O workflow de GitHub Pages só publica em push para `main`. Manter a página fora de `main` até sua revisão/aprovação.

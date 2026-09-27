@@ -168,3 +168,8 @@ Parecer independente de produto, privacidade e UX recomendou catálogo com vers�
 ### Clarificação posterior do limite de dados — 27/09/2026
 
 O responsável esclareceu que o que não quer ver são **dados clínicos e informações sensíveis desse tipo**. Corrigir a interpretação anterior: isso não significa automaticamente que nomes comerciais de clínicas/empresas ou metadados de licença estejam proibidos. Esses itens continuam a ser decisões de produto; não inventar cadastro/diretório de usuários. O princípio absoluto é não expor conteúdo clínico, diagnósticos, prontuários, comunicação, imagens/documentos ou indicadores clínicos. A proposta foi corrigida para refletir essa distinção. Existe agora uma prévia estática do console em `site/console-preview.html`; contém apenas dados fictícios, não chama serviços externos e não tem login ou persistência. Verifique-a na URL temporária compartilhada na conversa; não é publicação oficial.
+
+
+### Entrega da prévia — PR #86
+
+A proposta e o arquivo estático `site/console-preview.html` foram enviados na PR [#86](https://github.com/falacomigocaa-app/fala-comigo/pull/86), branch `docs/creator-console-license-scope`, commit inicial `06f77db87473426b12a06f2a1651ce663caf5db9`. Estado no momento do registro: PR aberta, check Flutter pendente. Não mesclar nem publicar no Pages sem aprovação do responsável. A prévia temporária é `https://4174-iqpj1o8qmwmk8nx17twm5-3af4165c.us1.manus.computer/console-preview.html`.

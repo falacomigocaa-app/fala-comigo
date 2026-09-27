@@ -237,3 +237,8 @@ Atualização: a branch `docs/supabase-staging-created` avançou até `08e5b1fad
 
 
 Estado Git: PR #84 foi integrada com CI verde por squash; `main` agora está em `49ee1a3`. Isso atualizou somente documentação do staging; não alterou o banco nem o site público.
+
+
+## Atualização — prévia do Espaço do Criador
+
+A proposta e protótipo estático para gestão de planos/licenças, sem exposição de dados clínicos, estão na PR #86. É prévia de dados fictícios: sem autenticação, Supabase, persistência, chamadas externas ou pagamentos. A PR permanece aberta e não deve ser mesclada/publicada sem revisão do responsável; o Pages publica apenas em push para `main`.
