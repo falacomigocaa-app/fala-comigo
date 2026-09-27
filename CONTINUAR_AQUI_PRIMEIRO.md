@@ -127,3 +127,15 @@ O link público atual ainda aponta para `https://falacomigo-kyrh225w.manus.space
 - **Commit/PR:** commit `0aae627` publicado; PR [#82](https://github.com/falacomigocaa-app/fala-comigo/pull/82) aberta contra `main`.
 - **Validação local:** revisão do diff e `git diff --check` passaram. Flutter/adb ausentes, portanto testes Flutter, build APK e aparelho não executados.
 - **Próximo gate:** verificar CI da PR #82; se os checks passarem, gerar APK de teste e solicitar validação no Realme C71. Não classificar como validado-em-aparelho sem evidência do proprietário.
+
+
+## Atualização — 27/09/2026 — fase Web de navegação e acessibilidade
+
+- A PR #82 foi integrada após o CI verde: merge squash em `main`, commit `1281c39` (`fix: alinhar assinatura Web do armazenamento de mídia (#82)`). Isso alinha apenas a assinatura da API; não habilita mídia na Web nem comprova teste Android em aparelho.
+- Criada a branch isolada `site/visual-a11y-phase1`, commit `0f52447a47c2b6fcbfe71676657c9f4a377c512c`, PR [#83](https://github.com/falacomigocaa-app/fala-comigo/pull/83).
+- A PR corrige os links de navegação, acrescenta FAQ, menu móvel e rolagem em viewport baixo, contraste de texto, skip links focáveis e orientação contra envio/exposição de dados sensíveis infantis. Adiciona `tools/check_static_site.py` ao CI do site.
+- **Validação local:** `python3 tools/check_static_site.py` e `git diff --check` passaram. Playwright/Chromium passou em 320, 390, 768, 1024 e 1440 px, além de 390×320; skip links e fechamento do menu após seleção também passaram.
+- **CI da PR #83 no momento do registro:** check `Validar site estático` aprovado; `Flutter quality checks` ainda pendente. PR aberta, sem revisão formal do GitHub. Revisores internos de design/acessibilidade e privacidade aprovaram após ajustes.
+- **Atenção:** não mesclar ainda. O merge aciona publicação do GitHub Pages e altera a página pública; obter autorização explícita antes de publicar. O endpoint oficial segue sem esta alteração até então.
+- O Supabase ativo encontrado chama-se `Fala comigo CAA` (`nwtrszfhtrtucdoifukg`, `us-east-1`), diferente de `fala-comigo-staging`/São Paulo no handoff. Nenhuma tabela, login, chave ou migration foi alterada; confirmar o projeto correto antes de implementar autenticação real.
+- **Próximos gates:** concluir CI/review da PR #83; pedir autorização para publicação. Separadamente, revalidar as PRs Android #79–#81 e solicitar instalação/teste no Realme C71. Manter login/backend do portal separado do site estático.
