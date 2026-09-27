@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a43">
+  <meta name="description" content="Prévia visual do Espaço do Criador do Fala Comigo. Demonstração estática com dados fictícios, sem login, banco ou pagamentos.">
+  <title>Prévia do Espaço do Criador — Fala Comigo</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --navy: #102a43;
+      --ink: #18334d;
+      --muted: #52677d;
+      --paper: #fff;
+      --canvas: #f4f7fb;
+      --line: #d9e3ec;
+      --aqua: #d9f4ee;
+      --lilac: #e9e3ff;
+      --coral: #ffe5db;
+      --green: #156b4d;
+      --shadow: 0 14px 40px rgba(16, 42, 67, .08);
+      --radius: 20px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--canvas); color: var(--ink); font: 16px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    a { color: inherit; }
+    button, select { font: inherit; }
+    :focus-visible { outline: 3px solid #b84f2d; outline-offset: 3px; }
+    .skip { position: absolute; left: 12px; top: -60px; z-index: 20; padding: 10px 14px; background: white; color: var(--navy); border-radius: 8px; }
+    .skip:focus { top: 12px; }
+    .app { min-height: 100vh; display: grid; grid-template-columns: 250px minmax(0, 1fr); }
+    .sidebar { padding: 25px 17px; background: var(--navy); color: #eff6fb; display: flex; flex-direction: column; gap: 28px; }
+    .brand { display: flex; gap: 11px; align-items: center; font-weight: 850; letter-spacing: -.03em; text-decoration: none; font-size: 1.06rem; }
+    .brand-mark { display: flex; gap: 3px; align-items: end; height: 25px; }
+    .brand-mark i { display: block; width: 7px; border-radius: 6px; background: #92e6d6; }
+    .brand-mark i:nth-child(1) { height: 14px; background: #ff9f80; }
+    .brand-mark i:nth-child(2) { height: 23px; }
+    .brand-mark i:nth-child(3) { height: 18px; background: #c7b8ff; }
+    .workspace-label { margin: -13px 0 0 35px; color: #b9cad7; font-size: .74rem; }
+    .side-nav { display: grid; gap: 7px; }
+    .side-nav a { display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 10px 12px; border-radius: 12px; color: #dce8f0; font-size: .91rem; text-decoration: none; }
+    .side-nav a:hover, .side-nav a[aria-current="page"] { background: #23445f; color: white; }
+    .nav-icon { width: 22px; text-align: center; color: #a7e5da; font-weight: 800; }
+    .sidebar-note { margin-top: auto; padding: 14px; border: 1px solid #38546b; border-radius: 15px; color: #dce8f0; font-size: .78rem; }
+    .sidebar-note strong { display: block; margin-bottom: 5px; color: white; }
+    .main { min-width: 0; padding: 22px clamp(18px, 4vw, 52px) 54px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+    .crumb { color: var(--muted); font-size: .84rem; }
+    .owner-chip { display: inline-flex; align-items: center; gap: 9px; padding: 8px 12px; background: white; border: 1px solid var(--line); border-radius: 999px; font-size: .84rem; font-weight: 700; }
+    .owner-dot { width: 9px; height: 9px; border-radius: 50%; background: #38a57d; box-shadow: 0 0 0 3px #ddf3e9; }
+    .demo-banner { display: flex; align-items: flex-start; gap: 12px; padding: 15px 17px; margin-bottom: 28px; border: 1px solid #dbcffb; border-radius: 15px; background: #f2efff; color: #3c3564; }
+    .demo-banner strong { display: block; margin-bottom: 2px; }
+    .demo-banner p { margin: 0; font-size: .88rem; }
+    .demo-icon { display: grid; place-items: center; flex: 0 0 26px; height: 26px; border-radius: 50%; background: white; color: #584b9a; font-weight: 900; }
+    .eyebrow { margin: 0 0 7px; color: #8a4932; font-size: .73rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 8px; color: var(--navy); font-size: clamp(1.8rem, 4vw, 2.55rem); line-height: 1.08; letter-spacing: -.05em; }
+    h2 { margin-bottom: 5px; color: var(--navy); font-size: 1.25rem; letter-spacing: -.025em; }
+    h3 { margin-bottom: 6px; color: var(--navy); font-size: 1.04rem; }
+    .subhead { max-width: 780px; margin-bottom: 23px; color: var(--muted); }
+    .privacy-pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px; margin-bottom: 24px; border-radius: 999px; background: #e5f5ec; color: #155b43; font-size: .79rem; font-weight: 750; }
+    .privacy-pill span { font-size: 1rem; }
+    .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin: 0 0 22px; }
+    .metric, .panel, .plan-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .metric { min-height: 132px; padding: 18px; }
+    .metric-label { color: var(--muted); font-size: .82rem; }
+    .metric-value { margin: 9px 0 3px; color: var(--navy); font-size: 1.8rem; font-weight: 850; line-height: 1; letter-spacing: -.04em; }
+    .metric-note { color: var(--muted); font-size: .74rem; }
+    .workspace { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(270px, .8fr); gap: 18px; align-items: start; }
+    .panel { padding: 21px; }
+    .panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 17px; }
+    .panel-head p { margin: 0; color: var(--muted); font-size: .83rem; }
+    .text-link { color: #18577a; font-weight: 750; font-size: .83rem; text-underline-offset: 3px; white-space: nowrap; }
+    .plan-list { display: grid; gap: 10px; }
+    .plan-row { display: grid; grid-template-columns: minmax(125px, 1fr) minmax(100px, 1.1fr) auto; gap: 12px; align-items: center; padding: 12px 13px; border: 1px solid #e5ebf0; border-radius: 13px; }
+    .plan-name { color: var(--navy); font-weight: 780; }
+    .plan-description { display: block; color: var(--muted); font-size: .74rem; font-weight: 450; }
+    .price { color: var(--navy); font-size: .85rem; font-weight: 750; }
+    .status { display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border-radius: 999px; font-size: .7rem; font-weight: 780; white-space: nowrap; }
+    .status-live { background: #e5f5ec; color: #155b43; }
+    .status-draft { background: #f2efff; color: #4d4384; }
+    .status-dot { width: 6px; height: 6px; background: currentColor; border-radius: 50%; }
+    .section-gap { margin-top: 18px; }
+    .batch-table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+    th, td { padding: 12px 9px; border-bottom: 1px solid #e7edf2; text-align: left; }
+    th { color: var(--muted); font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+    td { color: var(--ink); }
+    .batch-id { color: #2b5573; font-weight: 800; }
+    .right-stack { display: grid; gap: 18px; }
+    .quick-list { display: grid; gap: 10px; }
+    .quick-link { display: flex; align-items: center; gap: 11px; padding: 12px; border: 1px solid #e5ebf0; border-radius: 13px; text-decoration: none; }
+    .quick-link:hover { border-color: #93cfc3; background: #f7fcfb; }
+    .quick-symbol { display: grid; place-items: center; width: 36px; height: 36px; flex: 0 0 36px; border-radius: 11px; background: var(--aqua); color: var(--navy); font-size: 1.1rem; font-weight: 850; }
+    .quick-link:nth-child(2) .quick-symbol { background: var(--lilac); }
+    .quick-link strong { display: block; color: var(--navy); font-size: .86rem; }
+    .quick-link small { display: block; color: var(--muted); font-size: .73rem; }
+    .principle-card { padding: 17px; border-radius: 16px; background: var(--navy); color: #eff6fb; }
+    .principle-card strong { display: block; margin-bottom: 6px; color: #a7e5da; }
+    .principle-card p { margin: 0; font-size: .83rem; }
+    .section { margin-top: 35px; scroll-margin-top: 18px; }
+    .section-intro { margin-bottom: 17px; }
+    .section-intro p { max-width: 760px; margin-bottom: 0; color: var(--muted); font-size: .88rem; }
+    .plan-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .plan-card { padding: 18px; }
+    .plan-card:nth-child(1) { border-top: 4px solid #71c8b6; }
+    .plan-card:nth-child(2) { border-top: 4px solid #9988df; }
+    .plan-card:nth-child(3) { border-top: 4px solid #e39a7d; }
+    .plan-kind { color: var(--muted); font-size: .73rem; }
+    .plan-card .price-pending { margin: 15px 0 10px; color: var(--navy); font-size: 1.1rem; font-weight: 800; }
+    .plan-card ul { display: grid; gap: 7px; padding-left: 18px; margin: 13px 0 0; color: var(--muted); font-size: .82rem; }
+    .license-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr); gap: 18px; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    label { display: grid; gap: 6px; color: var(--navy); font-size: .82rem; font-weight: 760; }
+    select, input { width: 100%; min-height: 45px; padding: 10px 12px; border: 1px solid #b8c7d3; border-radius: 10px; background: white; color: var(--ink); }
+    .field-note { color: var(--muted); font-size: .72rem; font-weight: 450; }
+    .button { display: inline-flex; align-items: center; justify-content: center; min-height: 45px; padding: 10px 15px; border: 0; border-radius: 11px; background: var(--navy); color: white; font-weight: 780; text-decoration: none; cursor: pointer; }
+    .button:hover { background: #234c6c; }
+    .button-secondary { border: 1px solid #9eafbd; background: white; color: var(--navy); }
+    .button-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 17px; }
+    .sim-note { padding: 15px; border: 1px dashed #adbccc; border-radius: 13px; background: #f8fafc; color: var(--muted); font-size: .83rem; }
+    .sim-note strong { color: var(--navy); }
+    .sim-result { margin-top: 14px; padding: 13px; border-radius: 12px; background: #e5f5ec; color: #155b43; font-size: .84rem; }
+    .footer-note { margin: 30px 0 0; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: .76rem; }
+    @media (max-width: 1120px) { .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } .workspace { grid-template-columns: minmax(0, 1fr); } .workspace > * { min-width: 0; } .right-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); min-width: 0; } }
+    @media (max-width: 760px) { .app { grid-template-columns: 1fr; } .sidebar { padding: 15px 16px; gap: 14px; } .brand-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; } .workspace-label { margin: 0; } .side-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; overflow: visible; } .side-nav a { min-width: 0; min-height: 40px; padding: 8px 10px; font-size: .8rem; } .sidebar-note { display: none; } .main { padding: 16px 16px 38px; } .topbar { margin-bottom: 16px; } .right-stack, .license-layout { grid-template-columns: 1fr; } }
+    @media (max-width: 360px) { .side-nav { grid-template-columns: minmax(0, 1fr); } }
+    @media (max-width: 540px) { .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; } .metric { min-height: 118px; padding: 14px; } .metric-value { font-size: 1.55rem; } .plan-row { grid-template-columns: 1fr auto; } .plan-row .price { grid-column: 1; } .plan-row .status { grid-column: 2; grid-row: 1 / span 2; } .plan-cards { grid-template-columns: 1fr; } .form-grid { grid-template-columns: 1fr; } .panel { padding: 16px; } .owner-chip { font-size: .75rem; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+  </style>
+<style>
+    @media (max-width: 760px) {
+      .app { grid-template-columns: minmax(0, 1fr); }
+      .sidebar { min-width: 0; }
+      .topbar { align-items: flex-start; flex-wrap: wrap; }
+      .privacy-pill { max-width: 100%; flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+  <div class="app">
+    <aside class="sidebar" aria-label="Área do Espaço do Criador">
+      <div>
+        <div class="brand-row">
+          <a class="brand" href="#inicio" aria-label="Fala Comigo — início do protótipo">
+            <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span>Fala Comigo</span>
+          </a>
+          <span class="workspace-label">Espaço do Criador</span>
+        </div>
+      </div>
+      <nav class="side-nav" aria-label="Navegação do protótipo">
+        <a href="#inicio" aria-current="page"><span class="nav-icon" aria-hidden="true">⌂</span>Visão geral</a>
+        <a href="#planos"><span class="nav-icon" aria-hidden="true">◇</span>Planos e valores</a>
+        <a href="#licencas"><span class="nav-icon" aria-hidden="true">▤</span>Licenças por lote</a>
+        <a href="#privacidade"><span class="nav-icon" aria-hidden="true">◈</span>Limites de privacidade</a>
+      </nav>
+      <div class="sidebar-note">
+        <strong>O que este painel não mostra</strong>
+        Esta prévia não mostra dados clínicos, prontuários, comunicação ou atividade individual.
+      </div>
+    </aside>
+
+    <main class="main" id="conteudo">
+      <div class="topbar">
+        <span class="crumb">Prévia / Espaço do Criador</span>
+        <span class="owner-chip"><span class="owner-dot" aria-hidden="true"></span>Acesso do proprietário (simulado)</span>
+      </div>
+
+      <div class="demo-banner" role="note" aria-label="Aviso de protótipo">
+        <span class="demo-icon" aria-hidden="true">i</span>
+        <div><strong>Protótipo visual — não é um painel funcional</strong><p>Todos os números são fictícios. Não há login, conexão com Supabase, cadastro de usuários nem pagamentos.</p></div>
+      </div>
+
+      <section id="inicio" aria-labelledby="page-title">
+        <p class="eyebrow">Gestão comercial, sem conteúdo clínico</p>
+        <h1 id="page-title">Bom dia. Aqui você cuida dos planos.</h1>
+        <p class="subhead">Organize as versões dos planos e os lotes de licenças. Esta prévia não contém informações de famílias ou pessoas beneficiadas.</p>
+        <div class="privacy-pill"><span aria-hidden="true">✓</span> Sem dados clínicos · sem prontuários · sem conteúdo de comunicação</div>
+
+        <div class="metrics" aria-label="Indicadores fictícios de demonstração">
+          <article class="metric"><div class="metric-label">Planos no catálogo</div><div class="metric-value">5</div><div class="metric-note">Exemplo fictício · 1 rascunho</div></article>
+          <article class="metric"><div class="metric-label">Lotes emitidos</div><div class="metric-value">12</div><div class="metric-note">Exemplo fictício · todas as modalidades</div></article>
+          <article class="metric"><div class="metric-label">Licenças disponíveis</div><div class="metric-value">248</div><div class="metric-note">Total agregado de demonstração</div></article>
+          <article class="metric"><div class="metric-label">Valores comerciais</div><div class="metric-value" style="font-size:1.18rem">Em definição</div><div class="metric-note">Nenhum preço foi decidido</div></article>
+        </div>
+
+        <div class="workspace">
+          <div>
+            <section class="panel" aria-labelledby="plan-summary-title">
+              <div class="panel-head"><div><h2 id="plan-summary-title">Planos e valores</h2><p>Prévia do catálogo — sem cobrança ativa.</p></div><a class="text-link" href="#planos">Ver planos</a></div>
+              <div class="plan-list">
+                <div class="plan-row"><div class="plan-name">Essencial<span class="plan-description">Comunicação básica · offline</span></div><div class="price">Gratuito</div><span class="status status-live"><span class="status-dot"></span>Vigente</span></div>
+                <div class="plan-row"><div class="plan-name">Família<span class="plan-description">Recursos opcionais</span></div><div class="price">Valor em estudo</div><span class="status status-draft"><span class="status-dot"></span>Rascunho</span></div>
+                <div class="plan-row"><div class="plan-name">Cuidado Conectado<span class="plan-description">Licença opcional</span></div><div class="price">Valor em estudo</div><span class="status status-draft"><span class="status-dot"></span>Rascunho</span></div>
+              </div>
+            </section>
+
+            <section class="panel section-gap" aria-labelledby="batch-title">
+              <div class="panel-head"><div><h2 id="batch-title">Licenças por lote</h2><p>Somente modalidade, quantidade e validade.</p></div><a class="text-link" href="#licencas">Criar lote</a></div>
+              <div class="batch-table-wrap">
+                <table>
+                  <caption class="sr-only" style="position:absolute;left:-9999px">Lotes fictícios sem dados de beneficiários</caption>
+                  <thead><tr><th scope="col">Lote de exemplo</th><th scope="col">Modalidade</th><th scope="col">Quantidade</th><th scope="col">Estado</th></tr></thead>
+                  <tbody>
+                    <tr><td class="batch-id">DEMO-A12</td><td>Patrocínio</td><td>100</td><td><span class="status status-live">Ativo</span></td></tr>
+                    <tr><td class="batch-id">DEMO-B07</td><td>Clínica/escola</td><td>48</td><td><span class="status status-live">Ativo</span></td></tr>
+                    <tr><td class="batch-id">DEMO-C03</td><td>Particular</td><td>20</td><td><span class="status status-draft">Em preparação</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <div class="right-stack">
+            <section class="panel" aria-labelledby="quick-title">
+              <div class="panel-head"><div><h2 id="quick-title">Ações do Criador</h2><p>Atalhos de demonstração</p></div></div>
+              <div class="quick-list">
+                <a class="quick-link" href="#planos"><span class="quick-symbol" aria-hidden="true">◇</span><span><strong>Revisar planos</strong><small>Rascunho separado da versão vigente</small></span></a>
+                <a class="quick-link" href="#licencas"><span class="quick-symbol" aria-hidden="true">＋</span><span><strong>Preparar licenças</strong><small>Modalidade, quantidade e validade</small></span></a>
+              </div>
+            </section>
+            <section class="principle-card" id="privacidade" aria-labelledby="principle-title">
+              <strong id="principle-title">Limite do painel</strong>
+              <p>Gestão de planos e licenças não abre acesso a dados clínicos. Esta tela não contém perfis, diagnósticos ou conteúdo de comunicação.</p>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="planos" aria-labelledby="plans-title">
+        <div class="section-intro"><p class="eyebrow">Catálogo comercial</p><h2 id="plans-title">Planos e valores</h2><p>Uma mudança começaria como rascunho. A publicação exigiria revisão e confirmação; esta tela não publica no site nem inicia cobrança.</p></div>
+        <div class="plan-cards">
+          <article class="plan-card"><span class="status status-live">Versão vigente</span><h3 style="margin-top:12px">Essencial</h3><span class="plan-kind">Para todas as famílias</span><div class="price-pending">Gratuito</div><ul><li>Comunicação básica local</li><li>Acessibilidade e controles parentais</li><li>Funciona sem internet</li></ul></article>
+          <article class="plan-card"><span class="status status-draft">Rascunho ilustrativo</span><h3 style="margin-top:12px">Família</h3><span class="plan-kind">Recursos opcionais</span><div class="price-pending">Valor em estudo</div><ul><li>Preço ainda não definido</li><li>Sem pagamento nesta prévia</li><li>Recursos a validar</li></ul></article>
+          <article class="plan-card"><span class="status status-draft">Rascunho ilustrativo</span><h3 style="margin-top:12px">Patrocinado</h3><span class="plan-kind">Benefício corporativo</span><div class="price-pending">Condição a definir</div><ul><li>Lote administrado por modalidade</li><li>Sem identificar famílias</li><li>Sem liberar conteúdo clínico</li></ul></article>
+        </div>
+      </section>
+
+      <section class="section" id="licencas" aria-labelledby="licenses-title">
+        <div class="section-intro"><p class="eyebrow">Operação por lotes</p><h2 id="licenses-title">Preparar um lote de licenças</h2><p>Uma licença concede somente o direito comercial definido. Não é autorização para clínica, escola ou empresa consultar informações de uma família.</p></div>
+        <div class="license-layout">
+          <section class="panel" aria-labelledby="form-title">
+            <div class="panel-head"><div><h2 id="form-title">Novo lote (simulação)</h2><p>Campos demonstrativos; nada será gravado.</p></div></div>
+            <div class="form-grid">
+              <label for="modality">Modalidade<select id="modality"><option>Particular/família</option><option>Clínica/escola</option><option>Patrocínio/empresa</option></select></label>
+              <label for="plan">Plano<select id="plan"><option>Essencial (gratuito)</option><option>Família (em estudo)</option><option>Cuidado Conectado (em estudo)</option></select></label>
+              <label for="quantity">Quantidade de códigos<input id="quantity" type="number" min="1" max="500" value="10"><span class="field-note">Exemplo — não cria licenças reais.</span></label>
+              <label for="expiry">Validade do lote<select id="expiry"><option>90 dias (exemplo)</option><option>180 dias (exemplo)</option><option>12 meses (exemplo)</option></select></label>
+            </div>
+            <div class="button-row"><button class="button" type="button" id="simulate">Simular criação</button><a class="button button-secondary" href="#privacidade">Ver limite de dados</a></div>
+            <div id="result" class="sim-result" role="status" aria-live="polite" hidden></div>
+          </section>
+          <aside class="sim-note"><strong>Sem dados de pessoas</strong><br>Na proposta, o lote não pede nome, e-mail ou conta de beneficiário. Os códigos de demonstração não são válidos. Uma futura função real precisa de regras e aprovação próprias.</aside>
+        </div>
+      </section>
+
+      <p class="footer-note">Demonstração estática com conteúdo inventado. Sem login real, conexão de banco, envio de códigos, pagamentos ou consulta a dados de clientes. Esta prévia não é uma tela publicada nem uma validação de segurança.</p>
+    </main>
+  </div>
+  <script>
+    // Interação somente local para demonstrar a hierarquia; nenhum dado é enviado ou persistido.
+    document.getElementById('simulate').addEventListener('click', () => {
+      const quantity = Math.max(1, Math.min(500, Number(document.getElementById('quantity').value) || 1));
+      const result = document.getElementById('result');
+      result.textContent = `Simulação visual: ${quantity} códigos fictícios preparados. Nenhuma licença foi criada ou salva.`;
+      result.hidden = false;
+    });
+  </script>
+</body>
+</html>

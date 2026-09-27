@@ -59,3 +59,17 @@ A revisão da redação dos limites de backup foi publicada no commit `08e5b1fad
 ## Estado Git após documentação
 
 PR [#84](https://github.com/falacomigocaa-app/fala-comigo/pull/84) foi squash-merged com CI verde em `main` commit `49ee1a3`. O merge integrou somente documentação e não alterou o banco, Auth ou GitHub Pages. O staging continua vazio.
+
+
+## Atualização de produto — Espaço do Criador
+
+O proprietário quer editar valores de planos e gerar licenças para modalidades particular, clínica/escola e corporativa/patrocinada. Reforçou: **não quer saber nada de dados sensíveis, clientes ou usuários**. O console deve omitir diretório, listagem, busca e detalhes de contas/beneficiários; não mostrar vínculos pessoa-licença, resgates individuais, conteúdo, dado clínico nem atividade por pessoa. Não há pagamento real neste MVP.
+
+Está documentada uma proposta de catálogo versionado, emissão/revogação em lote, códigos opacos e só contagens agregadas em `docs/PROPOSTA_CONSOLE_CRIADOR_PLANOS_LICENCAS.md`. Decisão pendente antes do modelo de dados: o serviço pode guardar HMAC/hash e estado mínimo de cada código (sem identidade, invisível ao console), ou o requisito é proibir até esse estado? Sem qualquer estado por código, não se pode garantir uso único nem mostrar contagens confiáveis. O documento sugere uma prévia estática sintética como próxima etapa, antes de login, migrations ou conexão. Staging permanece vazio.
+
+
+## Clarificação de privacidade e prévia estática
+
+O responsável esclareceu que o que não quer ver são dados clínicos e informações sensíveis desse tipo. Não presumir que metadados comerciais de uma clínica/empresa ou contagens de licença sejam proibidos; são decisões ainda em aberto. O bloqueio absoluto é o console não expor conteúdo clínico, diagnósticos, prontuário, comunicação, mídia ou indicadores clínicos. A proposta que registra essa distinção está em `docs/PROPOSTA_CONSOLE_CRIADOR_PLANOS_LICENCAS.md`.
+
+Foi criada uma prévia estática, `site/console-preview.html`, apenas com dados fictícios, sem Auth, banco, pagamentos ou requisições externas. Deve continuar em branch/preview e não ser publicada no site oficial até aprovação separada. Nenhuma migration ou configuração Supabase foi feita.
