@@ -233,3 +233,6 @@ A documentação do staging foi enviada pela branch `docs/supabase-staging-creat
 
 
 Atualização: a branch `docs/supabase-staging-created` avançou até `08e5b1fad32d823a1dd4f9a5e21d85fe6d96dfac`; a PR #84 permanece aberta e sem merge.
+
+
+Estado Git: PR #84 foi integrada com CI verde por squash; `main` agora está em `49ee1a3`. Isso atualizou somente documentação do staging; não alterou o banco nem o site público.

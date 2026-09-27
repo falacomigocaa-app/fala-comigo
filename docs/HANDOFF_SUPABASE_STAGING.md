@@ -54,3 +54,8 @@ O estado acima foi documentado na branch `docs/supabase-staging-created`, commit
 
 
 A revisão da redação dos limites de backup foi publicada no commit `08e5b1fad32d823a1dd4f9a5e21d85fe6d96dfac`, cabeça atual da branch `docs/supabase-staging-created` e da PR #84, ainda aberta e sem merge.
+
+
+## Estado Git após documentação
+
+PR [#84](https://github.com/falacomigocaa-app/fala-comigo/pull/84) foi squash-merged com CI verde em `main` commit `49ee1a3`. O merge integrou somente documentação e não alterou o banco, Auth ou GitHub Pages. O staging continua vazio.

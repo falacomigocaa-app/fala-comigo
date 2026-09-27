@@ -615,3 +615,8 @@ Os guias da etapa foram commitados na branch `docs/supabase-staging-created` em 
 ### Head final da PR #84
 
 A redação dos backups Free foi revisada e enviada no commit `08e5b1fad32d823a1dd4f9a5e21d85fe6d96dfac`, atualmente no head da branch `docs/supabase-staging-created`. PR #84 segue aberta, sem merge; nenhuma mudança de banco ocorreu.
+
+
+### Fechamento da PR #84
+
+Após checks verdes, a PR de documentação #84 foi squash-merged na `main`, commit `49ee1a3`. O merge foi restrito aos documentos; nenhuma alteração no banco, Auth ou publicação Pages. O staging continua vazio e a PR #83 continua aberta sem autorização de merge público.
