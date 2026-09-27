@@ -124,6 +124,6 @@ O link público atual ainda aponta para `https://falacomigo-kyrh225w.manus.space
 - PRs abertas verificadas: #79 (câmera/overflow), #80 (despertador) e #81 (permissões sintéticas). Seus checks mais recentes falharam na compilação Web com `No named parameter with the name 'extensionHint'` em `add_card_screen.dart`.
 - Alteração isolada em `fix/web-media-api-parity`: a assinatura do stub `media_storage_service_web.dart` passou a aceitar o mesmo parâmetro nomeado opcional da implementação nativa. O stub continua lançando `UnsupportedError`; armazenamento de mídia na Web não foi habilitado.
 - **Estado:** pendente de CI; Flutter e adb não estão instalados nesta sessão. Nenhuma validação em aparelho foi feita. Nenhuma alteração na `main`.
-- **Commit/PR:** ainda não criados nesta atualização.
+- **Commit/PR:** commit `0aae627` publicado; PR [#82](https://github.com/falacomigocaa-app/fala-comigo/pull/82) aberta contra `main`.
 - **Validação local:** revisão do diff e `git diff --check` passaram. Flutter/adb ausentes, portanto testes Flutter, build APK e aparelho não executados.
-- **Próximo gate:** publicar a branch/PR para CI; se os checks passarem, gerar APK de teste e solicitar validação no Realme C71. Não classificar como validado-em-aparelho sem evidência do proprietário.
+- **Próximo gate:** verificar CI da PR #82; se os checks passarem, gerar APK de teste e solicitar validação no Realme C71. Não classificar como validado-em-aparelho sem evidência do proprietário.
