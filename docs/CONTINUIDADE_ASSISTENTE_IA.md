@@ -1,7 +1,7 @@
 # Fala Comigo — Continuidade para assistência por IA
 
-**Última atualização:** 24 de setembro de 2026
-**Estado:** `main` integrada e limpa; linha de base MobSF registrada; próxima continuidade deve monitorar segurança sem limitar as funções do produto.
+**Última atualização:** 29 de setembro de 2026
+**Estado:** há commits locais validados na branch `audit/creator-privacy-alignment`; não foram enviados, mesclados nem publicados. Consultar a seção 47 para hashes, testes e gates atuais.
 
 ## 1. Objetivo deste documento
 
@@ -643,3 +643,29 @@ Foi produzido `site/console-preview.html`, uma prévia estática com dados inven
 ### Entrega inicial da prévia do Espaço do Criador
 
 A proposta e o protótipo estático foram enviados na PR #86, commit `06f77db87473426b12a06f2a1651ce663caf5db9`; o check Flutter ainda estava pendente na última consulta. PR continua aberta, sem merge; nenhuma publicação ao Pages. URL temporária testada: `https://4174-iqpj1o8qmwmk8nx17twm5-3af4165c.us1.manus.computer/console-preview.html`.
+
+
+## 46. Retomada local — build Web/APK e resumo de pendências (28/09/2026)
+
+**Escopo:** apenas sandbox/checkout local; sem commit, push, PR, merge, publicação ou acesso ao Supabase. Branch `audit/creator-privacy-alignment`, HEAD local `cc96eaf`; alterações ainda não commitadas.
+
+- Corrigido `DataWipeService`: a caixa Hive `parent_reminders` agora entra na exclusão e é recriada vazia com chave nova. Adicionado `test/data_wipe_service_test.dart` com dados sintéticos.
+- Validação: `flutter test --no-pub` **93/93**; `node --test tests/creator-console.test.mjs` **5/5**; formatação dos dois arquivos Dart alterados sem mudanças; `flutter analyze --no-fatal-infos --no-fatal-warnings` exit 0, com 34 infos e 3 warnings não fatais.
+- `flutter build web --release --no-pub` passou; warnings de dry-run Wasm nas dependências não impediram o alvo JS.
+- `flutter build apk --debug --no-pub` passou; APK de 153 MB, pacote `com.falacomigo.fala_comigo`, minSdk 24, targetSdk 36; `apksigner` confirma assinatura v2. SHA-256: `e79271b5b6a8042d675be006c24e13b9b242e77c3e3b44ec35c1d81d00211f7f`. Não instalado em aparelho; não é release.
+- Prévia do site/console e Flutter Web release estão servidas temporariamente no sandbox, com HTTP 200. O Pages institucional continua permanente; o workflow atual publica apenas `site/`, não `build/web`.
+- Fotografia de PRs detalhada em `/home/ubuntu/reports/fala-comigo-open-pr-review-2026-09-28.md`: #77–#81 abertas/pendentes; #79–#81 bloqueadas pelo contrato `extensionHint` no Web; #83 aberta, checks verdes, mas conflitante. Estados correspondem à leitura de 28/09; nenhum estado remoto foi modificado nesta atualização.
+- Próximos gates: corrigir contrato Web e atualizar as PRs em deltas pequenos; decidir a rota permanente de Flutter Web; concluir backend/autorização do portal; preparar assinatura/build release. Testes reais em aparelho e validação humana permanecem para a etapa posterior indicada pelo proprietário.
+- Relatório consolidado: `docs/STATUS_PROJETO_E_PENDENCIAS_2026-09-28.md`.
+
+
+## 47. Finalização local do app e preparação da rota Web (29/09/2026)
+
+- HEAD local `fa3dc9c` na branch `audit/creator-privacy-alignment`; commits locais `9224c4c` e `fa3dc9c` ainda sem push. Nenhuma PR foi aberta/alterada, nenhum merge/deploy ocorreu e o Supabase não foi acessado.
+- `flutter analyze --no-pub`: **No issues found**. Formatação passou. `flutter test --no-pub`: **98/98**. `node --test tests/*.test.mjs`: **10/10**. `git diff --check` passou antes dos commits.
+- Builds locais: Flutter Web release com base `/fala-comigo/app/` e APK Android debug. O APK tem assinatura debug verificada, id `com.falacomigo.fala_comigo`, versão `1.0.0+1`, minSdk 24/targetSdk 36, SHA-256 `a94050ff151c65ecb21fb61982aafa8403bf45c81762121be48597f3c187dad7`; não foi instalado em aparelho.
+- Ajustes implementados: exclusão total também cancela notificações e remove `parent_reminders`; escala/orientação persistem; Planos de Comunicação são salvos/listados/editados localmente; stub Web aceita `extensionHint` mas continua sem persistir mídia; erros de análise corrigidos.
+- A rota pública proposta do app é `/fala-comigo/app/`; workflow e navegação do site estão preparados localmente. Site institucional oficial segue no GitHub Pages; alterações desta branch não foram publicadas. Preview combinado temporário: `https://4176-ijwj8rsnu6oknbsn37ldj-36a4ebfd.us4.manus.computer/fala-comigo/`.
+- Builds Web mostram avisos do dry-run WebAssembly (`dart:html`/`dart:js` em dependências), sem falhar o build JavaScript. AAB/assinatura de produção, testes físicos e validação humana permanecem pendentes.
+- Auditoria integral do repositório e revisão atualizada das PRs em andamento; verificar seus resultados antes de push/merge. Publicar a rota em Pages requer confirmação do responsável após revisão do payload público exato.
+- Manual atualizado em `docs/MANUAL_DO_USUARIO.md`; resumo anterior datado de 28/09 permanece como fotografia histórica em `docs/STATUS_PROJETO_E_PENDENCIAS_2026-09-28.md`.

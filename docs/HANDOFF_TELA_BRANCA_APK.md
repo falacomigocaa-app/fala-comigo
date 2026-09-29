@@ -148,3 +148,29 @@ Foi aplicada em branch separada `fix/web-media-api-parity`, baseada na `origin/m
 O commit `0aae627` foi publicado na branch e a [PR #82](https://github.com/falacomigocaa-app/fala-comigo/pull/82) foi aberta contra `main`.
 
 **Estado:** pendente de CI. A revisão do diff e `git diff --check` passaram. Esta sessão não tem Flutter/Dart nem adb disponíveis. Não há validação de APK nem em aparelho nesta etapa; os resultados previamente registrados para o Realme C71 permanecem limitados aos fluxos e à versão já testados pelo proprietário. A `main` não foi alterada. Próximo passo: confirmar checks verdes antes de gerar um novo APK de teste para a repetição dos fluxos no Realme C71.
+
+
+## Atualização — 28/09/2026 — build Android debug local
+
+O ambiente sandbox recebeu Flutter 3.38.0, JDK 21 e Android SDK 36. Após encerrar um daemon Gradle que estava associado a Java incompleto, o build local concluiu:
+
+- Comando final: `flutter build apk --debug --no-pub`.
+- Artefato: `build/app/outputs/flutter-apk/app-debug.apk` (aprox. 153 MB).
+- Pacote `com.falacomigo.fala_comigo`, versão `1.0.0+1`, minSdk 24, targetSdk 36.
+- `apksigner verify --verbose`: assinatura v2 válida.
+- SHA-256: `e79271b5b6a8042d675be006c24e13b9b242e77c3e3b44ec35c1d81d00211f7f`.
+- Build Web release e 93 testes Flutter também passaram nesta atualização.
+- Correção local adicional: `DataWipeService` agora apaga `parent_reminders`; a regressão está em `test/data_wipe_service_test.dart` e passou.
+
+**Limite:** o APK é de debug e não foi instalado nem aberto em dispositivo real. Não comprova tela inicial, grade CAA, uso offline ou comportamento em celular/tablet. A validação de aparelho foi deixada para a etapa posterior indicada pelo proprietário. Build de release/AAB e assinatura de produção continuam pendentes. Resumo completo: `docs/STATUS_PROJETO_E_PENDENCIAS_2026-09-28.md`.
+
+
+## Atualização — 29/09/2026 — APK debug reconstruído e validação automatizada
+
+Depois de concluir correções locais em privacidade, preferências e persistência dos Planos de Comunicação, o build foi repetido com Flutter 3.38.0, JDK 21 e Android SDK 36:
+
+- APK: `build/app/outputs/flutter-apk/app-debug.apk`, 153 MB, pacote `com.falacomigo.fala_comigo`, versão `1.0.0+1`, minSdk 24, targetSdk 36.
+- `apksigner verify --verbose --print-certs`: assinatura de debug válida; SHA-256 do APK `a94050ff151c65ecb21fb61982aafa8403bf45c81762121be48597f3c187dad7`.
+- Validações locais: `flutter analyze --no-pub` sem problemas; **98 testes Flutter**; build Web release concluído. Não foi feita instalação/abertura em aparelho real.
+- O Web release foi também empacotado para a subrota planejada `/fala-comigo/app/`; o smoke visual confirmou grade e seleção local de cartão. Isso não substitui teste em telefone/tablet nem valida armazenamento/permissões nativas.
+- **Ainda pendente:** AAB/APK release assinado com chave de produção; não criar nem registrar a chave no Git. Testes físicos continuam para a etapa posterior indicada pelo proprietário.

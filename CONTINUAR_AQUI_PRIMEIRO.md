@@ -4,6 +4,15 @@ O prompt completo para iniciar outro agente está em [`PROMPT_RETORNO_NOVO_AGENT
 
 > **Não alterar a `main` diretamente.** Antes de executar qualquer correção, leia este arquivo, `AGENTS.md`, `PROJECT_HANDOFF.md` e `docs/HANDOFF_TELA_BRANCA_APK.md`.
 
+## Estado atual verificado — 29/09/2026
+
+- Checkout local em `/home/ubuntu/fala-comigo`, branch `audit/creator-privacy-alignment`, HEAD local `fa3dc9c`; há dois commits locais organizados (`9224c4c` para app/privacidade/testes e `fa3dc9c` para site/rota Web). Ainda não foram enviados ao GitHub.
+- Validação local final: `dart format --output=none --set-exit-if-changed lib test`, `flutter analyze --no-pub` (**sem problemas**), `flutter test --no-pub` (**98/98**) e `node --test tests/*.test.mjs` (**10/10**) passaram; builds Flutter Web release e Android debug concluíram.
+- APK debug: `build/app/outputs/flutter-apk/app-debug.apk`, pacote `com.falacomigo.fala_comigo`, versão `1.0.0+1`, minSdk 24/targetSdk 36, assinatura de debug verificada; SHA-256 `a94050ff151c65ecb21fb61982aafa8403bf45c81762121be48597f3c187dad7`. Não instalaram em aparelho.
+- A rota planejada do app é `/fala-comigo/app/`. O workflow local combina `site/` e o build Flutter com base-href `/fala-comigo/app/`. A prévia combinada temporária é `https://4176-ijwj8rsnu6oknbsn37ldj-36a4ebfd.us4.manus.computer/fala-comigo/`; app em `/app/`. O GitHub Pages oficial continua ativo, mas ainda não recebeu esta mudança.
+- Nenhum push, merge ou deploy foi feito. Antes de tornar pública a nova rota, mostrar a URL/payload final e obter confirmação explícita; revisar primeiro o relatório atualizado das PRs e da auditoria integral.
+- AAB/release assinado com chave de produção e testes em dispositivos físicos continuam pendentes.
+
 ## Estado imediato em 25/09/2026
 
 O projeto está em uma branch de correção chamada `fix/main-startup-and-android-build`, baseada na `origin/main` no commit `0d0b685`. A `main` remota não foi alterada nesta retomada.
@@ -173,3 +182,15 @@ O responsável esclareceu que o que não quer ver são **dados clínicos e infor
 ### Entrega da prévia — PR #86
 
 A proposta e o arquivo estático `site/console-preview.html` foram enviados na PR [#86](https://github.com/falacomigocaa-app/fala-comigo/pull/86), branch `docs/creator-console-license-scope`, commit inicial `06f77db87473426b12a06f2a1651ce663caf5db9`. Estado no momento do registro: PR aberta, check Flutter pendente. Não mesclar nem publicar no Pages sem aprovação do responsável. A prévia temporária é `https://4174-iqpj1o8qmwmk8nx17twm5-3af4165c.us1.manus.computer/console-preview.html`.
+
+
+## Atualização — 28/09/2026 — prontidão local, APK e pendências
+
+- Estado local: sandbox `/home/ubuntu/fala-comigo`, branch `audit/creator-privacy-alignment`, HEAD `cc96eaf`; há mudanças locais ainda não commitadas. Nesta etapa não houve commit, push, PR, merge, publicação ou acesso ao Supabase.
+- O site institucional permanente continua no GitHub Pages: `https://falacomigocaa-app.github.io/fala-comigo/`. Ajustes locais em `site/` ainda não foram publicados.
+- Flutter Web release e Android debug foram compilados localmente. O APK debug tem SHA-256 `e79271b5b6a8042d675be006c24e13b9b242e77c3e3b44ec35c1d81d00211f7f` e assinatura v2 verificada; não foi instalado em aparelho.
+- Flutter: 93 testes passaram; análise não fatal retornou código 0 com 37 diagnósticos (34 info, 3 warnings). Node: 5/5 testes passaram. Build Web e build APK debug passaram.
+- `DataWipeService` foi corrigido localmente para também excluir `parent_reminders`; a regressão correspondente passou.
+- Prévias temporárias agora respondem HTTP 200: site/console na porta 4174 e Flutter Web release na 4175. Elas não são publicação permanente e dependem do sandbox.
+- Próximos gates: resolver `extensionHint`/CI das PRs #79–#81, atualizar e revisar conflitos das PRs #77–#83, decidir se o Flutter Web terá rota pública permanente, implementar backend conectado seguro, preparar build release e deixar os testes reais em dispositivos para a etapa posterior definida pelo proprietário.
+- Resumo completo: [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-09-28.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-09-28.md).
