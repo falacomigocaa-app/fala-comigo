@@ -661,7 +661,7 @@ A proposta e o protótipo estático foram enviados na PR #86, commit `06f77db874
 
 ## 47. Finalização local do app e preparação da rota Web (29/09/2026)
 
-- HEAD local `fa3dc9c` na branch `audit/creator-privacy-alignment`; commits locais `9224c4c` e `fa3dc9c` ainda sem push. Nenhuma PR foi aberta/alterada, nenhum merge/deploy ocorreu e o Supabase não foi acessado.
+- HEAD local `0af73e6` na branch `audit/creator-privacy-alignment`; commits locais `9224c4c`, `fa3dc9c` e `0af73e6` ainda sem push. Nenhuma PR foi aberta/alterada, nenhum merge/deploy ocorreu e o Supabase não foi acessado.
 - `flutter analyze --no-pub`: **No issues found**. Formatação passou. `flutter test --no-pub`: **98/98**. `node --test tests/*.test.mjs`: **10/10**. `git diff --check` passou antes dos commits.
 - Builds locais: Flutter Web release com base `/fala-comigo/app/` e APK Android debug. O APK tem assinatura debug verificada, id `com.falacomigo.fala_comigo`, versão `1.0.0+1`, minSdk 24/targetSdk 36, SHA-256 `a94050ff151c65ecb21fb61982aafa8403bf45c81762121be48597f3c187dad7`; não foi instalado em aparelho.
 - Ajustes implementados: exclusão total também cancela notificações e remove `parent_reminders`; escala/orientação persistem; Planos de Comunicação são salvos/listados/editados localmente; stub Web aceita `extensionHint` mas continua sem persistir mídia; erros de análise corrigidos.

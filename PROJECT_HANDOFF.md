@@ -254,7 +254,7 @@ As PRs #77–#81 e #83 permanecem fora do escopo de alterações remotas desta e
 
 ## Atualização — 29/09/2026 — validação, commits locais e rota Web
 
-Checkout local na branch `audit/creator-privacy-alignment`, HEAD `fa3dc9c`, com dois commits organizados ainda sem push: `9224c4c` (persistência/privacidade/estabilidade do app e testes) e `fa3dc9c` (site institucional, metadados Web, workflow e rota Pages `/app/`).
+Checkout local na branch `audit/creator-privacy-alignment`, HEAD `0af73e6`, com três commits organizados ainda sem push: `9224c4c` (persistência/privacidade/estabilidade do app e testes), `fa3dc9c` (site institucional, metadados Web, workflow e rota Pages `/app/`) e `0af73e6` (manual e handoffs).
 
 Validação: formatação passou, `flutter analyze --no-pub` reportou **No issues found**, **98 testes Flutter** e **10 testes Node** passaram; build Web release, build APK debug e smoke visual da prévia `/fala-comigo/app/` passaram. A seleção local do cartão “Comer” adicionou o cartão à barra de frase na prévia. O APK tem assinatura de debug, SHA-256 `a94050ff151c65ecb21fb61982aafa8403bf45c81762121be48597f3c187dad7`; não foi instalado em telefone/tablet. O Web build alerta incompatibilidades apenas no dry-run Wasm; o alvo JavaScript release concluiu.
 
