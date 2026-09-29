@@ -1,12 +1,12 @@
 {
-    "name": "fala_comigo",
-    "short_name": "fala_comigo",
+    "name": "Fala Comigo — Comunicação Alternativa",
+    "short_name": "Fala Comigo",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "background_color": "#f6fafb",
+    "theme_color": "#173f5f",
+    "description": "Aplicativo de comunicação aumentativa e alternativa, local-first e sem anúncios.",
+    "orientation": "any",
     "prefer_related_applications": false,
     "icons": [
         {
