@@ -283,7 +283,7 @@ class _DataExportScreenState extends State<DataExportScreen> {
                   style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
                 ),
                 DropdownButtonFormField<ExportPeriod>(
-                  value: _period,
+                  initialValue: _period,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     helperText: 'A rotina visual sempre mostra o estado atual.',

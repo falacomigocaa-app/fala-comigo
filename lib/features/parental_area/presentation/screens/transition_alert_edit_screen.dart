@@ -371,7 +371,7 @@ class _TransitionAlertEditScreenState
               ),
               Switch(
                 value: _isScheduled,
-                activeColor: AppTheme.primary,
+                activeThumbColor: AppTheme.primary,
                 onChanged: (v) => setState(() => _isScheduled = v),
               ),
             ],

@@ -4,6 +4,7 @@ import 'media_storage_service.dart';
 import 'parental_pin_service.dart';
 import 'parental_session_service.dart';
 import 'secure_box_service.dart';
+import 'transition_alert_service.dart';
 import '../plans/plan_license_store.dart';
 import '../../features/aac_grid/data/providers/seed_cards.dart';
 import '../../features/aac_grid/domain/models/pictogram_card.dart';
@@ -16,6 +17,7 @@ class DataWipeService {
     'pictogram_cards',
     'app_settings',
     'transition_alerts',
+    'parent_reminders',
     'patient_profile',
     'behavior_logs',
     'video_diary',
@@ -31,6 +33,7 @@ class DataWipeService {
 
   static Future<void> deleteAllLocalData() async {
     ParentalSessionService.lock();
+    await TransitionAlertService.instance.cancelAllNotifications();
     for (final name in _boxNames) {
       if (Hive.isBoxOpen(name)) {
         await Hive.box(name).close();
@@ -58,6 +61,7 @@ class DataWipeService {
     }
     await SecureBoxService.openSecureBoxWithMigration('app_settings');
     await SecureBoxService.openSecureBoxWithMigration('transition_alerts');
+    await SecureBoxService.openSecureBox('parent_reminders');
     await SecureBoxService.openSecureBox('patient_profile');
     await SecureBoxService.openSecureBox('behavior_logs');
     await SecureBoxService.openSecureBox('video_diary');

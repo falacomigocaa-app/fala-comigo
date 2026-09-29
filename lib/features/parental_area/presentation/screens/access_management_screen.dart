@@ -13,7 +13,7 @@ class AccessManagementScreen extends StatefulWidget {
 }
 
 class _AccessManagementScreenState extends State<AccessManagementScreen> {
-  final _uuid = Uuid();
+  final _uuid = const Uuid();
   List<AccessGrant> _grants = const [];
   bool _loading = true;
 

@@ -14,7 +14,7 @@ class MediaStorageService {
   MediaStorageService._();
 
   static Future<String> persistFile(
-    String _sourcePath, {
+    String sourcePath, {
     String? extensionHint,
   }) async {
     throw UnsupportedError(

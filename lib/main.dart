@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'core/services/transition_alert_service.dart';
+import 'core/services/app_orientation_service.dart';
 import 'core/services/secure_box_service.dart';
 import 'core/services/parental_session_service.dart';
 import 'core/services/tts_service.dart';
@@ -25,15 +25,6 @@ Future<void> main() async {
 }
 
 Future<void> _bootstrap() async {
-  try {
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
-  } catch (_) {
-    // Orientação é uma preferência de UX e não pode impedir o primeiro uso.
-  }
-
   await Hive.initFlutter();
   if (!Hive.isAdapterRegistered(PictogramCardAdapter().typeId)) {
     Hive.registerAdapter(PictogramCardAdapter());
@@ -45,6 +36,11 @@ Future<void> _bootstrap() async {
   await SecureBoxService.openSecureBoxWithMigration<dynamic>(
     'app_settings',
   );
+  try {
+    await AppOrientationService.applyChildOrientation();
+  } catch (_) {
+    // A preferência visual não pode impedir o primeiro uso.
+  }
   await SecureBoxService.openSecureBoxWithMigration(transitionAlertsBoxName);
 
   if (box.isEmpty) {

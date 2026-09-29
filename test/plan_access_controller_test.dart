@@ -25,7 +25,7 @@ void main() {
   test(
     'plano Essencial mantém comunicação e controles offline disponíveis',
     () {
-      final access = PlanAccessController(plan: PlanCatalog.essential);
+      const access = PlanAccessController(plan: PlanCatalog.essential);
 
       expect(access.canUse(PlanFeature.offlineCommunication), isTrue);
       expect(access.canUse(PlanFeature.parentalControls), isTrue);
@@ -149,7 +149,7 @@ void main() {
   });
 
   test('plano e licença podem ser serializados sem dados clínicos', () {
-    final plan = PlanCatalog.sponsored;
+    const plan = PlanCatalog.sponsored;
     final license = PlanLicense(
       id: 'sponsored-license-1',
       planId: plan.id,

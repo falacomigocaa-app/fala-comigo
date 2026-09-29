@@ -6,9 +6,9 @@ import 'package:fala_comigo/features/parental_area/presentation/screens/parental
 void main() {
   testWidgets('abre o destino parental após a transição', (tester) async {
     await tester.pumpWidget(
-      MaterialApp(
+      const MaterialApp(
         home: ParentalAreaTransitionScreen(
-          destination: const Scaffold(body: Text('Painel parental')),
+          destination: Scaffold(body: Text('Painel parental')),
         ),
       ),
     );

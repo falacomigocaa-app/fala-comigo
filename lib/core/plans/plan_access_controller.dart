@@ -34,4 +34,4 @@ class PlanAccessController {
 }
 
 /// Permissões do plano Essencial, usadas antes de qualquer licença remota.
-final essentialPlanAccess = PlanAccessController(plan: PlanCatalog.essential);
+const essentialPlanAccess = PlanAccessController(plan: PlanCatalog.essential);

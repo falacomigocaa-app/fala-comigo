@@ -74,6 +74,7 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
     };
 
     await _box?.add(entry);
+    if (!mounted) return;
 
     setState(() {
       _pendingVideoPath = null;
@@ -81,7 +82,6 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
     });
     FocusScope.of(context).unfocus();
 
-    if (!mounted) return;
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(const SnackBar(content: Text('Vídeo salvo.')));
@@ -225,11 +225,11 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
                         color: AppTheme.surface,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Row(
+                      child: const Row(
                         children: [
-                          const Icon(Icons.check_circle, color: Colors.green),
-                          const SizedBox(width: 8),
-                          const Expanded(
+                          Icon(Icons.check_circle, color: Colors.green),
+                          SizedBox(width: 8),
+                          Expanded(
                             child: Text('Vídeo gravado, pronto para salvar.'),
                           ),
                         ],

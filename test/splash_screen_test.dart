@@ -6,9 +6,9 @@ import 'package:fala_comigo/features/onboarding/presentation/screens/splash_scre
 void main() {
   testWidgets('navega da abertura para o destino inicial', (tester) async {
     await tester.pumpWidget(
-      MaterialApp(
+      const MaterialApp(
         home: SplashScreen(
-          destination: const Scaffold(body: Text('Grade inicial')),
+          destination: Scaffold(body: Text('Grade inicial')),
         ),
       ),
     );

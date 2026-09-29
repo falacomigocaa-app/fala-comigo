@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -52,12 +53,12 @@ class TransitionAlertService {
     tz.setLocalLocation(tz.getLocation('America/Sao_Paulo'));
 
     const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
-    final darwinInit = DarwinInitializationSettings(
+    const darwinInit = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
       requestSoundPermission: false,
     );
-    final initSettings = InitializationSettings(
+    const initSettings = InitializationSettings(
       android: androidInit,
       iOS: darwinInit,
       macOS: darwinInit,
@@ -76,6 +77,13 @@ class TransitionAlertService {
     if (launchDetails?.didNotificationLaunchApp ?? false) {
       _handlePayload(launchDetails?.notificationResponse?.payload);
     }
+  }
+
+  /// Remove notificações exibidas e agendadas antes de apagar os dados locais.
+  /// Flutter Web não tem implementação deste plugin.
+  Future<void> cancelAllNotifications() async {
+    if (kIsWeb) return;
+    await _plugin.cancelAll();
   }
 
   void _handlePayload(String? payload) {

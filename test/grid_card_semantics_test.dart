@@ -43,7 +43,7 @@ void main() {
 
     final semantics = tester.getSemantics(find.bySemanticsLabel('Maçã'));
     expect(semantics.label, 'Maçã');
-    expect(semantics.hasFlag(SemanticsFlag.isButton), isTrue);
+    expect(semantics.getSemanticsData().flagsCollection.isButton, isTrue);
     expect(
       semantics.getSemanticsData().actions & SemanticsAction.tap.index,
       isNonZero,
