@@ -661,11 +661,11 @@ A proposta e o protótipo estático foram enviados na PR #86, commit `06f77db874
 
 ## 47. Finalização local do app e preparação da rota Web (29/09/2026)
 
-- HEAD local `0af73e6` na branch `audit/creator-privacy-alignment`; commits locais `9224c4c`, `fa3dc9c` e `0af73e6` ainda sem push. Nenhuma PR foi aberta/alterada, nenhum merge/deploy ocorreu e o Supabase não foi acessado.
+- Branch `audit/creator-privacy-alignment` enviada ao GitHub e PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) aberta contra `main`; checks estavam pendentes no último snapshot. Não houve merge/deploy e o Supabase não foi acessado.
 - `flutter analyze --no-pub`: **No issues found**. Formatação passou. `flutter test --no-pub`: **98/98**. `node --test tests/*.test.mjs`: **10/10**. `git diff --check` passou antes dos commits.
 - Builds locais: Flutter Web release com base `/fala-comigo/app/` e APK Android debug. O APK tem assinatura debug verificada, id `com.falacomigo.fala_comigo`, versão `1.0.0+1`, minSdk 24/targetSdk 36, SHA-256 `a94050ff151c65ecb21fb61982aafa8403bf45c81762121be48597f3c187dad7`; não foi instalado em aparelho.
 - Ajustes implementados: exclusão total também cancela notificações e remove `parent_reminders`; escala/orientação persistem; Planos de Comunicação são salvos/listados/editados localmente; stub Web aceita `extensionHint` mas continua sem persistir mídia; erros de análise corrigidos.
 - A rota pública proposta do app é `/fala-comigo/app/`; workflow e navegação do site estão preparados localmente. Site institucional oficial segue no GitHub Pages; alterações desta branch não foram publicadas. Preview combinado temporário: `https://4176-ijwj8rsnu6oknbsn37ldj-36a4ebfd.us4.manus.computer/fala-comigo/`.
 - Builds Web mostram avisos do dry-run WebAssembly (`dart:html`/`dart:js` em dependências), sem falhar o build JavaScript. AAB/assinatura de produção, testes físicos e validação humana permanecem pendentes.
-- Auditoria integral do repositório e revisão atualizada das PRs em andamento; verificar seus resultados antes de push/merge. Publicar a rota em Pages requer confirmação do responsável após revisão do payload público exato.
+- Auditoria integral do repositório e revisão atualizada das PRs em andamento; verificar seus resultados e a CI da PR #87 antes de merge. Publicar a rota em Pages requer confirmação do responsável após revisão do payload público exato.
 - Manual atualizado em `docs/MANUAL_DO_USUARIO.md`; resumo anterior datado de 28/09 permanece como fotografia histórica em `docs/STATUS_PROJETO_E_PENDENCIAS_2026-09-28.md`.

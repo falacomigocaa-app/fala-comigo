@@ -2,17 +2,17 @@
 
 **Data da verificação:** 29/09/2026
 
-**Branch local:** `audit/creator-privacy-alignment`
+**Branch:** `audit/creator-privacy-alignment` (enviada ao remoto)
 
-**HEAD no momento da validação:** `0af73e6`
+**PR de integração:** [#87 — Finalize privacy, caregiver plans, and Flutter Web Pages route](https://github.com/falacomigocaa-app/fala-comigo/pull/87), aberta contra `main`.
 
-**Base remota verificada:** `origin/main` em `cc96eaf`; a branch local está 3 commits à frente, sem commits atrás.
+**Base remota verificada:** `origin/main` em `cc96eaf`; PR aberta sem merge. Dois checks estavam pendentes no último snapshot (04:57, horário local).
 
 ## Resumo executivo
 
 O núcleo do aplicativo foi validado localmente em Web e Android Debug. Privacidade e persistência dos Planos de Comunicação foram corrigidas, o manual do usuário foi criado e há uma rota Flutter Web preparada em `/fala-comigo/app/` no workflow do GitHub Pages.
 
-**Ainda não é uma publicação final:** os três commits estão somente na branch local; não houve push, PR, merge nem deploy desta atualização. O site institucional atual continua público, mas a rota `/app/` ainda retorna HTTP 404 no GitHub Pages. A auditoria integral do repositório e a revisão das PRs abertas estão em consolidação. Não houve teste em aparelho real, conforme a etapa posterior planejada pelo proprietário.
+**Ainda não é uma publicação final:** a branch foi enviada e a PR #87 está aberta; não houve merge nem deploy desta atualização. O site institucional atual continua público, mas a rota `/app/` ainda retorna HTTP 404 no GitHub Pages. A auditoria integral do repositório e a revisão das PRs abertas estão em consolidação. Não houve teste em aparelho real, conforme a etapa posterior planejada pelo proprietário.
 
 ## Trabalho concluído localmente
 
@@ -63,13 +63,14 @@ Verificação HTTP em 29/09/2026:
 
 A alteração preparada mantém o site institucional e coloca o Flutter Web em `/app/`; não configura backend, login ou armazenamento de mídia no browser. A integração final alterará o conteúdo público do GitHub Pages e deve ser revisada antes do merge/deploy.
 
-## Commits locais organizados
+## Commits organizados na branch da PR #87
 
 1. `9224c4c fix: harden privacy and persist caregiver workflows`
 2. `fa3dc9c feat(web): prepare Flutter app route on GitHub Pages`
 3. `0af73e6 docs: add user manual and refresh project handoffs`
+4. `5401f4b docs: record finalization status and validation evidence`
 
-Todos estão apenas em `audit/creator-privacy-alignment`. Nenhum foi enviado ao remoto.
+Os commits estão na branch remota `audit/creator-privacy-alignment` e na PR #87; nenhum foi integrado à `main`.
 
 ## Auditoria de pastas, histórico e PRs
 
@@ -79,7 +80,7 @@ A auditoria especialista integral e a revisão atualizada das PRs abertas foram 
 
 1. Incorporar o parecer final da auditoria de todas as pastas e do histórico Git.
 2. Incorporar o parecer atualizado das PRs, reordenar dependências e revisar conflitos/CI; não mesclar PRs apenas por estarem abertas ou por parecerem relacionadas.
-3. Enviar a branch e abrir/atualizar PR para execução de CI remoto; confirmar novamente estado e checks antes de qualquer merge.
+3. Acompanhar os checks da PR #87 e incorporar as auditorias especialistas; confirmar novamente estado e checks antes de qualquer merge.
 4. **Merge/deploy do Pages:** mostrar ao responsável o payload exato (site atualizado mais nova rota `/app/`) e obter confirmação final antes de torná-lo público.
 5. Preparar APK/AAB de **release** somente com a chave de produção e configuração protegida. Não criar, expor ou commitar keystore, senha ou segredo.
 6. Executar testes em aparelhos reais posteriormente, conforme o proprietário informou, cobrindo abertura limpa, grade CAA, modo offline, voz, cartão/frase, orientação, notificações e Android compatível.
