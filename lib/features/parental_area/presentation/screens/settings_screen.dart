@@ -68,7 +68,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     if (confirmed != true || !mounted) return;
 
     try {
-      await DataWipeService.deleteAllLocalData();
+      final result = await DataWipeService.deleteAllLocalData();
+      if (!result.notificationsCancelled && mounted) {
+        await showDialog<void>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: const Text('Dados locais apagados'),
+            content: const Text(
+              'O Fala Comigo não conseguiu cancelar todas as notificações do sistema. Um lembrete genérico pode continuar agendado. Para removê-lo, confira as notificações do Fala Comigo nas configurações do aparelho.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text('Entendi'),
+              ),
+            ],
+          ),
+        );
+      }
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

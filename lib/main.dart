@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 
+import 'core/services/media_storage_service.dart';
 import 'core/services/transition_alert_service.dart';
 import 'core/services/app_orientation_service.dart';
 import 'core/services/secure_box_service.dart';
@@ -25,23 +28,27 @@ Future<void> main() async {
 }
 
 Future<void> _bootstrap() async {
+  if (!kIsWeb) {
+    final documentsDirectory = await getApplicationDocumentsDirectory();
+    SecureBoxService.configureHiveDirectory(documentsDirectory.path);
+    await SecureBoxService.recoverPendingHiveSnapshots();
+  }
   await Hive.initFlutter();
+  await MediaStorageService.clearStalePreviews();
   if (!Hive.isAdapterRegistered(PictogramCardAdapter().typeId)) {
     Hive.registerAdapter(PictogramCardAdapter());
   }
 
-  final box = await SecureBoxService.openSecureBoxWithMigration<PictogramCard>(
+  final box = await SecureBoxService.openSecureBox<PictogramCard>(
     cardsBoxName,
   );
-  await SecureBoxService.openSecureBoxWithMigration<dynamic>(
-    'app_settings',
-  );
+  await SecureBoxService.openSecureBox<dynamic>('app_settings');
   try {
     await AppOrientationService.applyChildOrientation();
   } catch (_) {
     // A preferência visual não pode impedir o primeiro uso.
   }
-  await SecureBoxService.openSecureBoxWithMigration(transitionAlertsBoxName);
+  await SecureBoxService.openSecureBox(transitionAlertsBoxName);
 
   if (box.isEmpty) {
     for (final card in SeedCards.defaultCards()) {
@@ -222,7 +229,9 @@ class _BootstrapError extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               const Text(
-                'Nenhum dado foi apagado. Tente novamente para recuperar o uso offline.',
+                'Não desinstale o app nem use “Limpar dados” enquanto o erro '
+                'persistir. Tente novamente; se continuar, preserve o aparelho '
+                'e procure o suporte do projeto.',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),

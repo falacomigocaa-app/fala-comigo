@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
@@ -11,10 +12,9 @@ import '../../../../core/theme/app_theme.dart';
 /// anexando contexto (o que aconteceu), para os pais compartilharem
 /// com o terapeuta/especialista avaliar.
 ///
-/// Não faz nenhuma análise automática do vídeo — a gravação e o
-/// contexto ficam salvos localmente, em uma Hive Box criptografada
-/// com AES-256 (ver SecureBoxService), e cabe à família decidir
-/// quando e com quem compartilhar.
+/// Não faz nenhuma análise automática do vídeo. A migração, o ciclo de vida
+/// de arquivos temporários e a segurança da caixa permanecem sob revisão;
+/// a funcionalidade de mídia não é oferecida na prévia Web.
 class VideoDiaryScreen extends StatefulWidget {
   const VideoDiaryScreen({super.key});
 
@@ -100,15 +100,13 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
     if (mounted) setState(() => _pendingVideoPath = null);
   }
 
-  Future<void> _shareEntry(String videoPath, String entryContext) async {
+  Future<void> _shareEntry(String videoPath) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('Compartilhar vídeo?'),
-        content: Text(
-          entryContext.isEmpty
-              ? 'O vídeo será entregue ao aplicativo de compartilhamento escolhido por você.'
-              : 'O vídeo e o contexto “$entryContext” serão entregues ao aplicativo de compartilhamento escolhido por você.',
+        content: const Text(
+          'Somente o vídeo será entregue ao aplicativo de compartilhamento escolhido por você. O texto de contexto salvo nesta entrada não será incluído.',
         ),
         actions: [
           TextButton(
@@ -124,14 +122,23 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
     );
     if (confirmed != true || !mounted) return;
 
-    final file = await MediaStorageService.materializeForReading(videoPath);
-    if (!await file.exists()) return;
-    await Share.shareXFiles(
-      [XFile(file.path)],
-      text: entryContext.isNotEmpty
-          ? 'Vídeo do Fala Comigo — contexto: $entryContext'
-          : 'Vídeo do Fala Comigo',
-    );
+    Future<void> Function()? releaseFile;
+    try {
+      final file = await MediaStorageService.materializeForReading(videoPath);
+      releaseFile = () => MediaStorageService.releaseMaterializedFile(file);
+      if (!await file.exists()) return;
+      await Share.shareXFiles([XFile(file.path)], text: 'Vídeo do Fala Comigo');
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+              'Não foi possível compartilhar este vídeo nesta plataforma.'),
+        ),
+      );
+    } finally {
+      await releaseFile?.call();
+    }
   }
 
   String _formatDate(String isoString) {
@@ -154,188 +161,204 @@ class _VideoDiaryScreenState extends State<VideoDiaryScreen> {
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: AppTheme.professionalBackground,
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: const Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.videocam_outlined,
-                          color: AppTheme.professionalAccent,
-                          size: 28,
+      body: kIsWeb
+          ? const Center(
+              child: Padding(
+                padding: EdgeInsets.all(24),
+                child: Text(
+                  'O diário de vídeo não está habilitado na prévia Web. Use somente dados sintéticos; mídia pessoal deve aguardar a validação nativa.',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+          : _loading
+              ? const Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: AppTheme.professionalBackground,
+                          borderRadius: BorderRadius.circular(24),
                         ),
-                        SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Diário de Vídeo',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 20,
-                                ),
+                        child: const Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.videocam_outlined,
+                              color: AppTheme.professionalAccent,
+                              size: 28,
+                            ),
+                            SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Diário de Vídeo',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  SizedBox(height: 6),
+                                  Text(
+                                    'Grave um momento curto, registre o contexto e decida quando compartilhar.',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.white70,
+                                      height: 1.35,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 6),
-                              Text(
-                                'Grave um momento curto, registre o contexto e decida quando compartilhar.',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.white70,
-                                  height: 1.35,
-                                ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      if (_pendingVideoPath == null)
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: _recordVideo,
+                            icon: const Icon(Icons.videocam_outlined),
+                            label: const Text('Gravar vídeo'),
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(0, 56),
+                              backgroundColor: AppTheme.primary,
+                              foregroundColor: Colors.white,
+                            ),
+                          ),
+                        )
+                      else ...[
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: AppTheme.surface,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Row(
+                            children: [
+                              Icon(Icons.check_circle, color: Colors.green),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child:
+                                    Text('Vídeo gravado, pronto para salvar.'),
                               ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  if (_pendingVideoPath == null)
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: _recordVideo,
-                        icon: const Icon(Icons.videocam_outlined),
-                        label: const Text('Gravar vídeo'),
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(0, 56),
-                          backgroundColor: AppTheme.primary,
-                          foregroundColor: Colors.white,
-                        ),
-                      ),
-                    )
-                  else ...[
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: AppTheme.surface,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Row(
-                        children: [
-                          Icon(Icons.check_circle, color: Colors.green),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: Text('Vídeo gravado, pronto para salvar.'),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: _contextController,
-                      maxLines: 2,
-                      decoration: const InputDecoration(
-                        labelText: 'Contexto (o que estava acontecendo)',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: _discardPendingVideo,
-                            child: const Text('Descartar'),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: _contextController,
+                          maxLines: 2,
+                          decoration: const InputDecoration(
+                            labelText: 'Contexto (o que estava acontecendo)',
+                            border: OutlineInputBorder(),
                           ),
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: _saveEntry,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppTheme.primary,
-                              foregroundColor: Colors.white,
-                            ),
-                            child: const Text('Salvar'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                  const Divider(height: 40),
-                  const Text(
-                    'Vídeos salvos',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
-                  ),
-                  const SizedBox(height: 8),
-                  if (_box != null)
-                    ValueListenableBuilder(
-                      valueListenable: _box!.listenable(),
-                      builder: (context, Box box, _) {
-                        final keys = box.keys.toList().reversed.toList();
-                        if (keys.isEmpty) {
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: Text(
-                              'Nenhum vídeo ainda.',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          );
-                        }
-                        return Column(
-                          children: keys.map((key) {
-                            final entry = Map<String, dynamic>.from(
-                              box.get(key) as Map,
-                            );
-                            final videoPath =
-                                entry['videoPath'] as String? ?? '';
-                            final entryContext =
-                                entry['context'] as String? ?? '';
-                            return Card(
-                              margin: const EdgeInsets.symmetric(vertical: 4),
-                              child: ListTile(
-                                leading: const Icon(Icons.videocam_outlined),
-                                title: Text(
-                                  _formatDate(entry['timestamp'] ?? ''),
-                                ),
-                                subtitle: Text(
-                                  entryContext.isEmpty
-                                      ? '(sem contexto)'
-                                      : entryContext,
-                                ),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.share_outlined),
-                                      onPressed: () =>
-                                          _shareEntry(videoPath, entryContext),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.delete_outline,
-                                        color: Colors.redAccent,
-                                      ),
-                                      onPressed: () =>
-                                          _deleteEntry(key, videoPath),
-                                    ),
-                                  ],
-                                ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: _discardPendingVideo,
+                                child: const Text('Descartar'),
                               ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: _saveEntry,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppTheme.primary,
+                                  foregroundColor: Colors.white,
+                                ),
+                                child: const Text('Salvar'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                      const Divider(height: 40),
+                      const Text(
+                        'Vídeos salvos',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 18),
+                      ),
+                      const SizedBox(height: 8),
+                      if (_box != null)
+                        ValueListenableBuilder(
+                          valueListenable: _box!.listenable(),
+                          builder: (context, Box box, _) {
+                            final keys = box.keys.toList().reversed.toList();
+                            if (keys.isEmpty) {
+                              return const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16),
+                                child: Text(
+                                  'Nenhum vídeo ainda.',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              );
+                            }
+                            return Column(
+                              children: keys.map((key) {
+                                final entry = Map<String, dynamic>.from(
+                                  box.get(key) as Map,
+                                );
+                                final videoPath =
+                                    entry['videoPath'] as String? ?? '';
+                                final entryContext =
+                                    entry['context'] as String? ?? '';
+                                return Card(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 4),
+                                  child: ListTile(
+                                    leading:
+                                        const Icon(Icons.videocam_outlined),
+                                    title: Text(
+                                      _formatDate(entry['timestamp'] ?? ''),
+                                    ),
+                                    subtitle: Text(
+                                      entryContext.isEmpty
+                                          ? '(sem contexto)'
+                                          : entryContext,
+                                    ),
+                                    trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                          icon:
+                                              const Icon(Icons.share_outlined),
+                                          onPressed: kIsWeb
+                                              ? null
+                                              : () => _shareEntry(videoPath),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(
+                                            Icons.delete_outline,
+                                            color: Colors.redAccent,
+                                          ),
+                                          onPressed: () =>
+                                              _deleteEntry(key, videoPath),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
                             );
-                          }).toList(),
-                        );
-                      },
-                    ),
-                  const SizedBox(height: 24),
-                ],
-              ),
-            ),
+                          },
+                        ),
+                      const SizedBox(height: 24),
+                    ],
+                  ),
+                ),
     );
   }
 }

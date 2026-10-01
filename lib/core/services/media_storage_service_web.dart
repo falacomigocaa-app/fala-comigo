@@ -29,6 +29,10 @@ class MediaStorageService {
     );
   }
 
+  static Future<void> releaseMaterializedFile(WebMediaFile file) async {}
+
+  static Future<void> clearStalePreviews() async {}
+
   static Future<void> deleteFile(String path) async {}
 
   static Future<void> clearAllMedia() async {}

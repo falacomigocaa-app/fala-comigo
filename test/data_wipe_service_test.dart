@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 
 import 'package:fala_comigo/core/services/data_wipe_service.dart';
+import 'package:fala_comigo/core/services/secure_box_service.dart';
 import 'package:fala_comigo/features/aac_grid/domain/models/pictogram_card.dart';
 import 'package:fala_comigo/features/parental_area/data/parent_reminders.dart';
 
@@ -36,16 +37,18 @@ void main() {
 
   setUpAll(() async {
     root = await Directory.systemTemp.createTemp('fala_comigo_data_wipe_test_');
-    Hive.init('${root.path}/hive');
+    final hiveDirectory = '${root.path}/hive';
+    Hive.init(hiveDirectory);
+    SecureBoxService.configureHiveDirectory(hiveDirectory);
     if (!Hive.isAdapterRegistered(0)) {
       Hive.registerAdapter(PictogramCardAdapter());
     }
     FlutterLocalNotificationsPlatform.instance = _TestNotificationsPlatform(
       () async {
+        notificationMethods.add('cancelAll');
         if (failNotificationCancellation) {
           throw StateError('Falha simulada ao cancelar notificações.');
         }
-        notificationMethods.add('cancelAll');
       },
     );
 
@@ -115,7 +118,18 @@ void main() {
     expect(notificationMethods, contains('cancelAll'));
   });
 
-  test('falha ao cancelar notificações interrompe o wipe antes de apagar dados',
+  test('fecha outras boxes Hive tipadas sem tentar obtê-las como dynamic',
+      () async {
+    await Hive.close();
+    await Hive.openBox<PictogramCard>('behavior_logs');
+
+    await DataWipeService.deleteAllLocalData();
+
+    expect(Hive.isBoxOpen('behavior_logs'), isTrue);
+    expect(Hive.box<dynamic>('behavior_logs').isEmpty, isTrue);
+  });
+
+  test('falha de notificação não impede o wipe e retorna aviso de pendência',
       () async {
     const reminder = ParentReminder(
       id: 'wipe-fail-test',
@@ -128,11 +142,11 @@ void main() {
     await ParentReminderStore.save([reminder]);
     failNotificationCancellation = true;
 
-    await expectLater(
-      DataWipeService.deleteAllLocalData(),
-      throwsA(isA<StateError>()),
-    );
+    final result = await DataWipeService.deleteAllLocalData();
 
-    expect((await ParentReminderStore.load()).single.id, reminder.id);
+    expect(result.notificationsCancelled, isFalse);
+    expect(await ParentReminderStore.load(), isEmpty);
+    expect(
+        notificationMethods.where((method) => method == 'cancelAll').length, 2);
   });
 }

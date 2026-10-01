@@ -10,6 +10,12 @@ import '../../features/aac_grid/data/providers/seed_cards.dart';
 import '../../features/aac_grid/domain/models/pictogram_card.dart';
 
 /// Remove os dados criados pelo Fala Comigo neste dispositivo.
+class DataWipeResult {
+  const DataWipeResult({required this.notificationsCancelled});
+
+  final bool notificationsCancelled;
+}
+
 class DataWipeService {
   DataWipeService._();
 
@@ -31,13 +37,19 @@ class DataWipeService {
     planLicenseBoxName,
   ];
 
-  static Future<void> deleteAllLocalData() async {
+  static Future<DataWipeResult> deleteAllLocalData() async {
     ParentalSessionService.lock();
-    await TransitionAlertService.instance.cancelAllNotifications();
+    var notificationsCancelled = true;
+    try {
+      await TransitionAlertService.instance.cancelAllNotifications();
+    } catch (_) {
+      // Uma falha do plugin não deve impedir a remoção dos dados locais.
+      notificationsCancelled = false;
+    }
+    // Fecha todas as boxes sem tentar reabri-las como dynamic: algumas telas
+    // mantêm boxes tipadas que Hive não permite obter com outro tipo genérico.
+    await Hive.close();
     for (final name in _boxNames) {
-      if (Hive.isBoxOpen(name)) {
-        await Hive.box(name).close();
-      }
       try {
         await Hive.deleteBoxFromDisk(name);
       } on HiveError {
@@ -52,15 +64,14 @@ class DataWipeService {
 
     // Recria caixas vazias com uma nova chave para que o app continue
     // utilizável sem exigir uma reinicialização do processo Flutter.
-    final cardsBox =
-        await SecureBoxService.openSecureBoxWithMigration<PictogramCard>(
+    final cardsBox = await SecureBoxService.openSecureBox<PictogramCard>(
       'pictogram_cards',
     );
     for (final card in SeedCards.defaultCards()) {
       await cardsBox.put(card.id, card);
     }
-    await SecureBoxService.openSecureBoxWithMigration('app_settings');
-    await SecureBoxService.openSecureBoxWithMigration('transition_alerts');
+    await SecureBoxService.openSecureBox('app_settings');
+    await SecureBoxService.openSecureBox('transition_alerts');
     await SecureBoxService.openSecureBox('parent_reminders');
     await SecureBoxService.openSecureBox('patient_profile');
     await SecureBoxService.openSecureBox('behavior_logs');
@@ -73,5 +84,17 @@ class DataWipeService {
     await SecureBoxService.openSecureBox('communication_plans');
     await SecureBoxService.openSecureBox('care_appointments');
     await SecureBoxService.openSecureBox(planLicenseBoxName);
+
+    // Tenta novamente após a exclusão. Se o plugin continuar indisponível,
+    // a UI avisa que o sistema operacional pode manter lembretes pendentes.
+    if (!notificationsCancelled) {
+      try {
+        await TransitionAlertService.instance.cancelAllNotifications();
+        notificationsCancelled = true;
+      } catch (_) {
+        // A remoção local já foi concluída; o resultado informa a limitação.
+      }
+    }
+    return DataWipeResult(notificationsCancelled: notificationsCancelled);
   }
 }
