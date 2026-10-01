@@ -7,7 +7,7 @@ O prompt completo para iniciar outro agente está em [`PROMPT_RETORNO_NOVO_AGENT
 ## Estado atual verificado — 01/10/2026
 
 - A branch `audit/creator-privacy-alignment` está associada à PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87), que permanece em draft; não houve merge nem deploy.
-- No head `aced191`, Flutter quality e o build de Pages passaram; o deploy foi corretamente ignorado no evento `pull_request`. O commit documental em preparação acionará uma nova rodada e deve ser revalidado.
+- No head `f9cc766`, Flutter quality e o build de Pages passaram; o deploy foi corretamente ignorado no evento `pull_request`, sem checks pendentes ou falhos. Um commit posterior apenas para este prompt deve ser verificado na ponta atual antes de novas decisões.
 - Validação local: formatação passou; `flutter analyze --no-pub` (**No issues found**); `flutter test --no-pub` (**106/106**) e `node --test tests/*.test.mjs` (**13/13**) passaram; `git diff --check` passou na validação local final.
 - APK debug verificado: pacote `com.falacomigo.fala_comigo`, versão `1.0.0`, minSdk 24/targetSdk 36, assinatura v2 de debug. SHA-256 `6ba63c089db99b1d4237acc8052479df0074c61b33caf97d09c7aa17782c21a5`. Não instalado em aparelho e não serve como release.
 - Flutter Web release compilado com base-href `/fala-comigo/app/`; preview temporário em <https://4176-ijwj8rsnu6oknbsn37ldj-36a4ebfd.us4.manus.computer/fala-comigo/>. O site permanente responde 200, mas o endereço oficial `/fala-comigo/app/` ainda responde 404 até merge/deploy.

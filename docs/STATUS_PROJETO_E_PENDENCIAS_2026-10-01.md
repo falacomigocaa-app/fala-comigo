@@ -61,13 +61,13 @@ Achados que continuam relevantes como gates:
 
 A PR #87 está em **draft**. O workflow configura a futura rota `/fala-comigo/app/` e evita deploy em `pull_request`. A lista remota observada em 30/09 continha 16 PRs; vários itens tinham estado `DIRTY` ou `UNSTABLE`. Em especial, a stack de mudanças Web/portal não pode ser integrada em bloco: requer revisão das dependências e resolução de conflitos. Nenhuma PR foi mesclada nesta etapa.
 
-No head `aced191`, os checks do GitHub passaram: Flutter quality e Pages build bem-sucedidos, deploy do Pages ignorado por ser `pull_request`, sem falhas. O commit documental desta rodada deve acionar novos checks; verificar novamente a ponta final.
+No head `f9cc766`, os checks do GitHub passaram: Flutter quality e Pages build bem-sucedidos, deploy do Pages ignorado por ser `pull_request`, sem falhas ou pendências. Verifique sempre o head e os checks da ponta mais recente, pois novos commits documentais também podem acionar CI.
 
 Fotografia do `mergeStateStatus` do GitHub em 30/09 (estado de conflito/mergeabilidade, não aprovação funcional): **CLEAN** — #31, #32, #61, #65, #78 e #87 (a #87 em draft); **DIRTY** — #53, #60, #64, #68, #77, #79, #80, #81 e #83; **UNSTABLE** — #33. A #78 está empilhada sobre a #77 e não deve ser considerada isoladamente; estados e checks precisam ser consultados novamente após o push.
 
 Os pareceres já concluídos registraram que os heads então examinados de #80 e #81 falhavam o build Web por `extensionHint` incompatível; a #81 também contém um portal sintético em memória sem autenticação, tenant ou RLS de produção. O head antigo de #83 tinha checks verdes, mas estava atrás da `main` e conflitava. A compilação local atual do branch de finalização passou; isso **não** atualiza nem valida os heads dessas PRs.
 
-Os commits de segurança e site `e0a58e7` e `aced191` foram enviados à branch da PR #87 e os checks desse head passaram. Os relatórios e handoffs estão organizados em um commit documental separado nessa mesma branch; verificar a CI reacionada após sincronização. Manter a PR em draft até fechar os gates e revisar o payload público final.
+Os commits `e0a58e7`, `aced191` e `f9cc766` foram enviados à branch da PR #87; os checks do head `f9cc766` passaram. Manter a PR em draft até fechar os gates e revisar o payload público final. Qualquer novo commit deve ter seus checks verificados antes da próxima decisão.
 
 ## Bloqueios para release/publicação
 
