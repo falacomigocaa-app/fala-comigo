@@ -8,8 +8,8 @@ O código oficial está no GitHub:
 
 - Repositório: https://github.com/falacomigocaa-app/fala-comigo
 - Branch principal: `main`
-- Branch de trabalho atual: `feat/parental-area-professional-v2`
-- Último commit registrado neste handoff: `5464914 — feat: add family care coordination foundation`
+- Branch de trabalho atual: `audit/creator-privacy-alignment`, associada à PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) (draft; sem merge/deploy).
+- Situação e evidências atuais: `docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-01.md`. Handoffs antigos e relatórios de setembro são snapshots históricos.
 
 Não existem segredos, tokens, senhas ou chaves privadas neste documento. Nunca coloque credenciais no Git.
 
@@ -37,8 +37,8 @@ Já existem:
 - área protegida do responsável;
 - PIN parental com PBKDF2-HMAC-SHA256;
 - sessão parental temporária;
-- caixas Hive protegidas;
-- armazenamento nativo de mídias com AES-GCM-256;
+- caixas Hive locais abertas com fail-closed/snapshot em plataformas nativas; a migração automática de dados antigos está desativada, e a criptografia/migração ainda não têm sign-off de release;
+- armazenamento nativo de mídias com AES-GCM-256, sem que isso substitua a validação independente dos findings de segurança;
 - exclusão local de dados, credenciais e chaves;
 - registros ABC com exportação minimizada;
 - diário de vídeo;

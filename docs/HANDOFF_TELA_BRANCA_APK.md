@@ -1,5 +1,7 @@
 # Fala Comigo — Handoff da tela branca e do APK Android
 
+> **Nota de atualização — 30/09/2026:** o conteúdo abaixo preserva o histórico da retomada de 25/09. A instrução de `openSecureBoxWithMigration` está obsoleta: essa API foi removida. O código atual usa `SecureBoxService.openSecureBox<T>`, snapshot/rollback do arquivo Hive em plataformas nativas e falha fechada; migração automática de boxes legadas está desativada. Consulte `docs/STATUS_PROJETO_E_PENDENCIAS_2026-09-30.md` para os resultados e gates atuais. A recuperação no Web continua sem validação.
+
 **Data da retomada:** 25 de setembro de 2026
 **Repositório:** `falacomigocaa-app/fala-comigo`
 **Branch de correção:** `fix/main-startup-and-android-build`
@@ -35,7 +37,7 @@ O APK acima é útil para diagnóstico, mas não prova que a `main` esteja corri
 Na branch `fix/main-startup-and-android-build`, baseada na `origin/main`, foram reaplicadas apenas estas mudanças:
 
 1. `SecureBoxService.openSecureBox<T>` agora retorna `Box<T>` e chama `Hive.openBox<T>`.
-2. `SecureBoxService.openSecureBoxWithMigration<T>` agora preserva o tipo durante abertura, migração e recriação da caixa.
+2. Naquela correção, `SecureBoxService.openSecureBoxWithMigration<T>` preservava o tipo durante abertura, migração e recriação. **Esse método foi removido em 30/09; não usar a migração automática descrita no histórico.**
 3. `lib/main.dart` abre `pictogram_cards` como `Box<PictogramCard>`.
 4. `android/app/build.gradle.kts` aplica `org.jetbrains.kotlin.android`.
 5. A exigência de `android/key.properties` continua obrigatória para tarefas release; o APK debug não deve falhar durante a configuração por ausência da keystore de produção.
@@ -61,13 +63,13 @@ git show origin/main:lib/main.dart | sed -n '35,45p'
 git show origin/main:lib/core/services/secure_box_service.dart | sed -n '25,60p'
 ```
 
-A chamada correta precisa conter:
+A chamada tipada atualmente suportada é:
 
 ```dart
-SecureBoxService.openSecureBoxWithMigration<PictogramCard>(cardsBoxName)
+SecureBoxService.openSecureBox<PictogramCard>(cardsBoxName)
 ```
 
-E o serviço precisa abrir a caixa com `Hive.openBox<T>`, não com `Hive.openBox` sem tipo.
+O serviço usa `Hive.openBox<T>` e, no nativo, mantém snapshot para restaurar o arquivo se a abertura tentar reescrevê-lo. A migração de dados legados segue desativada até existir um fluxo validado.
 
 A validação remota deve ser feita em branch ou PR, nunca com alteração direta não revisada na `main`:
 
@@ -85,7 +87,7 @@ Para o Codemagic, a execução correta é outra: selecionar a branch/commit que 
 
 ## Procedimento no aparelho Android
 
-1. Instalar o APK de teste em uma instalação limpa para eliminar caixas antigas incompatíveis.
+1. Instalar o APK de teste em uma instalação limpa para validar a primeira abertura. **Não atualizar por cima de uma instalação com dados reais**: a migração de caixas antigas está desativada e deve ser planejada separadamente com backup/recuperação.
 2. Abrir o aplicativo com Wi-Fi e dados móveis desligados.
 3. Confirmar que a grade de cartões aparece após a abertura.
 4. Testar falar, adicionar, falar + adicionar e limpar a frase.

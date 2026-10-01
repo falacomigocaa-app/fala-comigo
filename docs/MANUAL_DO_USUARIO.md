@@ -1,6 +1,6 @@
 # Manual do usuário — Fala Comigo
 
-**Versão do documento:** 1.0 · **Atualizado em:** 29/09/2026
+**Versão do documento:** 1.1 · **Atualizado em:** 30/09/2026
 
 **Público:** familiares, responsáveis e educadores que acompanham a pessoa usuária.
 
@@ -91,9 +91,11 @@ Em **Lembretes do responsável**, crie um lembrete com nome, horário e dias da 
 
 O perfil do paciente é opcional e pode incluir nome, data de nascimento, nível de suporte, responsável e escola/clínica. Informe somente o necessário. Antes do primeiro salvamento, o aplicativo pede confirmação de que você é responsável legal ou está autorizado a cuidar desses dados.
 
-A tela **Privacidade e dados** explica armazenamento, exportação e exclusão e oferece acesso à política de privacidade. O aplicativo não envia automaticamente os registros para escolas ou clínicas. Caixas sensíveis usam armazenamento protegido nas plataformas nativas compatíveis; isso não significa que o produto tenha certificação de segurança.
+A tela **Privacidade e dados** explica armazenamento, exportação e exclusão e oferece acesso à política de privacidade. O aplicativo não envia automaticamente os registros para escolas ou clínicas. A proteção das caixas locais, da migração de dados antigos e do apagamento permanece sob revisão técnica; não use esta versão para guardar dados reais de saúde ou de crianças.
 
-**Atenção ao apagar:** em **Conta, plano e privacidade → Apagar todos os dados**, confirme apenas se realmente deseja remover cartões personalizados, perfil, registros, vídeos, áudios, configurações e PIN deste aparelho. A ação não pode ser desfeita no aplicativo. Arquivos PDF ou outras cópias já exportadas não são removidos.
+> **Esta é uma build de validação.** A migração automática de caixas antigas está desativada. Não atualize esta build sobre uma instalação que contenha dados importantes; a compatibilidade e a recuperação de dados legados precisam ser validadas antes.
+
+**Atenção ao apagar:** em **Conta, plano e privacidade → Apagar todos os dados**, confirme apenas se realmente deseja remover cartões personalizados, perfil, registros, vídeos, áudios, configurações e PIN deste aparelho. A ação não pode ser desfeita no aplicativo. Arquivos PDF ou outras cópias já exportadas não são removidos. Se aparecer um aviso de que notificações não puderam ser canceladas, confira as notificações do Fala Comigo nas configurações do aparelho: um aviso genérico pode continuar agendado.
 
 ## 8. O que ainda não está conectado
 

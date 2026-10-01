@@ -10,14 +10,14 @@ Este checklist evita que uma versão tecnicamente protegida seja apresentada com
 | --- | --- | --- |
 | PIN parental | Implementado com PBKDF2-HMAC-SHA256, salt aleatório, atraso progressivo e bloqueio temporário | `lib/core/services/parental_pin_service.dart` e testes Flutter |
 | Sessão parental | Implementada com expiração e bloqueio ao sair do fluxo protegido | `lib/core/services/parental_session_service.dart` e testes Flutter |
-| Dados locais | Caixas Hive sensíveis usam cifra AES-256 e migração de caixas antigas | `lib/core/services/secure_box_service.dart` |
+| Dados locais | Caixas usam `HiveAesCipher`; a análise de integridade/criptografia e a migração de dados antigos ainda são gates de lançamento. A abertura nativa cria snapshot e restaura o arquivo se Hive tentar recuperá-lo como vazio; migração automática permanece desativada | `lib/core/services/secure_box_service.dart` e `test/secure_box_service_test.dart` |
 | Mídia | Fotos, vídeos e áudios novos usam AES-GCM-256; caminhos, extensões e tamanho são validados | `lib/core/services/media_storage_service.dart` |
-| Exclusão | O responsável pode apagar caixas, mídias, chave local e PIN | `lib/core/services/data_wipe_service.dart` |
+| Exclusão | O responsável pode apagar caixas, mídias, chave local e PIN; o serviço tenta cancelar notificações novamente e informa falha que pode deixar lembretes do sistema agendados | `lib/core/services/data_wipe_service.dart` e `test/data_wipe_service_test.dart` |
 | Backup | Android declara regras para evitar backup automático de dados sensíveis | `android/app/src/main/AndroidManifest.xml` e regras XML |
 | Notificações | Conteúdo da notificação é genérico e a visibilidade é privada | `lib/core/services/transition_alert_service.dart` |
 | Exportação | PDF ABC é minimizado por padrão e dados identificadores exigem escolha explícita | `lib/features/parental_area/presentation/screens/behavior_log_screen.dart` |
 | AAC | Modos falar, adicionar e falar+adicionar são configuráveis e anunciados semanticamente | `lib/features/aac_grid` |
-| Política | A política de privacidade descreve armazenamento local, criptografia e exportação | `privacy_policy.html` |
+| Política | A política canônica descreve estado de validação, limitações do Web, armazenamento e exportação; revisão jurídica e técnica ainda pendente | `site/privacy.html` |
 | CI | Formatação, análise estática, assinatura segura e testes são executados no GitHub Actions | `.github/workflows/flutter.yml` |
 
 ## Gates antes de distribuir uma versão pública

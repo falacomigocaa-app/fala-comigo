@@ -1,7 +1,7 @@
 # Fala Comigo — Continuidade para assistência por IA
 
-**Última atualização:** 29 de setembro de 2026
-**Estado:** há commits locais validados na branch `audit/creator-privacy-alignment`; não foram enviados, mesclados nem publicados. Consultar a seção 47 para hashes, testes e gates atuais.
+**Última atualização:** 01 de outubro de 2026
+**Estado:** a branch atual é `audit/creator-privacy-alignment`, associada à PR #87 em draft; não houve merge nem deploy. Consultar a seção 48 e `docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-01.md` para a situação vigente.
 
 ## 1. Objetivo deste documento
 
@@ -23,7 +23,7 @@ Nenhuma credencial, token, senha, chave privada ou dado real de criança deve se
 - **Produto:** Fala Comigo — Comunicação Aumentativa e Alternativa (CAA/PECS).
 - **Repositório:** `falacomigocaa-app/fala-comigo`.
 - **Branch principal:** `main`.
-- **Branch de trabalho avaliada:** `feat/affordable-plans-model`.
+- **Branch de trabalho atual:** `audit/creator-privacy-alignment` (os nomes de branches nas seções históricas refletem snapshots anteriores).
 - **Conta GitHub conectada:** `falacomigocaa-app`.
 - **Permissões confirmadas:** leitura, push, maintain e admin.
 - **Regra central do produto:** a comunicação básica deve funcionar localmente, sem internet, sem conta e sem plano pago.
@@ -659,7 +659,9 @@ A proposta e o protótipo estático foram enviados na PR #86, commit `06f77db874
 - Relatório consolidado: `docs/STATUS_PROJETO_E_PENDENCIAS_2026-09-28.md`.
 
 
-## 47. Finalização local do app e preparação da rota Web (29/09/2026)
+## 47. Finalização local e preparação da rota Web — snapshot histórico (29/09/2026)
+
+> O snapshot abaixo antecede as correções de migração Hive/temporários, a atualização do site e as novas validações. Para o estado atual, usar a seção 48.
 
 - Branch `audit/creator-privacy-alignment` enviada ao GitHub e PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) aberta contra `main`; checks estavam pendentes no último snapshot. Não houve merge/deploy e o Supabase não foi acessado.
 - `flutter analyze --no-pub`: **No issues found**. Formatação passou. `flutter test --no-pub`: **98/98**. `node --test tests/*.test.mjs`: **10/10**. `git diff --check` passou antes dos commits.
@@ -669,3 +671,15 @@ A proposta e o protótipo estático foram enviados na PR #86, commit `06f77db874
 - Builds Web mostram avisos do dry-run WebAssembly (`dart:html`/`dart:js` em dependências), sem falhar o build JavaScript. AAB/assinatura de produção, testes físicos e validação humana permanecem pendentes.
 - Auditoria integral do repositório e revisão atualizada das PRs em andamento; verificar seus resultados e a CI da PR #87 antes de merge. Publicar a rota em Pages requer confirmação do responsável após revisão do payload público exato.
 - Manual atualizado em `docs/MANUAL_DO_USUARIO.md`; resumo anterior datado de 28/09 permanece como fotografia histórica em `docs/STATUS_PROJETO_E_PENDENCIAS_2026-09-28.md`.
+
+
+## 48. Continuação final local — 01/10/2026
+
+- A branch `audit/creator-privacy-alignment` está associada à PR #87, que permanece em draft. Os commits locais `e0a58e7` (proteção Hive/mídia e wipe) e `aced191` (conteúdo do site/política e testes) foram enviados à branch. Nenhuma PR foi mesclada e nenhum deploy foi executado.
+- A última validação local passou: Dart format em 98 arquivos sem mudanças; `flutter analyze --no-pub` sem issues; **106 testes Flutter** e **13 testes Node** aprovados; `git diff --check` limpo. O build Flutter Web release para `/fala-comigo/app/` e o APK Android Debug foram reconstruídos após a nova regressão que fecha todas as boxes Hive tipadas no wipe.
+- Artefatos verificados: `/home/ubuntu/artifacts/Fala_Comigo_debug_2026-10-01.apk` (SHA-256 `6ba63c089db99b1d4237acc8052479df0074c61b33caf97d09c7aa17782c21a5`, assinatura v2 de debug); `/home/ubuntu/artifacts/Fala_Comigo_flutter_web_2026-10-01.zip` (SHA-256 `3d2bb13296c32a337eb1d3ddac78c20429c3f2d9634415be00c575ef6e22a7b3`); manual PDF de 6 páginas `/home/ubuntu/artifacts/Manual_do_Usuario_Fala_Comigo_2026-10-01.pdf` (SHA-256 `1d6970b3c8f6445b875089cc94e2d2d9dbb0ea65e15a2b58567266361150e5b5`).
+- O preview combinado temporário respondeu HTTP 200 para homepage, `/app/`, `main.dart.js` e política. No domínio oficial, homepage e política respondem 200, mas `/fala-comigo/app/` continua 404 porque o workflow ainda não foi mesclado/executado em `main`.
+- O setor de Git/histórico, documentação e CI que faltou ao job especialista foi coberto manualmente em [`docs/auditoria/2026-10-01/whole-repo-audit-07-history-docs-ci.md`](auditoria/2026-10-01/whole-repo-audit-07-history-docs-ci.md). Há sete temas documentados (seis pareceres especialistas e um manual); a revisão individual das PRs segue parcial em 7/15, com 16 PRs abertas no inventário de 30/09.
+- A política de migração Hive antiga segue desativada para evitar perda de dados; não instalar sobre dispositivo que contenha dados importantes. O APK é debug, não AAB de distribuição, e não foi testado em aparelho físico.
+- `android/key.properties`/keystore de produção não estão configuradas; MobSF precisa ser executado novamente; portal/sincronização não têm Auth/RLS de produção. Não usar com dados sensíveis reais nem anunciar a rota Web como publicada.
+- O status completo, os bloqueios e os próximos gates estão em [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-01.md`](STATUS_PROJETO_E_PENDENCIAS_2026-10-01.md). Confirmar no GitHub o resultado dos checks da ponta mais recente antes de qualquer outra decisão. Merge e deploy permanecem fora do escopo autorizado nesta continuação.
