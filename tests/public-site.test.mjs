@@ -79,6 +79,15 @@ test('portal preview labels synthetic, non-interactive content clearly', () => {
   assert.match(portal, /botões não executam ações/i);
   assert.match(portal, /Contrato de domínio \(GitHub\)/);
   assert.doesNotMatch(portal, /href=["']\.\.\/docs\//i);
+  const buttons = [...portal.matchAll(/<button\b[^>]*>/gi)].map(([button]) => button);
+  assert.ok(buttons.length > 0, 'portal preview should contain illustrative controls');
+  assert.ok(buttons.every((button) => /\bdisabled\b/i.test(button)));
+});
+
+test('RH synthetic-data badge remains visible on narrow screens', () => {
+  const css = readFileSync(path.join(siteRoot, 'rh/styles.css'), 'utf8');
+  assert.doesNotMatch(css, /\.environment-badge\{display:none\}/i);
+  assert.match(css, /\.environment-badge\{display:inline-flex/i);
 });
 
 test('portal preview does not display stale sample calendar dates', () => {
@@ -86,9 +95,29 @@ test('portal preview does not display stale sample calendar dates', () => {
   assert.doesNotMatch(portal, /Até 24\/09|Até 25\/09|amanhã às 14:00|Revisão em 20\/10/i);
 });
 
+test('homepage clearly labels pre-release status and synthetic-only use', () => {
+  const home = readSiteFile('index.html');
+  assert.match(home, /Prévia de validação — ainda não é um lançamento público/i);
+  assert.match(home, /use somente dados sintéticos/i);
+  assert.match(home, /segurança do armazenamento/i);
+  assert.match(home, /Nenhum portal conectado ou piloto está ativo/i);
+  assert.doesNotMatch(home, /<a href="portal\.html">Portal piloto<\/a>/i);
+});
+
+test('published privacy policy is accessible, canonical, and Web-specific', () => {
+  const policy = readSiteFile('privacy.html');
+  const repositoryCopy = readFileSync(path.join(repoRoot, 'privacy_policy.html'), 'utf8');
+  assert.match(policy, /class="skip-link"/i);
+  assert.match(policy, /id="conteudo"/i);
+  assert.match(policy, /não foram validados para dados pessoais ou de saúde/i);
+  assert.match(policy, /não use a prévia Web para armazenar dados pessoais ou sensíveis/i);
+  assert.match(policy, /Não envie por e-mail, WhatsApp ou issues públicas/i);
+  assert.match(repositoryCopy, /política canônica/i);
+});
+
 test('public FAQ describes the generated validation APK without claiming release availability', () => {
   const home = readSiteFile('index.html');
-  assert.match(home, /APK de validação para Android já foi gerado/i);
+  assert.match(home, /APK de validação para Android foi gerado/i);
   assert.match(home, /não foi testado em aparelho real nem distribuído em lojas/i);
   assert.doesNotMatch(home, /preparação do primeiro build/i);
   assert.match(

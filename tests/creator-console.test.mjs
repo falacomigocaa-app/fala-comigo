@@ -23,11 +23,12 @@ test("creator preview does not expose a per-batch list or identifiers", () => {
   );
 });
 
-test("public plans show Essential as free and paid plans as consultation-only", () => {
+test("public plans distinguish a planned free tier from future consultation-only plans", () => {
   const displayedPrices = [...publicSite.matchAll(/<span class="plan-price">([^<]+)<\/span>/g)]
     .map((match) => match[1].trim());
 
-  assert.deepEqual(displayedPrices, ["Gratuito", "Sob consulta", "Sob consulta"]);
+  assert.deepEqual(displayedPrices, ["Previsto: gratuito", "Sob consulta", "Sob consulta"]);
+  assert.match(publicSite, /ainda sem distribuição pública/i);
 });
 
 test("public site does not link to the legacy Manus creator portal", () => {

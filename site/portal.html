@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#102a43" />
-    <meta name="description" content="Prévia do portal conectado Fala Comigo para famílias e redes autorizadas." />
-    <title>Portal conectado — Fala Comigo</title>
+    <meta name="description" content="Demonstração estática do portal futuro Fala Comigo com dados fictícios." />
+    <title>Prévia estática do portal — Fala Comigo</title>
     <link rel="stylesheet" href="portal.css" />
   </head>
   <body>
@@ -25,7 +25,7 @@
     <main id="conteudo" class="portal-shell portal-main">
       <section class="portal-intro">
         <div>
-          <p class="eyebrow">Portal de cuidado conectado</p>
+          <p class="eyebrow">Demonstração estática do portal futuro</p>
           <h1>Coordenação com controle da família.</h1>
           <p class="intro-copy">Esta prévia mostra a mesma linguagem de organizações, vínculos, tarefas, aceite e escopos que está sendo preparada no aplicativo.</p>
         </div>
@@ -33,7 +33,7 @@
           <span class="subject-label">Perfil familiar</span>
           <strong>Perfil de comunicação</strong>
           <span>Família Silva · modo offline disponível</span>
-          <button class="outline-button" type="button">Ver permissões</button>
+          <button disabled title="Demonstração estática; ação indisponível" class="outline-button" type="button">Ver permissões</button>
         </div>
       </section>
 
@@ -44,31 +44,31 @@
       </section>
 
       <section class="portal-section">
-        <div class="section-title-row"><div><p class="eyebrow">Rede autorizada</p><h2>Pessoas e organizações</h2></div><button class="primary-button" type="button">+ Convidar organização</button></div>
+        <div class="section-title-row"><div><p class="eyebrow">Rede autorizada</p><h2>Pessoas e organizações</h2></div><button disabled title="Demonstração estática; ação indisponível" class="primary-button" type="button">+ Convidar organização</button></div>
         <div class="connection-list">
           <article class="connection-card">
-            <div class="connection-icon clinic">＋</div><div class="connection-content"><strong>Clínica Caminhos</strong><span>Terapeuta responsável · vínculo ativo</span><div class="tag-row"><span class="tag">Tarefas e retornos</span><span class="tag">Perfil de comunicação</span></div></div><span class="status active">Ativo</span><button class="more-button" type="button" aria-label="Mais opções para Clínica Caminhos">•••</button>
+            <div class="connection-icon clinic" aria-hidden="true">＋</div><div class="connection-content"><strong>Clínica Caminhos</strong><span>Terapeuta responsável · vínculo ativo</span><div class="tag-row"><span class="tag">Tarefas e retornos</span><span class="tag">Perfil de comunicação</span></div></div><span class="status active">Ativo</span><button disabled title="Demonstração estática; ação indisponível" class="more-button" type="button" aria-label="Mais opções para Clínica Caminhos">•••</button>
           </article>
           <article class="connection-card">
-            <div class="connection-icon school">□</div><div class="connection-content"><strong>Escola Esperança</strong><span>Coordenação pedagógica · aguardando aceite</span><div class="tag-row"><span class="tag">Rotina compartilhada</span></div></div><span class="status pending">Aguardando aceite</span><button class="more-button" type="button" aria-label="Mais opções para Escola Esperança">•••</button>
+            <div class="connection-icon school" aria-hidden="true">□</div><div class="connection-content"><strong>Escola Esperança</strong><span>Coordenação pedagógica · aguardando aceite</span><div class="tag-row"><span class="tag">Rotina compartilhada</span></div></div><span class="status pending">Aguardando aceite</span><button disabled title="Demonstração estática; ação indisponível" class="more-button" type="button" aria-label="Mais opções para Escola Esperança">•••</button>
           </article>
         </div>
       </section>
 
       <section class="portal-section task-section">
-        <div class="section-title-row"><div><p class="eyebrow">Coordenação do cuidado</p><h2>Tarefas compartilhadas</h2></div><button class="secondary-button" type="button">Exportar visão</button></div>
+        <div class="section-title-row"><div><p class="eyebrow">Coordenação do cuidado</p><h2>Tarefas compartilhadas</h2></div><button disabled title="Demonstração estática; ação indisponível" class="secondary-button" type="button">Exportar visão</button></div>
         <div class="task-list">
-          <article class="task-card"><div class="task-top"><div><span class="task-context">CAA · Clínica Caminhos</span><h3>Praticar pedido de pausa</h3></div><span class="task-status status-pending">Pendente</span></div><p>Usar o símbolo durante uma atividade natural e registrar se houve pedido de ajuda.</p><div class="task-meta"><span>Para: Família</span><span>Prazo acordado</span><span class="acceptance pending">Aguardando aceite</span></div><div class="task-actions"><button class="link-button" type="button">Ver histórico (1)</button><button class="soft-button" type="button">Atualizar retorno</button></div></article>
-          <article class="task-card"><div class="task-top"><div><span class="task-context">Escola Esperança · Rotina</span><h3>Usar o cartão de pausa na chegada</h3></div><span class="task-status status-help">Precisa de ajuda</span></div><p>A prancha não estava disponível na escola. Revisar o plano de contingência antes de reenviar.</p><div class="task-meta"><span>Para: Coordenação pedagógica</span><span>Prazo a combinar</span><span class="acceptance accepted">Aceita</span></div><div class="task-actions"><button class="link-button" type="button">Ver histórico (3)</button><button class="soft-button" type="button">Adicionar observação</button></div></article>
+          <article class="task-card"><div class="task-top"><div><span class="task-context">CAA · Clínica Caminhos</span><h3>Praticar pedido de pausa</h3></div><span class="task-status status-pending">Pendente</span></div><p>Usar o símbolo durante uma atividade natural e registrar se houve pedido de ajuda.</p><div class="task-meta"><span>Para: Família</span><span>Prazo acordado</span><span class="acceptance pending">Aguardando aceite</span></div><div class="task-actions"><button disabled title="Demonstração estática; ação indisponível" class="link-button" type="button">Ver histórico (1)</button><button disabled title="Demonstração estática; ação indisponível" class="soft-button" type="button">Atualizar retorno</button></div></article>
+          <article class="task-card"><div class="task-top"><div><span class="task-context">Escola Esperança · Rotina</span><h3>Usar o cartão de pausa na chegada</h3></div><span class="task-status status-help">Precisa de ajuda</span></div><p>A prancha não estava disponível na escola. Revisar o plano de contingência antes de reenviar.</p><div class="task-meta"><span>Para: Coordenação pedagógica</span><span>Prazo a combinar</span><span class="acceptance accepted">Aceita</span></div><div class="task-actions"><button disabled title="Demonstração estática; ação indisponível" class="link-button" type="button">Ver histórico (3)</button><button disabled title="Demonstração estática; ação indisponível" class="soft-button" type="button">Adicionar observação</button></div></article>
         </div>
       </section>
 
       <section class="portal-section care-section">
         <div class="section-title-row"><div><p class="eyebrow">Continuidade do cuidado</p><h2>O mesmo plano para toda a rede</h2></div><span class="contract-note">Contrato compartilhado com o app</span></div>
         <div class="care-grid">
-          <article class="care-card care-profile"><span class="care-icon">◌</span><span class="task-context">Perfil funcional</span><h3>Como apoiar a comunicação</h3><p>Símbolos e gestos · tempo de resposta · antecipação visual.</p><div class="care-footer"><span>Família controla a versão</span><button class="link-button" type="button">Ver resumo →</button></div></article>
-          <article class="care-card care-plan"><span class="care-icon">✦</span><span class="task-context">Plano de comunicação</span><h3>Pedir pausa na chegada</h3><p>Modelar o cartão sem exigir repetição. Revisão programada.</p><div class="care-footer"><span class="status active">Ativo</span><button class="link-button" type="button">Abrir plano →</button></div></article>
-          <article class="care-card care-agenda"><span class="care-icon">□</span><span class="task-context">Próximo compromisso</span><h3>Sessão de fonoaudiologia</h3><p>Clínica Caminhos · horário a confirmar · levar a prancha de pausa.</p><div class="care-footer"><span class="status pending">Preparar transição</span><button class="link-button" type="button">Ver agenda →</button></div></article>
+          <article class="care-card care-profile"><span class="care-icon" aria-hidden="true">◌</span><span class="task-context">Perfil funcional</span><h3>Como apoiar a comunicação</h3><p>Símbolos e gestos · tempo de resposta · antecipação visual.</p><div class="care-footer"><span>Família controla a versão</span><button disabled title="Demonstração estática; ação indisponível" class="link-button" type="button">Ver resumo →</button></div></article>
+          <article class="care-card care-plan"><span class="care-icon" aria-hidden="true">✦</span><span class="task-context">Plano de comunicação</span><h3>Pedir pausa na chegada</h3><p>Modelar o cartão sem exigir repetição. Revisão programada.</p><div class="care-footer"><span class="status active">Ativo</span><button disabled title="Demonstração estática; ação indisponível" class="link-button" type="button">Abrir plano →</button></div></article>
+          <article class="care-card care-agenda"><span class="care-icon" aria-hidden="true">□</span><span class="task-context">Próximo compromisso</span><h3>Sessão de fonoaudiologia</h3><p>Clínica Caminhos · horário a confirmar · levar a prancha de pausa.</p><div class="care-footer"><span class="status pending">Preparar transição</span><button disabled title="Demonstração estática; ação indisponível" class="link-button" type="button">Ver agenda →</button></div></article>
         </div>
       </section>
 
