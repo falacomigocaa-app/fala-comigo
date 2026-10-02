@@ -4,17 +4,17 @@ O prompt completo para iniciar outro agente está em [`PROMPT_RETORNO_NOVO_AGENT
 
 > **Não alterar a `main` diretamente.** Antes de executar qualquer correção, leia este arquivo, `AGENTS.md`, `PROJECT_HANDOFF.md` e `docs/HANDOFF_TELA_BRANCA_APK.md`.
 
-## Estado atual verificado — 01/10/2026
+## Estado atual verificado — 02/10/2026
 
-- A branch `audit/creator-privacy-alignment` está associada à PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87), que permanece em draft; não houve merge nem deploy.
-- No head `f9cc766`, Flutter quality e o build de Pages passaram; o deploy foi corretamente ignorado no evento `pull_request`, sem checks pendentes ou falhos. Um commit posterior apenas para este prompt deve ser verificado na ponta atual antes de novas decisões.
-- Validação local: formatação passou; `flutter analyze --no-pub` (**No issues found**); `flutter test --no-pub` (**106/106**) e `node --test tests/*.test.mjs` (**13/13**) passaram; `git diff --check` passou na validação local final.
-- APK debug verificado: pacote `com.falacomigo.fala_comigo`, versão `1.0.0`, minSdk 24/targetSdk 36, assinatura v2 de debug. SHA-256 `6ba63c089db99b1d4237acc8052479df0074c61b33caf97d09c7aa17782c21a5`. Não instalado em aparelho e não serve como release.
-- Flutter Web release compilado com base-href `/fala-comigo/app/`; preview temporário em <https://4176-ijwj8rsnu6oknbsn37ldj-36a4ebfd.us4.manus.computer/fala-comigo/>. O site permanente responde 200, mas o endereço oficial `/fala-comigo/app/` ainda responde 404 até merge/deploy.
-- Hive agora falha fechado e evita migração automática de boxes antigas. **Não atualizar esta build sobre uma instalação com dados importantes.** As correções passaram nos testes locais, não em dispositivos reais.
-- Auditoria preservada em `docs/auditoria/`: seis setores receberam pareceres especialistas e o sétimo (histórico Git, documentação e CI) foi coberto manualmente em 01/10; consulte `docs/auditoria/2026-10-01/whole-repo-audit-07-history-docs-ci.md`. A revisão de PRs continua em 7/15 na rodada inicial (o inventário passou a 16 com a #87); isto não é sign-off independente completo.
-- Keystore/`android/key.properties` de produção ausentes; não há AAB assinado. Testes físicos permanecem para a etapa posterior do proprietário.
-- Relatório atual: `docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-01.md`. Antes do merge e deploy públicos, confirmar o payload final depois de revisar CI, PRs e política.
+- A PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) foi squash-merged em `main`, commit `43afb5c34b5c6ca7a2b05bb049dd8c1edb901b81`.
+- GitHub Pages executou build e deploy com sucesso no [run 37029707742](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37029707742); Flutter quality passou no [run 37029707714](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37029707714).
+- Endereços publicados: [site institucional](https://falacomigocaa-app.github.io/fala-comigo/), [prévia Flutter Web](https://falacomigocaa-app.github.io/fala-comigo/app/) e [política de privacidade](https://falacomigocaa-app.github.io/fala-comigo/privacy.html). Homepage, `/app/`, política e `main.dart.js` retornaram HTTP 200.
+- Smoke visual/interativo: a grade carregou, o console não retornou mensagens e o cartão sintético “Comer” entrou na frase, habilitando “Falar”. Isto não é teste físico, validação de acessibilidade completa ou validação de todos os fluxos.
+- **Use somente dados sintéticos na prévia Web.** Ela é pública, sem login, backend ou sincronização conectados; armazenamento no navegador não foi validado para dados sensíveis.
+- PRs ainda abertas no inventário consultado: #83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31. A revisão comparável anterior cobriu apenas parte das PRs; atualizar inventário e checks antes de decidir.
+- Gates restantes: migração automática de boxes Hive antigas desativada; sem keystore de produção/AAB; sem MobSF atualizado ou reauditoria independente integral pós-correções; testes em dispositivos físicos ainda não feitos, conforme plano do proprietário; portal sem Auth/RLS/backend de produção.
+- Esta atualização documental está na branch `docs/continuity-handoff-2026-10-02` e na PR [#88](https://github.com/falacomigocaa-app/fala-comigo/pull/88), baseada no `main` `43afb5c`; a PR segue aberta, então confira seu estado antes de afirmar que os arquivos foram integrados.
+- Relatório pós-publicação: [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md). O status de 01/10 e as instruções seguintes com datas anteriores são fotografias históricas; não dizem mais que #87 está em draft ou que `/app/` retorna 404.
 
 ## Registro histórico — estado imediato em 25/09/2026
 
