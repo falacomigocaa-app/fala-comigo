@@ -35,7 +35,6 @@ class MediaStorageService {
   static final _algorithm = AesGcm.with256bits();
   static final _random = Random.secure();
   static const _storage = FlutterSecureStorage();
-  static final Map<String, Future<File>> _previewCache = {};
 
   /// Copia [sourcePath] para a área privada e grava somente a versão cifrada.
   /// O caminho retornado é o identificador persistente a ser salvo no Hive.
@@ -69,10 +68,42 @@ class MediaStorageService {
     return destination.path;
   }
 
-  /// Materializa uma cópia temporária somente para widgets, players ou
-  /// compartilhamento que exigem um arquivo legível pelo sistema.
-  static Future<File> materializeForReading(String path) {
-    return _previewCache.putIfAbsent(path, () => _materialize(path));
+  /// Lê uma mídia autorizada para renderização em memória, sem criar arquivo
+  /// descriptografado no disco.
+  static Future<List<int>> readBytesForDisplay(String path) async {
+    final source = File(path);
+    if (!await source.exists()) {
+      throw FileSystemException('Mídia não encontrada', path);
+    }
+    if (!await _isOwnedPath(source)) {
+      throw const FileSystemException('Caminho de mídia não autorizado.');
+    }
+
+    final bytes = await source.readAsBytes();
+    final isEncrypted = bytes.length >= _fileMagic.length &&
+        utf8.decode(
+              bytes.take(_fileMagic.length).toList(),
+              allowMalformed: true,
+            ) ==
+            _fileMagic;
+    return isEncrypted
+        ? _decrypt(bytes.sublist(_fileMagic.length))
+        : bytes; // Compatibilidade legada; novos arquivos são sempre cifrados.
+  }
+
+  /// Materializa um arquivo temporário para APIs do SO que exigem um caminho,
+  /// como o seletor de compartilhamento. O chamador deve liberá-lo em finally.
+  static Future<File> materializeForReading(String path) => _materialize(path);
+
+  /// Apaga uma cópia criada por [materializeForReading], somente se ela ainda
+  /// estiver dentro da pasta temporária privada do app.
+  static Future<void> releaseMaterializedFile(File file) async {
+    final previewDir = await _previewDirectory();
+    if (!await previewDir.exists() || !await file.exists()) return;
+    final previewPath = await previewDir.resolveSymbolicLinks();
+    final filePath = await file.resolveSymbolicLinks();
+    if (!filePath.startsWith('$previewPath${Platform.pathSeparator}')) return;
+    await file.delete();
   }
 
   /// Remove a mídia cifrada. Caminhos fora da pasta privada são ignorados.
@@ -80,11 +111,18 @@ class MediaStorageService {
     final file = File(path);
     if (!await _isOwnedPath(file)) return;
     if (await file.exists()) await file.delete();
+  }
 
-    final preview = _previewCache.remove(path);
-    if (preview != null) {
-      final previewFile = await preview;
-      if (await previewFile.exists()) await previewFile.delete();
+  /// Remove arquivos de preview/gravações interrompidas que sobraram de uma
+  /// execução anterior. Chamado uma vez no bootstrap, antes de exibir a UI.
+  static Future<void> clearStalePreviews() async {
+    final temporaryDir = await getTemporaryDirectory();
+    for (final name in [
+      _temporarySubfolder,
+      'fala_comigo_audio_recordings',
+    ]) {
+      final directory = Directory('${temporaryDir.path}/$name');
+      if (await directory.exists()) await directory.delete(recursive: true);
     }
   }
 
@@ -102,7 +140,6 @@ class MediaStorageService {
         await directory.delete(recursive: true);
       }
     }
-    _previewCache.clear();
   }
 
   static Future<void> deleteEncryptionKey() async {
@@ -110,28 +147,8 @@ class MediaStorageService {
   }
 
   static Future<File> _materialize(String path) async {
-    final source = File(path);
-    if (!await source.exists()) {
-      throw FileSystemException('Mídia não encontrada', path);
-    }
-    if (!await _isOwnedPath(source)) {
-      throw const FileSystemException('Caminho de mídia não autorizado.');
-    }
-
-    final bytes = await source.readAsBytes();
-    final isEncrypted = bytes.length >= _fileMagic.length &&
-        utf8.decode(
-              bytes.take(_fileMagic.length).toList(),
-              allowMalformed: true,
-            ) ==
-            _fileMagic;
-    final plainBytes = isEncrypted
-        ? await _decrypt(bytes.sublist(_fileMagic.length))
-        : bytes; // compatibilidade com arquivos criados antes da cifra.
-
-    final temporaryDir = Directory(
-      '${(await getTemporaryDirectory()).path}/$_temporarySubfolder',
-    );
+    final plainBytes = await readBytesForDisplay(path);
+    final temporaryDir = await _previewDirectory();
     await temporaryDir.create(recursive: true);
     final extension = _safeExtension(path, fallback: '.bin');
     final temporary = File(
@@ -139,6 +156,11 @@ class MediaStorageService {
     );
     await temporary.writeAsBytes(plainBytes, flush: true);
     return temporary;
+  }
+
+  static Future<Directory> _previewDirectory() async {
+    final temporaryDir = await getTemporaryDirectory();
+    return Directory('${temporaryDir.path}/$_temporarySubfolder');
   }
 
   static Future<List<int>> _decrypt(List<int> encoded) async {

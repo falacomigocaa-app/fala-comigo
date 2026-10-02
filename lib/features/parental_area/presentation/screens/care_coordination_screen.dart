@@ -226,6 +226,35 @@ class _CommunicationPlanTabState extends State<_CommunicationPlanTab> {
   DateTime? _reviewAt;
   CarePlanStatus _status = CarePlanStatus.draft;
   bool _saving = false;
+  bool _loadingPlans = true;
+  bool _loadFailed = false;
+  String? _editingPlanId;
+  List<CommunicationPlan> _plans = [];
+  final _formKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPlans();
+  }
+
+  Future<void> _loadPlans() async {
+    try {
+      final plans = await CareCoordinationStore.loadPlans();
+      plans.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+      if (!mounted) return;
+      setState(() {
+        _plans = plans;
+        _loadingPlans = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _loadingPlans = false;
+        _loadFailed = true;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -253,26 +282,89 @@ class _CommunicationPlanTabState extends State<_CommunicationPlanTab> {
     }
     setState(() => _saving = true);
     final now = DateTime.now();
-    await CareCoordinationStore.savePlan(
-      CommunicationPlan(
-        id: 'plan-${now.microsecondsSinceEpoch}',
-        title: _title.text.trim(),
-        context: _context.text.trim(),
-        functionalGoal: _goal.text.trim(),
-        strategy: _strategy.text.trim(),
-        familyAction: _family.text.trim(),
-        schoolAction: _school.text.trim(),
-        reviewAt: _reviewAt,
-        status: _status,
-        createdAt: now,
-        updatedAt: now,
+    final editingId = _editingPlanId;
+    CommunicationPlan? previousPlan;
+    if (editingId != null) {
+      for (final savedPlan in _plans) {
+        if (savedPlan.id == editingId) {
+          previousPlan = savedPlan;
+          break;
+        }
+      }
+    }
+    final plan = CommunicationPlan(
+      id: editingId ?? 'plan-${now.microsecondsSinceEpoch}',
+      title: _title.text.trim(),
+      context: _context.text.trim(),
+      functionalGoal: _goal.text.trim(),
+      strategy: _strategy.text.trim(),
+      familyAction: _family.text.trim(),
+      schoolAction: _school.text.trim(),
+      reviewAt: _reviewAt,
+      status: _status,
+      createdAt: previousPlan?.createdAt ?? now,
+      updatedAt: now,
+    );
+    try {
+      await CareCoordinationStore.savePlan(plan);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _saving = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Não foi possível salvar o plano.')),
+      );
+      return;
+    }
+    if (!mounted) return;
+    setState(() {
+      _saving = false;
+      _plans = [plan, ..._plans.where((saved) => saved.id != plan.id)]
+        ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+      _clearFormFields();
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          editingId == null
+              ? 'Plano de comunicação salvo localmente.'
+              : 'Plano de comunicação atualizado.',
+        ),
       ),
     );
-    if (!mounted) return;
-    setState(() => _saving = false);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Plano de comunicação salvo localmente.')),
-    );
+  }
+
+  void _clearFormFields() {
+    _title.clear();
+    _context.text = 'Casa';
+    _goal.clear();
+    _strategy.clear();
+    _family.clear();
+    _school.clear();
+    _reviewAt = null;
+    _status = CarePlanStatus.draft;
+    _editingPlanId = null;
+  }
+
+  void _editPlan(CommunicationPlan plan) {
+    setState(() {
+      _editingPlanId = plan.id;
+      _title.text = plan.title;
+      _context.text = plan.context;
+      _goal.text = plan.functionalGoal;
+      _strategy.text = plan.strategy;
+      _family.text = plan.familyAction;
+      _school.text = plan.schoolAction;
+      _reviewAt = plan.reviewAt;
+      _status = plan.status;
+    });
+    final formContext = _formKey.currentContext;
+    if (formContext != null) {
+      Scrollable.ensureVisible(
+        formContext,
+        duration: const Duration(milliseconds: 250),
+        alignment: 0.05,
+      );
+    }
   }
 
   @override
@@ -286,69 +378,153 @@ class _CommunicationPlanTabState extends State<_CommunicationPlanTab> {
                 'Um objetivo observável, uma estratégia simples e um próximo passo para casa e escola. Não substitui o prontuário profissional.',
           ),
           const SizedBox(height: 14),
-          ParentalSurface(
-            child: Column(
-              children: [
-                _field(_title, 'Título do plano', Icons.title_outlined),
-                _field(_context, 'Contexto', Icons.place_outlined),
-                _field(_goal, 'Objetivo funcional', Icons.flag_outlined),
-                _field(
-                    _strategy, 'Estratégia combinada', Icons.lightbulb_outline),
-                _field(
-                  _family,
-                  'Próximo passo para a família',
-                  Icons.home_outlined,
-                ),
-                _field(
-                  _school,
-                  'Próximo passo para escola ou clínica',
-                  Icons.school_outlined,
-                ),
-                DropdownButtonFormField<CarePlanStatus>(
-                  initialValue: _status,
-                  decoration: parentalInputDecoration(
-                    labelText: 'Estado',
-                    icon: Icons.published_with_changes_outlined,
+          if (_editingPlanId != null)
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: () => setState(_clearFormFields),
+                icon: const Icon(Icons.close),
+                label: const Text('Cancelar edição'),
+              ),
+            ),
+          KeyedSubtree(
+            key: _formKey,
+            child: ParentalSurface(
+              child: Column(
+                children: [
+                  _field(_title, 'Título do plano', Icons.title_outlined),
+                  _field(_context, 'Contexto', Icons.place_outlined),
+                  _field(_goal, 'Objetivo funcional', Icons.flag_outlined),
+                  _field(
+                    _strategy,
+                    'Estratégia combinada',
+                    Icons.lightbulb_outline,
                   ),
-                  items: CarePlanStatus.values
-                      .map(
-                        (value) => DropdownMenuItem(
-                          value: value,
-                          child: Text(_statusLabel(value)),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (value) =>
-                      setState(() => _status = value ?? CarePlanStatus.draft),
-                ),
-                const SizedBox(height: 12),
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(Icons.event_repeat_outlined),
-                  title: const Text('Revisar em'),
-                  subtitle: Text(
-                    _reviewAt == null
-                        ? 'Ainda não definido'
-                        : _date(_reviewAt!),
+                  _field(
+                    _family,
+                    'Próximo passo para a família',
+                    Icons.home_outlined,
                   ),
-                  onTap: () async {
-                    final date = await showDatePicker(
-                      context: context,
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime.now().add(const Duration(days: 730)),
-                      initialDate: _reviewAt ??
-                          DateTime.now().add(const Duration(days: 30)),
-                    );
-                    if (date != null) setState(() => _reviewAt = date);
-                  },
-                ),
-                const SizedBox(height: 10),
-                _saveButton(
-                    _saving ? null : _save, 'Salvar plano de comunicação'),
-              ],
+                  _field(
+                    _school,
+                    'Próximo passo para escola ou clínica',
+                    Icons.school_outlined,
+                  ),
+                  DropdownButtonFormField<CarePlanStatus>(
+                    initialValue: _status,
+                    decoration: parentalInputDecoration(
+                      labelText: 'Estado',
+                      icon: Icons.published_with_changes_outlined,
+                    ),
+                    items: CarePlanStatus.values
+                        .map(
+                          (value) => DropdownMenuItem(
+                            value: value,
+                            child: Text(_statusLabel(value)),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) =>
+                        setState(() => _status = value ?? CarePlanStatus.draft),
+                  ),
+                  const SizedBox(height: 12),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.event_repeat_outlined),
+                    title: const Text('Revisar em'),
+                    subtitle: Text(
+                      _reviewAt == null
+                          ? 'Ainda não definido'
+                          : _date(_reviewAt!),
+                    ),
+                    onTap: () async {
+                      final date = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime.now().add(const Duration(days: 730)),
+                        initialDate: _reviewAt ??
+                            DateTime.now().add(const Duration(days: 30)),
+                      );
+                      if (date != null) setState(() => _reviewAt = date);
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  _saveButton(
+                    _saving ? null : _save,
+                    _editingPlanId == null
+                        ? 'Salvar plano de comunicação'
+                        : 'Atualizar plano',
+                  ),
+                ],
+              ),
             ),
           ),
+          const SizedBox(height: 20),
+          Text(
+            'Planos salvos neste aparelho',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 8),
+          if (_loadingPlans)
+            const Center(child: CircularProgressIndicator())
+          else if (_loadFailed)
+            const ParentalInfoBanner(
+              icon: Icons.error_outline,
+              eyebrow: 'NÃO FOI POSSÍVEL CARREGAR',
+              message:
+                  'Tente abrir novamente esta tela para carregar os planos.',
+            )
+          else if (_plans.isEmpty)
+            const ParentalInfoBanner(
+              icon: Icons.assignment_outlined,
+              eyebrow: 'NENHUM PLANO SALVO',
+              message:
+                  'Os planos criados aparecerão aqui para consulta e edição.',
+            )
+          else
+            ..._plans.map(_planCard),
         ],
+      );
+
+  Widget _planCard(CommunicationPlan plan) => ParentalSurface(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    plan.title,
+                    style: const TextStyle(fontWeight: FontWeight.w800),
+                  ),
+                ),
+                IconButton(
+                  tooltip: 'Editar plano',
+                  onPressed: () => _editPlan(plan),
+                  icon: const Icon(Icons.edit_outlined),
+                ),
+              ],
+            ),
+            Text(plan.context),
+            const SizedBox(height: 6),
+            Text('Objetivo: ${plan.functionalGoal}'),
+            if (plan.strategy.isNotEmpty) Text('Estratégia: ${plan.strategy}'),
+            if (plan.familyAction.isNotEmpty)
+              Text('Família: ${plan.familyAction}'),
+            if (plan.schoolAction.isNotEmpty)
+              Text('Escola/clínica: ${plan.schoolAction}'),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: [
+                Chip(label: Text(plan.statusLabel)),
+                if (plan.reviewAt != null)
+                  Chip(label: Text('Revisar: ${_date(plan.reviewAt!)}')),
+              ],
+            ),
+          ],
+        ),
       );
 
   Widget _field(

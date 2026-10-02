@@ -111,10 +111,10 @@ class _WeeklyTrendsScreenState extends State<WeeklyTrendsScreen> {
 class _Legend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       children: [
         _LegendItem(color: AppTheme.primary, label: 'Registros ABC'),
-        const SizedBox(width: 18),
+        SizedBox(width: 18),
         _LegendItem(color: AppTheme.accentGreen, label: 'Vídeos locais'),
       ],
     );

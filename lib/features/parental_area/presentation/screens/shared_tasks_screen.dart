@@ -13,7 +13,7 @@ class SharedTasksScreen extends StatefulWidget {
 }
 
 class _SharedTasksScreenState extends State<SharedTasksScreen> {
-  final _uuid = Uuid();
+  final _uuid = const Uuid();
   List<SharedTask> _tasks = const [];
   bool _loading = true;
 

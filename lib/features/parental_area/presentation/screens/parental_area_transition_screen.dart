@@ -113,7 +113,7 @@ class _ParentalAreaTransitionScreenState
                   ),
                 ),
                 const SizedBox(height: 28),
-                SizedBox(
+                const SizedBox(
                   width: 28,
                   height: 28,
                   child: CircularProgressIndicator(

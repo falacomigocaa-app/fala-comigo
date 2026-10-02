@@ -1,10 +1,27 @@
-name: Publicar site institucional
+name: Publicar site institucional e app Flutter Web
 
 on:
   push:
     branches: [main]
     paths:
       - "site/**"
+      - "tests/**"
+      - "lib/**"
+      - "test/**"
+      - "web/**"
+      - "assets/**"
+      - "pubspec.*"
+      - ".github/workflows/site-pages.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "site/**"
+      - "tests/**"
+      - "lib/**"
+      - "test/**"
+      - "web/**"
+      - "assets/**"
+      - "pubspec.*"
       - ".github/workflows/site-pages.yml"
   workflow_dispatch:
 
@@ -24,13 +41,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Preparar site
+      - name: Testar conteúdo e links do site
+        run: node --test tests/*.test.mjs
+
+      - name: Configurar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.38.0
+          cache: true
+
+      - name: Construir app Web para a subrota do Pages
+        run: |
+          flutter pub get
+          flutter build web --release --base-href /fala-comigo/app/
+          test -s build/web/index.html
+          grep -F '<base href="/fala-comigo/app/">' build/web/index.html
+
+      - name: Preparar payload do Pages
         run: |
           test -s site/index.html
           test -s site/styles.css
           test -s site/privacy.html
+          test -s site/portal.html
+          test -s site/portal.css
+          test -s site/console-preview.html
           test -s site/rh/index.html
           test -s site/rh/styles.css
+          rm -rf public
+          mkdir -p public/app
+          cp -a site/. public/
+          cp -a build/web/. public/app/
+          test -s public/app/index.html
 
       - name: Configurar Pages
         uses: actions/configure-pages@v5
@@ -38,9 +79,10 @@ jobs:
       - name: Upload do artefato
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: public
 
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

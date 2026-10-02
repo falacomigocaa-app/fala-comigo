@@ -8,8 +8,8 @@ O código oficial está no GitHub:
 
 - Repositório: https://github.com/falacomigocaa-app/fala-comigo
 - Branch principal: `main`
-- Branch de trabalho atual: `feat/parental-area-professional-v2`
-- Último commit registrado neste handoff: `5464914 — feat: add family care coordination foundation`
+- Branch de trabalho atual: `audit/creator-privacy-alignment`, associada à PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) (draft; sem merge/deploy).
+- Situação e evidências atuais: `docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-01.md`. Handoffs antigos e relatórios de setembro são snapshots históricos.
 
 Não existem segredos, tokens, senhas ou chaves privadas neste documento. Nunca coloque credenciais no Git.
 
@@ -37,8 +37,8 @@ Já existem:
 - área protegida do responsável;
 - PIN parental com PBKDF2-HMAC-SHA256;
 - sessão parental temporária;
-- caixas Hive protegidas;
-- armazenamento nativo de mídias com AES-GCM-256;
+- caixas Hive locais abertas com fail-closed/snapshot em plataformas nativas; a migração automática de dados antigos está desativada, e a criptografia/migração ainda não têm sign-off de release;
+- armazenamento nativo de mídias com AES-GCM-256, sem que isso substitua a validação independente dos findings de segurança;
 - exclusão local de dados, credenciais e chaves;
 - registros ABC com exportação minimizada;
 - diário de vídeo;
@@ -242,3 +242,22 @@ Estado Git: PR #84 foi integrada com CI verde por squash; `main` agora está em 
 ## Atualização — prévia do Espaço do Criador
 
 A proposta e protótipo estático para gestão de planos/licenças, sem exposição de dados clínicos, estão na PR #86. É prévia de dados fictícios: sem autenticação, Supabase, persistência, chamadas externas ou pagamentos. A PR permanece aberta e não deve ser mesclada/publicada sem revisão do responsável; o Pages publica apenas em push para `main`.
+
+
+## Atualização — 28/09/2026 — validação local e estado de prontidão
+
+O checkout atual de trabalho local está na branch `audit/creator-privacy-alignment`, HEAD `cc96eaf`, com alterações não commitadas. O site institucional tem endereço permanente no GitHub Pages; o workflow `site-pages.yml` publica apenas `site/`, não o Flutter Web. O app Web foi compilado como release e é servido apenas numa URL temporária do sandbox.
+
+Após incluir `parent_reminders` no apagamento completo e adicionar uma regressão, `flutter test --no-pub` passou com **93 testes**, `node --test tests/creator-console.test.mjs` passou com **5 testes**, o formato dos dois arquivos Dart alterados está limpo, `flutter analyze --no-fatal-infos --no-fatal-warnings` retornou código 0 (37 diagnósticos não fatais), `flutter build web --release` passou e `flutter build apk --debug` passou. O APK debug foi verificado por `apksigner`; SHA-256 `e79271b5b6a8042d675be006c24e13b9b242e77c3e3b44ec35c1d81d00211f7f`. Nenhum teste em dispositivo foi feito.
+
+As PRs #77–#81 e #83 permanecem fora do escopo de alterações remotas desta etapa; veja a fotografia e bloqueios no [resumo de status](docs/STATUS_PROJETO_E_PENDENCIAS_2026-09-28.md) e no relatório detalhado das PRs. O Supabase não foi acessado nem alterado. Não houve commit, push, merge nem publicação. A lista de pendências inclui corrigir `extensionHint` entre IO/Web, resolver conflitos/CI das PRs, decidir o destino permanente do Flutter Web, terminar backend/portal seguro e preparar o build de release antes dos testes reais planejados.
+
+## Atualização — 29/09/2026 — validação, commits locais e rota Web
+
+Branch `audit/creator-privacy-alignment` enviada ao GitHub e PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) aberta contra `main`. A PR contém correções de app/privacidade, testes, a rota Pages `/app/`, manual e handoffs. No último snapshot, os dois checks ainda estavam pendentes; não houve merge nem deploy.
+
+Validação: formatação passou, `flutter analyze --no-pub` reportou **No issues found**, **98 testes Flutter** e **10 testes Node** passaram; build Web release, build APK debug e smoke visual da prévia `/fala-comigo/app/` passaram. A seleção local do cartão “Comer” adicionou o cartão à barra de frase na prévia. O APK tem assinatura de debug, SHA-256 `a94050ff151c65ecb21fb61982aafa8403bf45c81762121be48597f3c187dad7`; não foi instalado em telefone/tablet. O Web build alerta incompatibilidades apenas no dry-run Wasm; o alvo JavaScript release concluiu.
+
+O workflow local prepara `site/` mais o Flutter Web em `/fala-comigo/app/`, e o site oferece uma entrada “Abrir prévia Web”. A prévia combinada temporária é `https://4176-ijwj8rsnu6oknbsn37ldj-36a4ebfd.us4.manus.computer/fala-comigo/`; o endereço oficial atual do GitHub Pages continua HTTP 200, mas a alteração da nova rota **não foi publicada** (a rota `/app/` ainda retorna 404). Houve push apenas da branch de trabalho e criação da PR #87; não houve merge nem acesso/alteração do Supabase. A publicação da rota pública exige revisão do payload final e confirmação explícita.
+
+O manual de usuário foi criado em Markdown e PDF. A auditoria integral do repositório e a revisão atualizada das PRs devem ser consultadas antes de integrar. Permanecem pendentes AAB/release com chave de produção, revisão/decisão dos bloqueios de PR, backend seguro do portal e testes reais em aparelhos, conforme o plano do proprietário.

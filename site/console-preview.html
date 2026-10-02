@@ -62,7 +62,7 @@
     .subhead { max-width: 780px; margin-bottom: 23px; color: var(--muted); }
     .privacy-pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px; margin-bottom: 24px; border-radius: 999px; background: #e5f5ec; color: #155b43; font-size: .79rem; font-weight: 750; }
     .privacy-pill span { font-size: 1rem; }
-    .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin: 0 0 22px; }
+    .metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 0 0 22px; }
     .metric, .panel, .plan-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
     .metric { min-height: 132px; padding: 18px; }
     .metric-label { color: var(--muted); font-size: .82rem; }
@@ -181,11 +181,9 @@
         <p class="subhead">Organize as versões dos planos e os lotes de licenças. Esta prévia não contém informações de famílias ou pessoas beneficiadas.</p>
         <div class="privacy-pill"><span aria-hidden="true">✓</span> Sem dados clínicos · sem prontuários · sem conteúdo de comunicação</div>
 
-        <div class="metrics" aria-label="Indicadores fictícios de demonstração">
-          <article class="metric"><div class="metric-label">Planos no catálogo</div><div class="metric-value">5</div><div class="metric-note">Exemplo fictício · 1 rascunho</div></article>
-          <article class="metric"><div class="metric-label">Lotes emitidos</div><div class="metric-value">12</div><div class="metric-note">Exemplo fictício · todas as modalidades</div></article>
-          <article class="metric"><div class="metric-label">Licenças disponíveis</div><div class="metric-value">248</div><div class="metric-note">Total agregado de demonstração</div></article>
-          <article class="metric"><div class="metric-label">Valores comerciais</div><div class="metric-value" style="font-size:1.18rem">Em definição</div><div class="metric-note">Nenhum preço foi decidido</div></article>
+        <div class="metrics" aria-label="Duas contagens globais fictícias">
+          <article class="metric"><div class="metric-label">Total de lotes</div><div class="metric-value">12</div><div class="metric-note">Contagem global fictícia</div></article>
+          <article class="metric"><div class="metric-label">Total de códigos emitidos</div><div class="metric-value">1.248</div><div class="metric-note">Contagem global fictícia</div></article>
         </div>
 
         <div class="workspace">
@@ -194,24 +192,14 @@
               <div class="panel-head"><div><h2 id="plan-summary-title">Planos e valores</h2><p>Prévia do catálogo — sem cobrança ativa.</p></div><a class="text-link" href="#planos">Ver planos</a></div>
               <div class="plan-list">
                 <div class="plan-row"><div class="plan-name">Essencial<span class="plan-description">Comunicação básica · offline</span></div><div class="price">Gratuito</div><span class="status status-live"><span class="status-dot"></span>Vigente</span></div>
-                <div class="plan-row"><div class="plan-name">Família<span class="plan-description">Recursos opcionais</span></div><div class="price">Valor em estudo</div><span class="status status-draft"><span class="status-dot"></span>Rascunho</span></div>
-                <div class="plan-row"><div class="plan-name">Cuidado Conectado<span class="plan-description">Licença opcional</span></div><div class="price">Valor em estudo</div><span class="status status-draft"><span class="status-dot"></span>Rascunho</span></div>
+                <div class="plan-row"><div class="plan-name">Família<span class="plan-description">Recursos opcionais</span></div><div class="price">Sob consulta</div><span class="status status-draft"><span class="status-dot"></span>Rascunho</span></div>
+                <div class="plan-row"><div class="plan-name">Cuidado Conectado<span class="plan-description">Licença opcional</span></div><div class="price">Sob consulta</div><span class="status status-draft"><span class="status-dot"></span>Rascunho</span></div>
               </div>
             </section>
 
             <section class="panel section-gap" aria-labelledby="batch-title">
-              <div class="panel-head"><div><h2 id="batch-title">Licenças por lote</h2><p>Somente modalidade, quantidade e validade.</p></div><a class="text-link" href="#licencas">Criar lote</a></div>
-              <div class="batch-table-wrap">
-                <table>
-                  <caption class="sr-only" style="position:absolute;left:-9999px">Lotes fictícios sem dados de beneficiários</caption>
-                  <thead><tr><th scope="col">Lote de exemplo</th><th scope="col">Modalidade</th><th scope="col">Quantidade</th><th scope="col">Estado</th></tr></thead>
-                  <tbody>
-                    <tr><td class="batch-id">DEMO-A12</td><td>Patrocínio</td><td>100</td><td><span class="status status-live">Ativo</span></td></tr>
-                    <tr><td class="batch-id">DEMO-B07</td><td>Clínica/escola</td><td>48</td><td><span class="status status-live">Ativo</span></td></tr>
-                    <tr><td class="batch-id">DEMO-C03</td><td>Particular</td><td>20</td><td><span class="status status-draft">Em preparação</span></td></tr>
-                  </tbody>
-                </table>
-              </div>
+              <div class="panel-head"><div><h2 id="batch-title">Privacidade das licenças</h2><p>O painel não oferece consulta individual de lotes.</p></div></div>
+              <p>Somente duas contagens globais são exibidas: total de lotes e total de códigos emitidos. Não há referência, modalidade, versão, data, estado ou total de resgates por lote.</p>
             </section>
           </div>
 
@@ -235,8 +223,8 @@
         <div class="section-intro"><p class="eyebrow">Catálogo comercial</p><h2 id="plans-title">Planos e valores</h2><p>Uma mudança começaria como rascunho. A publicação exigiria revisão e confirmação; esta tela não publica no site nem inicia cobrança.</p></div>
         <div class="plan-cards">
           <article class="plan-card"><span class="status status-live">Versão vigente</span><h3 style="margin-top:12px">Essencial</h3><span class="plan-kind">Para todas as famílias</span><div class="price-pending">Gratuito</div><ul><li>Comunicação básica local</li><li>Acessibilidade e controles parentais</li><li>Funciona sem internet</li></ul></article>
-          <article class="plan-card"><span class="status status-draft">Rascunho ilustrativo</span><h3 style="margin-top:12px">Família</h3><span class="plan-kind">Recursos opcionais</span><div class="price-pending">Valor em estudo</div><ul><li>Preço ainda não definido</li><li>Sem pagamento nesta prévia</li><li>Recursos a validar</li></ul></article>
-          <article class="plan-card"><span class="status status-draft">Rascunho ilustrativo</span><h3 style="margin-top:12px">Patrocinado</h3><span class="plan-kind">Benefício corporativo</span><div class="price-pending">Condição a definir</div><ul><li>Lote administrado por modalidade</li><li>Sem identificar famílias</li><li>Sem liberar conteúdo clínico</li></ul></article>
+          <article class="plan-card"><span class="status status-draft">Rascunho ilustrativo</span><h3 style="margin-top:12px">Família</h3><span class="plan-kind">Recursos opcionais</span><div class="price-pending">Sob consulta</div><ul><li>Condições comerciais sob consulta</li><li>Sem pagamento nesta prévia</li><li>Recursos a validar</li></ul></article>
+          <article class="plan-card"><span class="status status-draft">Rascunho ilustrativo</span><h3 style="margin-top:12px">Patrocinado</h3><span class="plan-kind">Benefício corporativo</span><div class="price-pending">Sob consulta</div><ul><li>Lote administrado por modalidade</li><li>Sem identificar famílias</li><li>Sem liberar conteúdo clínico</li></ul></article>
         </div>
       </section>
 
@@ -247,7 +235,7 @@
             <div class="panel-head"><div><h2 id="form-title">Novo lote (simulação)</h2><p>Campos demonstrativos; nada será gravado.</p></div></div>
             <div class="form-grid">
               <label for="modality">Modalidade<select id="modality"><option>Particular/família</option><option>Clínica/escola</option><option>Patrocínio/empresa</option></select></label>
-              <label for="plan">Plano<select id="plan"><option>Essencial (gratuito)</option><option>Família (em estudo)</option><option>Cuidado Conectado (em estudo)</option></select></label>
+              <label for="plan">Plano<select id="plan"><option>Essencial (gratuito)</option><option>Família (sob consulta)</option><option>Cuidado Conectado (sob consulta)</option></select></label>
               <label for="quantity">Quantidade de códigos<input id="quantity" type="number" min="1" max="500" value="10"><span class="field-note">Exemplo — não cria licenças reais.</span></label>
               <label for="expiry">Validade do lote<select id="expiry"><option>90 dias (exemplo)</option><option>180 dias (exemplo)</option><option>12 meses (exemplo)</option></select></label>
             </div>
@@ -258,7 +246,7 @@
         </div>
       </section>
 
-      <p class="footer-note">Demonstração estática com conteúdo inventado. Sem login real, conexão de banco, envio de códigos, pagamentos ou consulta a dados de clientes. Esta prévia não é uma tela publicada nem uma validação de segurança.</p>
+      <p class="footer-note">Prévia estática com conteúdo inventado. O workflow do site inclui este arquivo no artefato do Pages; isso não a torna um painel funcional. Não há login real, conexão de banco, envio de códigos, pagamentos ou consulta a dados de clientes. Esta prévia não é uma validação de segurança.</p>
     </main>
   </div>
   <script>

@@ -146,7 +146,31 @@ class SentenceBarNotifier extends StateNotifier<List<PictogramCard>> {
 }
 
 /// Tamanho ajustável dos botões, controlado no Painel dos Pais.
-final buttonScaleProvider = StateProvider<double>((ref) => 1.0);
+final buttonScaleProvider = StateNotifierProvider<ButtonScaleNotifier, double>(
+  (ref) => ButtonScaleNotifier(),
+);
+
+class ButtonScaleNotifier extends StateNotifier<double> {
+  ButtonScaleNotifier() : super(_loadInitial());
+
+  static double _loadInitial() {
+    try {
+      final saved = Hive.box('app_settings').get('button_scale');
+      if (saved is num) return saved.toDouble().clamp(0.8, 1.6).toDouble();
+    } catch (_) {
+      // O provider pode ser consultado em testes antes do bootstrap do Hive.
+    }
+    return 1.0;
+  }
+
+  void setScale(double value) {
+    state = value.clamp(0.8, 1.6).toDouble();
+  }
+
+  Future<void> persist() async {
+    await Hive.box('app_settings').put('button_scale', state);
+  }
+}
 
 /// Define se tocar em um cartão fala, adiciona à frase, ou faz as duas coisas.
 ///

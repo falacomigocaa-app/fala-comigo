@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
@@ -48,6 +50,8 @@ class _TransitionAlertEditScreenState
   String? _recordedAudioPath;
   bool _isRecording = false;
   bool _isPlayingPreview = false;
+  Completer<void>? _stopPreview;
+  Future<void> Function()? _releaseActivePreview;
 
   late bool _isScheduled;
   TimeOfDay? _scheduledTimeOfDay;
@@ -87,11 +91,21 @@ class _TransitionAlertEditScreenState
 
   @override
   void dispose() {
+    final stopPreview = _stopPreview;
+    if (stopPreview != null && !stopPreview.isCompleted) {
+      stopPreview.complete();
+    }
+    final releasePreview = _releaseActivePreview;
+    _releaseActivePreview = null;
+    if (releasePreview != null) {
+      unawaited(releasePreview().catchError((Object _) {}));
+    }
+    unawaited(_player.stop().catchError((Object _) {}));
+    unawaited(_player.dispose().catchError((Object _) {}));
     _titleController.dispose();
     _ttsController.dispose();
     _checklistInputController.dispose();
     _recorder.dispose();
-    _player.dispose();
     super.dispose();
   }
 
@@ -105,6 +119,7 @@ class _TransitionAlertEditScreenState
   }
 
   Future<void> _toggleRecording() async {
+    if (kIsWeb) return;
     if (_isRecording) {
       final path = await _recorder.stop();
       if (path != null) {
@@ -146,15 +161,40 @@ class _TransitionAlertEditScreenState
   }
 
   Future<void> _playPreview() async {
-    if (_recordedAudioPath == null) return;
+    if (kIsWeb || _recordedAudioPath == null || _isPlayingPreview) return;
     setState(() => _isPlayingPreview = true);
-    final preview = await MediaStorageService.materializeForReading(
-      _recordedAudioPath!,
-    );
-    await _player.play(DeviceFileSource(preview.path));
-    _player.onPlayerComplete.first.then((_) {
+    final stopSignal = Completer<void>();
+    Future<void> Function()? releasePreview;
+    try {
+      final preview = await MediaStorageService.materializeForReading(
+        _recordedAudioPath!,
+      );
+      releasePreview =
+          () => MediaStorageService.releaseMaterializedFile(preview);
+      _releaseActivePreview = releasePreview;
+      if (!mounted) return;
+
+      _stopPreview = stopSignal;
+      final completed = _player.onPlayerComplete.first.then((_) {});
+      await _player.play(DeviceFileSource(preview.path));
+      await Future.any<void>([completed, stopSignal.future]);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'Não foi possível reproduzir este áudio nesta plataforma.'),
+          ),
+        );
+      }
+    } finally {
+      if (identical(_stopPreview, stopSignal)) _stopPreview = null;
+      if (identical(_releaseActivePreview, releasePreview)) {
+        _releaseActivePreview = null;
+      }
+      await releasePreview?.call();
       if (mounted) setState(() => _isPlayingPreview = false);
-    });
+    }
   }
 
   Future<void> _pickTime() async {
@@ -292,14 +332,23 @@ class _TransitionAlertEditScreenState
             style: TextStyle(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 8),
+          if (kIsWeb)
+            const Padding(
+              padding: EdgeInsets.only(bottom: 8),
+              child: Text(
+                'Gravação de voz e notificações agendadas não estão habilitadas na prévia Web.',
+                style: TextStyle(color: Colors.deepOrange),
+              ),
+            ),
           Wrap(
             spacing: 8,
             children: [
-              ChoiceChip(
-                label: const Text('Gravar minha voz'),
-                selected: _audioType == 'gravado',
-                onSelected: (_) => setState(() => _audioType = 'gravado'),
-              ),
+              if (!kIsWeb)
+                ChoiceChip(
+                  label: const Text('Gravar minha voz'),
+                  selected: _audioType == 'gravado',
+                  onSelected: (_) => setState(() => _audioType = 'gravado'),
+                ),
               ChoiceChip(
                 label: const Text('Digitar (o app fala)'),
                 selected: _audioType == 'tts',
@@ -312,7 +361,7 @@ class _TransitionAlertEditScreenState
             Row(
               children: [
                 ElevatedButton.icon(
-                  onPressed: _toggleRecording,
+                  onPressed: kIsWeb ? null : _toggleRecording,
                   icon: Icon(_isRecording ? Icons.stop : Icons.mic),
                   label: Text(_isRecording ? 'Parar' : 'Gravar'),
                   style: ElevatedButton.styleFrom(
@@ -324,7 +373,8 @@ class _TransitionAlertEditScreenState
                 const SizedBox(width: 12),
                 if (_recordedAudioPath != null)
                   IconButton(
-                    onPressed: _isPlayingPreview ? null : _playPreview,
+                    onPressed:
+                        kIsWeb || _isPlayingPreview ? null : _playPreview,
                     icon: const Icon(
                       Icons.play_circle,
                       color: AppTheme.accentGreen,
@@ -371,8 +421,9 @@ class _TransitionAlertEditScreenState
               ),
               Switch(
                 value: _isScheduled,
-                activeColor: AppTheme.primary,
-                onChanged: (v) => setState(() => _isScheduled = v),
+                activeThumbColor: AppTheme.primary,
+                onChanged:
+                    kIsWeb ? null : (v) => setState(() => _isScheduled = v),
               ),
             ],
           ),

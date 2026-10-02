@@ -15,7 +15,7 @@ class PlanLicenseStore {
     if (Hive.isBoxOpen(planLicenseBoxName)) {
       return Hive.box(planLicenseBoxName);
     }
-    return SecureBoxService.openSecureBoxWithMigration(planLicenseBoxName);
+    return SecureBoxService.openSecureBox(planLicenseBoxName);
   }
 
   static Future<PlanLicense?> load() async {

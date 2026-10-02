@@ -4,7 +4,19 @@ O prompt completo para iniciar outro agente está em [`PROMPT_RETORNO_NOVO_AGENT
 
 > **Não alterar a `main` diretamente.** Antes de executar qualquer correção, leia este arquivo, `AGENTS.md`, `PROJECT_HANDOFF.md` e `docs/HANDOFF_TELA_BRANCA_APK.md`.
 
-## Estado imediato em 25/09/2026
+## Estado atual verificado — 01/10/2026
+
+- A branch `audit/creator-privacy-alignment` está associada à PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87), que permanece em draft; não houve merge nem deploy.
+- No head `f9cc766`, Flutter quality e o build de Pages passaram; o deploy foi corretamente ignorado no evento `pull_request`, sem checks pendentes ou falhos. Um commit posterior apenas para este prompt deve ser verificado na ponta atual antes de novas decisões.
+- Validação local: formatação passou; `flutter analyze --no-pub` (**No issues found**); `flutter test --no-pub` (**106/106**) e `node --test tests/*.test.mjs` (**13/13**) passaram; `git diff --check` passou na validação local final.
+- APK debug verificado: pacote `com.falacomigo.fala_comigo`, versão `1.0.0`, minSdk 24/targetSdk 36, assinatura v2 de debug. SHA-256 `6ba63c089db99b1d4237acc8052479df0074c61b33caf97d09c7aa17782c21a5`. Não instalado em aparelho e não serve como release.
+- Flutter Web release compilado com base-href `/fala-comigo/app/`; preview temporário em <https://4176-ijwj8rsnu6oknbsn37ldj-36a4ebfd.us4.manus.computer/fala-comigo/>. O site permanente responde 200, mas o endereço oficial `/fala-comigo/app/` ainda responde 404 até merge/deploy.
+- Hive agora falha fechado e evita migração automática de boxes antigas. **Não atualizar esta build sobre uma instalação com dados importantes.** As correções passaram nos testes locais, não em dispositivos reais.
+- Auditoria preservada em `docs/auditoria/`: seis setores receberam pareceres especialistas e o sétimo (histórico Git, documentação e CI) foi coberto manualmente em 01/10; consulte `docs/auditoria/2026-10-01/whole-repo-audit-07-history-docs-ci.md`. A revisão de PRs continua em 7/15 na rodada inicial (o inventário passou a 16 com a #87); isto não é sign-off independente completo.
+- Keystore/`android/key.properties` de produção ausentes; não há AAB assinado. Testes físicos permanecem para a etapa posterior do proprietário.
+- Relatório atual: `docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-01.md`. Antes do merge e deploy públicos, confirmar o payload final depois de revisar CI, PRs e política.
+
+## Registro histórico — estado imediato em 25/09/2026
 
 O projeto está em uma branch de correção chamada `fix/main-startup-and-android-build`, baseada na `origin/main` no commit `0d0b685`. A `main` remota não foi alterada nesta retomada.
 
@@ -173,3 +185,15 @@ O responsável esclareceu que o que não quer ver são **dados clínicos e infor
 ### Entrega da prévia — PR #86
 
 A proposta e o arquivo estático `site/console-preview.html` foram enviados na PR [#86](https://github.com/falacomigocaa-app/fala-comigo/pull/86), branch `docs/creator-console-license-scope`, commit inicial `06f77db87473426b12a06f2a1651ce663caf5db9`. Estado no momento do registro: PR aberta, check Flutter pendente. Não mesclar nem publicar no Pages sem aprovação do responsável. A prévia temporária é `https://4174-iqpj1o8qmwmk8nx17twm5-3af4165c.us1.manus.computer/console-preview.html`.
+
+
+## Atualização — 28/09/2026 — prontidão local, APK e pendências
+
+- Estado local: sandbox `/home/ubuntu/fala-comigo`, branch `audit/creator-privacy-alignment`, HEAD `cc96eaf`; há mudanças locais ainda não commitadas. Nesta etapa não houve commit, push, PR, merge, publicação ou acesso ao Supabase.
+- O site institucional permanente continua no GitHub Pages: `https://falacomigocaa-app.github.io/fala-comigo/`. Ajustes locais em `site/` ainda não foram publicados.
+- Flutter Web release e Android debug foram compilados localmente. O APK debug tem SHA-256 `e79271b5b6a8042d675be006c24e13b9b242e77c3e3b44ec35c1d81d00211f7f` e assinatura v2 verificada; não foi instalado em aparelho.
+- Flutter: 93 testes passaram; análise não fatal retornou código 0 com 37 diagnósticos (34 info, 3 warnings). Node: 5/5 testes passaram. Build Web e build APK debug passaram.
+- `DataWipeService` foi corrigido localmente para também excluir `parent_reminders`; a regressão correspondente passou.
+- Prévias temporárias agora respondem HTTP 200: site/console na porta 4174 e Flutter Web release na 4175. Elas não são publicação permanente e dependem do sandbox.
+- Próximos gates: resolver `extensionHint`/CI das PRs #79–#81, atualizar e revisar conflitos das PRs #77–#83, decidir se o Flutter Web terá rota pública permanente, implementar backend conectado seguro, preparar build release e deixar os testes reais em dispositivos para a etapa posterior definida pelo proprietário.
+- Resumo completo: [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-09-28.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-09-28.md).

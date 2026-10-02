@@ -20,9 +20,9 @@ class SentenceBarWidget extends ConsumerWidget {
 
     return Container(
       height: 96,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppTheme.surface,
-        border: const Border(
+        border: Border(
           top: BorderSide(color: AppTheme.accentGreen, width: 2),
           bottom: BorderSide(color: AppTheme.cardBorder, width: 1.5),
         ),

@@ -14,7 +14,7 @@ class MediaStorageService {
   MediaStorageService._();
 
   static Future<String> persistFile(
-    String _sourcePath, {
+    String sourcePath, {
     String? extensionHint,
   }) async {
     throw UnsupportedError(
@@ -28,6 +28,10 @@ class MediaStorageService {
       'A leitura de mídia privada ainda não está disponível na versão Web.',
     );
   }
+
+  static Future<void> releaseMaterializedFile(WebMediaFile file) async {}
+
+  static Future<void> clearStalePreviews() async {}
 
   static Future<void> deleteFile(String path) async {}
 

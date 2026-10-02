@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../core/config/public_links.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/hyperfocus_theme.dart';
 import '../../../../core/services/app_orientation_service.dart';
@@ -46,16 +44,6 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
-  Future<void> _openInstitutionalSite() async {
-    final uri = Uri.parse(PublicLinks.institutionalSite);
-    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
-    if (!opened && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Não foi possível abrir o site agora.')),
-      );
-    }
-  }
-
   Future<void> _deleteAllLocalData() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -79,7 +67,36 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     );
     if (confirmed != true || !mounted) return;
 
-    await DataWipeService.deleteAllLocalData();
+    try {
+      final result = await DataWipeService.deleteAllLocalData();
+      if (!result.notificationsCancelled && mounted) {
+        await showDialog<void>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: const Text('Dados locais apagados'),
+            content: const Text(
+              'O Fala Comigo não conseguiu cancelar todas as notificações do sistema. Um lembrete genérico pode continuar agendado. Para removê-lo, confira as notificações do Fala Comigo nas configurações do aparelho.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text('Entendi'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'A exclusão não foi concluída por completo. Alguns dados podem ter permanecido; tente novamente para finalizar.',
+          ),
+        ),
+      );
+      return;
+    }
     if (!mounted) return;
     ref.invalidate(cardsBoxProvider);
     ref.invalidate(cardsListProvider);
@@ -155,7 +172,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   label: '${(scale * 100).round()}%',
                   activeColor: AppTheme.primary,
                   onChanged: (v) =>
-                      ref.read(buttonScaleProvider.notifier).state = v,
+                      ref.read(buttonScaleProvider.notifier).setScale(v),
+                  onChangeEnd: (_) async {
+                    try {
+                      await ref.read(buttonScaleProvider.notifier).persist();
+                    } catch (_) {
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Não foi possível salvar o tamanho dos botões.',
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 ),
                 const SizedBox(height: 6),
                 const Text(
@@ -167,41 +198,34 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   'Escolha se o toque fala, monta uma mensagem ou faz as duas coisas.',
                   style: TextStyle(fontSize: 13, color: AppTheme.mutedText),
                 ),
-                RadioListTile<CardTapBehavior>(
-                  contentPadding: EdgeInsets.zero,
-                  value: CardTapBehavior.speakAndAdd,
+                RadioGroup<CardTapBehavior>(
                   groupValue: tapBehavior,
-                  title: const Text('Falar e adicionar à frase'),
                   onChanged: (value) {
-                    if (value != null)
+                    if (value != null) {
                       ref
                           .read(cardTapBehaviorProvider.notifier)
                           .setBehavior(value);
+                    }
                   },
-                ),
-                RadioListTile<CardTapBehavior>(
-                  contentPadding: EdgeInsets.zero,
-                  value: CardTapBehavior.addOnly,
-                  groupValue: tapBehavior,
-                  title: const Text('Adicionar sem falar'),
-                  onChanged: (value) {
-                    if (value != null)
-                      ref
-                          .read(cardTapBehaviorProvider.notifier)
-                          .setBehavior(value);
-                  },
-                ),
-                RadioListTile<CardTapBehavior>(
-                  contentPadding: EdgeInsets.zero,
-                  value: CardTapBehavior.speakOnly,
-                  groupValue: tapBehavior,
-                  title: const Text('Falar sem adicionar à frase'),
-                  onChanged: (value) {
-                    if (value != null)
-                      ref
-                          .read(cardTapBehaviorProvider.notifier)
-                          .setBehavior(value);
-                  },
+                  child: const Column(
+                    children: [
+                      RadioListTile<CardTapBehavior>(
+                        contentPadding: EdgeInsets.zero,
+                        value: CardTapBehavior.speakAndAdd,
+                        title: Text('Falar e adicionar à frase'),
+                      ),
+                      RadioListTile<CardTapBehavior>(
+                        contentPadding: EdgeInsets.zero,
+                        value: CardTapBehavior.addOnly,
+                        title: Text('Adicionar sem falar'),
+                      ),
+                      RadioListTile<CardTapBehavior>(
+                        contentPadding: EdgeInsets.zero,
+                        value: CardTapBehavior.speakOnly,
+                        title: Text('Falar sem adicionar à frase'),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -825,10 +849,10 @@ class _LocationHeroCard extends StatelessWidget {
                 Center(
                   child: Container(
                     padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
-                      boxShadow: const [
+                      boxShadow: [
                         BoxShadow(color: Color(0x3314253D), blurRadius: 12),
                       ],
                     ),
@@ -865,113 +889,6 @@ class _LocationHeroCard extends StatelessWidget {
             label: const Text('Ver como a conexão será feita'),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _DashboardSection extends StatelessWidget {
-  final String title;
-  final String description;
-  final List<Widget> children;
-
-  const _DashboardSection({
-    required this.title,
-    required this.description,
-    required this.children,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-        ),
-        const SizedBox(height: 4),
-        Text(description, style: const TextStyle(color: AppTheme.mutedText)),
-        const SizedBox(height: 12),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final width = constraints.maxWidth > 650
-                ? (constraints.maxWidth - 12) / 2
-                : constraints.maxWidth;
-            return Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: [
-                for (final child in children)
-                  SizedBox(width: width, child: child),
-              ],
-            );
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class _DashboardActionCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String description;
-  final Color color;
-  final VoidCallback onTap;
-
-  const _DashboardActionCard({
-    required this.icon,
-    required this.title,
-    required this.description,
-    required this.color,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      color: AppTheme.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-        side: const BorderSide(color: AppTheme.cardBorder),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              _IconBubble(icon: icon, color: color),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(fontWeight: FontWeight.w800),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      description,
-                      style: const TextStyle(
-                        color: AppTheme.mutedText,
-                        fontSize: 13,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(
-                Icons.chevron_right_rounded,
-                color: AppTheme.mutedText,
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
