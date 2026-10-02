@@ -16,7 +16,7 @@ Você vai continuar a finalização técnica do projeto **Fala Comigo**, um apli
 - URLs permanentes verificadas: site <https://falacomigocaa-app.github.io/fala-comigo/>; Flutter Web <https://falacomigocaa-app.github.io/fala-comigo/app/>; política <https://falacomigocaa-app.github.io/fala-comigo/privacy.html>.
 - Smoke público: homepage, `/app/`, política e `/app/main.dart.js` responderam HTTP 200; o HTML do app contém base href `/fala-comigo/app/`. O app renderizou a grade; o console não retornou mensagens; o cartão sintético “Comer” foi selecionado e apareceu na frase, habilitando “Falar”. Isso não substitui teste físico, teste de acessibilidade completo ou teste de todos os fluxos.
 - Depois da merge da #87, a lista consultada tinha 15 PRs abertas: #83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31. **Recarregue a lista e os checks**; a auditoria comparável anterior ficou parcial (7/15 subrevisões concluídas).
-- Estes documentos de continuidade foram preparados na branch `docs/continuity-handoff-2026-10-02`, baseada no `main` `43afb5c`. Confira a PR/merge dessa atualização antes de afirmar que estes arquivos já estão em `main`.
+- Estes documentos foram preparados na branch `docs/continuity-handoff-2026-10-02`, baseada no `main` `43afb5c`, e enviados na PR [#88](https://github.com/falacomigocaa-app/fala-comigo/pull/88). Ela segue aberta; confirme head e checks antes de afirmar que estes arquivos entraram em `main`.
 
 O relatório datado com evidências e pendências está em [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md). Use-o como snapshot, não como substituto de checagem ao vivo.
 

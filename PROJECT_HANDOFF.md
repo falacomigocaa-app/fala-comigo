@@ -9,7 +9,7 @@ O código oficial está no GitHub:
 - Repositório: https://github.com/falacomigocaa-app/fala-comigo
 - Branch principal: `main`
 - Estado mais recente observado em 02/10/2026: `main` no commit `43afb5c`, após squash-merge da PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87). O site e a prévia Flutter Web estão publicados no GitHub Pages; verifique novamente `origin/main` antes de agir.
-- Esta atualização documental está na branch `docs/continuity-handoff-2026-10-02`, baseada em `43afb5c`; confira seu estado/PR antes de afirmar que entrou em `main`.
+- Esta atualização documental está na branch `docs/continuity-handoff-2026-10-02` e na PR [#88](https://github.com/falacomigocaa-app/fala-comigo/pull/88), baseada em `43afb5c`; a PR segue aberta e não altera app/site.
 - Situação e evidências pós-publicação: [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md). O relatório de 01/10 e os handoffs datados de setembro são snapshots históricos.
 
 Não existem segredos, tokens, senhas ou chaves privadas neste documento. Nunca coloque credenciais no Git.

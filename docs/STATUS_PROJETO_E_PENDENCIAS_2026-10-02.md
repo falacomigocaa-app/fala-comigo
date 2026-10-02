@@ -3,7 +3,7 @@
 **Atualizado:** 02/10/2026
 **Repositório:** `falacomigocaa-app/fala-comigo` (público)
 **Base observada:** `main` no commit `43afb5c` (squash merge da PR #87)
-**Esta atualização documental:** preparada na branch `docs/continuity-handoff-2026-10-02`, baseada nesse commit; não altera o app nem o site.
+**Esta atualização documental:** preparada na branch `docs/continuity-handoff-2026-10-02`, baseada nesse commit, e enviada na [PR #88](https://github.com/falacomigocaa-app/fala-comigo/pull/88); não altera o app nem o site.
 
 ## Resumo executivo
 
@@ -47,7 +47,7 @@ A rota `/app/` é acessível publicamente, sem login. O app Web trabalha com arm
 
 ## Auditoria e PRs restantes
 
-A revisão de PRs registrada anteriormente é parcial: o parecer comparável original cobriu 7 de 15 subrevisões; os demais pareceres não devem ser presumidos concluídos. O arquivo da auditoria de 29/09 é uma fotografia histórica. A listagem do GitHub após a merge da #87, imediatamente antes desta atualização documental, mostrou 15 PRs abertas: **#83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31**. O estado de merge/checks dessas PRs deve ser consultado novamente antes de qualquer decisão.
+A revisão de PRs registrada anteriormente é parcial: o parecer comparável original cobriu 7 de 15 subrevisões; os demais pareceres não devem ser presumidos concluídos. O arquivo da auditoria de 29/09 é uma fotografia histórica. A listagem do GitHub após a merge da #87, imediatamente antes da PR documental #88, mostrou 15 PRs abertas: **#83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31**. A PR documental #88 está aberta à parte; refaça o inventário e consulte head, checks e mergeabilidade antes de qualquer decisão.
 
 ## Próximos passos recomendados
 

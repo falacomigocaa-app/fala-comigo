@@ -13,7 +13,7 @@ O prompt completo para iniciar outro agente está em [`PROMPT_RETORNO_NOVO_AGENT
 - **Use somente dados sintéticos na prévia Web.** Ela é pública, sem login, backend ou sincronização conectados; armazenamento no navegador não foi validado para dados sensíveis.
 - PRs ainda abertas no inventário consultado: #83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31. A revisão comparável anterior cobriu apenas parte das PRs; atualizar inventário e checks antes de decidir.
 - Gates restantes: migração automática de boxes Hive antigas desativada; sem keystore de produção/AAB; sem MobSF atualizado ou reauditoria independente integral pós-correções; testes em dispositivos físicos ainda não feitos, conforme plano do proprietário; portal sem Auth/RLS/backend de produção.
-- Esta atualização documental foi preparada na branch `docs/continuity-handoff-2026-10-02`, baseada no `main` `43afb5c`; confira a PR/merge antes de afirmar que ela também foi integrada.
+- Esta atualização documental está na branch `docs/continuity-handoff-2026-10-02` e na PR [#88](https://github.com/falacomigocaa-app/fala-comigo/pull/88), baseada no `main` `43afb5c`; a PR segue aberta, então confira seu estado antes de afirmar que os arquivos foram integrados.
 - Relatório pós-publicação: [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md). O status de 01/10 e as instruções seguintes com datas anteriores são fotografias históricas; não dizem mais que #87 está em draft ou que `/app/` retorna 404.
 
 ## Registro histórico — estado imediato em 25/09/2026
