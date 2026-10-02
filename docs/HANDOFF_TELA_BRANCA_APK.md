@@ -1,13 +1,13 @@
 # Fala Comigo — Handoff da tela branca e do APK Android
 
-> **Nota de atualização — 30/09/2026:** o conteúdo abaixo preserva o histórico da retomada de 25/09. A instrução de `openSecureBoxWithMigration` está obsoleta: essa API foi removida. O código atual usa `SecureBoxService.openSecureBox<T>`, snapshot/rollback do arquivo Hive em plataformas nativas e falha fechada; migração automática de boxes legadas está desativada. Consulte `docs/STATUS_PROJETO_E_PENDENCIAS_2026-09-30.md` para os resultados e gates atuais. A recuperação no Web continua sem validação.
+> **Estado atual — 02/10/2026:** este arquivo preserva abaixo o diagnóstico histórico de 25/09 e não deve ser usado como fotografia do estado remoto atual. A PR #87 foi squash-merged em `main` (`43afb5c`); o site institucional e a prévia Flutter Web em `/fala-comigo/app/` foram publicados. Consulte [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md`](STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md) e [`PROMPT_RETORNO_NOVO_AGENTE.md`](../PROMPT_RETORNO_NOVO_AGENTE.md) para o estado atual. A API `openSecureBoxWithMigration` descrita em trechos antigos foi removida; o código atual falha fechado, mantém snapshot/rollback nativo e deixa migração automática de boxes legadas desativada. Não instalar sobre dados importantes nem usar a prévia Web com dados sensíveis.
 
 **Data da retomada:** 25 de setembro de 2026
 **Repositório:** `falacomigocaa-app/fala-comigo`
 **Branch de correção:** `fix/main-startup-and-android-build`
 **Base da correção:** `origin/main` no commit `0d0b685`
 
-## Conclusão atual
+## Conclusão da retomada de 25/09 — registro histórico
 
 A `main` não foi apagada nem reescrita. A PR 29 continua aberta e a PR 60 continua aberta como rascunho. A tentativa de mesclar a PR 60 foi recusada pelo GitHub porque ela está marcada como draft; portanto, nenhuma dessas operações alterou a `main`.
 

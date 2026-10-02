@@ -8,8 +8,9 @@ O código oficial está no GitHub:
 
 - Repositório: https://github.com/falacomigocaa-app/fala-comigo
 - Branch principal: `main`
-- Branch de trabalho atual: `audit/creator-privacy-alignment`, associada à PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) (draft; sem merge/deploy).
-- Situação e evidências atuais: `docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-01.md`. Handoffs antigos e relatórios de setembro são snapshots históricos.
+- Estado mais recente observado em 02/10/2026: `main` no commit `43afb5c`, após squash-merge da PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87). O site e a prévia Flutter Web estão publicados no GitHub Pages; verifique novamente `origin/main` antes de agir.
+- Esta atualização documental está na branch `docs/continuity-handoff-2026-10-02`, baseada em `43afb5c`; confira seu estado/PR antes de afirmar que entrou em `main`.
+- Situação e evidências pós-publicação: [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md). O relatório de 01/10 e os handoffs datados de setembro são snapshots históricos.
 
 Não existem segredos, tokens, senhas ou chaves privadas neste documento. Nunca coloque credenciais no Git.
 
@@ -253,6 +254,8 @@ Após incluir `parent_reminders` no apagamento completo e adicionar uma regress�
 As PRs #77–#81 e #83 permanecem fora do escopo de alterações remotas desta etapa; veja a fotografia e bloqueios no [resumo de status](docs/STATUS_PROJETO_E_PENDENCIAS_2026-09-28.md) e no relatório detalhado das PRs. O Supabase não foi acessado nem alterado. Não houve commit, push, merge nem publicação. A lista de pendências inclui corrigir `extensionHint` entre IO/Web, resolver conflitos/CI das PRs, decidir o destino permanente do Flutter Web, terminar backend/portal seguro e preparar o build de release antes dos testes reais planejados.
 
 ## Atualização — 29/09/2026 — validação, commits locais e rota Web
+
+> **Snapshot histórico de 29/09:** os parágrafos desta seção descrevem o estado anterior à merge da PR #87 e ao deploy de 02/10. Para o estado atual, consulte [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md).
 
 Branch `audit/creator-privacy-alignment` enviada ao GitHub e PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) aberta contra `main`. A PR contém correções de app/privacidade, testes, a rota Pages `/app/`, manual e handoffs. No último snapshot, os dois checks ainda estavam pendentes; não houve merge nem deploy.
 
