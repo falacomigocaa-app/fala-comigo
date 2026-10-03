@@ -1,4 +1,4 @@
-# Prompt de comando e continuidade do Fala Comigo — 02/10/2026
+# Prompt de comando e continuidade do Fala Comigo — 03/10/2026
 
 Copie a seção **PROMPT PARA A PRÓXIMA AGENTE** integralmente para iniciar a próxima conversa. Ela registra o último estado observado, mas a agente deve revalidar GitHub, branches, PRs e URLs antes de agir.
 
@@ -8,15 +8,15 @@ Copie a seção **PROMPT PARA A PRÓXIMA AGENTE** integralmente para iniciar a p
 
 Você vai continuar a finalização técnica do projeto **Fala Comigo**, um aplicativo Flutter de Comunicação Aumentativa e Alternativa (CAA). Trabalhe como engenheira sênior e preserve a comunicação local/offline, a privacidade e os dados. O proprietário quer concluir o projeto antes de realizar testes em aparelhos físicos, que serão feitos por ele depois da etapa técnica.
 
-### Estado verificado em 02/10/2026
+### Estado verificado em 03/10/2026
 
 - Repositório público: `falacomigocaa-app/fala-comigo`.
-- A PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) foi squash-merged em `main` no commit `43afb5c34b5c6ca7a2b05bb049dd8c1edb901b81`. A PR integrou 69 arquivos (+4.261/−1.099), não apenas uma configuração de hospedagem.
+- A PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) foi squash-merged em `main` no commit `43afb5c34b5c6ca7a2b05bb049dd8c1edb901b81`. A PR documental [#88](https://github.com/falacomigocaa-app/fala-comigo/pull/88) também foi squash-merged; `main` está agora em `174ba5d`.
 - O workflow [GitHub Pages — run 37029707742](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37029707742) concluiu com sucesso; os jobs `build` e `deploy` passaram. O workflow [Flutter quality — run 37029707714](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37029707714) também passou no commit de merge.
 - URLs permanentes verificadas: site <https://falacomigocaa-app.github.io/fala-comigo/>; Flutter Web <https://falacomigocaa-app.github.io/fala-comigo/app/>; política <https://falacomigocaa-app.github.io/fala-comigo/privacy.html>.
 - Smoke público: homepage, `/app/`, política e `/app/main.dart.js` responderam HTTP 200; o HTML do app contém base href `/fala-comigo/app/`. O app renderizou a grade; o console não retornou mensagens; o cartão sintético “Comer” foi selecionado e apareceu na frase, habilitando “Falar”. Isso não substitui teste físico, teste de acessibilidade completo ou teste de todos os fluxos.
-- Depois da merge da #87, a lista consultada tinha 15 PRs abertas: #83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31. **Recarregue a lista e os checks**; a auditoria comparável anterior ficou parcial (7/15 subrevisões concluídas).
-- Estes documentos foram preparados na branch `docs/continuity-handoff-2026-10-02`, baseada no `main` `43afb5c`, e enviados na PR [#88](https://github.com/falacomigocaa-app/fala-comigo/pull/88). Ela segue aberta; confirme head e checks antes de afirmar que estes arquivos entraram em `main`.
+- Inventário read-only de 03/10 confirmou 15 PRs abertas: #83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31. A auditoria anterior cobriu 7/15; uma nova tentativa em workflow parou antes de gerar pareceres individuais. **Não considere a revisão das 15 concluída**; revalide tudo.
+- A PR #88 está integrada em `main` (`174ba5d`). O trabalho Hive atual está em `fix/refuse-missing-hive-key`, ainda sem merge: não reativa migração automática e depende de CI/revisão.
 
 O relatório datado com evidências e pendências está em [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md). Use-o como snapshot, não como substituto de checagem ao vivo.
 

@@ -52,6 +52,67 @@ void main() {
     await root.delete(recursive: true);
   });
 
+  test('instalação nova cria a primeira chave quando não há arquivos Hive',
+      () async {
+    secureValues.remove('fala_comigo_hive_encryption_key');
+
+    final box = await SecureBoxService.openSecureBox<String>('first_install');
+
+    expect(secureValues['fala_comigo_hive_encryption_key'], isNotNull);
+    await box.close();
+  });
+
+  test('não gera chave substituta nem altera box cifrada se a chave sumiu',
+      () async {
+    const name = 'encrypted_missing_key';
+    const storageKey = 'fala_comigo_hive_encryption_key';
+    final originalKey = Hive.generateSecureKey();
+    final original = await Hive.openBox<String>(
+      name,
+      encryptionCipher: HiveAesCipher(originalKey),
+    );
+    await original.put('profile', 'valor preservado');
+    await original.close();
+    final file = File('${root.path}/hive/$name.hive');
+    final originalBytes = await file.readAsBytes();
+    secureValues.remove(storageKey);
+
+    await expectLater(
+      SecureBoxService.openSecureBox<String>(name),
+      throwsA(isA<HiveEncryptionKeyMissingException>()),
+    );
+
+    expect(await file.readAsBytes(), originalBytes);
+    expect(secureValues.containsKey(storageKey), isFalse);
+
+    secureValues[storageKey] = base64UrlEncode(originalKey);
+    final preserved = await SecureBoxService.openSecureBox<String>(name);
+    expect(preserved.get('profile'), 'valor preservado');
+    await preserved.close();
+  });
+
+  test('não gera chave nem reescreve box legada em plaintext', () async {
+    const name = 'legacy_plaintext_missing_key';
+    const storageKey = 'fala_comigo_hive_encryption_key';
+    final legacy = await Hive.openBox<String>(name);
+    await legacy.put('profile', 'valor legado preservado');
+    await legacy.close();
+    final file = File('${root.path}/hive/$name.hive');
+    final originalBytes = await file.readAsBytes();
+    secureValues.remove(storageKey);
+
+    await expectLater(
+      SecureBoxService.openSecureBox<String>(name),
+      throwsA(isA<HiveEncryptionKeyMissingException>()),
+    );
+
+    expect(await file.readAsBytes(), originalBytes);
+    expect(secureValues.containsKey(storageKey), isFalse);
+    final preserved = await Hive.openBox<String>(name);
+    expect(preserved.get('profile'), 'valor legado preservado');
+    await preserved.close();
+  });
+
   test('recupera backup interrompido antes de abrir qualquer box', () async {
     final original = File('${root.path}/hive/not_yet_opened.hive');
     final backup = File('${original.path}.fcm-backup');

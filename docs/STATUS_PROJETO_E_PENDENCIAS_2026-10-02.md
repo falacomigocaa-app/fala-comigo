@@ -1,9 +1,9 @@
 # Fala Comigo — estado após publicação da prévia Web
 
-**Atualizado:** 02/10/2026
+**Atualizado:** 03/10/2026
 **Repositório:** `falacomigocaa-app/fala-comigo` (público)
-**Base observada:** `main` no commit `43afb5c` (squash merge da PR #87)
-**Esta atualização documental:** preparada na branch `docs/continuity-handoff-2026-10-02`, baseada nesse commit, e enviada na [PR #88](https://github.com/falacomigocaa-app/fala-comigo/pull/88); não altera o app nem o site.
+**Base observada:** `main` no commit `174ba5d` (PR #87 e PR documental #88 integradas)
+**Trabalho em andamento:** branch `fix/refuse-missing-hive-key`, baseada em `174ba5d`; guarda fail-closed, testes sintéticos incluindo limpeza dos snapshots no wipe explícito e plano Hive. Ainda não está na `main`; migração automática continua desativada.
 
 ## Resumo executivo
 
@@ -47,7 +47,7 @@ A rota `/app/` é acessível publicamente, sem login. O app Web trabalha com arm
 
 ## Auditoria e PRs restantes
 
-A revisão de PRs registrada anteriormente é parcial: o parecer comparável original cobriu 7 de 15 subrevisões; os demais pareceres não devem ser presumidos concluídos. O arquivo da auditoria de 29/09 é uma fotografia histórica. A listagem do GitHub após a merge da #87, imediatamente antes da PR documental #88, mostrou 15 PRs abertas: **#83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31**. A PR documental #88 está aberta à parte; refaça o inventário e consulte head, checks e mergeabilidade antes de qualquer decisão.
+A revisão de PRs registrada anteriormente é parcial: o parecer comparável original cobriu 7 de 15 subrevisões. O inventário read-only de 03/10, depois da merge da #88, confirmou 15 PRs abertas: **#83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31**. Uma tentativa de auditoria em workflow não gerou pareceres por PR; não tratar este ciclo como auditoria concluída. Atualizar heads, bases, checks e mergeabilidade antes de qualquer decisão.
 
 ## Próximos passos recomendados
 

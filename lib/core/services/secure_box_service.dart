@@ -67,14 +67,41 @@ class SecureBoxService {
     }
   }
 
-  static Future<List<int>> _getOrCreateEncryptionKey() async {
+  static Future<List<int>> _getOrCreateEncryptionKey(String boxName) async {
     final existing = await _storage.read(key: _keyStorageKey);
     if (existing != null) {
       return base64Url.decode(existing);
     }
+    if (await _hasExistingHiveData()) {
+      throw HiveEncryptionKeyMissingException(boxName);
+    }
     final key = Hive.generateSecureKey();
     await _storage.write(key: _keyStorageKey, value: base64UrlEncode(key));
     return key;
+  }
+
+  /// Só cria a primeira chave se não houver dados Hive ou sidecars no diretório.
+  /// A inspeção olha apenas nomes de arquivos; não abre nem altera nenhuma box.
+  static Future<bool> _hasExistingHiveData() async {
+    final directoryPath = _hiveDirectoryPath;
+    if (directoryPath == null) return false;
+    final directory = Directory(directoryPath);
+    if (!await directory.exists()) return false;
+
+    const managedSuffixes = [
+      '.hive',
+      '.hivec',
+      '.hive.fcm-backup',
+      '.hivec.fcm-backup',
+      '.hive.fcm-backup.tmp',
+      '.hivec.fcm-backup.tmp',
+    ];
+    await for (final entity in directory.list(followLinks: false)) {
+      if (entity is! File) continue;
+      final fileName = entity.uri.pathSegments.last.toLowerCase();
+      if (managedSuffixes.any(fileName.endsWith)) return true;
+    }
+    return false;
   }
 
   /// Abre (ou cria) uma box cifrada. Antes de abrir uma box existente no native,
@@ -85,7 +112,7 @@ class SecureBoxService {
   static Future<Box<T>> openSecureBox<T>(String name) async {
     if (Hive.isBoxOpen(name)) return Hive.box<T>(name);
 
-    final key = await _getOrCreateEncryptionKey();
+    final key = await _getOrCreateEncryptionKey(name);
     final snapshot = await _HiveFileSnapshot.capture(
       _hiveDirectoryPath,
       name,
@@ -132,6 +159,37 @@ class SecureBoxService {
 
   static Future<void> deleteEncryptionKey() async {
     await _storage.delete(key: _keyStorageKey);
+  }
+
+  /// Remove sidecars somente durante o wipe explícito de todas as boxes.
+  /// Snapshots copiam bytes da origem e podem conter dados legados sem cifra.
+  static Future<void> deletePendingHiveSnapshotsForWipe(
+    Iterable<String> boxNames,
+  ) async {
+    final directoryPath = _hiveDirectoryPath;
+    if (directoryPath == null) return;
+    final directory = Directory(directoryPath);
+    if (!await directory.exists()) return;
+
+    const suffixes = [
+      '.hive.fcm-backup',
+      '.hivec.fcm-backup',
+      '.hive.fcm-backup.tmp',
+      '.hivec.fcm-backup.tmp',
+    ];
+    final validName = RegExp(r'^[A-Za-z0-9_-]+$');
+    for (final boxName in boxNames) {
+      if (!validName.hasMatch(boxName)) {
+        throw ArgumentError.value(boxName, 'boxNames', 'Nome de box inválido.');
+      }
+      for (final suffix in suffixes) {
+        final sidecar = File(
+          '${directory.path}${Platform.pathSeparator}'
+          '${boxName.toLowerCase()}$suffix',
+        );
+        if (await sidecar.exists()) await sidecar.delete();
+      }
+    }
   }
 }
 
@@ -232,4 +290,18 @@ class _HiveFileEntry {
   final File backup;
   final File temporary;
   final List<int>? bytes;
+}
+
+/// Há arquivos Hive no disco, mas a chave protegida não está disponível.
+/// A chave nova não deve mascarar dados locais potencialmente recuperáveis.
+class HiveEncryptionKeyMissingException implements Exception {
+  const HiveEncryptionKeyMissingException(this.boxName);
+
+  final String boxName;
+
+  @override
+  String toString() =>
+      'A chave local não está disponível para "$boxName"; arquivos Hive '
+      'foram preservados. Não desinstale o app nem limpe os dados sem '
+      'um procedimento de recuperação validado.';
 }
