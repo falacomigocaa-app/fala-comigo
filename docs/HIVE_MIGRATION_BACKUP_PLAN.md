@@ -2,8 +2,8 @@
 
 **Data:** 03/10/2026
 **Estado:** desenho técnico; migração automática permanece desativada
-**Linha de base:** `main` no commit `174ba5d` (PR documental #88 integrada)
-**Branch de trabalho desta etapa:** `fix/refuse-missing-hive-key`
+**Linha de base do desenho:** `main` em `174ba5d`; a proteção inicial foi integrada pela PR #89 em `21a981f`
+**Estado:** guarda de chave ausente e limpeza de sidecars no wipe explícito estão em `main`; migração e backup exportável permanecem não implementados
 
 ## Objetivo e invariantes
 
@@ -27,7 +27,7 @@ Invariantes obrigatórios:
 - Novas mídias nativas usam AES-GCM-256; há compatibilidade de leitura com arquivos legados sem marcador cifrado. Os caminhos de mídia incluem `fala_comigo_media/` e `transition_alerts_audio/`; novos cartões e registros podem referenciar esses arquivos.
 - O MobSF histórico registrou CBC/PKCS5/PKCS7 associado ao `HiveAesCipher`. Backup e migração não eliminam esse achado. A substituição de formato criptográfico precisa de projeto, compatibilidade, scan e testes próprios.
 - O bootstrap abre primeiro `pictogram_cards`, `app_settings` e `transition_alerts`; uma falha nessas caixas pode impedir a tela inicial. A arquitetura de recuperação futura deve isolar falhas de dados parentais e preservar um caminho CAA básico.
-- Nesta branch está sendo adicionada uma guarda: se a chave protegida estiver ausente e houver arquivos Hive/sidecars, o app não gera uma chave substituta; lança erro explícito sem abrir nem alterar a origem. A mudança não migra dados.
+- A PR #89 integrou a guarda: se a chave protegida estiver ausente e houver arquivos Hive/sidecars no diretório nativo, o app não gera uma chave substituta; lança erro explícito sem abrir nem alterar a origem. A mudança não migra dados. O wipe explícito remove sidecars geridos antes da troca da chave.
 
 ## Inventário de boxes sob gestão do wipe
 
