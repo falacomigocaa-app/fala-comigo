@@ -129,6 +129,25 @@ void main() {
     expect(Hive.box<dynamic>('behavior_logs').isEmpty, isTrue);
   });
 
+  test('wipe explícito remove sidecars Hive antes de recriar caixas', () async {
+    final hiveDirectory = Directory('${root.path}/hive');
+    final backup = File(
+      '${hiveDirectory.path}/pictogram_cards.hive.fcm-backup',
+    );
+    final temporary = File(
+      '${hiveDirectory.path}/app_settings.hive.fcm-backup.tmp',
+    );
+    await backup.writeAsString('fixture sintética de backup');
+    await temporary.writeAsString('fixture sintética temporária');
+
+    await DataWipeService.deleteAllLocalData();
+
+    expect(await backup.exists(), isFalse);
+    expect(await temporary.exists(), isFalse);
+    expect(Hive.isBoxOpen('pictogram_cards'), isTrue);
+    expect(Hive.box<PictogramCard>('pictogram_cards').values, isNotEmpty);
+  });
+
   test('falha de notificação não impede o wipe e retorna aviso de pendência',
       () async {
     const reminder = ParentReminder(

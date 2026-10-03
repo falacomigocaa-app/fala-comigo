@@ -4,16 +4,16 @@ O prompt completo para iniciar outro agente está em [`PROMPT_RETORNO_NOVO_AGENT
 
 > **Não alterar a `main` diretamente.** Antes de executar qualquer correção, leia este arquivo, `AGENTS.md`, `PROJECT_HANDOFF.md` e `docs/HANDOFF_TELA_BRANCA_APK.md`.
 
-## Estado atual verificado — 02/10/2026
+## Estado atual verificado — 03/10/2026
 
-- A PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) foi squash-merged em `main`, commit `43afb5c34b5c6ca7a2b05bb049dd8c1edb901b81`.
+- A PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) foi squash-merged em `main`; a PR documental [#88](https://github.com/falacomigocaa-app/fala-comigo/pull/88) também foi integrada. `main` está em `174ba5d`.
 - GitHub Pages executou build e deploy com sucesso no [run 37029707742](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37029707742); Flutter quality passou no [run 37029707714](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37029707714).
 - Endereços publicados: [site institucional](https://falacomigocaa-app.github.io/fala-comigo/), [prévia Flutter Web](https://falacomigocaa-app.github.io/fala-comigo/app/) e [política de privacidade](https://falacomigocaa-app.github.io/fala-comigo/privacy.html). Homepage, `/app/`, política e `main.dart.js` retornaram HTTP 200.
 - Smoke visual/interativo: a grade carregou, o console não retornou mensagens e o cartão sintético “Comer” entrou na frase, habilitando “Falar”. Isto não é teste físico, validação de acessibilidade completa ou validação de todos os fluxos.
 - **Use somente dados sintéticos na prévia Web.** Ela é pública, sem login, backend ou sincronização conectados; armazenamento no navegador não foi validado para dados sensíveis.
-- PRs ainda abertas no inventário consultado: #83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31. A revisão comparável anterior cobriu apenas parte das PRs; atualizar inventário e checks antes de decidir.
-- Gates restantes: migração automática de boxes Hive antigas desativada; sem keystore de produção/AAB; sem MobSF atualizado ou reauditoria independente integral pós-correções; testes em dispositivos físicos ainda não feitos, conforme plano do proprietário; portal sem Auth/RLS/backend de produção.
-- Esta atualização documental está na branch `docs/continuity-handoff-2026-10-02` e na PR [#88](https://github.com/falacomigocaa-app/fala-comigo/pull/88), baseada no `main` `43afb5c`; a PR segue aberta, então confira seu estado antes de afirmar que os arquivos foram integrados.
+- Inventário read-only de 03/10: PRs abertas #83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31. A auditoria completa continua pendente; a tentativa de workflow não produziu avaliações por PR.
+- Gates restantes: migração automática Hive desativada; sem backup/restauração de usuário validado; sem keystore de produção/AAB; sem MobSF atualizado; sem testes físicos; portal sem Auth/RLS/backend de produção.
+- A etapa está na PR [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89), head `9c323dc`; run [37142324330](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142324330) passou em análise e 110 testes. Verifique ao vivo se foi integrada; a migração automática Hive continua desativada.
 - Relatório pós-publicação: [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md). O status de 01/10 e as instruções seguintes com datas anteriores são fotografias históricas; não dizem mais que #87 está em draft ou que `/app/` retorna 404.
 
 ## Registro histórico — estado imediato em 25/09/2026
