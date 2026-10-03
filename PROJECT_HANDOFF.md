@@ -9,7 +9,7 @@ O código oficial está no GitHub:
 - Repositório: https://github.com/falacomigocaa-app/fala-comigo
 - Branch principal: `main`
 - Estado atualizado em 03/10/2026: PR #87 e PR documental [#88](https://github.com/falacomigocaa-app/fala-comigo/pull/88) foram integradas; `main` está em `174ba5d`. Site e prévia Web continuam publicados; confirme `origin/main` antes de agir.
-- Branch de trabalho da próxima etapa: `fix/refuse-missing-hive-key`, baseada em `174ba5d`; adiciona guarda de preservação para chave Hive ausente e plano de migração/backup. A migração automática continua desativada e a branch aguarda CI/revisão.
+- A etapa Hive está na PR [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89), head `9c323dc`; no run [37142324330](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142324330), `flutter analyze` e os 110 testes passaram. Confirme ao vivo se a PR já foi integrada antes de agir; migração automática continua desativada.
 - Situação e evidências pós-publicação: [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md). O relatório de 01/10 e os handoffs datados de setembro são snapshots históricos.
 
 Não existem segredos, tokens, senhas ou chaves privadas neste documento. Nunca coloque credenciais no Git.

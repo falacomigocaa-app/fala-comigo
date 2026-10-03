@@ -13,7 +13,7 @@ O prompt completo para iniciar outro agente está em [`PROMPT_RETORNO_NOVO_AGENT
 - **Use somente dados sintéticos na prévia Web.** Ela é pública, sem login, backend ou sincronização conectados; armazenamento no navegador não foi validado para dados sensíveis.
 - Inventário read-only de 03/10: PRs abertas #83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31. A auditoria completa continua pendente; a tentativa de workflow não produziu avaliações por PR.
 - Gates restantes: migração automática Hive desativada; sem backup/restauração de usuário validado; sem keystore de produção/AAB; sem MobSF atualizado; sem testes físicos; portal sem Auth/RLS/backend de produção.
-- Branch `fix/refuse-missing-hive-key`, baseada em `174ba5d`, inclui guarda fail-closed, testes sintéticos e plano de migração/backup; ainda depende de CI/revisão e não está em `main`.
+- A etapa está na PR [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89), head `9c323dc`; run [37142324330](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142324330) passou em análise e 110 testes. Verifique ao vivo se foi integrada; a migração automática Hive continua desativada.
 - Relatório pós-publicação: [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md). O status de 01/10 e as instruções seguintes com datas anteriores são fotografias históricas; não dizem mais que #87 está em draft ou que `/app/` retorna 404.
 
 ## Registro histórico — estado imediato em 25/09/2026

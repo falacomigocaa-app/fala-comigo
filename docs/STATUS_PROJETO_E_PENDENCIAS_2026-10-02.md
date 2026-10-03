@@ -3,7 +3,7 @@
 **Atualizado:** 03/10/2026
 **Repositório:** `falacomigocaa-app/fala-comigo` (público)
 **Base observada:** `main` no commit `174ba5d` (PR #87 e PR documental #88 integradas)
-**Trabalho em andamento:** branch `fix/refuse-missing-hive-key`, baseada em `174ba5d`; guarda fail-closed, testes sintéticos incluindo limpeza dos snapshots no wipe explícito e plano Hive. Ainda não está na `main`; migração automática continua desativada.
+**Etapa Hive:** PR [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89), head `9c323dc`; run [37142324330](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142324330) passou em `flutter analyze` e 110 testes. Esta é a fotografia de 03/10; confirme merge ao vivo. Migração automática continua desativada.
 
 ## Resumo executivo
 
