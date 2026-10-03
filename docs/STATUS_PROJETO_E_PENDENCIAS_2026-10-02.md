@@ -2,8 +2,8 @@
 
 **Atualizado:** 03/10/2026
 **Repositório:** `falacomigocaa-app/fala-comigo` (público)
-**Base observada:** `main` no commit `174ba5d` (PR #87 e PR documental #88 integradas)
-**Etapa Hive:** PR [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89), head `9c323dc`; run [37142324330](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142324330) passou em `flutter analyze` e 110 testes. Esta é a fotografia de 03/10; confirme merge ao vivo. Migração automática continua desativada.
+**Base observada:** `main` no commit `21a981f` (PR #89 integrada após #87 e #88)
+**Etapa Hive:** PR [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89) foi squash-merged em `21a981f`; CI confirmou 110 testes, análise e build Web. MobSF foi disparado em `21a981f` no run [37142972414](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142972414); o resultado ainda deve ser consultado. Migração automática e backup exportável continuam desativados/não implementados.
 
 ## Resumo executivo
 
