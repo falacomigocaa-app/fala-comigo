@@ -25,7 +25,7 @@ Invariantes obrigatórios:
 - Esses sidecars são **rollback transitório de uma operação de abertura**, não backup de usuário: não têm interface de exportação/restauração, não são portáveis e não incluem o conjunto completo de mídias. São cópias brutas e podem conter dados legados sem cifra; não presumir que estão protegidas pela chave Hive.
 - A migração de boxes legadas está desativada. A simples cópia de um arquivo não permite afirmar que ele está íntegro, decifrável ou compatível com o schema atual.
 - Novas mídias nativas usam AES-GCM-256; há compatibilidade de leitura com arquivos legados sem marcador cifrado. Os caminhos de mídia incluem `fala_comigo_media/` e `transition_alerts_audio/`; novos cartões e registros podem referenciar esses arquivos.
-- O MobSF histórico registrou CBC/PKCS5/PKCS7 associado ao `HiveAesCipher`. Backup e migração não eliminam esse achado. A substituição de formato criptográfico precisa de projeto, compatibilidade, scan e testes próprios.
+- O MobSF no APK de `main` `21a981f` (run 37142972414) registrou CBC/PKCS5/PKCS7 na classe Java ofuscada `defpackage/s3.java:1277`; o mapeamento exato não foi obtido. A fonte oficial do plugin `flutter_secure_storage 9.2.4` confirma CBC como cifra Android padrão, e `Hive 2.2.3` confirma que `HiveAesCipher` também usa AES-256-CBC/PKCS7. Portanto, não atribuir o finding a uma única camada nem presumir que atualizar só o plugin resolve a persistência Hive. Backup/migração não eliminam o achado; cada formato precisa de projeto, compatibilidade, scan e testes próprios. Relatório: `docs/auditoria/2026-10-03/MOBSF_MAIN_21A981F.md`.
 - O bootstrap abre primeiro `pictogram_cards`, `app_settings` e `transition_alerts`; uma falha nessas caixas pode impedir a tela inicial. A arquitetura de recuperação futura deve isolar falhas de dados parentais e preservar um caminho CAA básico.
 - A PR #89 integrou a guarda: se a chave protegida estiver ausente e houver arquivos Hive/sidecars no diretório nativo, o app não gera uma chave substituta; lança erro explícito sem abrir nem alterar a origem. A mudança não migra dados. O wipe explícito remove sidecars geridos antes da troca da chave.
 
@@ -97,8 +97,8 @@ Todos os testes usam fixtures sintéticas. Nenhum screenshot, log, relatório de
 - Ainda não existe exportação/restauração de backup pelo usuário.
 - A estratégia de formato AEAD para persistência Hive precisa de prova de compatibilidade e revisão independente.
 - Não há teste de falha de processo real em dispositivo Android para cada ponto transacional.
-- A chave de banco ausente deve falhar sem sobrescrever: o guard nesta branch cobre o cenário nativo por nomes de arquivos, sujeito a CI.
-- O achado MobSF de CBC permanece aberto até reexecução e revisão do artefato atual.
+- A chave do Hive ausente deve falhar sem sobrescrever: a guarda foi integrada pela PR #89 em `main` e a CI daquela PR aprovou 110 testes; não substitui uma estratégia de migração/backup.
+- O scan MobSF atual de `21a981f` confirmou CBC/PKCS5/PKCS7 e `minSdk=24` como findings high. CBC continua aberto; os dois caminhos fonte (plugin Android e Hive) ainda precisam de migração segura, sem presumir mapping exato da classe ofuscada.
 - Não habilitar migração automática, não remover boxes antigas e não recomendar atualização sobre instalação com dados importantes.
 
-**Próxima validação desta branch:** CI Flutter para os testes adicionados. Como Flutter/Dart não estão instalados neste sandbox, nenhum teste local é declarado como executado. Depois, revisar resultado da CI, completar os testes de snapshot/retomada e atualizar o handoff com o commit/PR real.
+**Estado atualizado em 04/10/2026:** a proteção da PR #89 está integrada; o plano de migração permanece desenho, não implementação. Flutter/Dart não estão disponíveis neste sandbox. O próximo trabalho é criar uma migração controlada/testável para ambas as camadas CBC, com fixtures sintéticas, preservação de backup e rollback; não habilitar migração automática nem instalar em dispositivo com dados importantes. A PR documental #90 atualiza este plano e deve passar CI antes de merge.

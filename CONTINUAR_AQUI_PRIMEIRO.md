@@ -4,7 +4,7 @@ O prompt completo para iniciar outro agente está em [`PROMPT_RETORNO_NOVO_AGENT
 
 > **Não alterar a `main` diretamente.** Antes de executar qualquer correção, leia este arquivo, `AGENTS.md`, `PROJECT_HANDOFF.md` e `docs/HANDOFF_TELA_BRANCA_APK.md`.
 
-## Estado atual verificado — 03/10/2026
+## Estado atual verificado — 04/10/2026
 
 - A PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) e a PR documental [#88](https://github.com/falacomigocaa-app/fala-comigo/pull/88) estão integradas. A PR Hive [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89) também foi squash-merged; `main` está em `21a981f`.
 - GitHub Pages executou build e deploy com sucesso no [run 37029707742](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37029707742); Flutter quality passou no [run 37029707714](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37029707714).
@@ -12,7 +12,9 @@ O prompt completo para iniciar outro agente está em [`PROMPT_RETORNO_NOVO_AGENT
 - Smoke visual/interativo: a grade carregou, o console não retornou mensagens e o cartão sintético “Comer” entrou na frase, habilitando “Falar”. Isto não é teste físico, validação de acessibilidade completa ou validação de todos os fluxos.
 - **Use somente dados sintéticos na prévia Web.** Ela é pública, sem login, backend ou sincronização conectados; armazenamento no navegador não foi validado para dados sensíveis.
 - Inventário read-only de 03/10: PRs abertas #83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31. A auditoria completa continua pendente; a tentativa de workflow não produziu avaliações por PR.
-- Gates restantes: migração automática Hive desativada; sem backup/restauração de usuário validado; sem keystore de produção/AAB; sem MobSF atualizado; sem testes físicos; portal sem Auth/RLS/backend de produção.
+- MobSF no APK de teste de `main` `21a981f` ([run 37142972414](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142972414)) reportou score 46/100, CBC/PKCS5/PKCS7 e `minSdk=24` como achados altos, além de warnings; relatório sanitizado: [`docs/auditoria/2026-10-03/MOBSF_MAIN_21A981F.md`](docs/auditoria/2026-10-03/MOBSF_MAIN_21A981F.md). `flutter_secure_storage 9.2.4` Android e `Hive 2.2.3` têm caminhos CBC; finding segue aberto, sem atribuição exata da classe ofuscada.
+- Gates restantes: migração Hive e backup/restauração de usuário continuam desativados/não implementados; CBC não remediado; findings MobSF em triagem; sem keystore de produção/AAB; sem testes físicos; portal sem Auth/RLS/backend de produção.
+- A PR documental [#90](https://github.com/falacomigocaa-app/fala-comigo/pull/90) está aberta na branch `docs/record-hive-safety-merge`. O head anterior `7b805de` tinha CI verde; esta atualização e a correção do workflow MobSF precisam de CI no head novo antes de qualquer merge.
 - A proteção Hive foi integrada pela PR [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89) em `21a981f`; CI passou com análise e 110 testes. A migração automática permanece desativada; o plano está em [`docs/HIVE_MIGRATION_BACKUP_PLAN.md`](docs/HIVE_MIGRATION_BACKUP_PLAN.md).
 - Relatório pós-publicação: [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md). O status de 01/10 e as instruções seguintes com datas anteriores são fotografias históricas; não dizem mais que #87 está em draft ou que `/app/` retorna 404.
 

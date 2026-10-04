@@ -8,15 +8,16 @@ Copie a seção **PROMPT PARA A PRÓXIMA AGENTE** integralmente para iniciar a p
 
 Você vai continuar a finalização técnica do projeto **Fala Comigo**, um aplicativo Flutter de Comunicação Aumentativa e Alternativa (CAA). Trabalhe como engenheira sênior e preserve a comunicação local/offline, a privacidade e os dados. O proprietário quer concluir o projeto antes de realizar testes em aparelhos físicos, que serão feitos por ele depois da etapa técnica.
 
-### Estado verificado em 03/10/2026
+### Estado verificado em 04/10/2026
 
 - Repositório público: `falacomigocaa-app/fala-comigo`.
-- A PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) foi squash-merged em `43afb5c`; depois a PR documental [#88](https://github.com/falacomigocaa-app/fala-comigo/pull/88) levou `main` a `174ba5d`; por fim, a PR Hive [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89) levou `main` a `21a981f`.
+- A PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) foi squash-merged em `43afb5c`; a PR documental [#88](https://github.com/falacomigocaa-app/fala-comigo/pull/88) em `174ba5d`; e a PR Hive [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89) em `21a981f`. Revalidar `origin/main` antes de qualquer ação.
 - O workflow [GitHub Pages — run 37029707742](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37029707742) concluiu com sucesso; os jobs `build` e `deploy` passaram. O workflow [Flutter quality — run 37029707714](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37029707714) também passou no commit de merge.
 - URLs permanentes verificadas: site <https://falacomigocaa-app.github.io/fala-comigo/>; Flutter Web <https://falacomigocaa-app.github.io/fala-comigo/app/>; política <https://falacomigocaa-app.github.io/fala-comigo/privacy.html>.
 - Smoke público: homepage, `/app/`, política e `/app/main.dart.js` responderam HTTP 200; o HTML do app contém base href `/fala-comigo/app/`. O app renderizou a grade; o console não retornou mensagens; o cartão sintético “Comer” foi selecionado e apareceu na frase, habilitando “Falar”. Isso não substitui teste físico, teste de acessibilidade completo ou teste de todos os fluxos.
-- Inventário read-only de 03/10 confirmou 15 PRs abertas: #83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31. A auditoria anterior cobriu 7/15; uma nova tentativa em workflow parou antes de gerar pareceres individuais. **Não considere a revisão das 15 concluída**; revalide tudo.
-- As PRs #87, #88 e #89 estão integradas; `main` está em `21a981f`. A PR #89 passou análise e 110 testes; o deploy também passou. MobSF foi disparado no commit atual (run [37142972414](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142972414)); confira o resultado antes de fechar o achado CBC. A migração automática segue desativada.
+- Inventário read-only de 04/10 confirmou 15 PRs de produto abertas: #83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31; a PR documental #90 também está aberta. A auditoria anterior cobriu 7/15; tentativa em workflow não gerou pareceres individuais. **Não considere a revisão das 15 concluída**; revalide tudo.
+- MobSF no APK de teste de `21a981f` ([run 37142972414](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142972414)) concluiu com score 46/100. Achados altos: CBC/PKCS5/PKCS7 em classe ofuscada e `minSdk=24`; relatório sanitizado em [`docs/auditoria/2026-10-03/MOBSF_MAIN_21A981F.md`](docs/auditoria/2026-10-03/MOBSF_MAIN_21A981F.md). `flutter_secure_storage 9.2.4` no Android usa CBC por padrão e `Hive 2.2.3` também usa CBC em `HiveAesCipher`; não foi possível provar qual classe-fonte corresponde exatamente ao caminho ofuscado. **CBC continua sem correção nos dois caminhos.**
+- PR documental [#90](https://github.com/falacomigocaa-app/fala-comigo/pull/90) está aberta na branch `docs/record-hive-safety-merge`. Seu head `7b805de` passou o check antes da atualização MobSF/workflow; aguarde os checks do head atual antes de merge.
 
 O relatório datado com evidências e pendências está em [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md). Use-o como snapshot, não como substituto de checagem ao vivo.
 
@@ -30,7 +31,7 @@ A merge da #87 não concluiu o lançamento Android:
 - assinatura de produção e `android/key.properties` não estão configurados;
 - não houve instalação/teste em dispositivo físico;
 - migração automática de boxes Hive antigas continua desativada por segurança;
-- MobSF precisa ser executado novamente; não houve reauditoria independente integral após todas as correções;
+- o scan MobSF atual tem achados altos e warnings em triagem; não houve reauditoria independente integral após todas as correções;
 - o portal continua sem autenticação, autorização server-side, isolamento multi-organização ou RLS de produção.
 
 Se os artefatos ainda existirem, o snapshot local de 01/10 contém APK Debug, ZIP Web e PDF do manual sob `/home/ubuntu/artifacts/`; **verifique os arquivos e hashes antes de reutilizar**. Não commitar APKs, AABs, keystores ou segredos.
@@ -66,8 +67,9 @@ Depois apresente ao proprietário um resumo conciso: branch/HEAD, estado da árv
 
 1. Atualizar o inventário e concluir uma revisão atual das PRs remanescentes; ordenar dependências e recomendar por item o que integrar, corrigir, fechar ou manter em espera.
 2. Investigar os gates de preservação/migração de dados e segurança com testes de recuperação; não substituir isso por uma afirmação de que o snapshot equivale a backup.
-3. Reexecutar MobSF e revisar findings contra o estado atual do código.
-4. Preparar plano de release Android seguro (keystore fora do Git, AAB, checklist de permissões e fluxo de atualização); os testes reais ficam para o proprietário após a finalização técnica.
+3. Projetar e testar separadamente a migração do `flutter_secure_storage` (9.2.4→10.x→11.x, com backup e sem reset destrutivo) e a substituição AEAD de `HiveAesCipher`; não habilitar migração global até validar recuperação/rollback com fixtures sintéticas.
+4. Tratar warnings MobSF e reescanear um candidato depois das correções. Não elevar `minSdk` a 29 sem decisão informada de suporte a dispositivos.
+5. Preparar plano de release Android seguro (keystore fora do Git, AAB, checklist de permissões e fluxo de atualização); os testes reais ficam para o proprietário após a finalização técnica.
 5. Manter documentação e handoffs sincronizados após cada etapa relevante.
 
 ### Formato da próxima atualização
