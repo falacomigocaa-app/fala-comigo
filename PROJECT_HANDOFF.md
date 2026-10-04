@@ -8,9 +8,9 @@ O código oficial está no GitHub:
 
 - Repositório: https://github.com/falacomigocaa-app/fala-comigo
 - Branch principal: `main`
-- Estado atualizado em 04/10/2026: PRs #87, #88 e #89 estão integradas; `main` observada em `21a981f`. Site e prévia Web continuam publicados; confirme `origin/main` antes de agir.
+- Estado atualizado em 04/10/2026: PRs #87–#90 integradas; `main` em `b08daa10d2314ea56fd079d07378fbcabe4e4335`. Após a auditoria inicial, seis PRs redundantes/superadas foram encerradas sem merge e permanecem nove abertas (#53, #64, #68, #77, #78, #79, #80, #81 e #83). Relatório: `docs/auditoria/2026-10-04/AUDITORIA_PR_ABERTAS.md`; confirme GitHub antes de agir.
 - MobSF no APK de teste da main ([run 37142972414](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142972414)) reportou score 46/100, finding alto CBC/PKCS5/PKCS7 e finding alto `minSdk=24`. O relatório sanitizado está em `docs/auditoria/2026-10-03/MOBSF_MAIN_21A981F.md`. Há CBC em `flutter_secure_storage 9.2.4` no Android e em `HiveAesCipher` 2.2.3; a classe ofuscada do scan não foi mapeada exatamente. Nenhum dos dois caminhos está remediado.
-- PR documental [#90](https://github.com/falacomigocaa-app/fala-comigo/pull/90) está aberta na branch `docs/record-hive-safety-merge`; antes desta atualização seu head `7b805de` tinha o check documental verde. O update corrente inclui o relatório MobSF e uma correção no workflow; aguardar CI do novo head. A migração Hive segue desativada.
+- A PR documental #90 foi integrada em `b08daa1`; contém o relatório MobSF sanitizado e a correção do resumo do workflow MobSF. A migração Hive segue desativada.
 - Situação e evidências pós-publicação: [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md). O relatório de 01/10 e os handoffs datados de setembro são snapshots históricos.
 
 Não existem segredos, tokens, senhas ou chaves privadas neste documento. Nunca coloque credenciais no Git.
@@ -139,9 +139,10 @@ A regra é separar aplicativo local, site público, portal conectado e console a
 8. Executar `flutter build web --release`.
 9. Corrigir primeiro falhas do CI ou do núcleo CAA.
 10. Trabalhar em branch própria, adicionar teste, revisar diff, comitar e enviar ao GitHub.
-11. Tratar primeiro as findings do MobSF e desenhar migrações testáveis e reversíveis para ambas as camadas CBC, sem habilitar migração global nem usar dados reais.
-12. Retomar a auditoria individual das PRs abertas somente após confirmar o inventário atual e obter pareceres verificáveis; não mesclar stacks em bloco.
-13. Preparar AAB/assinatura e coordenar teste físico apenas depois da validação técnica, mantendo o uso de dados sintéticos.
+11. Tratar findings MobSF e desenhar migrações reversíveis para as duas camadas CBC, sem habilitar migração global nem usar dados reais.
+12. Continuar a triagem seletiva das nove PRs abertas conforme `docs/auditoria/2026-10-04/AUDITORIA_PR_ABERTAS.md`; separar branches empilhadas e não mesclar #79–#81 em bloco.
+13. Corrigir o ciclo de vida de mídia temporária antes de considerar a câmera; obter confirmação antes de mudanças de conteúdo público em #68/#83.
+14. Preparar signing/AAB e coordenar teste físico somente após fechar gates técnicos, usando dados sintéticos.
 
 Comandos básicos:
 
