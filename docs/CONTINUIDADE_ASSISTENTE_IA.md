@@ -1,7 +1,7 @@
 # Fala Comigo — Continuidade para assistência por IA
 
-**Última atualização:** 01 de outubro de 2026
-**Estado:** a branch atual é `audit/creator-privacy-alignment`, associada à PR #87 em draft; não houve merge nem deploy. Consultar a seção 48 e `docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-01.md` para a situação vigente.
+**Última atualização:** 04 de outubro de 2026
+**Estado vigente:** PRs #87, #88 e #89 integradas; `main` observada em `21a981f`. O scan MobSF detectou CBC e `minSdk=24` como findings altos. A PR documental #90 está aberta; consultar as seções 51–52 e `docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md` para estado e evidências. As seções anteriores são registros históricos, não instruções atuais.
 
 ## 1. Objetivo deste documento
 
@@ -707,3 +707,27 @@ A proposta e o protótipo estático foram enviados na PR #86, commit `06f77db874
 - `git diff --check` passou nesta branch. Flutter/Dart não estão instalados localmente. No run [37142324330](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142324330), `flutter analyze` e 110 testes passaram. A PR [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89) está no head `9c323dc`; confira ao vivo se foi integrada.
 - Ainda não foram concluídos: triagem atual das 15 PRs, scan MobSF pós-`main` atual, assinatura de produção/AAB, backup/restore de usuário, migração em aparelho e testes físicos. Manter somente dados sintéticos.
 - Próximo gate: confirmar o estado da PR #89 e integrar somente se os checks continuarem verdes; depois revalidar `main`, executar o scan MobSF e retomar a auditoria individual das 15 PRs quando o workflow puder produzir resultados.
+
+
+## 51. Atualização — 03/10/2026 — proteção Hive integrada
+
+- A PR [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89) foi squash-merged; `main` está em `21a981f6068a39e5658fd3f53f8a13bb5bbda037`. A mudança impede gerar uma chave Hive substituta quando há arquivos/sidecars locais e remove sidecars geridos somente no wipe explícito. Migração automática continua desativada.
+- No head final da PR, `flutter analyze` passou e `flutter test` aprovou 110 testes no run [37142546790](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142546790). Na main, Flutter quality run [37142769400](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142769400) e publicação Pages run [37142769412](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142769412) terminaram com sucesso.
+- Após o deploy, site institucional, `/app/`, política de privacidade e `app/main.dart.js` responderam HTTP 200. O build Web emitiu avisos de compatibilidade Wasm de dependências `flutter_secure_storage_web`/`flutter_tts`, mas compilou; registrar como dívida de compatibilidade, não como falha do release.
+- O scan MobSF manual foi disparado em `main`/`21a981f` no run [37142972414](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142972414), usando container Docker isolado no runner e APK de teste assinado com chave efêmera. No momento desta anotação, o resultado ainda não foi inspecionado; não declarar resolvido o achado CBC até ler o relatório.
+- O inventário atual continua com 15 PRs abertas: #31, #32, #33, #53, #60, #61, #64, #65, #68, #77, #78, #79, #80, #81 e #83. O workflow de auditoria anterior não produziu resultados por PR; a tarefa permanece incompleta e nenhuma dessas PRs foi mesclada com base nela.
+- Continuam pendentes: estratégia/implementação de migração de schema, backup de usuário exportável, resolução ou aceite explícito do achado MobSF CBC, AAB assinado com segredo fora do Git, backend seguro do portal e testes físicos planejados pelo proprietário. Usar somente dados sintéticos na prévia pública.
+- Próximos gates: concluir e revisar o artefato MobSF de `21a981f`; registrar findings e priorizar correção; retomar auditoria individual das 15 PRs apenas quando a ferramenta de orquestração puder produzir pareceres verificáveis.
+
+
+## 52. Atualização — 04/10/2026 — triagem do MobSF em `main` `21a981f`
+
+- Relido o resultado do workflow MobSF [run 37142972414](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142972414), executado no commit `21a981f6068a39e5658fd3f53f8a13bb5bbda037`. O APK sintético de release de teste, assinado com chave efêmera (SHA-256 `0a070cda62635613c4bf3f12fb949b31071aa1b3a32503fcbd6ccb88ae9b1792`), recebeu score estático 46/100; execução bem-sucedida do workflow não significa aprovação de segurança.
+- Achados: seção `appsec` 2 high, 5 warning e 2 info; `code_analysis` 1 high, 3 warning e 2 info; manifesto 1 high e 1 warning. O relatório sanitizado, sem strings candidatas a segredo, está em `docs/auditoria/2026-10-03/MOBSF_MAIN_21A981F.md`.
+- A cifra CBC do plugin foi confirmada nos fontes oficiais Pub do `flutter_secure_storage 9.2.4`: AES/CBC/PKCS7 é o default Android e o app usa o plugin sem opções explícitas. Também foi confirmado nos fontes Hive 2.2.3 que `HiveAesCipher` implementa AES-256-CBC/PKCS7. MobSF aponta `defpackage/s3.java:1277` ofuscado; sem mapping, não afirmar qual classe-fonte gerou exatamente esse hit. Ambas as camadas permanecem com CBC e exigem remediação separada.
+- `minSdk=24` é real no APK; não foi elevado a 29 automaticamente, pois isso excluiria Android 7–9 sem decisão de suporte. Outros warnings (receiver exported com DUMP, padrões de segredo, temp files, external storage) e infos (logging/clipboard) precisam de triagem contra manifesto/dependências/código; nenhum valor candidato foi reproduzido.
+- Evidências externas consultadas: documentação oficial Pub de `flutter_secure_storage` 9.2.4, 10.3.4 e 11.2.0; issue upstream #694/#1025 e issue/PR #1158/#1183 de regressão Apple Keychain. A trilha recomendada é migração Android 9.2.4→10.x com backup e sem reset destrutivo, depois 11.x; Hive exige migração de formato separada. Não executar upgrade direto nem ativar migração global sem teste sintético de restauração.
+- O workflow MobSF em `.github/workflows/mobsf-security-scan.yml` foi alterado na branch documental para extrair contagens aninhadas (`appsec`, `code_analysis`, `manifest_analysis`) e publicar apenas resumo sanitizado + hash do APK; relatório bruto/PDF são removidos do artifact público. A nova CI ainda precisa validar o novo head.
+- As atualizações deste estado estão na branch `docs/record-hive-safety-merge`, PR [#90](https://github.com/falacomigocaa-app/fala-comigo/pull/90). Head antes da atualização `7b805de` tinha o check `analyze-and-test` verde; aguardar o check do commit novo antes de decidir merge. Nenhuma mudança foi feita diretamente em `main`; Flutter/Dart não estão disponíveis neste sandbox e não se declara validação local.
+- Inventário remoto atualizado em 04/10: 15 PRs de produto abertas (#31, #32, #33, #53, #60, #61, #64, #65, #68, #77, #78, #79, #80, #81, #83), além da PR documental #90.
+- Próxima ordem: revisar `git diff --check`; enviar atualização documental à PR #90 e aguardar sua CI; depois retomar a remediação de criptografia/migração com fixtures sintéticas. Auditoria das 15 PRs segue incompleta; testes físicos permanecem planejados para depois dos gates técnicos.

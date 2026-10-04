@@ -94,7 +94,22 @@ jobs:
             --header "Authorization: $MOBSF_API_KEY" \
             --data "hash=$hash" \
             --output mobsf-report.pdf
-          jq '{hash, version, title, security_score, blockers, high, warning, info}' mobsf-report.json > mobsf-summary.json || cp mobsf-report.json mobsf-summary.json
+          jq -e '{
+            app_name,
+            package_name,
+            version_name,
+            min_sdk,
+            target_sdk,
+            security_score: .appsec.security_score,
+            appsec: {
+              high: (.appsec.high | length),
+              warning: (.appsec.warning | length),
+              info: (.appsec.info | length)
+            },
+            code_analysis: .code_analysis.summary,
+            manifest_analysis: .manifest_analysis.manifest_summary,
+            trackers_detected: .appsec.trackers
+          }' mobsf-report.json > mobsf-summary.json
           cat mobsf-summary.json
 
       - name: Publish MobSF evidence
@@ -105,14 +120,11 @@ jobs:
           if-no-files-found: warn
           path: |
             apk-sha256.txt
-            mobsf-upload.json
-            mobsf-scan.json
-            mobsf-report.json
             mobsf-summary.json
-            mobsf-report.pdf
 
       - name: Stop MobSF
         if: always()
         run: |
           docker stop mobsf-security-scan || true
           rm -f android/key.properties "$RUNNER_TEMP/mobsf-test.jks"
+          rm -f mobsf-upload.json mobsf-scan.json mobsf-report.json mobsf-report.pdf
