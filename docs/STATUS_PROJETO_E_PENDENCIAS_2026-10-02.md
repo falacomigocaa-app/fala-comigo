@@ -1,9 +1,9 @@
 # Fala Comigo — estado após publicação da prévia Web
 
-**Atualizado:** 04/10/2026
+**Atualizado:** 04/10/2026 — triagem inicial das PRs
 **Repositório:** `falacomigocaa-app/fala-comigo` (público)
-**Base observada:** `main` no commit `21a981f` (PRs #87, #88 e #89 integradas); branch de documentação corrente `docs/record-hive-safety-merge`.
-**Etapa Hive/segurança:** PR [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89) foi squash-merged em `21a981f`; CI confirmou 110 testes, análise e build Web. MobSF no run [37142972414](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142972414) concluiu com score 46/100, achados altos CBC/PKCS5/PKCS7 e `minSdk=24`; relatório sanitizado em [`docs/auditoria/2026-10-03/MOBSF_MAIN_21A981F.md`](auditoria/2026-10-03/MOBSF_MAIN_21A981F.md). Migração automática Hive e backup exportável continuam desativados/não implementados. O achado CBC permanece aberto.
+**Base observada:** `main` no commit `b08daa10d2314ea56fd079d07378fbcabe4e4335` (PRs #87–#90 integradas).
+**Etapa Hive/segurança:** PR #89 foi squash-merged em `21a981f`; CI confirmou 110 testes, análise e build Web. PR #90 integrou o relatório sanitizado e a correção do resumo MobSF em `b08daa1`. MobSF no run [37142972414](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142972414) concluiu com score 46/100, achados altos CBC/PKCS5/PKCS7 e `minSdk=24`; relatório em [`docs/auditoria/2026-10-03/MOBSF_MAIN_21A981F.md`](auditoria/2026-10-03/MOBSF_MAIN_21A981F.md). Migração Hive e backup exportável continuam desativados/não implementados; o achado CBC permanece aberto.
 
 ## Resumo executivo
 
@@ -35,7 +35,7 @@ A rota `/app/` é acessível publicamente, sem login. O app Web trabalha com arm
 - Verificados os caminhos essenciais e a interação primária com um cartão padrão sintético.
 - PR #89 integrada, com guarda para chave Hive ausente; migração continua deliberadamente desativada.
 - Scan MobSF executado e triado; o resultado identificou achados altos e dívida criptográfica, não aprovação de release.
-- O workflow MobSF está sendo corrigido na branch documental para resumir os campos aninhados e evitar publicar relatório JSON/PDF bruto nos próximos artifacts. A alteração aguarda nova CI.
+- O workflow MobSF foi ajustado pela PR #90 integrada: o resumo usa os campos aninhados e o artifact evita publicar o relatório JSON/PDF bruto. A futura execução do scan ainda deve ser inspecionada; a correção não significa que os findings foram resolvidos.
 
 ### Ainda não é release completo
 
@@ -49,17 +49,18 @@ A rota `/app/` é acessível publicamente, sem login. O app Web trabalha com arm
 
 ## Auditoria e PRs restantes
 
-A revisão de PRs registrada anteriormente é parcial: o parecer comparável original cobriu 7 de 15 subrevisões. O inventário read-only de 04/10 confirmou 15 PRs de produto ainda abertas: **#83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31**, além da PR documental #90 nesta branch. Uma tentativa anterior de auditoria em workflow não gerou pareceres por PR; não tratar esse ciclo como auditoria concluída. Atualizar heads, bases, checks e mergeabilidade antes de qualquer decisão.
+Em 04/10, seis PRs antigas foram encerradas sem merge: #31–33 porque suas pontas já eram ancestrais da `main`; #60 e #65 porque o bootstrap atual as substitui; #61 porque era uma baseline PR29 obsoleta. As branches foram preservadas. Permanecem abertas **nove PRs: #53, #64, #68, #77, #78, #79, #80, #81 e #83**. O relatório de diffs, checks, conflitos, dependências e recomendações está em [`docs/auditoria/2026-10-04/AUDITORIA_PR_ABERTAS.md`](auditoria/2026-10-04/AUDITORIA_PR_ABERTAS.md). O workflow de análise paralela não entregou pareceres por PR; esta etapa é uma triagem manual, não revisão exaustiva ou aprovação de release.
 
 ## Próximos passos recomendados
 
-1. Atualizar refs e inventário das PRs abertas; revisar cada diff, head/base, checks, conflitos e dependências, sem integrar stacks em bloco.
+1. Continuar a revisão profunda das nove PRs abertas conforme o relatório; revalidar cada head/base/check e não integrar stacks em bloco.
 2. Priorizar riscos que possam interromper a comunicação CAA ou afetar privacidade/dados locais; corrigir em branch com testes.
-3. Fechar a auditoria individual das PRs restantes e selecionar mudanças seguras para revisão/merge item a item, sem agrupar stacks.
+3. Rebasear seletivamente a ficha manual #53; avaliar #64/#68/#77 como documentação. Não publicar o contato proposto em #68 sem confirmação explícita.
 4. Desenhar e testar migração em etapas do armazenamento seguro e das boxes Hive para remover CBC sem perder a chave ou dados; preservar backup/rollback e usar somente fixtures sintéticas.
 5. Remediar/triagem os achados MobSF, revisar os warnings e reexecutar scan no candidato corrigido; avaliar `minSdk` como escolha de suporte, não elevar para 29 automaticamente.
 6. Depois de fechar os gates técnicos, preparar signing seguro fora do Git e AAB; então coordenar os testes em aparelhos reais conforme o plano do proprietário.
-7. Manter a prévia Web sinalizada como pré-lançamento e limitada a dados sintéticos; não anunciar backend/portal como funcional.
+7. Corrigir separadamente #79 antes de considerar #80/#81: o CI aponta incompatibilidade `extensionHint` no Web, e a chamada `materializeForReading` descartada cria arquivo plaintext temporário sem liberação.
+8. Manter a prévia Web sinalizada como pré-lançamento e limitada a dados sintéticos; #83 altera conteúdo público e precisa de autorização antes do merge/deploy; não anunciar backend/portal como funcional.
 
 ## Instruções de continuidade
 

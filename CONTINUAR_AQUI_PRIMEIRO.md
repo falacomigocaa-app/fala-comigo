@@ -4,19 +4,16 @@ O prompt completo para iniciar outro agente está em [`PROMPT_RETORNO_NOVO_AGENT
 
 > **Não alterar a `main` diretamente.** Antes de executar qualquer correção, leia este arquivo, `AGENTS.md`, `PROJECT_HANDOFF.md` e `docs/HANDOFF_TELA_BRANCA_APK.md`.
 
-## Estado atual verificado — 04/10/2026
+## Estado atual verificado — 04/10/2026, após triagem inicial
 
-- A PR [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87) e a PR documental [#88](https://github.com/falacomigocaa-app/fala-comigo/pull/88) estão integradas. A PR Hive [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89) também foi squash-merged; `main` está em `21a981f`.
-- GitHub Pages executou build e deploy com sucesso no [run 37029707742](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37029707742); Flutter quality passou no [run 37029707714](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37029707714).
-- Endereços publicados: [site institucional](https://falacomigocaa-app.github.io/fala-comigo/), [prévia Flutter Web](https://falacomigocaa-app.github.io/fala-comigo/app/) e [política de privacidade](https://falacomigocaa-app.github.io/fala-comigo/privacy.html). Homepage, `/app/`, política e `main.dart.js` retornaram HTTP 200.
-- Smoke visual/interativo: a grade carregou, o console não retornou mensagens e o cartão sintético “Comer” entrou na frase, habilitando “Falar”. Isto não é teste físico, validação de acessibilidade completa ou validação de todos os fluxos.
-- **Use somente dados sintéticos na prévia Web.** Ela é pública, sem login, backend ou sincronização conectados; armazenamento no navegador não foi validado para dados sensíveis.
-- Inventário read-only de 03/10: PRs abertas #83, #81, #80, #79, #78, #77, #68, #65, #64, #61, #60, #53, #33, #32 e #31. A auditoria completa continua pendente; a tentativa de workflow não produziu avaliações por PR.
-- MobSF no APK de teste de `main` `21a981f` ([run 37142972414](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142972414)) reportou score 46/100, CBC/PKCS5/PKCS7 e `minSdk=24` como achados altos, além de warnings; relatório sanitizado: [`docs/auditoria/2026-10-03/MOBSF_MAIN_21A981F.md`](docs/auditoria/2026-10-03/MOBSF_MAIN_21A981F.md). `flutter_secure_storage 9.2.4` Android e `Hive 2.2.3` têm caminhos CBC; finding segue aberto, sem atribuição exata da classe ofuscada.
-- Gates restantes: migração Hive e backup/restauração de usuário continuam desativados/não implementados; CBC não remediado; findings MobSF em triagem; sem keystore de produção/AAB; sem testes físicos; portal sem Auth/RLS/backend de produção.
-- A PR documental [#90](https://github.com/falacomigocaa-app/fala-comigo/pull/90) está aberta na branch `docs/record-hive-safety-merge`. O head anterior `7b805de` tinha CI verde; esta atualização e a correção do workflow MobSF precisam de CI no head novo antes de qualquer merge.
-- A proteção Hive foi integrada pela PR [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89) em `21a981f`; CI passou com análise e 110 testes. A migração automática permanece desativada; o plano está em [`docs/HIVE_MIGRATION_BACKUP_PLAN.md`](docs/HIVE_MIGRATION_BACKUP_PLAN.md).
-- Relatório pós-publicação: [`docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md`](docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md). O status de 01/10 e as instruções seguintes com datas anteriores são fotografias históricas; não dizem mais que #87 está em draft ou que `/app/` retorna 404.
+- As PRs [#87](https://github.com/falacomigocaa-app/fala-comigo/pull/87), [#88](https://github.com/falacomigocaa-app/fala-comigo/pull/88), [#89](https://github.com/falacomigocaa-app/fala-comigo/pull/89) e [#90](https://github.com/falacomigocaa-app/fala-comigo/pull/90) estão integradas; `main` está em `b08daa10d2314ea56fd079d07378fbcabe4e4335`.
+- Site e prévia Flutter Web permanecem nos endereços [institucional](https://falacomigocaa-app.github.io/fala-comigo/), [`/app/`](https://falacomigocaa-app.github.io/fala-comigo/app/) e [política](https://falacomigocaa-app.github.io/fala-comigo/privacy.html). Isso não equivale a lançamento de produção.
+- A prévia Web é pública, sem backend/Auth/sincronização. **Use somente dados sintéticos**; não inserir dados pessoais, de saúde, identificáveis de crianças, fotos, vídeos ou registros reais.
+- Seis PRs antigas foram encerradas sem merge: #31–33 já eram ancestrais de main; #60/#65 foram substituídas pelo bootstrap atual; #61 era uma baseline PR29 obsoleta. Branches preservadas. Permanecem abertas #53, #64, #68, #77, #78, #79, #80, #81 e #83. Relatório: [`docs/auditoria/2026-10-04/AUDITORIA_PR_ABERTAS.md`](docs/auditoria/2026-10-04/AUDITORIA_PR_ABERTAS.md).
+- A revisão atual foi uma triagem manual de heads, bases, diffs e checks. A tentativa de orquestração não retornou pareceres individuais; não tratar a triagem como code review exaustivo ou aprovação de release.
+- MobSF no APK de teste da `main` `21a981f` ([run 37142972414](https://github.com/falacomigocaa-app/fala-comigo/actions/runs/37142972414)) reportou score 46/100 e findings altos CBC/PKCS5/PKCS7 e `minSdk=24`; relatório sanitizado em [`docs/auditoria/2026-10-03/MOBSF_MAIN_21A981F.md`](docs/auditoria/2026-10-03/MOBSF_MAIN_21A981F.md). CBC continua sem remediação comprovada.
+- Gates restantes: migração Hive e backup/restauração ainda não implementados; findings MobSF/CBC abertos; sem keystore/AAB de produção; sem testes físicos; portal sem Auth/RLS/backend de produção.
+- A proteção Hive #89 está integrada; a migração automática continua desativada. Plano em [`docs/HIVE_MIGRATION_BACKUP_PLAN.md`](docs/HIVE_MIGRATION_BACKUP_PLAN.md). Os registros datados abaixo são históricos; revalidar GitHub, checks e URLs antes de agir.
 
 ## Registro histórico — estado imediato em 25/09/2026
 
@@ -30,7 +27,7 @@ HiveError: The box "pictogram_cards" is already open and of type Box<dynamic>
 
 A PR 29 contém a correção, mas está `OPEN` e `DIRTY` porque foi criada sobre uma `main` antiga. **Não mesclar a PR 29 inteira.** A correção foi reaplicada seletivamente na branch atual.
 
-A PR 60 adiciona uma tela que mostra a exceção de inicialização em vez de deixar branco, mas está `OPEN` e `DRAFT`. Não foi mesclada. A tentativa de merge foi recusada pelo GitHub por ela ser draft. **Não apagar nem fechar a PR 60 antes de obter o erro real, se a correção Hive não resolver.**
+A PR #60 foi encerrada em 04/10/2026 como superada: a `main` atual tem loading/erro/retry, enquanto o diff antigo mostrava stack trace completo. Este parágrafo é histórico; não reabrir nem reutilizar o código sem justificativa nova e revisão de privacidade.
 
 ## Correções já preparadas nesta branch
 

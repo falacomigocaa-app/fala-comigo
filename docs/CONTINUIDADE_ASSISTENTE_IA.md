@@ -1,7 +1,7 @@
 # Fala Comigo — Continuidade para assistência por IA
 
 **Última atualização:** 04 de outubro de 2026
-**Estado vigente:** PRs #87, #88 e #89 integradas; `main` observada em `21a981f`. O scan MobSF detectou CBC e `minSdk=24` como findings altos. A PR documental #90 está aberta; consultar as seções 51–52 e `docs/STATUS_PROJETO_E_PENDENCIAS_2026-10-02.md` para estado e evidências. As seções anteriores são registros históricos, não instruções atuais.
+**Estado vigente:** PRs #87–#90 integradas; `main` observada em `b08daa10`. Seis PRs redundantes/superadas foram encerradas sem merge; nove permanecem abertas. O scan MobSF de `21a981f` detectou CBC e `minSdk=24` como findings altos. Consulte a seção 53, `docs/auditoria/2026-10-04/AUDITORIA_PR_ABERTAS.md` e o status do projeto. As seções anteriores são registros históricos, não instruções atuais.
 
 ## 1. Objetivo deste documento
 
@@ -23,7 +23,7 @@ Nenhuma credencial, token, senha, chave privada ou dado real de criança deve se
 - **Produto:** Fala Comigo — Comunicação Aumentativa e Alternativa (CAA/PECS).
 - **Repositório:** `falacomigocaa-app/fala-comigo`.
 - **Branch principal:** `main`.
-- **Branch de trabalho atual:** `audit/creator-privacy-alignment` (os nomes de branches nas seções históricas refletem snapshots anteriores).
+- **Branch de trabalho desta atualização:** `docs/open-pr-audit-2026-10-04` (revalidar HEAD e branch no GitHub ao retomar).
 - **Conta GitHub conectada:** `falacomigocaa-app`.
 - **Permissões confirmadas:** leitura, push, maintain e admin.
 - **Regra central do produto:** a comunicação básica deve funcionar localmente, sem internet, sem conta e sem plano pago.
@@ -731,3 +731,15 @@ A proposta e o protótipo estático foram enviados na PR #86, commit `06f77db874
 - As atualizações deste estado estão na branch `docs/record-hive-safety-merge`, PR [#90](https://github.com/falacomigocaa-app/fala-comigo/pull/90). Head antes da atualização `7b805de` tinha o check `analyze-and-test` verde; aguardar o check do commit novo antes de decidir merge. Nenhuma mudança foi feita diretamente em `main`; Flutter/Dart não estão disponíveis neste sandbox e não se declara validação local.
 - Inventário remoto atualizado em 04/10: 15 PRs de produto abertas (#31, #32, #33, #53, #60, #61, #64, #65, #68, #77, #78, #79, #80, #81, #83), além da PR documental #90.
 - Próxima ordem: revisar `git diff --check`; enviar atualização documental à PR #90 e aguardar sua CI; depois retomar a remediação de criptografia/migração com fixtures sintéticas. Auditoria das 15 PRs segue incompleta; testes físicos permanecem planejados para depois dos gates técnicos.
+
+
+## 53. Atualização — 04/10/2026 — triagem das PRs abertas
+
+- Base sincronizada: `main` em `b08daa10d2314ea56fd079d07378fbcabe4e4335`; PR #90 foi squash-merged, incluindo o relatório MobSF sanitizado e o resumo seguro do workflow.
+- Inventário ao vivo antes desta atualização: 15 PRs antigas abertas. #31, #32 e #33 tinham heads ancestrais de `main` (`ahead_by=0`) e foram fechadas como já integradas; #60 foi fechada porque a `main` já tem loading/erro/retry e o diff antigo mostrava stack trace completo; #65 foi fechada porque o bootstrap atual a substitui e a branch chama migração Hive antiga; #61 foi fechada como build histórico PR29, 112 commits atrás e sem CI de PR. As seis branches foram preservadas; nenhuma merge de produto ou deploy ocorreu.
+- Nove PRs continuam abertas: #53, #64, #68, #77, #78, #79, #80, #81 e #83. Head/base, checks, conflitos e recomendações estão em `docs/auditoria/2026-10-04/AUDITORIA_PR_ABERTAS.md`.
+- #53/#64/#68/#77/#79/#80/#81/#83 aparecem `DIRTY`; #78 é `CLEAN` apenas contra sua base documental empilhada, não contra `main`. Checks antigos de #53/#64/#68/#77 passaram; #78 não reporta check; #79/#80/#81 falham no build Web por `extensionHint` ausente no stub Web da ponta; #83 tem checks Flutter e estático verdes.
+- Bloqueio funcional relevante: #79 chama `materializeForReading(permanentPath)` e descarta o arquivo temporário descriptografado retornado, sem chamar `releaseMaterializedFile`; isso contraria o contrato do serviço e pode deixar plaintext na pasta temporária. Não integrar #79–#81 como estão. #80 também muda ID de canal/permissões de alarme; #81/#78 são somente protótipos sintéticos, sem Auth/RLS de produção.
+- #68 propõe publicar contatos diretos na homepage; manter bloqueado até confirmação explícita da pessoa responsável. #83 altera o conteúdo público e requer autorização específica antes de merge/deploy.
+- A tentativa de orquestração de 15 revisores não entregou avaliações individuais; a análise atual é triagem manual baseada em GitHub CLI, diffs e logs, não revisão exaustiva nem aprovação de release.
+- `git status` estava limpo na `main`; criada branch documental `docs/open-pr-audit-2026-10-04`. Próximo passo: validar diff/whitespace, abrir PR documental e aguardar CI. Não realizar merge público de #68/#83 nem reativar migração Hive.
